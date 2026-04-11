@@ -1,0 +1,205 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Tools - Pancito y Más</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-primary-container": "#422500",
+                        "surface-variant": "#e7e2d8",
+                        "on-primary-fixed": "#2b1700",
+                        "on-tertiary-container": "#3d261e",
+                        "primary-container": "#c4863a",
+                        "secondary-fixed": "#ffdbc8",
+                        "surface-container": "#f2ede3",
+                        "secondary": "#835334",
+                        "tertiary-fixed": "#ffdbce",
+                        "on-secondary-fixed-variant": "#673c1f",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#794b2d",
+                        "on-primary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#fef9ef",
+                        "secondary-fixed-dim": "#f8b993",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#514538",
+                        "background": "#fef9ef",
+                        "surface-tint": "#875305",
+                        "primary": "#875305",
+                        "inverse-on-surface": "#f5f0e6",
+                        "surface-container-low": "#f8f3e9",
+                        "surface-container-highest": "#e7e2d8",
+                        "tertiary-fixed-dim": "#e3bfb2",
+                        "on-surface": "#1d1c16",
+                        "on-background": "#1d1c16",
+                        "outline-variant": "#d6c3b3",
+                        "inverse-surface": "#32302a",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#dedad0",
+                        "on-secondary-fixed": "#321300",
+                        "tertiary": "#74584e",
+                        "on-tertiary-fixed": "#2a170f",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#847466",
+                        "surface-container-high": "#ece8de",
+                        "surface": "#fef9ef",
+                        "primary-fixed-dim": "#ffb967",
+                        "on-tertiary-fixed-variant": "#5a4137",
+                        "primary-fixed": "#ffddba",
+                        "on-primary-fixed-variant": "#673d00",
+                        "inverse-primary": "#ffb967",
+                        "tertiary-container": "#ac8c80",
+                        "secondary-container": "#febe98"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-noto { font-family: 'Noto Serif', serif; }
+    </style>
+</head>
+<body class="bg-[#fef9ef] text-on-surface font-body">
+<!-- TopAppBar -->
+<header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/20">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<a class="flex items-center gap-3" href="index.html">
+<img alt="Pancito y Más Logo" class="w-12 h-12 object-contain" src="logo.png"/>
+<span class="font-['Noto_Serif'] text-[#875305] italic font-bold text-2xl tracking-tight">Pancito y Más</span>
+</a>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8 items-center font-['Plus_Jakarta_Sans'] text-xs uppercase tracking-widest">
+<a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="index.html">Dashboard</a>
+      <a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="bake-log.html">Bake</a>
+      <a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="library.html">Library</a>
+      <a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="archive.html">Archive</a>
+      <a class="text-[#875305] font-extrabold hover:text-[#c4863a] transition-colors duration-200" href="starter-kit.html">Tools</a>
+</nav>
+<div class="flex items-center gap-3 text-[#875305]">
+<a href="bake-log.html" class="hover:opacity-70 transition-opacity" title="Active Bake Session">
+<span class="material-symbols-outlined">timer</span>
+</a>
+<a href="https://www.facebook.com/groups/1235548458006543" target="_blank" class="hover:opacity-70 transition-opacity" title="Join our Community Group">
+<span class="material-symbols-outlined">account_circle</span>
+</a>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-8">
+<!-- Hero Section: The Starter Kit -->
+<section class="relative overflow-hidden rounded-3xl bg-surface-container-low mb-12">
+<div class="flex flex-col md:flex-row items-center">
+<div class="w-full md:w-1/2 p-8 md:p-12 z-10">
+<span class="inline-block text-primary font-label text-xs font-black uppercase tracking-[0.2em] mb-4">Essential Equipment</span>
+<h1 class="font-headline text-4xl md:text-6xl font-bold leading-tight mb-6"><span class="text-on-surface">Sourdough</span><br/><span class="text-primary">Starter Kit</span></h1>
+<p class="text-on-surface-variant text-lg leading-relaxed mb-8 max-w-md">Every masterpiece requires the right tools. We've curated the ultimate collection for the modern sourdough alchemist.</p>
+<div class="flex gap-4">
+<a class="bg-gradient-to-br from-[#875305] to-[#c4863a] text-on-primary px-8 py-4 rounded-xl font-bold shadow-lg hover:scale-105 transition-transform inline-block" href="https://www.amazon.com/dp/B0FZWXPXF6?maas=maas_adg_9469FAF870BAA9D072E90EE503019C38_afap_abs&amp;ref_=aa_maas&amp;tag=maas" target="_blank">Get the Kit</a>
+</div>
+</div>
+<div class="w-full md:w-1/2 h-[400px] md:h-[600px] relative">
+<img class="w-full h-full object-cover" alt="Sourdough Starter Kit" src="https://pancitoymas.com/wp-content/uploads/2026/03/Facebook-Post-Whats-Inside-the-Sourdough-Kit-1200-x-628-px.png">
+<div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-surface-container-low via-transparent to-transparent"></div>
+</div>
+</div>
+</section>
+<!-- Tools Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Banneton -->
+<a class="md:col-span-8 group relative overflow-hidden rounded-3xl bg-surface-container-high h-[500px] flex items-end" href="https://pancitoymas.com/tools/the-banneton/">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="The Banneton" src="https://pancitoymas.com/wp-content/uploads/2026/03/%E9%9D%A2%E5%8C%85%E7%AF%AE.jpg">
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 via-on-surface/20 to-transparent"></div>
+<div class="relative p-8 w-full">
+<h3 class="font-headline text-3xl text-white font-bold mb-2">The Banneton</h3>
+<p class="text-white/80 max-w-sm mb-4">Shape your dough and achieve that beautiful characteristic spiral crust.</p>
+<span class="inline-flex items-center gap-2 text-primary-fixed font-bold uppercase text-xs tracking-widest">Read Guide <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
+</div>
+</a>
+<!-- Lame -->
+<a class="md:col-span-4 group relative overflow-hidden rounded-3xl bg-surface-container-highest h-[500px]" href="https://pancitoymas.com/uncategorized/the-lame/">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="The Lame" src="https://pancitoymas.com/wp-content/uploads/2026/03/%E5%89%B2%E5%88%80%E7%BB%86%E8%8A%82.jpg">
+<div class="absolute inset-0 bg-gradient-to-t from-on-tertiary-container/90 via-transparent to-transparent"></div>
+<div class="absolute bottom-0 p-8">
+<h3 class="font-headline text-2xl text-white font-bold mb-2">The Lame</h3>
+<p class="text-white/70 text-sm mb-4">The artist's scalpel. Master the intricate patterns of sourdough scoring.</p>
+<span class="inline-flex items-center gap-2 text-secondary-fixed font-bold uppercase text-xs tracking-widest">Learn Scoring</span>
+</div>
+</a>
+<!-- Bench Scraper -->
+<a class="md:col-span-4 group relative overflow-hidden rounded-3xl bg-surface-container-low h-[400px]" href="https://pancitoymas.com/uncategorized/the-bench-scraper/">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Bench Scraper" src="https://pancitoymas.com/wp-content/uploads/2026/03/%E5%8D%8A%E5%9C%86%E5%89%B2%E5%88%80.jpg">
+<div class="absolute inset-0 bg-gradient-to-t from-secondary/90 via-transparent to-transparent"></div>
+<div class="absolute bottom-0 p-8">
+<h3 class="font-headline text-2xl text-white font-bold mb-2">Bench Scraper</h3>
+<p class="text-white/70 text-sm">An extension of your hands for dividing and shaping high-hydration dough.</p>
+</div>
+</a>
+<!-- Bread Sling -->
+<a class="md:col-span-8 group relative overflow-hidden rounded-3xl bg-surface-container-high h-[400px]" href="https://pancitoymas.com/uncategorized/the-bread-sling/">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Bread Sling" src="https://pancitoymas.com/wp-content/uploads/2026/03/%E7%A1%85%E8%83%B6%E5%90%8A%E5%B8%A6-1140x1140.jpg">
+<div class="absolute inset-0 bg-gradient-to-t from-on-primary-container/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-0 p-8 flex justify-between items-end w-full">
+<div>
+<h3 class="font-headline text-3xl text-white font-bold mb-2">Bread Sling</h3>
+<p class="text-white/80 max-w-xs">Transfer your loaf to the blazing Dutch oven with ease and safety.</p>
+</div>
+<span class="material-symbols-outlined text-white text-4xl opacity-50">oven_gen</span>
+</div>
+</a>
+</div>
+<!-- Community Callout -->
+<section class="mt-16 p-12 rounded-[2.5rem] bg-surface-container relative overflow-hidden border border-outline-variant/15 text-center">
+<div class="relative z-10">
+<span class="material-symbols-outlined text-primary text-5xl mb-6">groups</span>
+<h2 class="font-headline text-3xl font-bold mb-4">Join Our Flourished Community</h2>
+<p class="text-on-surface-variant max-w-xl mx-auto mb-8 text-lg">Share your bakes, troubleshoot your crumb, and connect with fellow enthusiasts in our official Facebook group.</p>
+<a class="inline-block bg-[#875305] text-white px-10 py-4 rounded-full font-bold shadow-xl hover:scale-105 transition-all" href="https://www.facebook.com/groups/1235548458006543" target="_blank">Visit the Group</a>
+</div>
+<!-- Decorative backdrop -->
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-primary-container/10 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-24 -left-24 w-64 h-64 bg-secondary-container/20 rounded-full blur-3xl"></div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]">
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="index.html">
+<span class="material-symbols-outlined text-[20px]">home_max</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Dash</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="bake-log.html">
+<span class="material-symbols-outlined text-[20px]">timer</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Bake</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="library.html">
+<span class="material-symbols-outlined text-[20px]">book_5</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Library</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="archive.html">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Archive</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" href="starter-kit.html">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">handyman</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Tools</span>
+</a>
+</nav>
+</body></html>

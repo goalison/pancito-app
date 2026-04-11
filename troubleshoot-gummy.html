@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gummy Texture — Pancito y Más Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-low": "#f8f3e9","surface": "#fef9ef","on-surface-variant": "#514538","background": "#fef9ef","on-surface": "#1d1c16","primary": "#875305","secondary-container": "#febe98","surface-container": "#f2ede3","surface-container-high": "#ece8de","surface-container-highest": "#e7e2d8","outline": "#847466","outline-variant": "#d6c3b3"
+        },
+        fontFamily: { "headline": ["Noto Serif"], "body": ["Plus Jakarta Sans"], "label": ["Plus Jakarta Sans"] },
+        borderRadius: {"DEFAULT": "0.5rem","lg": "0.5rem","xl": "0.75rem","full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { min-height: max(884px, 100dvh); }
+  .prose-article p { margin-bottom: 1.25rem; line-height: 1.8; color: #514538; }
+  .prose-article h2 { font-family: 'Noto Serif', serif; font-size: 1.75rem; color: #1d1c16; margin-top: 2.5rem; margin-bottom: 1rem; }
+  .prose-article h3 { font-family: 'Noto Serif', serif; font-size: 1.25rem; color: #1d1c16; margin-top: 2rem; margin-bottom: 0.5rem; }
+  .prose-article ul { list-style: none; padding: 0; margin-bottom: 1.25rem; }
+  .prose-article ul li { padding-left: 1.5rem; position: relative; margin-bottom: 0.5rem; color: #514538; line-height: 1.7; }
+  .prose-article ul li::before { content: '—'; position: absolute; left: 0; color: #875305; font-weight: bold; }
+  .temp-callout { background: linear-gradient(135deg, #c4863a15, #87530510); border: 1px solid #c4863a40; border-radius: 0.75rem; padding: 1.5rem 2rem; margin: 2rem 0; text-align: center; }
+  .temp-callout .temp-number { font-family: 'Noto Serif', serif; font-size: 3.5rem; font-weight: 700; color: #875305; line-height: 1; }
+  .temp-callout .temp-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; color: #514538; margin-top: 0.5rem; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body">
+
+<header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/40">
+  <div class="flex justify-between items-center px-6 py-4 w-full max-w-4xl mx-auto">
+    <a class="flex items-center gap-3" href="library.html">
+      <span class="material-symbols-outlined text-primary">arrow_back</span>
+      <span class="font-label text-sm text-primary font-bold tracking-wide">Library</span>
+    </a>
+    <a class="flex items-center gap-3" href="index.html"><img alt="Pancito y Más Logo" class="w-12 h-12 object-contain" src="logo.png"/><span class="font-headline italic font-bold text-primary text-2xl tracking-tight">Pancito y Más</span></a>
+    <button class="text-primary hover:opacity-80 transition-opacity p-2 rounded-full">
+      <span class="material-symbols-outlined">account_circle</span>
+    </button>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-6 py-12 pb-32">
+
+  <div class="mb-10">
+    <span class="font-label text-[10px] uppercase tracking-[0.2em] text-primary font-extrabold block mb-4">Troubleshooting</span>
+    <h1 class="font-headline text-4xl md:text-6xl text-on-surface leading-tight mb-6">Gummy Texture</h1>
+    <p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">You baked it, it looks beautiful — then you slice it and the crumb is dense and gummy. The answer almost always comes down to one number.</p>
+  </div>
+
+  <div class="w-full aspect-[16/7] rounded-xl overflow-hidden mb-12 bg-surface-container-highest relative shadow-md">
+    <img alt="A sliced sourdough loaf showing a perfect open, non-gummy crumb structure" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-gummy.jpg" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')"/>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-surface-container-highest hidden">
+      <span class="material-symbols-outlined text-6xl text-primary/30 mb-3">texture</span>
+      <span class="font-label text-xs text-outline uppercase tracking-widest">Gummy Texture</span>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-6 mb-12 pb-8 border-b border-outline-variant">
+    <span class="font-label text-xs text-outline">By Pancito y Más</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">5 min read</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">All Levels</span>
+  </div>
+
+  <article class="prose-article">
+
+    <p>You waited. You were patient. The loaf came out of the oven deep brown and crackling, it filled the kitchen with the right smell, and you let it cool (mostly). Then you sliced it — and the crumb was dense, wet, and gummy. It stuck to the knife. It tore instead of cut cleanly. It had the texture of undercooked dough despite clearly being baked.</p>
+
+    <p>This is one of the most common sourdough problems, and it usually comes down to one of two things: the loaf wasn't fully baked, or it wasn't given enough time to cool.</p>
+
+    <h2>The Internal Temperature Rule</h2>
+
+    <p>The color of the crust tells you almost nothing about whether the interior is done. A sourdough loaf can have a dark, beautiful crust and still be completely raw inside if the oven temperature was too high and the outside set before the heat could reach the crumb.</p>
+
+    <p>The only reliable way to know if a loaf is fully baked is to check the internal temperature with a probe thermometer.</p>
+
+    <div class="temp-callout">
+      <div class="temp-number">206–210°F</div>
+      <div class="temp-label">Target internal temperature / 97–99°C</div>
+    </div>
+
+    <p>At 206°F (97°C), the starches inside the bread have fully gelatinized and set. Below this temperature, they remain partially liquid, which is exactly what creates that gummy, pasty texture. Insert your probe thermometer into the side of the loaf toward the center — not from the bottom or top — and wait for the reading to stabilize.</p>
+
+    <p>If the reading is below 200°F (93°C), return the loaf to the oven (without the Dutch oven lid) for 5–10 more minutes and check again.</p>
+
+    <h2>The Cooling Rule</h2>
+
+    <p>Even a perfectly baked loaf will have a gummy crumb if you slice it too early. This is the most common mistake home bakers make, and understandably — after 24 hours of fermentation and 45 minutes of baking, the temptation to slice immediately is almost unbearable.</p>
+
+    <p>But the bread is still baking as it cools.</p>
+
+    <p>When the loaf comes out of the oven, the interior is still at 200°F+ and full of steam. As the loaf cools on a wire rack, that steam gradually redistributes and escapes through the crust. The crumb sets and firms. The texture that was almost-done when the loaf left the oven becomes fully done during the first hour of cooling.</p>
+
+    <ul>
+      <li><strong>Minimum cooling time: 45 minutes</strong> for a standard 900g loaf</li>
+      <li><strong>Ideal cooling time: 1.5–2 hours</strong> for the best crumb texture and cleanest slices</li>
+      <li><strong>For the very best crumb: wait until fully cooled</strong> (3–4 hours) — the flavor also deepens as the loaf reaches room temperature</li>
+    </ul>
+
+    <p>A loaf sliced at 20 minutes will almost always seem gummy compared to the same loaf sliced at 90 minutes. The bread isn't gummy — it's just unfinished.</p>
+
+    <h2>Other Causes Worth Checking</h2>
+
+    <h3>Over-Fermentation</h3>
+    <p>A dough that over-fermented before baking will produce a dense, gummy crumb regardless of bake time and cooling. The gluten breaks down, the gas structure collapses, and the internal structure never sets properly. If you're hitting the right temperature and cooling correctly but still getting gummy bread, look at your fermentation timing. See the <a href="troubleshoot-rise.html" class="text-primary border-b border-primary/20 hover:border-primary transition-all">rise troubleshooting guide</a> for diagnosing over-fermentation.</p>
+
+    <h3>Too Much Whole Grain Flour</h3>
+    <p>Whole wheat and rye flours absorb more water initially, but the bran also weakens gluten over time. High-percentage whole grain doughs can seem gummy because the crumb structure is inherently denser and less able to set cleanly. If you're using more than 30% whole grain, adjust expectations for crumb openness and add 5 minutes to your bake time.</p>
+
+    <h3>Oven Temperature Too High</h3>
+    <p>Counterintuitively, an oven that's too hot can produce a gummy crumb. The crust sets and browns rapidly, but the inside never reaches the temperature it needs because the outer shell acts as insulation. This is why so many recipes call for covering the loaf for the first 20 minutes and then reducing the temperature slightly for the remainder of the bake.</p>
+
+    <h2>The Fix at a Glance</h2>
+
+    <ul>
+      <li>Use a probe thermometer and bake to 206–210°F internal temperature</li>
+      <li>Cool on a wire rack for a minimum of 1 hour before slicing</li>
+      <li>If the loaf seems done but the internal temp is too low, return to the oven uncovered</li>
+      <li>If you suspect over-fermentation, review your bulk fermentation timing and starter health</li>
+    </ul>
+
+    <p>A probe thermometer is one of the lowest-cost, highest-impact tools a home baker can own. It removes all the guesswork from one of the most frustrating sourdough problems. If you don't have one, get one before your next bake.</p>
+
+  </article>
+
+  <div class="mt-16 pt-8 border-t border-outline-variant">
+    <h3 class="font-headline text-2xl mb-6">More Troubleshooting</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <a href="troubleshoot-rise.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-primary mb-3 block">trending_down</span>
+        <h4 class="font-headline text-base mb-1 group-hover:text-primary transition-colors">Didn't Rise</h4>
+        <p class="text-xs text-on-surface-variant">Diagnosing weak starter, temperature, and over-fermentation.</p>
+      </a>
+      <a href="troubleshoot-sticky.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-primary mb-3 block">water_drop</span>
+        <h4 class="font-headline text-base mb-1 group-hover:text-primary transition-colors">Sticky Dough</h4>
+        <p class="text-xs text-on-surface-variant">Hydration mismatch and the Rubaud method.</p>
+      </a>
+      <a href="troubleshoot-crust.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-primary mb-3 block">oven_gen</span>
+        <h4 class="font-headline text-base mb-1 group-hover:text-primary transition-colors">Tough Crust</h4>
+        <p class="text-xs text-on-surface-variant">Why steam is everything in crust formation.</p>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]">
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="index.html">
+<span class="material-symbols-outlined text-[20px]">home_max</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Dash</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="bake-log.html">
+<span class="material-symbols-outlined text-[20px]">timer</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Bake</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" href="library.html">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">book_5</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Library</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="archive.html">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Archive</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="starter-kit.html">
+<span class="material-symbols-outlined text-[20px]">handyman</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Tools</span>
+</a>
+</nav>
+
+</body>
+</html>

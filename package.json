@@ -1,0 +1,19 @@
+{
+  "name": "pancito-y-mas",
+  "version": "1.0.0",
+  "description": "Pancito y Más — Sourdough Baking App for Android",
+  "private": true,
+  "scripts": {
+    "sync": "cap sync android",
+    "open": "cap open android",
+    "build": "cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/local-notifications": "^6.0.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.2"
+  }
+}

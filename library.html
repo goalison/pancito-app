@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pancito y Más Sourdough Companion App - The Bread Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#ac8c80",
+                        "surface-container-low": "#f8f3e9",
+                        "surface-dim": "#dedad0",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#ffddba",
+                        "tertiary-fixed-dim": "#e3bfb2",
+                        "on-surface-variant": "#514538",
+                        "surface": "#fef9ef",
+                        "secondary": "#835334",
+                        "inverse-primary": "#ffb967",
+                        "tertiary": "#74584e",
+                        "outline-variant": "#d6c3b3",
+                        "inverse-on-surface": "#f5f0e6",
+                        "primary-fixed-dim": "#ffb967",
+                        "primary-container": "#c4863a",
+                        "on-primary-fixed": "#2b1700",
+                        "tertiary-fixed": "#ffdbce",
+                        "secondary-fixed-dim": "#f8b993",
+                        "on-background": "#1d1c16",
+                        "on-secondary-container": "#794b2d",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#fef9ef",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#875305",
+                        "on-tertiary-fixed-variant": "#5a4137",
+                        "surface-variant": "#e7e2d8",
+                        "background": "#fef9ef",
+                        "surface-container-highest": "#e7e2d8",
+                        "surface-container-high": "#ece8de",
+                        "outline": "#847466",
+                        "on-secondary-fixed": "#321300",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#ffdbc8",
+                        "secondary-container": "#febe98",
+                        "inverse-surface": "#32302a",
+                        "on-tertiary-fixed": "#2a170f",
+                        "surface-container": "#f2ede3",
+                        "on-tertiary-container": "#3d261e",
+                        "on-primary-fixed-variant": "#673d00",
+                        "primary": "#875305",
+                        "on-surface": "#1d1c16",
+                        "on-primary-container": "#422500",
+                        "on-secondary-fixed-variant": "#673c1f",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(254, 249, 239, 0.7);
+            backdrop-filter: blur(12px);
+        }
+        .asymmetric-bleed {
+            margin-left: -2rem;
+            margin-right: 2rem;
+        }
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopAppBar -->
+<header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/20">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<a class="flex items-center gap-3" href="index.html">
+<img alt="Pancito y Más Logo" class="w-12 h-12 object-contain" src="logo.png"/>
+<span class="font-['Noto_Serif'] text-[#875305] italic font-bold text-2xl tracking-tight">Pancito y Más</span>
+</a>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8 items-center font-['Plus_Jakarta_Sans'] text-xs uppercase tracking-widest">
+<a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="index.html">Dashboard</a>
+<a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="bake-log.html">Bake</a>
+<a class="text-[#875305] font-extrabold hover:text-[#c4863a] transition-colors duration-200" href="library.html">Library</a>
+<a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="archive.html">Archive</a>
+<a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="starter-kit.html">Tools</a>
+</nav>
+<div class="flex items-center gap-3 text-[#875305]">
+<a href="bake-log.html" class="hover:opacity-70 transition-opacity" title="Active Bake Session">
+<span class="material-symbols-outlined">timer</span></a>
+<a href="#" class="hover:opacity-70 transition-opacity"><span class="material-symbols-outlined">account_circle</span></a>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-12 pb-32">
+<!-- Hero Section -->
+<section class="mb-20">
+<div class="flex flex-col md:flex-row items-end gap-8">
+<div class="w-full md:w-2/3">
+<span class="font-label text-xs uppercase tracking-[0.2em] text-primary font-bold block mb-4">Knowledge &amp; Technique</span>
+<h1 class="font-headline text-5xl md:text-7xl text-on-surface leading-tight mb-6">Pancito y Más Library</h1>
+<p class="text-on-surface-variant text-lg max-w-xl">A curated collection of wisdom for the modern baker, from foundational techniques to the science of fermentation.</p>
+</div>
+<div class="w-full md:w-1/3 flex justify-end">
+<div class="relative w-full aspect-square max-w-[300px] rounded-xl overflow-hidden shadow-2xl rotate-3">
+<img alt="Close up of dusted flour on wooden table" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-science-steam.jpg"/>
+<div class="absolute inset-0 bg-primary/10"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Searchable Glossary Section -->
+<section class="mb-24">
+<div class="bg-surface-container-low rounded-xl p-8 md:p-12 relative overflow-hidden">
+<div class="relative z-10 flex flex-col md:flex-row gap-12 items-start">
+<div class="w-full md:w-1/3">
+<h2 class="font-headline text-3xl mb-4">The Glossary</h2>
+<p class="text-on-surface-variant mb-8">De-coding the language of the sourdough alchemist. Search for techniques, terms, and tools.</p>
+<div class="relative group">
+<input class="w-full bg-surface-container-lowest border-none rounded-lg px-12 py-4 text-on-surface focus:ring-1 focus:ring-primary/40 transition-all placeholder:text-outline shadow-sm" id="glossarySearch" placeholder="Search terms (e.g. Autolyse)" type="text"/>
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary">search</span>
+</div>
+</div>
+<div class="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12" id="glossaryGrid">
+<div class="glossary-item">
+<span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">TECHNIQUE</span>
+<h3 class="font-headline text-xl mb-2">Autolyse</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">A rest period where flour and water are mixed before adding salt and starter. Encourages enzymatic activity and gluten development.</p>
+</div>
+<div class="glossary-item">
+<span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">SCIENCE</span>
+<h3 class="font-headline text-xl mb-2">Hooch</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">The liquid layer that forms on top of an unfed starter. High in alcohol — it means your starter is hungry and needs feeding.</p>
+</div>
+<div class="glossary-item">
+<span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">CRAFT</span>
+<h3 class="font-headline text-xl mb-2">Banneton</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">A proofing basket, often rattan or linen-lined, that holds shaped dough and imprints a beautiful spiral pattern on the crust.</p>
+</div>
+<div class="glossary-item">
+<span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">TEXTURE</span>
+<h3 class="font-headline text-xl mb-2">Open Crumb</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">The aesthetic goal of many bakers: a light, airy internal structure with large, irregular air pockets throughout the loaf.</p>
+</div>
+<div class="glossary-item">
+<span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">TECHNIQUE</span>
+<h3 class="font-headline text-xl mb-2">Stretch &amp; Fold</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">Gentle dough strengthening during bulk fermentation. Stretch the dough up and fold over itself, rotating the bowl each time — no kneading needed.</p>
+</div>
+<div class="glossary-item">
+<span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">PROCESS</span>
+<h3 class="font-headline text-xl mb-2">Bulk Fermentation</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">The first rise after mixing. Wild yeast and bacteria ferment the dough at room temperature, building flavor and structure over several hours.</p>
+</div>
+<div class="glossary-item">
+<span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">BAKING</span>
+<h3 class="font-headline text-xl mb-2">Lame</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">A razor-sharp blade on a handle used to score bread before baking. The score controls where the loaf opens during oven spring.</p>
+</div>
+<div class="glossary-item">
+<span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">SCIENCE</span>
+<h3 class="font-headline text-xl mb-2">Oven Spring</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">The rapid rise that happens in the first 10–15 minutes of baking as trapped gases expand. A dramatic spring means well-fermented dough.</p>
+</div>
+<div class="glossary-item">
+<span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">STARTER</span>
+<h3 class="font-headline text-xl mb-2">Levain</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">A pre-ferment built from your starter that is added to the dough. Using a levain gives more control over fermentation rate and flavor profile.</p>
+</div>
+<div class="glossary-item">
+<span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">SHAPING</span>
+<h3 class="font-headline text-xl mb-2">Boule &amp; Bâtard</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">The two classic sourdough shapes. A boule is round; a bâtard is oval. Each requires a different shaping technique and scoring pattern.</p>
+</div>
+<!-- Website search results -->
+<div id="siteResults" class="col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-x-8"></div>
+<!-- No-results message (hidden by default) -->
+<div id="glossaryNoResults" class="col-span-2 py-8 text-center hidden">
+<span class="material-symbols-outlined text-3xl text-outline mb-3 block">search_off</span>
+<p class="text-on-surface-variant text-sm">No matching terms. Try a different word.</p>
+</div>
+</div>
+</div>
+<!-- Decorative element -->
+<div class="absolute -bottom-12 -right-12 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+</div>
+</section>
+<!-- Video Tutorials (Asymmetric Cards) -->
+<section class="mb-24">
+<div class="flex justify-between items-end mb-12">
+<h2 class="font-headline text-4xl">Artisan Tutorials</h2>
+<a class="font-label text-sm text-primary font-bold border-b border-primary/20 pb-1 hover:border-primary transition-all flex items-center gap-1.5" href="https://www.tiktok.com/@pancitoymas" target="_blank" rel="noopener">
+  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.95a8.16 8.16 0 0 0 4.77 1.52V7.01a4.85 4.85 0 0 1-1-.32z"/></svg>
+  Watch on TikTok
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<!-- Video Card 1 -->
+<a class="group block" href="stretch-and-fold.html">
+<div class="relative mb-6 overflow-hidden rounded-xl bg-surface-container-high aspect-[4/5] shadow-sm transition-transform duration-500 group-hover:-translate-y-2">
+<img alt="Hands stretching and folding raw dough on counter" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-stretch-fold.jpg" onerror="this.onerror=null;this.src='https://pancitoymas.com/app/images/featured-rise.jpg';"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="w-16 h-16 rounded-full bg-surface/90 flex items-center justify-center text-primary scale-90 group-hover:scale-100 transition-transform duration-300">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+</div>
+</div>
+<div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-full">
+<span class="font-label text-[10px] font-bold tracking-tighter">04:12</span>
+</div>
+</div>
+<span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Foundations</span>
+<h3 class="font-headline text-2xl mb-2 group-hover:text-primary transition-colors">The Stretch &amp; Fold</h3>
+<p class="text-on-surface-variant text-sm">Mastering hydration without the heavy kneading. The core of sourdough structure.</p>
+</a>
+<!-- Video Card 2 (Offset/Taller) -->
+<a class="group block md:-mt-8" href="scoring-aesthetics.html">
+<div class="relative mb-6 overflow-hidden rounded-xl bg-surface-container-high aspect-[4/5] shadow-sm transition-transform duration-500 group-hover:-translate-y-2">
+<img alt="Scoring a loaf of bread with a sharp blade" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-scoring.jpg" onerror="this.onerror=null;this.src='https://pancitoymas.com/app/images/featured-rise.jpg';"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="w-16 h-16 rounded-full bg-surface/90 flex items-center justify-center text-primary scale-90 group-hover:scale-100 transition-transform duration-300">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+</div>
+</div>
+<div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-full">
+<span class="font-label text-[10px] font-bold tracking-tighter">08:45</span>
+</div>
+</div>
+<span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Finishing</span>
+<h3 class="font-headline text-2xl mb-2 group-hover:text-primary transition-colors">Scoring Aesthetics</h3>
+<p class="text-on-surface-variant text-sm">A guide to the decorative 'Lame' work that creates beautiful, controlled expansion.</p>
+</a>
+<!-- Video Card 3 -->
+<a class="group block" href="starter-revival.html">
+<div class="relative mb-6 overflow-hidden rounded-xl bg-surface-container-high aspect-[4/5] shadow-sm transition-transform duration-500 group-hover:-translate-y-2">
+<img alt="A jar of active bubbling sourdough starter" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-starter.jpg" onerror="this.onerror=null;this.src='https://pancitoymas.com/app/images/featured-rise.jpg';"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="w-16 h-16 rounded-full bg-surface/90 flex items-center justify-center text-primary scale-90 group-hover:scale-100 transition-transform duration-300">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+</div>
+</div>
+<div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-full">
+<span class="font-label text-[10px] font-bold tracking-tighter">12:30</span>
+</div>
+</div>
+<span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Maintenance</span>
+<h3 class="font-headline text-2xl mb-2 group-hover:text-primary transition-colors">The Starter Revival</h3>
+<p class="text-on-surface-variant text-sm">How to bring a neglected starter back from the brink of dormancy.</p>
+</a>
+</div>
+</section>
+<!-- Troubleshooting Grid (Bento Style) -->
+<section class="mb-24">
+<h2 class="font-headline text-4xl mb-12">The Troubleshooting Guide</h2>
+<div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-6 h-full md:h-[600px]">
+<!-- Item 1: Why didn't it rise? -->
+<a href="troubleshoot-rise.html" class="md:col-span-2 md:row-span-2 bg-surface-container-highest rounded-xl p-8 flex flex-col justify-between group hover:bg-surface-container-high transition-colors">
+<div>
+<span class="material-symbols-outlined text-4xl text-primary mb-6">trending_down</span>
+<h3 class="font-headline text-3xl mb-4 leading-tight">"Why didn't my bread rise?"</h3>
+<p class="text-on-surface-variant mb-8">Investigating the three most common culprits: weak starter, improper proofing temperature, or over-fermentation.</p>
+</div>
+<span class="flex items-center gap-3 font-label text-sm font-bold text-primary self-start group-hover:gap-4 transition-all">
+  Read Guide <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</span>
+</a>
+<!-- Item 2: Sticky Dough -->
+<a href="troubleshoot-sticky.html" class="md:col-span-2 bg-secondary-container rounded-xl p-8 flex items-center gap-6 group hover:opacity-90 transition-opacity">
+<div class="flex-1">
+<h3 class="font-headline text-xl mb-2">Dough is too sticky?</h3>
+<p class="text-xs text-on-secondary-container leading-relaxed">It's likely a hydration mismatch with your specific brand of flour. Try the 'Rubaud' method.</p>
+</div>
+<div class="w-20 h-20 bg-surface/30 rounded-full flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">water_drop</span>
+</div>
+</a>
+<!-- Item 3: Crust Problems -->
+<a href="troubleshoot-crust.html" class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-center text-center group hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-2xl text-primary mb-3 group-hover:scale-110 transition-transform">oven_gen</span>
+<h4 class="font-headline text-lg mb-1">Tough Crust</h4>
+<p class="text-[10px] uppercase tracking-widest opacity-60">Lack of Steam</p>
+</a>
+<!-- Item 4: Crumb Problems -->
+<a href="troubleshoot-gummy.html" class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-center text-center group hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-2xl text-primary mb-3 group-hover:scale-110 transition-transform">texture</span>
+<h4 class="font-headline text-lg mb-1">Gummy Texture</h4>
+<p class="text-[10px] uppercase tracking-widest opacity-60">Internal Temp</p>
+</a>
+</div>
+</section>
+<!-- Newsletter / Footer-ish Callout -->
+<section class="mb-12">
+<div class="bg-primary rounded-2xl p-8 md:p-16 flex flex-col md:flex-row items-center gap-12 text-surface">
+<div class="w-full md:w-1/2">
+<h2 class="font-headline text-4xl mb-4">Deepen Your Knowledge</h2>
+<p class="opacity-80 text-lg">Join 15,000+ bakers receiving our weekly 'Dough Journal'—a collection of science deep-dives and seasonal wheat varieties.</p>
+</div>
+<div class="w-full md:w-1/2">
+<form class="flex flex-col sm:flex-row gap-4">
+<input class="flex-1 bg-surface/10 border-surface/20 rounded-lg px-6 py-4 placeholder:text-surface/60 text-surface focus:ring-surface/40 border-none outline-none" placeholder="Your email address" type="email"/>
+<button class="bg-surface text-primary font-bold px-8 py-4 rounded-lg hover:bg-surface-container-lowest transition-colors">Subscribe</button>
+</form>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]">
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="index.html">
+<span class="material-symbols-outlined text-[20px]">home_max</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Dash</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="bake-log.html">
+<span class="material-symbols-outlined text-[20px]">timer</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Bake</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" href="library.html">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">book_5</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Library</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="archive.html">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Archive</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="starter-kit.html">
+<span class="material-symbols-outlined text-[20px]">handyman</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Tools</span>
+</a>
+</nav>
+
+<script>
+(function() {
+  var input   = document.getElementById('glossarySearch');
+  var grid    = document.getElementById('glossaryGrid');
+  var noRes   = document.getElementById('glossaryNoResults');
+  var siteRes = document.getElementById('siteResults');
+  if (!input || !grid) return;
+
+  var debounceTimer;
+
+  input.addEventListener('input', function() {
+    var query = this.value.trim();
+    var lower = query.toLowerCase();
+
+    // --- 1. Filter local glossary items ---
+    var items = grid.querySelectorAll('.glossary-item');
+    var visibleCount = 0;
+    items.forEach(function(item) {
+      if (!query || item.textContent.toLowerCase().includes(lower)) {
+        item.classList.remove('hidden');
+        visibleCount++;
+      } else {
+        item.classList.add('hidden');
+      }
+    });
+    if (noRes) {
+      noRes.classList.toggle('hidden', visibleCount > 0);
+    }
+
+    // --- 2. Search pancitoymas.com via WordPress REST API ---
+    if (siteRes) {
+      if (!query || query.length < 2) {
+        siteRes.innerHTML = '';
+        return;
+      }
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(function() {
+        siteRes.innerHTML = '<p class="text-xs text-outline col-span-2 py-2">Searching pancitoymas.com…</p>';
+        fetch('https://pancitoymas.com/wp-json/wp/v2/search?search=' + encodeURIComponent(query) + '&per_page=5&_embed')
+          .then(function(r) { return r.json(); })
+          .then(function(results) {
+            if (!results || results.length === 0) {
+              siteRes.innerHTML = '<p class="text-xs text-outline col-span-2 py-2">No results found on pancitoymas.com.</p>';
+              return;
+            }
+            var html = '<p class="text-[10px] uppercase tracking-widest text-primary font-extrabold col-span-2 pt-4 pb-2 border-t border-outline-variant">From pancitoymas.com</p>';
+            results.forEach(function(item) {
+              html += '<a href="' + item.url + '" target="_blank" rel="noopener" class="col-span-1 group block py-3 border-b border-outline-variant/30 hover:text-primary transition-colors">'
+                    + '<h4 class="font-headline text-base mb-1 group-hover:text-primary">' + item.title + '</h4>'
+                    + '<span class="text-[10px] uppercase tracking-widest text-outline">' + (item.subtype || item.type) + '</span>'
+                    + '</a>';
+            });
+            siteRes.innerHTML = html;
+          })
+          .catch(function() {
+            siteRes.innerHTML = '<p class="text-xs text-outline col-span-2 py-2">Could not reach pancitoymas.com. Check your connection.</p>';
+          });
+      }, 400);
+    }
+  });
+})();
+</script>
+</body></html>

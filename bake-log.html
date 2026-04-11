@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-variant": "#e7e2d8",
+              "error": "#ba1a1a",
+              "primary-container": "#c4863a",
+              "on-tertiary-fixed": "#2a170f",
+              "on-error": "#ffffff",
+              "inverse-surface": "#32302a",
+              "background": "#fef9ef",
+              "tertiary-container": "#ac8c80",
+              "surface-container-high": "#ece8de",
+              "secondary-fixed": "#ffdbc8",
+              "tertiary": "#74584e",
+              "secondary-fixed-dim": "#f8b993",
+              "inverse-primary": "#ffb967",
+              "outline-variant": "#d6c3b3",
+              "on-secondary-container": "#794b2d",
+              "on-surface": "#1d1c16",
+              "surface": "#fef9ef",
+              "primary-fixed-dim": "#ffb967",
+              "outline": "#847466",
+              "on-tertiary-fixed-variant": "#5a4137",
+              "on-tertiary": "#ffffff",
+              "secondary": "#835334",
+              "surface-container-lowest": "#ffffff",
+              "secondary-container": "#febe98",
+              "tertiary-fixed-dim": "#e3bfb2",
+              "on-tertiary-container": "#3d261e",
+              "on-primary-container": "#422500",
+              "tertiary-fixed": "#ffdbce",
+              "surface-container-highest": "#e7e2d8",
+              "surface-bright": "#fef9ef",
+              "surface-dim": "#dedad0",
+              "surface-container-low": "#f8f3e9",
+              "on-secondary-fixed": "#321300",
+              "on-surface-variant": "#514538",
+              "on-primary-fixed": "#2b1700",
+              "on-primary": "#ffffff",
+              "surface-container": "#f2ede3",
+              "on-secondary": "#ffffff",
+              "on-primary-fixed-variant": "#673d00",
+              "primary": "#875305",
+              "error-container": "#ffdad6",
+              "on-background": "#1d1c16",
+              "surface-tint": "#875305",
+              "primary-fixed": "#ffddba",
+              "on-secondary-fixed-variant": "#673c1f",
+              "on-error-container": "#93000a",
+              "inverse-on-surface": "#f5f0e6"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-panel {
+        background: rgba(254, 249, 239, 0.7);
+        backdrop-filter: blur(12px);
+      }
+      .step-inactive { opacity: 0.5; filter: grayscale(1); }
+      .step-active { opacity: 1; filter: none; }
+      .hidden-step { display: none; }
+    </style>
+</head>
+<body class="bg-[#fef9ef] text-on-surface font-body selection:bg-secondary-container">
+<!-- TopAppBar -->
+<header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/20">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<a class="flex items-center gap-3" href="index.html">
+<img alt="Pancito y Más Logo" class="w-12 h-12 object-contain" src="logo.png"/>
+<span class="font-['Noto_Serif'] text-[#875305] italic font-bold text-2xl tracking-tight">Pancito y Más</span>
+</a>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8 items-center font-['Plus_Jakarta_Sans'] text-xs uppercase tracking-widest">
+<a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="index.html">Dashboard</a>
+      <a class="text-[#875305] font-extrabold hover:text-[#c4863a] transition-colors duration-200" href="bake-log.html">Bake</a>
+      <a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="library.html">Library</a>
+      <a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="archive.html">Archive</a>
+      <a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="starter-kit.html">Tools</a>
+</nav>
+<div class="flex items-center gap-3 text-[#875305]">
+<a href="bake-log.html" class="hover:opacity-70 transition-opacity" title="Active Bake Session">
+<span class="material-symbols-outlined">timer</span>
+</a>
+<a href="https://www.facebook.com/groups/1235548458006543" target="_blank" class="hover:opacity-70 transition-opacity" title="Join our Community Group">
+<span class="material-symbols-outlined">account_circle</span>
+</a>
+</div>
+</div>
+</div>
+</header>
+<!-- Persistent Global Header Timer -->
+<div class="hidden sticky top-[72px] z-40 w-full bg-primary/10 backdrop-blur-md border-b border-primary/20 py-3 px-6 shadow-sm" id="persistent-bulk-timer">
+<div class="max-w-4xl mx-auto flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">schedule</span>
+<span class="font-label text-[10px] uppercase tracking-[0.2em] font-bold text-secondary">Total Bulk Fermentation</span>
+</div>
+<div class="font-headline text-2xl text-primary" id="header-bulk-total-timer">00:00:00</div>
+</div>
+</div>
+<main class="max-w-4xl mx-auto px-6 py-12 pb-32">
+<!-- Stepper Navigation -->
+<nav class="mb-16">
+<div class="flex justify-between items-center relative">
+<div class="absolute top-1/2 left-0 w-full h-[1px] bg-outline-variant/30 -z-10"></div>
+<button class="flex flex-col items-center gap-3 group transition-all" id="step-nav-1" onclick="goToStep(1)">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-headline text-lg step-circle shadow-md">1</div>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold text-primary step-label">Mix</span>
+</button>
+<button class="flex flex-col items-center gap-3 group transition-all step-inactive" id="step-nav-2" onclick="goToStep(2)">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle">2</div>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label">Bulk</span>
+</button>
+<button class="flex flex-col items-center gap-3 group transition-all step-inactive" id="step-nav-3" onclick="goToStep(3)">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle">3</div>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label">Shape</span>
+</button>
+<button class="flex flex-col items-center gap-3 group transition-all step-inactive" id="step-nav-4" onclick="goToStep(4)">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle">4</div>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label">Proof</span>
+</button>
+<button class="flex flex-col items-center gap-3 group transition-all step-inactive" id="step-nav-5" onclick="goToStep(5)">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle">5</div>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label">Bake</span>
+</button>
+<button class="flex flex-col items-center gap-3 group transition-all step-inactive" id="step-nav-6" onclick="goToStep(6)">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle">6</div>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label">Result</span>
+</button>
+</div>
+</nav>
+<!-- Stage 1: Mix -->
+<section class="space-y-12" id="step-content-1">
+<header>
+<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight">Stage 1: The Initial Mix</h1>
+<p class="font-label text-xs uppercase tracking-[0.2em] text-outline">Bring everything together — you're officially baking!</p>
+</header>
+<!-- Beginner welcome card -->
+<div class="bg-secondary-container/20 border-l-4 border-secondary p-6 rounded-xl flex gap-4 items-start">
+  <span class="material-symbols-outlined text-secondary text-3xl shrink-0">emoji_food_beverage</span>
+  <div>
+    <h3 class="font-headline text-xl text-secondary mb-1">Welcome to your bake! 🎉</h3>
+    <p class="text-sm text-on-surface-variant leading-relaxed">In this stage you'll mix flour, water, starter, and salt together. Don't worry about it being perfect — a shaggy, rough dough is exactly what you want right now. The magic happens in the hours ahead. Just fill in your amounts below, mix well, and hit <strong>Complete Mix</strong> when you're done.</p>
+  </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+<div class="md:col-span-5 bg-surface-container-low p-8 rounded-xl space-y-6">
+<h3 class="font-headline text-2xl text-secondary">Formula (<span id="hydration-pct">65</span>% Hydration)</h3>
+<ul class="space-y-4">
+<li class="flex justify-between items-center border-b border-outline-variant/15 pb-2">
+<span class="font-body text-on-surface-variant">Strong Bread Flour</span>
+<div class="flex items-center gap-1">
+<input class="w-20 bg-transparent text-right font-headline text-xl text-primary border-none focus:ring-0 p-0" id="input-flour" oninput="updateHydration()" type="number" value="500"/>
+<span class="font-headline text-xl text-primary">g</span>
+</div>
+</li>
+<li class="flex justify-between items-center border-b border-outline-variant/15 pb-2">
+<span class="font-body text-on-surface-variant">Filtered Water</span>
+<div class="flex items-center gap-1">
+<input class="w-20 bg-transparent text-right font-headline text-xl text-primary border-none focus:ring-0 p-0" id="input-water" oninput="updateHydration()" type="number" value="325"/>
+<span class="font-headline text-xl text-primary">g</span>
+</div>
+</li>
+<li class="flex justify-between items-center border-b border-outline-variant/15 pb-2">
+<span class="font-body text-on-surface-variant">Active Starter</span>
+<div class="flex items-center gap-1">
+<input class="w-20 bg-transparent text-right font-headline text-xl text-primary border-none focus:ring-0 p-0" id="input-starter" type="number" value="100"/>
+<span class="font-headline text-xl text-primary">g</span>
+</div>
+</li>
+<li class="flex justify-between items-center border-b border-outline-variant/15 pb-2">
+<span class="font-body text-on-surface-variant">Fine Sea Salt</span>
+<div class="flex items-center gap-1">
+<input class="w-20 bg-transparent text-right font-headline text-xl text-primary border-none focus:ring-0 p-0" id="input-salt" type="number" value="10"/>
+<span class="font-headline text-xl text-primary">g</span>
+</div>
+</li>
+</ul>
+<div class="pt-4 space-y-4">
+<div>
+<label class="block font-label text-[10px] uppercase tracking-widest font-bold text-primary mb-2">✦ Bake Name / Recipe <span class="text-secondary normal-case tracking-normal font-normal">(name your loaf!)</span></label>
+<input class="w-full bg-surface-container border-none rounded-lg px-4 py-3 text-primary font-headline" id="input-recipe-name" type="text" placeholder="e.g. Sunday Country Loaf"/>
+</div>
+<div>
+<label class="block font-label text-[10px] uppercase tracking-widest font-bold text-outline mb-2">Flour Type</label>
+<input class="w-full bg-surface-container border-none rounded-lg px-4 py-3 text-primary font-headline" id="input-flour-type" type="text" placeholder="e.g. Bread Flour, Whole Wheat" value="Bread Flour"/>
+</div>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-lg font-label uppercase tracking-widest text-sm shadow-lg hover:translate-y-[-2px] transition-all" onclick="completeStep1()">
+                        Complete Mix &amp; Start Bulk
+                    </button>
+</div>
+<div class="md:col-span-7 space-y-6">
+<div class="bg-surface-container p-6 rounded-xl space-y-4">
+  <h4 class="font-headline text-xl text-secondary">How to Mix — Step by Step</h4>
+  <ol class="space-y-3 text-sm text-on-surface-variant">
+    <li class="flex gap-3 items-start"><span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-xs shrink-0 font-bold">1</span><span>Combine flour and water in a large bowl. Mix with your hands until no dry flour remains. Cover and rest 30 min (autolyse — this kick-starts gluten development).</span></li>
+    <li class="flex gap-3 items-start"><span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-xs shrink-0 font-bold">2</span><span>Add your active starter and squeeze it through the dough until fully absorbed. The dough will feel slippery at first — keep going!</span></li>
+    <li class="flex gap-3 items-start"><span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-xs shrink-0 font-bold">3</span><span>Sprinkle salt over the dough, then add a tiny splash of water to help it dissolve. Squeeze and fold until the salt is worked in.</span></li>
+    <li class="flex gap-3 items-start"><span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-xs shrink-0 font-bold">4</span><span>Do 2–3 minutes of folds in the bowl (grab, stretch, fold over). The dough should feel cohesive and hold together — a little rough is perfectly fine.</span></li>
+  </ol>
+</div>
+<div class="bg-primary/5 border border-primary/20 p-5 rounded-xl flex gap-3 items-start">
+  <span class="material-symbols-outlined text-primary text-2xl shrink-0">timer</span>
+  <div>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold text-primary block mb-1">After you hit "Complete Mix"…</span>
+    <p class="text-sm text-on-surface-variant leading-relaxed">The app will start a <strong>60-minute rest timer</strong> automatically. This rest lets the gluten relax before your first stretch &amp; fold. You can leave the dough covered on the counter — no action needed yet!</p>
+  </div>
+</div>
+<div class="p-5 border-l-4 border-secondary-container bg-surface-container-low italic text-on-surface-variant leading-relaxed text-sm rounded-r-xl">
+  "It doesn't need to be smooth yet. Trust the process — the gluten will build itself over the next few hours of bulk fermentation." 🍞
+</div>
+</div>
+</div>
+</section>
+<!-- Stage 2: Bulk Fermentation -->
+<section class="hidden-step space-y-12" id="step-content-2">
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight">Stage 2: Bulk</h1>
+<p class="font-label text-xs uppercase tracking-[0.2em] text-outline">4 Rounds of Stretch &amp; Fold — the app guides you step by step</p>
+</div>
+<div class="bg-primary/5 px-6 py-4 rounded-xl border border-primary/10">
+<span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary block mb-1">Total Fermentation Time</span>
+<div class="font-headline text-3xl text-primary" id="bulk-total-timer">00:00:00</div>
+</div>
+</header>
+<!-- 60-Minute Initial Rest Timer -->
+<div class="bg-primary/5 border border-primary/20 rounded-xl p-6 mb-8" id="rest-60-container">
+  <div class="flex flex-col md:flex-row md:items-center gap-4 justify-between">
+    <div>
+      <span class="font-label text-[10px] uppercase tracking-[0.2em] font-bold text-secondary block mb-1">Initial Rest — 60 Minutes</span>
+      <p class="text-sm text-on-surface-variant">Let the gluten relax before your first stretch &amp; fold. Round 1 unlocks when this timer finishes.</p>
+    </div>
+    <div class="flex flex-col items-center gap-3 shrink-0">
+      <div class="font-headline text-4xl text-primary" id="rest-timer-display">60:00</div>
+      <div class="flex gap-2">
+        <button class="px-4 py-2 bg-primary text-on-primary rounded-full text-[10px] font-label uppercase tracking-widest" id="rest-timer-btn" onclick="toggleRestTimer()">Start Rest</button>
+      </div>
+    </div>
+  </div>
+  <div class="hidden mt-4 p-3 bg-green-100 text-green-800 rounded-lg text-sm font-label font-bold text-center" id="rest-timer-complete-msg">
+    ✔ Rest complete — Round 1 is now unlocked!
+  </div>
+</div>
+
+<!-- How timers work info card -->
+<div class="bg-surface-container-low border border-outline-variant/30 rounded-xl p-5 flex gap-4 items-start">
+  <span class="material-symbols-outlined text-secondary text-2xl shrink-0">info</span>
+  <div>
+    <h4 class="font-headline text-lg text-secondary mb-1">How Stretch &amp; Fold Works</h4>
+    <p class="text-sm text-on-surface-variant leading-relaxed">Each round is <strong>30 minutes long</strong> and unlocks automatically when the previous one finishes. When a timer starts, grab the dough from one side, stretch it up as high as it will go without tearing, then fold it over the center. Rotate the bowl and repeat 4 times. That's one "set" — it only takes about 30 seconds! Then cover the bowl and let it rest until the next round unlocks.</p>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="grid grid-cols-2 gap-4">
+<!-- Timer 1 -->
+<div class="bg-surface-container-low/50 p-6 rounded-xl border border-dashed border-outline-variant/30 flex flex-col items-center gap-4 text-center grayscale opacity-50 transition-all" id="bulk-timer-1">
+<span class="material-symbols-outlined text-4xl" id="icon-1">lock</span>
+<div>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold">Round 1</span>
+<div class="font-headline text-2xl timer-display">30:00</div>
+</div>
+<div class="flex gap-2 w-full justify-center">
+<button class="px-3 py-1.5 bg-outline text-on-surface-variant rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full" disabled onclick="toggleTimer(1)">Locked</button>
+</div>
+</div>
+<!-- Timer 2 -->
+<div class="bg-surface-container-low/50 p-6 rounded-xl border border-dashed border-outline-variant/30 flex flex-col items-center gap-4 text-center grayscale opacity-50 transition-all" id="bulk-timer-2">
+<span class="material-symbols-outlined text-4xl" id="icon-2">lock</span>
+<div>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold">Round 2</span>
+<div class="font-headline text-2xl timer-display">30:00</div>
+</div>
+<div class="flex gap-2 w-full justify-center">
+<button class="px-3 py-1.5 bg-outline text-on-surface-variant rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full" disabled="" onclick="toggleTimer(2)">Locked</button>
+</div>
+</div>
+<!-- Timer 3 -->
+<div class="bg-surface-container-low/50 p-6 rounded-xl border border-dashed border-outline-variant/30 flex flex-col items-center gap-4 text-center grayscale opacity-50 transition-all" id="bulk-timer-3">
+<span class="material-symbols-outlined text-4xl" id="icon-3">lock</span>
+<div>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold">Round 3</span>
+<div class="font-headline text-2xl timer-display">30:00</div>
+</div>
+<div class="flex gap-2 w-full justify-center">
+<button class="px-3 py-1.5 bg-outline text-on-surface-variant rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full" disabled="" onclick="toggleTimer(3)">Locked</button>
+</div>
+</div>
+<!-- Timer 4 -->
+<div class="bg-surface-container-low/50 p-6 rounded-xl border border-dashed border-outline-variant/30 flex flex-col items-center gap-4 text-center grayscale opacity-50 transition-all" id="bulk-timer-4">
+<span class="material-symbols-outlined text-4xl" id="icon-4">lock</span>
+<div>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold">Round 4</span>
+<div class="font-headline text-2xl timer-display">30:00</div>
+</div>
+<div class="flex gap-2 w-full justify-center">
+<button class="px-3 py-1.5 bg-outline text-on-surface-variant rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full" disabled="" onclick="toggleTimer(4)">Locked</button>
+</div>
+</div>
+</div>
+<!-- Dough temp after bulk -->
+<div class="bg-surface-container-low border border-outline-variant/30 p-6 rounded-xl flex flex-col sm:flex-row sm:items-center gap-4">
+  <div class="flex-1">
+    <label class="block font-label text-[10px] uppercase tracking-widest font-bold text-secondary mb-1">📍 Final Dough Temp — After Your Last Stretch &amp; Fold</label>
+    <p class="text-xs text-on-surface-variant">Take your dough's temperature now. This tells you which row of the table below to use for timing.</p>
+  </div>
+  <div class="flex items-center gap-2 shrink-0">
+    <input class="w-24 bg-surface-container border border-outline-variant/40 rounded-lg px-3 py-3 text-primary font-headline text-xl text-center" id="input-initial-temp" type="number" value="78"/>
+    <span class="font-headline text-xl text-primary">°F</span>
+  </div>
+</div>
+<div class="bg-green-50 border border-green-200 p-6 rounded-xl mb-2">
+  <h4 class="font-headline text-xl text-green-800 mb-3">✅ How do I know bulk fermentation is done?</h4>
+  <p class="text-sm text-green-900 mb-4">After all 4 rounds of stretch &amp; fold, look for these signs before moving to shaping:</p>
+  <ul class="space-y-2 text-sm text-green-900">
+    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600 text-base">check_circle</span> Dough has risen <strong>50–75%</strong> in size (use a rubber band on the side of the bowl to track)</li>
+    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600 text-base">check_circle</span> Dough jiggles like jello when you shake the bowl</li>
+    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600 text-base">check_circle</span> Bubbles visible on the surface and along the sides</li>
+    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600 text-base">check_circle</span> Dough feels airy and light, not dense</li>
+    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600 text-base">check_circle</span> Smooth, domed surface (not flat or sunken)</li>
+  </ul>
+  <p class="text-xs text-green-700 mt-3 italic">If you're unsure, wait another 30 minutes and check again. Over-proofed dough is harder to fix than under-proofed!</p>
+</div>
+<div class="bg-secondary-container/10 p-8 rounded-xl">
+<h3 class="font-headline text-2xl text-secondary mb-6">Dough Temp vs. Target Rise</h3>
+<div class="overflow-hidden border border-outline-variant/30 rounded-lg">
+<table class="w-full text-sm font-label uppercase tracking-wider">
+<thead class="bg-surface-container-high">
+<tr class="text-left">
+<th class="p-3 border-b border-outline-variant/30">Dough Temp</th>
+<th class="p-3 border-b border-outline-variant/30">Approx. Time</th>
+<th class="p-3 border-b border-outline-variant/30">Target Rise</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<tr><td class="p-3">65°F (18°C)</td><td class="p-3">14–18 hrs</td><td class="p-3">80–100%</td></tr>
+<tr class="bg-surface-container-low"><td class="p-3">68°F (20°C)</td><td class="p-3">12–14 hrs</td><td class="p-3">80–100%</td></tr>
+<tr><td class="p-3">72°F (22°C)</td><td class="p-3">8–10 hrs</td><td class="p-3">75–90%</td></tr>
+<tr class="bg-surface-container-low"><td class="p-3">75°F (24°C)</td><td class="p-3">6–8 hrs</td><td class="p-3">50–75%</td></tr>
+<tr><td class="p-3">78°F (26°C)</td><td class="p-3">4–6 hrs</td><td class="p-3">40–60%</td></tr>
+<tr class="bg-surface-container-low"><td class="p-3">80°F (27°C)</td><td class="p-3">3–5 hrs</td><td class="p-3">30–50%</td></tr>
+</tbody>
+</table>
+</div>
+<button class="w-full mt-8 py-4 bg-secondary text-on-secondary rounded-lg font-label uppercase tracking-widest text-sm hover:opacity-90 transition-all" onclick="goToStep(3)">🎉 Bulk Done — Let's Shape!</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Stage 3: Shape -->
+<section class="hidden-step space-y-12" id="step-content-3">
+<header>
+<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight">Stage 3: Shaping</h1>
+<p class="font-label text-xs uppercase tracking-[0.2em] text-outline">Creating tension and surface skin — almost there!</p>
+</header>
+<!-- Beginner shaping intro -->
+<div class="bg-secondary-container/20 border-l-4 border-secondary p-6 rounded-xl flex gap-4 items-start">
+  <span class="material-symbols-outlined text-secondary text-3xl shrink-0">pan_tool</span>
+  <div>
+    <h3 class="font-headline text-xl text-secondary mb-1">You made it through bulk fermentation! 🙌</h3>
+    <p class="text-sm text-on-surface-variant leading-relaxed">Shaping has two parts: a quick <strong>preshape</strong> (a rough round), then a 30-minute bench rest, then the <strong>final shape</strong> (a tighter round) before it goes in the fridge. The goal is to create surface tension — the skin on the outside of the dough is what gives your loaf its structure in the oven. Take your time and be gentle. Even an imperfect shape bakes into beautiful bread!</p>
+  </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+<div class="space-y-6">
+<div class="bg-surface-container-high p-12 rounded-2xl text-center border border-primary/20" id="preshape-timer">
+<span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary mb-4 block">Preshape Bench Rest</span>
+<div class="font-headline text-6xl text-primary mb-8 timer-display">30:00</div>
+<button class="px-8 py-3 bg-primary text-on-primary rounded-full font-label uppercase tracking-widest text-sm shadow-lg hover:opacity-90 start-btn" onclick="toggleStaticTimer('preshape-timer', 30*60)">Start Rest</button>
+</div>
+<div class="p-6 bg-surface-container-low rounded-xl border-l-4 border-secondary space-y-3">
+<h4 class="font-headline text-xl mb-2">Technique: Final Shape</h4>
+<p class="text-sm leading-relaxed text-on-surface-variant">After the bench rest timer, do your final shape:</p>
+<ol class="text-sm text-on-surface-variant space-y-1 list-decimal list-inside">
+  <li>Lightly flour your work surface with rice flour</li>
+  <li>Flip the dough upside-down onto the bench</li>
+  <li>Fold top edge to center, bottom to center, then left and right sides over</li>
+  <li>Flip seam-side down and cup both hands around the dough</li>
+  <li>Pull it gently toward you, dragging it across the bench — this creates tension on the surface skin</li>
+  <li>Repeat a few times until the surface feels taut, then place seam-side up into your floured banneton</li>
+</ol>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<div class="bg-surface-container p-6 rounded-xl">
+<h4 class="font-headline text-xl mb-4">Shaping Checklist</h4>
+<ul class="space-y-4">
+<li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary text-sm">check_circle</span> No bubbles popped on surface</li>
+<li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary text-sm">check_circle</span> Strong lateral tension felt</li>
+<li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary text-sm">check_circle</span> Seamless bottom closure</li>
+</ul>
+</div>
+<button class="py-4 bg-secondary text-on-secondary rounded-lg font-label uppercase tracking-widest text-sm hover:opacity-90 transition-all" onclick="goToStep(4)">Shaped! — Time to Proof 🧊</button>
+</div>
+</div>
+</section>
+<!-- Stage 4: Proof -->
+<section class="hidden-step space-y-12" id="step-content-4">
+<header>
+<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight">Stage 4: Proofing</h1>
+<p class="font-label text-xs uppercase tracking-[0.2em] text-outline">Into the fridge overnight — the hard part is over!</p>
+</header>
+<!-- Beginner proofing intro -->
+<div class="bg-secondary-container/20 border-l-4 border-secondary p-6 rounded-xl flex gap-4 items-start">
+  <span class="material-symbols-outlined text-secondary text-3xl shrink-0">ac_unit</span>
+  <div>
+    <h3 class="font-headline text-xl text-secondary mb-1">You're in the home stretch! ❄️</h3>
+    <p class="text-sm text-on-surface-variant leading-relaxed">The cold fridge slows fermentation way down, letting the dough develop more complex flavor and firm up so it's easier to score. After the 10-minute ambient proof and stitching, cover your banneton in a plastic bag and put it in the fridge. You can bake it <strong>12–16 hours later</strong> (or even up to 48 hours for extra tang!). Come back tomorrow for the exciting part — baking!</p>
+  </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-surface-container-low p-8 rounded-xl space-y-8" id="ambient-timer-container">
+<div>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary">Final Stitching Window</span>
+<div class="font-headline text-5xl text-primary my-4 timer-display">10:00</div>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full text-xs font-label uppercase tracking-widest start-btn" onclick="toggleStaticTimer('ambient-timer-container', 10*60)">Start Ambient Proof</button>
+</div>
+<div class="space-y-4 pt-6 border-t border-outline-variant/30">
+<h4 class="font-headline text-2xl text-secondary">Stitching Instructions</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Wait 10 minutes after basket entry. "Stitch" the dough by pulling sides over each other like a corset. This adds structural support for the oven spring.</p>
+</div>
+</div>
+<div class="bg-secondary-container/20 p-8 rounded-xl flex flex-col justify-between">
+<div>
+<h4 class="font-headline text-2xl mb-6">Cold Proof Guide</h4>
+<ul class="space-y-6">
+<li class="flex items-start gap-4">
+<span class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs shrink-0">1</span>
+<p class="text-sm">Place banneton in a plastic bag to prevent skinning.</p>
+</li>
+<li class="flex items-start gap-4">
+<span class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs shrink-0">2</span>
+<p class="text-sm">Retard in fridge (38°F / 3°C) for 12-16 hours.</p>
+</li>
+<li class="flex items-start gap-4">
+<span class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs shrink-0">3</span>
+<p class="text-sm">Bake directly from cold for best scoring definition.</p>
+</li>
+</ul>
+</div>
+<div class="mt-6">
+<label class="block font-label text-[10px] uppercase tracking-widest font-bold text-secondary mb-2">Fridge/Proof Temp (°F)</label>
+<input class="w-full bg-surface-container border-none rounded-lg px-4 py-3 text-secondary font-headline" id="input-proof-temp" type="number" value="38"/>
+</div>
+<button class="mt-8 py-4 bg-secondary text-on-secondary rounded-lg font-label uppercase tracking-widest text-sm hover:opacity-90 transition-all" onclick="fridgeAndProof()">Into the Fridge — See You Tomorrow! 🔥</button>
+</div>
+</div>
+</section>
+<!-- Stage 5: Bake -->
+<section class="hidden-step space-y-12" id="step-content-5">
+<header>
+<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight">Stage 5: Oven Mechanics</h1>
+<p class="font-label text-xs uppercase tracking-[0.2em] text-outline">The Maillard reaction and final transformation</p>
+</header>
+
+<!-- Cold Proof Elapsed Info -->
+<div class="bg-primary/5 border border-primary/20 rounded-2xl p-5 flex items-center justify-between gap-4">
+  <div class="flex items-center gap-3">
+    <span class="material-symbols-outlined text-primary text-3xl">ac_unit</span>
+    <div>
+      <span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary block mb-1">Dough in Fridge For</span>
+      <span class="font-headline text-2xl text-primary" id="cold-proof-elapsed-display">--:--:--</span>
+    </div>
+  </div>
+  <div class="text-right">
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold text-outline block mb-1">Oven Temp</span>
+    <div class="flex items-center gap-1 justify-end">
+      <input class="w-20 bg-surface-container border border-outline-variant/40 rounded-lg px-2 py-2 text-primary font-headline text-xl text-center" id="input-bake-temp" type="number" value="450"/>
+      <span class="font-headline text-xl text-primary">°F</span>
+    </div>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-surface-container-high p-8 rounded-xl space-y-6" id="bake-timer-1">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary">Phase 1: Steam Expansion</span>
+<h4 class="font-headline text-2xl">Lid On • 25 Mins</h4>
+</div>
+<span class="material-symbols-outlined text-primary text-3xl">deck</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">Preheat oven &amp; Dutch Oven to 500°F. <strong>Lower to 450°F</strong> immediately after placing dough inside. The steam trapped inside allows the crust to expand fully.</p>
+<div class="text-center py-4 bg-surface-container rounded-lg">
+<div class="font-headline text-4xl mb-4 timer-display">25:00</div>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full text-xs font-label uppercase tracking-widest start-btn" onclick="startBakePhase1()">Start Timer</button>
+</div>
+</div>
+<div class="bg-secondary-container/30 p-8 rounded-xl space-y-6" id="bake-timer-2">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary">Phase 2: Color &amp; Cure</span>
+<h4 class="font-headline text-2xl">Lid Off • 20 Mins</h4>
+</div>
+<span class="material-symbols-outlined text-secondary text-3xl">local_fire_department</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">Remove lid to develop deep amber crust. Target internal temperature: <strong>205-210°F</strong>. If the crust darkens too fast, lower temp to 425°F.</p>
+<div class="text-center py-4 bg-surface-container rounded-lg">
+<div class="font-headline text-4xl mb-4 timer-display">20:00</div>
+<button class="px-6 py-2 bg-secondary text-on-secondary rounded-full text-xs font-label uppercase tracking-widest start-btn" onclick="toggleStaticTimer('bake-timer-2', 20*60)">Start Timer</button>
+</div>
+</div>
+</div>
+<div class="text-center pt-8">
+<button class="px-12 py-4 bg-secondary text-on-secondary rounded-lg font-label uppercase tracking-widest text-sm shadow-xl hover:scale-105 transition-all" onclick="goToStep(6)">Record Final Result</button>
+</div>
+</section>
+<!-- Stage 6: Result -->
+<section class="hidden-step space-y-12" id="step-content-6">
+<header class="text-center">
+<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight">Bake Complete</h1>
+<p class="font-label text-xs uppercase tracking-[0.2em] text-outline">Documentation and Reflection</p>
+</header>
+<div class="bg-surface-container-lowest p-12 rounded-2xl border border-outline-variant/10 shadow-sm max-w-2xl mx-auto space-y-10">
+<div class="text-center">
+<h3 class="font-headline text-3xl mb-6">Crumb Rating</h3>
+<div class="flex justify-center gap-2" id="star-rating">
+<button class="material-symbols-outlined text-4xl text-outline-variant hover:text-primary-container transition-colors" onclick="setRating(1)">star</button>
+<button class="material-symbols-outlined text-4xl text-outline-variant hover:text-primary-container transition-colors" onclick="setRating(2)">star</button>
+<button class="material-symbols-outlined text-4xl text-outline-variant hover:text-primary-container transition-colors" onclick="setRating(3)">star</button>
+<button class="material-symbols-outlined text-4xl text-outline-variant hover:text-primary-container transition-colors" onclick="setRating(4)">star</button>
+<button class="material-symbols-outlined text-4xl text-outline-variant hover:text-primary-container transition-colors" onclick="setRating(5)">star</button>
+</div>
+</div>
+<div class="space-y-6">
+<div class="border-2 border-dashed border-outline-variant/30 rounded-xl p-8 hover:bg-surface-container transition-colors cursor-pointer text-center relative overflow-hidden h-48 flex flex-col items-center justify-center group" onclick="document.getElementById('photo-upload').click()">
+<input accept="image/*" class="hidden" id="photo-upload" onchange="previewImage(this)" type="file"/>
+<img class="absolute inset-0 w-full h-full object-cover hidden" id="preview-img" src=""/>
+<div class="group-hover:scale-110 transition-transform" id="upload-prompt">
+<span class="material-symbols-outlined text-4xl text-outline mb-2">add_a_photo</span>
+<p class="font-label text-xs uppercase tracking-widest text-outline font-bold">Upload Final Crumb Shot</p>
+</div>
+</div>
+<textarea class="w-full bg-surface-container border-none rounded-xl p-6 text-sm focus:ring-1 focus:ring-primary h-40 resize-none" id="bake-notes" placeholder="Notes on crumb texture, crust depth, or adjustments for next time..."></textarea>
+<button class="w-full py-4 bg-primary text-on-primary rounded-lg font-label uppercase tracking-widest text-sm hover:opacity-90 shadow-lg transition-all" id="save-button" onclick="saveLog()">
+                        Save to Archive
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]">
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="index.html">
+<span class="material-symbols-outlined text-[20px]">home_max</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Dash</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" href="bake-log.html">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">timer</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Bake</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="library.html">
+<span class="material-symbols-outlined text-[20px]">book_5</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Library</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="archive.html">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Archive</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="starter-kit.html">
+<span class="material-symbols-outlined text-[20px]">handyman</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Tools</span>
+</a>
+</nav>
+<!-- Floating Global Timer Overlay -->
+<div class="fixed bottom-24 right-6 md:bottom-12 md:right-12 z-40 hidden" id="global-timer-container">
+<div class="glass-panel p-6 rounded-2xl shadow-xl border border-white/20 flex items-center gap-6">
+<div class="relative w-16 h-16 flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle class="text-outline-variant/20" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-primary" cx="32" cy="32" fill="transparent" id="timer-progress" r="28" stroke="currentColor" stroke-dasharray="175" stroke-dashoffset="175" stroke-width="4"></circle>
+</svg>
+<span class="material-symbols-outlined text-primary">hourglass_top</span>
+</div>
+<div>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold block mb-1 text-secondary" id="timer-label">Active Timer</span>
+<span class="font-headline text-2xl text-on-surface" id="timer-countdown">--:--</span>
+</div>
+</div>
+</div>
+<script>
+        let currentStep = 1;
+        let userRating = 0;
+        let currentPhoto = null;
+
+        // Timer States
+        const timers = {
+            1: { baseRemaining: 30*60, startTs: 0, interval: null, running: false, completed: false, label: "Round 1" },
+            2: { baseRemaining: 30*60, startTs: 0, interval: null, running: false, completed: false, label: "Round 2" },
+            3: { baseRemaining: 30*60, startTs: 0, interval: null, running: false, completed: false, label: "Round 3" },
+            4: { baseRemaining: 30*60, startTs: 0, interval: null, running: false, completed: false, label: "Round 4" },
+        };
+
+        let bulkTotalSeconds = 0;
+        let bulkTotalInterval = null;
+        const BULK_START_KEY = 'pym_bulk_start';
+
+        // --- 60-Minute Initial Rest Timer (persists across navigation via localStorage) ---
+        const REST_START_KEY  = 'pym_rest_start';   // epoch ms when running started
+        const REST_PAUSED_KEY = 'pym_rest_paused';  // seconds remaining when paused
+        const REST_DONE_KEY   = 'pym_rest_done';    // '1' when complete
+        const REST_TOTAL      = 60 * 60;            // 60 min in seconds
+        const ROUNDS_DONE_KEY  = 'pym_rounds_done';  // JSON array of completed round numbers
+        const ROUND_ACTIVE_KEY = 'pym_round_active'; // JSON {num, startTs, baseRemaining}
+        // ── New phase-tracking keys ──────────────────────────────────────────
+        const BULK_END_KEY          = 'pym_bulk_end';
+        const COLD_PROOF_START_KEY  = 'pym_cold_proof_start';
+        const COLD_PROOF_END_KEY    = 'pym_cold_proof_end';
+        const BAKE_START_KEY        = 'pym_bake_start';
+        const BAKE_END_KEY          = 'pym_bake_end';
+        let coldProofInterval = null;
+        let restInterval = null;
+
+        function restSecondsLeft() {
+            var startTs = parseInt(localStorage.getItem(REST_START_KEY) || '0');
+            var base    = parseInt(localStorage.getItem(REST_PAUSED_KEY) || REST_TOTAL);
+            if (!startTs) return base;
+            return Math.max(0, base - Math.floor((Date.now() - startTs) / 1000));
+        }
+
+        function restUpdateDisplay(sec) {
+            var m = Math.floor(sec / 60), s = sec % 60;
+            document.getElementById('rest-timer-display').innerText =
+                m.toString().padStart(2,'0') + ':' + s.toString().padStart(2,'0');
+        }
+
+        function toggleRestTimer() {
+            if (localStorage.getItem(REST_DONE_KEY)) return;
+            var btn = document.getElementById('rest-timer-btn');
+            if (restInterval) {
+                // Pause: freeze remaining time
+                clearInterval(restInterval); restInterval = null;
+                localStorage.setItem(REST_PAUSED_KEY, restSecondsLeft());
+                localStorage.removeItem(REST_START_KEY);
+                btn.innerText = 'Resume';
+                cancelAlarm('rest-timer');
+            } else {
+                // Unlock AudioContext on this user gesture so alarm can fire later
+                try { var actx = getAudioCtx(); if (actx.state === 'suspended') actx.resume(); } catch(e) {}
+                // Start / Resume: record start epoch against current base
+                localStorage.setItem(REST_START_KEY, Date.now());
+                btn.innerText = 'Pause';
+                sendAlarm('rest-timer', 'Initial 60-min Rest', restSecondsLeft());
+                restTick();
+            }
+        }
+
+        function restTick() {
+            restInterval = setInterval(function() {
+                var left = restSecondsLeft();
+                restUpdateDisplay(left);
+                if (left <= 0) {
+                    clearInterval(restInterval); restInterval = null;
+                    localStorage.removeItem(REST_START_KEY);
+                    localStorage.removeItem(REST_PAUSED_KEY);
+                    localStorage.setItem(REST_DONE_KEY, '1');
+                    finishRestTimer();
+                }
+            }, 1000);
+        }
+
+        function finishRestTimer() {
+            restUpdateDisplay(0);
+            var btn = document.getElementById('rest-timer-btn');
+            btn.disabled = true; btn.innerText = 'Done';
+            document.getElementById('rest-timer-complete-msg').classList.remove('hidden');
+            playBeep('done');
+            unlockRound1();
+        }
+
+        function unlockRound1() {
+            var r1 = document.getElementById('bulk-timer-1');
+            r1.classList.remove('grayscale','opacity-50','border-dashed');
+            r1.classList.add('border-solid');
+            document.getElementById('icon-1').innerText = 'hourglass_empty';
+            document.getElementById('icon-1').classList.add('text-primary');
+            var r1Btn = r1.querySelector('.start-btn');
+            r1Btn.disabled = false; r1Btn.innerText = 'Start';
+            r1Btn.className = 'px-3 py-1.5 bg-primary text-on-primary rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full';
+        }
+
+        function restoreRestTimer() {
+            // Runs on page load — re-connects UI to whatever state is in localStorage
+            if (localStorage.getItem(REST_DONE_KEY)) {
+                restUpdateDisplay(0);
+                var btn = document.getElementById('rest-timer-btn');
+                btn.disabled = true; btn.innerText = 'Done';
+                document.getElementById('rest-timer-complete-msg').classList.remove('hidden');
+                unlockRound1();
+                return;
+            }
+            var left = restSecondsLeft();
+            restUpdateDisplay(left);
+            if (localStorage.getItem(REST_START_KEY)) {
+                // Was actively running when user left
+                document.getElementById('rest-timer-btn').innerText = 'Pause';
+                restTick();
+            } else if (parseInt(localStorage.getItem(REST_PAUSED_KEY) || '0') > 0) {
+                document.getElementById('rest-timer-btn').innerText = 'Resume';
+            }
+        }
+
+        // --- Global AudioContext (created on first user interaction to satisfy browser autoplay policy) ---
+        let _audioCtx = null;
+        function getAudioCtx() {
+            if (!_audioCtx) {
+                _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return _audioCtx;
+        }
+
+        // --- Sound Alert ---
+        function playBeep(type) {
+            // Kept for backward compatibility — routes to playAlarm for 'done' type
+            if (type === 'done') { playAlarm(); return; }
+            try {
+                const ctx = getAudioCtx();
+                const doPlay = function() {
+                    const o = ctx.createOscillator();
+                    const g = ctx.createGain();
+                    o.connect(g);
+                    g.connect(ctx.destination);
+                    o.frequency.value = 440;
+                    o.type = 'sine';
+                    g.gain.setValueAtTime(0.4, ctx.currentTime);
+                    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+                    o.start(ctx.currentTime);
+                    o.stop(ctx.currentTime + 0.5);
+                };
+                if (ctx.state === 'suspended') {
+                    ctx.resume().then(doPlay).catch(function(){});
+                } else {
+                    doPlay();
+                }
+            } catch(e) { /* AudioContext not available */ }
+        }
+
+        // --- Loud Kitchen Alarm (called when any timer finishes) ---
+        function playAlarm() {
+            try {
+                const ctx = getAudioCtx();
+                const doAlarm = function() {
+                    // 9 loud beeps in 3 groups of 3 — hard to miss
+                    const times = [0, 0.28, 0.56,  1.1, 1.38, 1.66,  2.2, 2.48, 2.76];
+                    times.forEach(function(t) {
+                        // Primary tone (square wave — much louder and harsher than sine)
+                        const o = ctx.createOscillator();
+                        const g = ctx.createGain();
+                        o.connect(g);
+                        g.connect(ctx.destination);
+                        o.frequency.value = 880;   // high A — easy to hear across a room
+                        o.type = 'square';
+                        g.gain.setValueAtTime(0, ctx.currentTime + t);
+                        g.gain.linearRampToValueAtTime(0.7, ctx.currentTime + t + 0.015);
+                        g.gain.setValueAtTime(0.7, ctx.currentTime + t + 0.18);
+                        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.25);
+                        o.start(ctx.currentTime + t);
+                        o.stop(ctx.currentTime + t + 0.27);
+
+                        // Harmonic layer (adds richness and volume)
+                        const o2 = ctx.createOscillator();
+                        const g2 = ctx.createGain();
+                        o2.connect(g2);
+                        g2.connect(ctx.destination);
+                        o2.frequency.value = 1320;
+                        o2.type = 'square';
+                        g2.gain.setValueAtTime(0, ctx.currentTime + t);
+                        g2.gain.linearRampToValueAtTime(0.4, ctx.currentTime + t + 0.015);
+                        g2.gain.setValueAtTime(0.4, ctx.currentTime + t + 0.18);
+                        g2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.25);
+                        o2.start(ctx.currentTime + t);
+                        o2.stop(ctx.currentTime + t + 0.27);
+                    });
+                };
+                if (ctx.state === 'suspended') {
+                    ctx.resume().then(doAlarm).catch(function(){});
+                } else {
+                    doAlarm();
+                }
+            } catch(e) { /* AudioContext not available */ }
+        }
+
+        // Static Timers (Preshape, Ambient Proof, Bake, etc.)
+        // — timestamp-based AND persisted in localStorage so navigation never resets them
+        const STATIC_TIMER_KEY = 'pym_static_timer';
+        let activeStaticInterval = null;
+        let staticTimerState = { id: null, baseRemaining: 0, startTs: 0, total: 0, running: false };
+
+        function saveStaticTimerState() {
+            try {
+                if (staticTimerState.running && staticTimerState.id && staticTimerState.startTs) {
+                    localStorage.setItem(STATIC_TIMER_KEY, JSON.stringify({
+                        id: staticTimerState.id,
+                        baseRemaining: staticTimerState.baseRemaining,
+                        startTs: staticTimerState.startTs,
+                        total: staticTimerState.total
+                    }));
+                } else {
+                    localStorage.removeItem(STATIC_TIMER_KEY);
+                }
+            } catch(e) {}
+        }
+
+        function restoreStaticTimer() {
+            try {
+                var saved = JSON.parse(localStorage.getItem(STATIC_TIMER_KEY) || 'null');
+                if (!saved || !saved.id || !saved.startTs) return;
+
+                var elapsed = Math.floor((Date.now() - saved.startTs) / 1000);
+                var remaining = Math.max(0, saved.baseRemaining - elapsed);
+                if (remaining <= 0) { localStorage.removeItem(STATIC_TIMER_KEY); return; }
+
+                staticTimerState.id = saved.id;
+                staticTimerState.baseRemaining = saved.baseRemaining;
+                staticTimerState.startTs = saved.startTs;
+                staticTimerState.total = saved.total;
+                staticTimerState.running = true;
+
+                var container = document.getElementById(saved.id);
+                if (!container) return;
+                var btn = container.querySelector('.start-btn');
+                var display = container.querySelector('.timer-display');
+                if (btn) btn.innerText = 'Pause';
+
+                var tick = function() {
+                    var el = Math.floor((Date.now() - staticTimerState.startTs) / 1000);
+                    var rem = Math.max(0, staticTimerState.baseRemaining - el);
+                    var mins = Math.floor(rem / 60);
+                    var secs = rem % 60;
+                    var timeStr = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
+                    if (display) display.innerText = timeStr;
+                    if (rem <= 0) {
+                        clearInterval(activeStaticInterval);
+                        activeStaticInterval = null;
+                        staticTimerState.running = false;
+                        localStorage.removeItem(STATIC_TIMER_KEY);
+                        if (display) display.innerText = '00:00';
+                        if (btn) { btn.innerText = 'Done ✓'; btn.disabled = true; }
+                        playAlarm();
+                        hideGlobalTimer();
+                    }
+                };
+                tick();
+                activeStaticInterval = setInterval(tick, 500);
+            } catch(e) {}
+        }
+
+        function goToStep(stepNumber) {
+            document.querySelectorAll('section[id^="step-content-"]').forEach(s => s.classList.add('hidden-step'));
+            document.getElementById(`step-content-${stepNumber}`).classList.remove('hidden-step');
+            
+            const persistentTimer = document.getElementById('persistent-bulk-timer');
+            // Bulk fermentation header only shown while bulk is actually running (Steps 2-3)
+            if (stepNumber >= 2 && stepNumber <= 3 && !localStorage.getItem(BULK_END_KEY)) {
+                persistentTimer.classList.remove('hidden');
+            } else {
+                persistentTimer.classList.add('hidden');
+            }
+
+            // Record bake-end timestamp when reaching the Result stage
+            if (stepNumber === 6 && !localStorage.getItem(BAKE_END_KEY)) {
+                localStorage.setItem(BAKE_END_KEY, Date.now());
+            }
+
+            // Resume cold proof elapsed display when on Stage 5 (Bake)
+            if (stepNumber === 5 && localStorage.getItem(COLD_PROOF_START_KEY)) {
+                setTimeout(resumeColdProofElapsed, 100);
+            }
+
+            for (let i = 1; i <= 6; i++) {
+                const nav = document.getElementById(`step-nav-${i}`);
+                const circle = nav.querySelector('.step-circle');
+                const label = nav.querySelector('.step-label');
+
+                if (i < stepNumber) {
+                    nav.classList.remove('step-inactive');
+                    circle.className = 'w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-on-secondary font-headline text-lg step-circle';
+                    label.className = 'font-label text-[10px] uppercase tracking-widest font-bold text-secondary step-label';
+                } else if (i === stepNumber) {
+                    nav.classList.remove('step-inactive');
+                    circle.className = 'w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-headline text-lg step-circle shadow-md';
+                    label.className = 'font-label text-[10px] uppercase tracking-widest font-bold text-primary step-label';
+                } else {
+                    nav.classList.add('step-inactive');
+                    circle.className = 'w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle';
+                    label.className = 'font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label';
+                }
+            }
+            currentStep = stepNumber;
+            saveActiveBake(stepNumber);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        const STEP_LABELS = {
+            1: { stage: 'Initial Mix', instruction: 'Mix flour, water, starter and salt until no dry flour remains.' },
+            2: { stage: 'Bulk Fermentation', instruction: 'Fold every 30 minutes. Watch for 50-75% rise.' },
+            3: { stage: 'Shaping', instruction: 'Pre-shape, rest 30 min, then final shape into banneton.' },
+            4: { stage: 'Cold Proof', instruction: 'Place in fridge for 12-16 hours. Bake any time after.' },
+            5: { stage: 'Baking', instruction: 'Preheat Dutch oven to 500°F. Score and bake covered 25 min.' },
+            6: { stage: 'Result & Log', instruction: 'Rate your bake and save it to your archive.' }
+        };
+
+        function saveActiveBake(stepNumber) {
+            const recipeName = document.getElementById('input-recipe-name')?.value?.trim() ||
+                (() => {
+                    const flour = parseFloat(document.getElementById('input-flour').value) || 0;
+                    const water = parseFloat(document.getElementById('input-water').value) || 0;
+                    const h = flour > 0 ? Math.round((water/flour)*100) : 65;
+                    return `Classic ${h}% Hydration Sourdough`;
+                })();
+            const bulkStart = parseInt(localStorage.getItem(BULK_START_KEY));
+            const activeBake = {
+                status: stepNumber < 6 ? 'active' : 'complete',
+                recipeName: recipeName,
+                currentStep: stepNumber,
+                currentStepIndex: stepNumber - 1,
+                totalSteps: 6,
+                currentStage: STEP_LABELS[stepNumber]?.stage || '',
+                currentInstruction: STEP_LABELS[stepNumber]?.instruction || '',
+                bulkStart: bulkStart || null
+            };
+            try { localStorage.setItem('pym_active_bake', JSON.stringify(activeBake)); } catch(e) {}
+        }
+
+        function completeStep1() {
+            // Initialise AudioContext on this user gesture so alarms can play later
+            try { getAudioCtx(); } catch(e) {}
+            // Request notification permission (native alarm or web notification)
+            initNotifications();
+            startBulkTotalTimer();
+            goToStep(2);
+            // Auto-start the 60-min rest timer
+            setTimeout(function() { toggleRestTimer(); }, 300);
+        }
+
+        function startBulkTotalTimer() {
+            // Store start time in localStorage so it survives page changes
+            let startTime = parseInt(localStorage.getItem(BULK_START_KEY));
+            if (!startTime) {
+                startTime = Date.now();
+                try { localStorage.setItem(BULK_START_KEY, startTime); } catch(e) {}
+            }
+            if (bulkTotalInterval) return;
+            function tick() {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                bulkTotalSeconds = elapsed;
+                const hrs = Math.floor(elapsed / 3600);
+                const mins = Math.floor((elapsed % 3600) / 60);
+                const secs = elapsed % 60;
+                const timeStr = `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                const localDisplay = document.getElementById('bulk-total-timer');
+                if (localDisplay) localDisplay.innerText = timeStr;
+                const headerDisplay = document.getElementById('header-bulk-total-timer');
+                if (headerDisplay) headerDisplay.innerText = timeStr;
+            }
+            tick();
+            bulkTotalInterval = setInterval(tick, 1000);
+        }
+
+        // ── Helpers ───────────────────────────────────────────────────────────
+        function formatHMS(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+            return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        }
+
+        // ── Bulk timer: stop and record end time ──────────────────────────────
+        function stopBulkTimer() {
+            if (!localStorage.getItem(BULK_END_KEY)) {
+                localStorage.setItem(BULK_END_KEY, Date.now());
+            }
+            if (bulkTotalInterval) { clearInterval(bulkTotalInterval); bulkTotalInterval = null; }
+        }
+
+        // ── Cold proof elapsed counter ────────────────────────────────────────
+        function startColdProofTimer() {
+            if (!localStorage.getItem(COLD_PROOF_START_KEY)) {
+                localStorage.setItem(COLD_PROOF_START_KEY, Date.now());
+            }
+            resumeColdProofElapsed();
+        }
+
+        function resumeColdProofElapsed() {
+            const start = parseInt(localStorage.getItem(COLD_PROOF_START_KEY));
+            if (!start) return;
+            const ended = parseInt(localStorage.getItem(COLD_PROOF_END_KEY));
+            if (coldProofInterval) { clearInterval(coldProofInterval); coldProofInterval = null; }
+            if (ended) {
+                const elapsed = Math.floor((ended - start) / 1000);
+                updateColdProofDisplay(formatHMS(elapsed) + ' — done ✓');
+                return;
+            }
+            function tick() {
+                const el = document.getElementById('cold-proof-elapsed-display');
+                if (el) el.innerText = formatHMS(Math.floor((Date.now() - start) / 1000));
+            }
+            tick();
+            coldProofInterval = setInterval(tick, 1000);
+        }
+
+        function updateColdProofDisplay(str) {
+            const el = document.getElementById('cold-proof-elapsed-display');
+            if (el) el.innerText = str;
+        }
+
+        function stopColdProofTimer() {
+            if (coldProofInterval) { clearInterval(coldProofInterval); coldProofInterval = null; }
+            if (!localStorage.getItem(COLD_PROOF_END_KEY)) {
+                localStorage.setItem(COLD_PROOF_END_KEY, Date.now());
+            }
+            // show frozen final value
+            const start = parseInt(localStorage.getItem(COLD_PROOF_START_KEY));
+            const end   = parseInt(localStorage.getItem(COLD_PROOF_END_KEY));
+            if (start && end) updateColdProofDisplay(formatHMS(Math.floor((end - start) / 1000)) + ' — done ✓');
+        }
+
+        // ── Fridge button: stop bulk, start cold proof, advance to Stage 5 ────
+        function fridgeAndProof() {
+            stopBulkTimer();
+            startColdProofTimer();
+            goToStep(5);
+        }
+
+        // ── Bake Phase 1 start: stop cold proof, record bake start ────────────
+        function startBakePhase1() {
+            stopColdProofTimer();
+            if (!localStorage.getItem(BAKE_START_KEY)) {
+                localStorage.setItem(BAKE_START_KEY, Date.now());
+            }
+            toggleStaticTimer('bake-timer-1', 25 * 60);
+        }
+
+        function resumeBulkTimerIfActive() {
+            // On page load, resume timers if a bake was already in progress
+            const startTime = parseInt(localStorage.getItem(BULK_START_KEY));
+            if (!startTime) return;
+
+            // Determine which step to restore to from saved active bake state
+            let savedStep = 2;
+            try {
+                const ab = JSON.parse(localStorage.getItem('pym_active_bake'));
+                if (ab && ab.currentStep) savedStep = parseInt(ab.currentStep) || 2;
+            } catch(e) {}
+
+            // Resume bulk if it hasn't been stopped yet
+            if (!localStorage.getItem(BULK_END_KEY)) {
+                startBulkTotalTimer();
+            }
+
+            goToStep(savedStep);
+
+            // If dough is in fridge / baking, resume cold proof display
+            if (localStorage.getItem(COLD_PROOF_START_KEY)) {
+                resumeColdProofElapsed();
+            }
+        }
+
+        // --- Round Timer helpers (timestamp-based, persists across navigation) ---
+        function roundSecondsLeft(num) {
+            var t = timers[num];
+            if (!t.startTs) return t.baseRemaining;
+            return Math.max(0, t.baseRemaining - Math.floor((Date.now() - t.startTs) / 1000));
+        }
+        function saveRoundState(num) {
+            var t = timers[num];
+            try { localStorage.setItem(ROUND_ACTIVE_KEY, JSON.stringify({num: num, startTs: t.startTs, baseRemaining: t.baseRemaining})); } catch(e) {}
+        }
+        function clearRoundState() { try { localStorage.removeItem(ROUND_ACTIVE_KEY); } catch(e) {} }
+        function markRoundDone(num) {
+            try {
+                var done = JSON.parse(localStorage.getItem(ROUNDS_DONE_KEY) || '[]');
+                if (done.indexOf(num) === -1) done.push(num);
+                localStorage.setItem(ROUNDS_DONE_KEY, JSON.stringify(done));
+            } catch(e) {}
+            clearRoundState();
+        }
+        function applyRoundComplete(num) {
+            var t = timers[num]; t.completed = true; t.running = false;
+            var container = document.getElementById('bulk-timer-' + num);
+            if (!container) return;
+            var btn = container.querySelector('.start-btn');
+            btn.innerText = 'Done'; btn.disabled = true;
+            btn.className = 'px-3 py-1.5 bg-secondary text-on-secondary rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full';
+            document.getElementById('icon-' + num).innerText = 'check_circle';
+            container.querySelector('.timer-display').innerText = '00:00';
+            container.classList.remove('grayscale','opacity-50','border-dashed');
+            container.classList.add('border-solid');
+        }
+        function applyRoundUnlocked(num) {
+            var container = document.getElementById('bulk-timer-' + num);
+            if (!container) return;
+            var btn = container.querySelector('.start-btn');
+            var icon = document.getElementById('icon-' + num);
+            container.classList.remove('grayscale','opacity-50','border-dashed');
+            container.classList.add('border-solid');
+            icon.innerText = 'hourglass_empty'; icon.classList.add('text-primary');
+            btn.disabled = false; btn.innerText = 'Start';
+            btn.className = 'px-3 py-1.5 bg-primary text-on-primary rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full';
+        }
+        function roundTick(num) {
+            var t = timers[num];
+            t.interval = setInterval(function() {
+                var left = roundSecondsLeft(num);
+                updateTimerUI(num, left);
+                if (left <= 0) {
+                    clearInterval(t.interval); t.interval = null;
+                    t.running = false;
+                    completeTimer(num);
+                }
+            }, 1000);
+        }
+        function toggleTimer(num) {
+            var t = timers[num];
+            if (t.completed) return;
+            var container = document.getElementById('bulk-timer-' + num);
+            var btn = container.querySelector('.start-btn');
+            var icon = document.getElementById('icon-' + num);
+            // Unlock AudioContext on this user gesture so alarm can fire later
+            try { var actx = getAudioCtx(); if (actx.state === 'suspended') actx.resume(); } catch(e) {}
+            if (t.running) {
+                // Pause — freeze remaining seconds
+                t.baseRemaining = roundSecondsLeft(num);
+                t.startTs = 0;
+                clearInterval(t.interval); t.interval = null;
+                t.running = false;
+                btn.innerText = 'Resume';
+                hideGlobalTimer();
+                saveRoundState(num);
+                cancelAlarm('round-' + num);
+            } else {
+                // Start / Resume — record timestamp against current base
+                t.startTs = Date.now();
+                t.running = true;
+                btn.innerText = 'Pause';
+                icon.innerText = 'hourglass_bottom';
+                showGlobalTimer(t.label, t.baseRemaining, 30 * 60);
+                saveRoundState(num);
+                sendAlarm('round-' + num, `Stretch & Fold ${t.label}`, roundSecondsLeft(num));
+                roundTick(num);
+            }
+        }
+
+        function updateTimerUI(num, left) {
+            if (left === undefined) left = roundSecondsLeft(num);
+            var container = document.getElementById('bulk-timer-' + num);
+            var display = container.querySelector('.timer-display');
+            var mins = Math.floor(left / 60), secs = left % 60;
+            var timeStr = mins.toString().padStart(2,'0') + ':' + secs.toString().padStart(2,'0');
+            display.innerText = timeStr;
+            updateGlobalTimer(timeStr, left, 30 * 60);
+        }
+
+        function completeTimer(num) {
+            applyRoundComplete(num);
+            markRoundDone(num);
+            playBeep('done');
+            hideGlobalTimer();
+            if (num < 4) {
+                applyRoundUnlocked(num + 1);
+            }
+        }
+
+        function toggleStaticTimer(containerId, initialSeconds) {
+            const container = document.getElementById(containerId);
+            const btn = container.querySelector('.start-btn');
+            const display = container.querySelector('.timer-display');
+            const label = container.querySelector('.font-label')?.innerText || "Timer";
+
+            if (staticTimerState.id === containerId && staticTimerState.running) {
+                // PAUSE: freeze remaining based on real elapsed time
+                clearInterval(activeStaticInterval);
+                activeStaticInterval = null;
+                const elapsed = Math.floor((Date.now() - staticTimerState.startTs) / 1000);
+                staticTimerState.baseRemaining = Math.max(0, staticTimerState.baseRemaining - elapsed);
+                staticTimerState.startTs = 0;
+                staticTimerState.running = false;
+                btn.innerText = "Resume";
+                hideGlobalTimer();
+                saveStaticTimerState(); // clear from localStorage when paused
+                cancelAlarm('static-' + containerId);
+            } else {
+                // START or RESUME
+                if (staticTimerState.id !== containerId) {
+                    staticTimerState.id = containerId;
+                    staticTimerState.baseRemaining = initialSeconds;
+                    staticTimerState.total = initialSeconds;
+                }
+                staticTimerState.running = true;
+                staticTimerState.startTs = Date.now();
+                btn.innerText = "Pause";
+                showGlobalTimer(label, staticTimerState.baseRemaining, staticTimerState.total);
+                saveStaticTimerState(); // persist start to localStorage
+                sendAlarm('static-' + containerId, label, staticTimerState.baseRemaining);
+
+                const tick = () => {
+                    const elapsed = Math.floor((Date.now() - staticTimerState.startTs) / 1000);
+                    const remaining = Math.max(0, staticTimerState.baseRemaining - elapsed);
+                    const mins = Math.floor(remaining / 60);
+                    const secs = remaining % 60;
+                    const timeStr = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                    display.innerText = timeStr;
+                    updateGlobalTimer(timeStr, remaining, staticTimerState.total);
+
+                    if (remaining <= 0) {
+                        clearInterval(activeStaticInterval);
+                        activeStaticInterval = null;
+                        staticTimerState.running = false;
+                        display.innerText = "00:00";
+                        btn.innerText = "Done ✓";
+                        btn.disabled = true;
+                        localStorage.removeItem(STATIC_TIMER_KEY);
+                        playAlarm();
+                        hideGlobalTimer();
+                    }
+                };
+                tick(); // immediate first render
+                activeStaticInterval = setInterval(tick, 500);
+            }
+        }
+
+        function showGlobalTimer(label, current, total) {
+            const global = document.getElementById('global-timer-container');
+            document.getElementById('timer-label').innerText = label;
+            global.classList.remove('hidden');
+            updateGlobalTimer("", current, total);
+        }
+
+        function updateGlobalTimer(str, current, total) {
+            const display = document.getElementById('timer-countdown');
+            if (str) display.innerText = str;
+            else {
+                const mins = Math.floor(current / 60);
+                const secs = current % 60;
+                display.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+            const progress = document.getElementById('timer-progress');
+            const offset = 175 - (175 * (current / total));
+            progress.style.strokeDashoffset = offset;
+        }
+
+        function hideGlobalTimer() {
+            document.getElementById('global-timer-container').classList.add('hidden');
+        }
+
+        function setRating(val) {
+            userRating = val;
+            const stars = document.getElementById('star-rating').children;
+            for (let i = 0; i < stars.length; i++) {
+                if (i < val) {
+                    stars[i].style.fontVariationSettings = "'FILL' 1";
+                    stars[i].classList.replace('text-outline-variant', 'text-primary-container');
+                } else {
+                    stars[i].style.fontVariationSettings = "'FILL' 0";
+                    stars[i].classList.replace('text-primary-container', 'text-outline-variant');
+                }
+            }
+        }
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentPhoto = e.target.result;
+                    document.getElementById('preview-img').src = currentPhoto;
+                    document.getElementById('preview-img').classList.remove('hidden');
+                    document.getElementById('upload-prompt').classList.add('opacity-0');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function compressImage(base64Str, maxWidth = 800, quality = 0.7) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.src = base64Str;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > maxWidth) {
+                        height = Math.round((height * maxWidth) / width);
+                        width = maxWidth;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+                    resolve(compressedBase64);
+                };
+            });
+        }
+
+        async function saveLog() {
+            const saveBtn = document.getElementById('save-button');
+            saveBtn.disabled = true;
+            saveBtn.innerText = "Saving...";
+
+            const flour = parseFloat(document.getElementById('input-flour').value) || 0;
+            const water = parseFloat(document.getElementById('input-water').value) || 0;
+            const starter = parseFloat(document.getElementById('input-starter').value) || 0;
+            const salt = parseFloat(document.getElementById('input-salt').value) || 0;
+            const hydration = flour > 0 ? Math.round((water / flour) * 100) : 0;
+            
+            const initialTemp = document.getElementById('input-initial-temp').value + "°F";
+            const proofTemp = document.getElementById('input-proof-temp').value + "°F";
+
+            // ── Bulk fermentation duration (timestamp-based) ──────────────────
+            const bsTime  = parseInt(localStorage.getItem(BULK_START_KEY));
+            const beTime  = parseInt(localStorage.getItem(BULK_END_KEY)) || Date.now();
+            const bulkSecs = bsTime ? Math.floor((beTime - bsTime) / 1000) : bulkTotalSeconds;
+            const bhrs = Math.floor(bulkSecs / 3600);
+            const bmins = Math.floor((bulkSecs % 3600) / 60);
+            const totalBulkFormatted = `${bhrs}h ${bmins}m`;
+
+            // Compress photo if it exists
+            let processedPhoto = currentPhoto;
+            if (currentPhoto && currentPhoto.startsWith('data:image')) {
+                try {
+                    processedPhoto = await compressImage(currentPhoto);
+                } catch (err) {
+                    console.warn("Image compression failed, trying original", err);
+                }
+            }
+
+            const recipeName = document.getElementById('input-recipe-name')?.value?.trim() ||
+                `Classic ${hydration}% Hydration Sourdough`;
+            const flourType = document.getElementById('input-flour-type')?.value?.trim() || 'Bread Flour';
+            const saltPct = flour > 0 ? ((salt / flour) * 100).toFixed(1) : '2.0';
+            const starterRatio = flour > 0 ? `1:${(parseFloat(document.getElementById('input-water').value)/flour).toFixed(1)}:${(parseFloat(document.getElementById('input-water').value)/flour).toFixed(1)}` : '1:2:2';
+
+            // Bulk time as decimal hours for archive display
+            const bulkTimeDecimal = (bhrs + bmins / 60).toFixed(1);
+
+            // ── Cold proof duration ────────────────────────────────────────────
+            const cpStart = parseInt(localStorage.getItem(COLD_PROOF_START_KEY));
+            const cpEnd   = parseInt(localStorage.getItem(COLD_PROOF_END_KEY)) || (cpStart ? Date.now() : 0);
+            const cpSecs  = cpStart && cpEnd ? Math.floor((cpEnd - cpStart) / 1000) : 0;
+            const cpHrs   = Math.floor(cpSecs / 3600);
+            const cpMins  = Math.floor((cpSecs % 3600) / 60);
+            const coldProofTimeDecimal = cpStart ? (cpHrs + cpMins / 60).toFixed(1) : null;
+
+            // ── Bake duration ──────────────────────────────────────────────────
+            const bkStart  = parseInt(localStorage.getItem(BAKE_START_KEY));
+            const bkEnd    = parseInt(localStorage.getItem(BAKE_END_KEY)) || Date.now();
+            const bkSecs   = bkStart ? Math.floor((bkEnd - bkStart) / 1000) : 45 * 60;
+            const bkHrs    = Math.floor(bkSecs / 3600);
+            const bkMins   = Math.floor((bkSecs % 3600) / 60);
+            const bakeTimeFormatted = bkHrs > 0 ? `${bkHrs}h ${bkMins}m` : `${bkMins}m`;
+            const bakeTimeDecimal = (bkHrs + bkMins / 60).toFixed(2);
+
+            // ── Bake temperature ───────────────────────────────────────────────
+            const bakeTempVal = document.getElementById('input-bake-temp')?.value || '450';
+
+            // Updated keys to match Archive expectations
+            const sessionData = {
+                id: `log-${Date.now()}`,
+                timestamp: new Date().toISOString(),
+                date: new Date().toISOString().split('T')[0],
+                recipe: recipeName,
+                hydration: hydration,
+                flourType: flourType,
+                temp: document.getElementById('input-initial-temp').value,
+                // Phase timings (all in decimal hours)
+                bulkTime: bulkTimeDecimal,
+                coldProofTime: coldProofTimeDecimal,
+                bakeTime: bakeTimeDecimal,
+                bakeTemp: bakeTempVal,
+                // Fridge/retard temperature
+                proofTemp: document.getElementById('input-proof-temp').value,
+                // Legacy field kept for backward compatibility
+                proofTime: coldProofTimeDecimal || document.getElementById('input-proof-temp').value,
+                salt: saltPct,
+                starterFeed: '1:2:2',
+                rating: userRating.toFixed(1),
+                comments: document.getElementById('bake-notes').value,
+                photo: processedPhoto,
+                inclusions: 'None',
+                autolyse: '30m',
+                mixTime: '15',
+                ingredients: {
+                    flour: `${flour}g`,
+                    water: `${water}g`,
+                    starter: `${starter}g`,
+                    salt: `${salt}g`
+                }
+            };
+
+            try {
+                let logs = JSON.parse(localStorage.getItem('pym_logs') || '[]');
+                logs.unshift(sessionData);
+                localStorage.setItem('pym_logs', JSON.stringify(logs));
+                // Clear all phase timers and active bake state for next bake
+                try {
+                    localStorage.removeItem(BULK_START_KEY);
+                    localStorage.removeItem(BULK_END_KEY);
+                    localStorage.removeItem(COLD_PROOF_START_KEY);
+                    localStorage.removeItem(COLD_PROOF_END_KEY);
+                    localStorage.removeItem(BAKE_START_KEY);
+                    localStorage.removeItem(BAKE_END_KEY);
+                    localStorage.removeItem('pym_active_bake');
+                    localStorage.removeItem(REST_START_KEY);
+                    localStorage.removeItem(REST_PAUSED_KEY);
+                    localStorage.removeItem(REST_DONE_KEY);
+                    localStorage.removeItem(ROUNDS_DONE_KEY);
+                    localStorage.removeItem(ROUND_ACTIVE_KEY);
+                    localStorage.removeItem(STATIC_TIMER_KEY);
+                } catch(e) {}
+                alert("Bake successfully saved to Archive!");
+                window.location.href = "archive.html";
+            } catch (e) {
+                console.error("Storage Error:", e);
+                saveBtn.disabled = false;
+                saveBtn.innerText = "Save to Archive";
+                
+                if (e.name === 'QuotaExceededError' || e.code === 22) {
+                    alert("Storage Limit Reached: Your browser's local storage is full. To save new bakes, please visit your Archive to delete old entries or clear browser data.");
+                } else {
+                    alert("An error occurred while saving. Please try again or check your storage space.");
+                }
+            }
+        }
+
+        function updateHydration() {
+            const flour = parseFloat(document.getElementById('input-flour').value) || 0;
+            const water = parseFloat(document.getElementById('input-water').value) || 0;
+            const pctDisplay = document.getElementById('hydration-pct');
+            if (flour > 0) {
+                const hydration = Math.round((water / flour) * 100);
+                pctDisplay.innerText = hydration;
+            } else {
+                pctDisplay.innerText = '0';
+            }
+        }
+
+        // ── Native vs. Web detection ─────────────────────────────────────────
+        // IS_NATIVE is true when running inside the Pancito y Más Android app.
+        // On a regular browser it's false and we fall back to the service worker.
+        const IS_NATIVE = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+
+        // Convert a string timer ID to a stable positive integer (Android needs numeric notification IDs)
+        function timerIdToInt(strId) {
+            let h = 5381;
+            for (let i = 0; i < strId.length; i++) h = ((h << 5) + h) ^ strId.charCodeAt(i);
+            return Math.abs(h) % 2147483647;
+        }
+
+        // ── Unified notification initialisation ──────────────────────────────
+        async function initNotifications() {
+            if (IS_NATIVE) {
+                try {
+                    const { LocalNotifications } = window.Capacitor.Plugins;
+                    // Create a high-priority alarm channel (Android 8+).
+                    // The CI build patches the native plugin so this channel uses
+                    // STREAM_ALARM, which rings even when the phone is on vibrate.
+                    await LocalNotifications.createChannel({
+                        id: 'bake-timers',
+                        name: 'Bake Timers',
+                        description: 'Sourdough bake timer alerts',
+                        importance: 5,       // IMPORTANCE_HIGH → shows on lock screen
+                        visibility: 1,       // VISIBILITY_PUBLIC
+                        vibration: true,
+                        lights: true,
+                        lightColor: '#875305',
+                        sound: 'default'
+                    });
+
+                    // Request notification permission
+                    const perm = await LocalNotifications.requestPermissions();
+                    if (perm.display !== 'granted') return false;
+
+                    // Android 12+: "Alarms & reminders" special permission.
+                    // Without this the OS can defer or drop exact alarms.
+                    try {
+                        const exact = await LocalNotifications.checkExactNotificationSetting();
+                        if (exact.result !== 'granted') {
+                            // Only ask once per install
+                            if (!localStorage.getItem('pym_exact_alarm_asked')) {
+                                localStorage.setItem('pym_exact_alarm_asked', '1');
+                                const go = confirm(
+                                    'Para que los temporizadores suenen aunque la pantalla esté apagada,\n' +
+                                    'necesitas permitir "Alarmas y recordatorios" para Pancito y Más.\n\n' +
+                                    '¿Abrir esa configuración ahora?'
+                                );
+                                if (go) await LocalNotifications.openExactAlarmSettings();
+                            }
+                        }
+                    } catch (_) { /* API not available on Android < 12 — exact alarms work without it */ }
+
+                    return true;
+                } catch(e) { return false; }
+            } else {
+                // Web browser fallback
+                if (!('Notification' in window)) return false;
+                if (Notification.permission === 'granted') return true;
+                if (Notification.permission === 'denied') return false;
+                const result = await Notification.requestPermission();
+                return result === 'granted';
+            }
+        }
+
+        // ── Service Worker (web-only fallback) ────────────────────────────────
+        let swReg = null;
+
+        async function initSW() {
+            if (IS_NATIVE) return;   // Native app uses LocalNotifications instead
+            if (!('serviceWorker' in navigator)) return;
+            try {
+                swReg = await navigator.serviceWorker.register('./sw.js', { scope: './' });
+                if (swReg.installing) {
+                    await new Promise(resolve => {
+                        const sw = swReg.installing;
+                        sw.onstatechange = () => { if (sw.state === 'activated') resolve(); };
+                    });
+                }
+                if (!swReg.active) swReg = await navigator.serviceWorker.ready;
+            } catch(e) {}
+        }
+
+        // ── Schedule / cancel an alarm ────────────────────────────────────────
+        async function sendAlarm(id, label, delaySecs) {
+            if (IS_NATIVE) {
+                try {
+                    const { LocalNotifications } = window.Capacitor.Plugins;
+                    const nid = timerIdToInt(id);
+                    // Cancel any previous alarm with same ID first
+                    await LocalNotifications.cancel({ notifications: [{ id: nid }] }).catch(() => {});
+                    await LocalNotifications.schedule({
+                        notifications: [{
+                            id: nid,
+                            title: '🍞 Pancito y Más',
+                            body: `${label} — time is up!`,
+                            schedule: {
+                                at: new Date(Date.now() + delaySecs * 1000),
+                                allowWhileIdle: true   // fires even in Doze mode
+                            },
+                            channelId: 'bake-timers',
+                            sound: 'default',
+                            extra: { timerId: id }
+                        }]
+                    });
+                } catch(e) {}
+            } else {
+                const sw = swReg?.active || navigator.serviceWorker?.controller;
+                if (!sw) return;
+                if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+                sw.postMessage({ type: 'SET_ALARM', id, label, endTime: Date.now() + delaySecs * 1000 });
+            }
+        }
+
+        async function cancelAlarm(id) {
+            if (IS_NATIVE) {
+                try {
+                    const { LocalNotifications } = window.Capacitor.Plugins;
+                    await LocalNotifications.cancel({ notifications: [{ id: timerIdToInt(id) }] });
+                } catch(e) {}
+            } else {
+                const sw = swReg?.active || navigator.serviceWorker?.controller;
+                if (!sw) return;
+                sw.postMessage({ type: 'CANCEL_ALARM', id });
+            }
+        }
+
+        // On page load: resume timers if a bake was already in progress
+        function restoreRoundTimers() {
+            // Re-apply completed round state
+            var done = JSON.parse(localStorage.getItem(ROUNDS_DONE_KEY) || '[]');
+            done.forEach(function(num) {
+                applyRoundComplete(num);
+                if (num < 4) applyRoundUnlocked(num + 1);
+            });
+            // Re-attach active (running or paused) round timer
+            try {
+                var active = JSON.parse(localStorage.getItem(ROUND_ACTIVE_KEY));
+                if (active && done.indexOf(active.num) === -1) {
+                    var num = active.num;
+                    var t = timers[num];
+                    t.baseRemaining = active.baseRemaining;
+                    t.startTs = active.startTs;
+                    var left = roundSecondsLeft(num);
+                    applyRoundUnlocked(num);
+                    var container = document.getElementById('bulk-timer-' + num);
+                    var btn = container.querySelector('.start-btn');
+                    if (left <= 0) {
+                        // Timer finished while the user was away — complete it now
+                        t.running = false;
+                        completeTimer(num);
+                    } else if (t.startTs) {
+                        // Was actively running — resume it
+                        t.running = true;
+                        btn.innerText = 'Pause';
+                        document.getElementById('icon-' + num).innerText = 'hourglass_bottom';
+                        updateTimerUI(num, left);
+                        showGlobalTimer(t.label, left, 30 * 60);
+                        roundTick(num);
+                    } else {
+                        // Was paused
+                        btn.innerText = 'Resume';
+                        updateTimerUI(num, left);
+                    }
+                }
+            } catch(e) {}
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Register Service Worker for background alarm notifications
+            initSW();
+
+            // Unlock AudioContext on ANY click/tap so alarms work even after navigation
+            document.addEventListener('click', function() {
+                try { var ctx = getAudioCtx(); if (ctx.state === 'suspended') ctx.resume(); } catch(e) {}
+            });
+            resumeBulkTimerIfActive();
+            restoreRestTimer();
+            restoreRoundTimers();
+            restoreStaticTimer();
+        });
+    </script>
+</body></html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Stretch & Fold — Pancito y Más Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-low": "#f8f3e9","surface-dim": "#dedad0","surface": "#fef9ef","secondary": "#835334","primary-container": "#c4863a","on-surface-variant": "#514538","background": "#fef9ef","on-surface": "#1d1c16","primary": "#875305","secondary-container": "#febe98","on-secondary-container": "#794b2d","surface-container": "#f2ede3","surface-container-high": "#ece8de","surface-container-highest": "#e7e2d8","outline": "#847466","outline-variant": "#d6c3b3"
+        },
+        fontFamily: { "headline": ["Noto Serif"], "body": ["Plus Jakarta Sans"], "label": ["Plus Jakarta Sans"] },
+        borderRadius: {"DEFAULT": "0.5rem","lg": "0.5rem","xl": "0.75rem","full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { min-height: max(884px, 100dvh); }
+  .prose-article p { margin-bottom: 1.25rem; line-height: 1.8; color: #514538; }
+  .prose-article h2 { font-family: 'Noto Serif', serif; font-size: 1.75rem; color: #1d1c16; margin-top: 2.5rem; margin-bottom: 1rem; }
+  .prose-article h3 { font-family: 'Noto Serif', serif; font-size: 1.25rem; color: #1d1c16; margin-top: 2rem; margin-bottom: 0.5rem; }
+  .prose-article ul { list-style: none; padding: 0; margin-bottom: 1.25rem; }
+  .prose-article ul li { padding-left: 1.5rem; position: relative; margin-bottom: 0.5rem; color: #514538; line-height: 1.7; }
+  .prose-article ul li::before { content: '—'; position: absolute; left: 0; color: #875305; font-weight: bold; }
+  .prose-article ol { counter-reset: item; padding: 0; margin-bottom: 1.25rem; }
+  .prose-article ol li { counter-increment: item; padding-left: 2rem; position: relative; margin-bottom: 0.75rem; color: #514538; line-height: 1.7; }
+  .prose-article ol li::before { content: counter(item) "."; position: absolute; left: 0; color: #875305; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body">
+
+<!-- Header -->
+<header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/40">
+  <div class="flex justify-between items-center px-6 py-4 w-full max-w-4xl mx-auto">
+    <a class="flex items-center gap-3" href="library.html">
+      <span class="material-symbols-outlined text-primary">arrow_back</span>
+      <span class="font-label text-sm text-primary font-bold tracking-wide">Library</span>
+    </a>
+    <a class="flex items-center gap-3" href="index.html"><img alt="Pancito y Más Logo" class="w-12 h-12 object-contain" src="logo.png"/><span class="font-headline italic font-bold text-primary text-2xl tracking-tight">Pancito y Más</span></a>
+    <button class="text-primary hover:opacity-80 transition-opacity p-2 rounded-full">
+      <span class="material-symbols-outlined">account_circle</span>
+    </button>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-6 py-12 pb-32">
+
+  <!-- Category + Title -->
+  <div class="mb-10">
+    <span class="font-label text-[10px] uppercase tracking-[0.2em] text-primary font-extrabold block mb-4">Foundations</span>
+    <h1 class="font-headline text-4xl md:text-6xl text-on-surface leading-tight mb-6">The Stretch &amp; Fold</h1>
+    <p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">Mastering hydration without heavy kneading. The technique at the core of every great sourdough loaf.</p>
+  </div>
+
+  <!-- Featured Image -->
+  <div class="w-full aspect-[16/7] rounded-xl overflow-hidden mb-12 bg-surface-container-highest relative shadow-md">
+    <img alt="Hands performing the stretch and fold technique on wet dough" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-stretch-fold.jpg" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')"/>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-surface-container-highest hidden" id="img-placeholder-1">
+      <span class="material-symbols-outlined text-6xl text-primary/30 mb-3">back_hand</span>
+      <span class="font-label text-xs text-outline uppercase tracking-widest">The Stretch &amp; Fold</span>
+    </div>
+  </div>
+
+  <!-- Meta -->
+  <div class="flex items-center gap-6 mb-12 pb-8 border-b border-outline-variant">
+    <span class="font-label text-xs text-outline">By Pancito y Más</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">8 min read</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">Beginner–Intermediate</span>
+  </div>
+
+  <!-- Article Body -->
+  <article class="prose-article">
+
+    <p>If you've ever heard someone describe sourdough as "low-knead," you were probably hearing about the stretch and fold method. It is one of those deceptively simple techniques that, once you understand why it works, changes the way you think about dough development entirely.</p>
+
+    <p>Traditional bread recipes rely on aggressive kneading to develop gluten — the network of proteins that gives bread its structure, elasticity, and ability to trap the gases produced by fermentation. But sourdough is different. The long, slow fermentation process does a lot of that work on its own. The stretch and fold is how we assist it without tearing the delicate dough structure we're building.</p>
+
+    <h2>Why Not Just Knead?</h2>
+
+    <p>High-hydration sourdough doughs — those with 70% water or more relative to flour — are sticky, extensible, and not easy to work with on a counter. Kneading them aggressively degasses the dough, overworks the gluten, and generates heat that can speed up fermentation too fast.</p>
+
+    <p>The stretch and fold, done in sets during bulk fermentation, allows you to gradually build strength into the dough without disrupting the fermentation environment. You're working with the dough's natural elasticity, not fighting against it.</p>
+
+    <h2>How to Do It: Step by Step</h2>
+
+    <p>The technique is performed during bulk fermentation — the first long rise after mixing your dough. You'll typically do 4 sets of stretches, spaced 30 minutes apart.</p>
+
+    <ol>
+      <li><strong>Wet your hands</strong> — never flour them. Wet hands prevent sticking without altering the dough's hydration.</li>
+      <li><strong>Reach under the dough</strong> on one side of the container, grab it firmly, and stretch it upward as high as it will go without tearing.</li>
+      <li><strong>Fold it over</strong> to the opposite side of the container, like folding a letter.</li>
+      <li><strong>Rotate the container 90 degrees</strong> and repeat. Do this four times per set (North, East, South, West) so the entire mass is worked.</li>
+      <li><strong>Cover and rest</strong> for 30 minutes before the next set.</li>
+    </ol>
+
+    <p>With each set, you should notice the dough becoming smoother, more cohesive, and less sticky. This is gluten development happening in real time.</p>
+
+    <h2>Reading the Dough</h2>
+
+    <p>After your first set, the dough will feel loose and a little unruly. This is normal. By the third set, it should have real tension — it will hold its shape in the container instead of spreading flat, and it will feel almost silky when you handle it.</p>
+
+    <p>If the dough tears during a fold, stop. Cover it and wait 15 extra minutes before the next set. Tearing means the gluten is tight and needs time to relax. Forcing it causes more harm than good.</p>
+
+    <h2>The Coil Fold Variation</h2>
+
+    <p>As your skills develop, you may encounter the <em>coil fold</em> — a slightly more advanced variation favored for very extensible, high-hydration doughs. Instead of folding in the container, you lift the dough by its center so it hangs freely, then set it down so the ends coil underneath it. This is repeated four times, rotating the container each time.</p>
+
+    <p>The coil fold applies less stress than a standard stretch and fold, making it ideal for doughs that are already strong but still need building during a longer bulk ferment.</p>
+
+    <h2>How Many Sets Do You Need?</h2>
+
+    <p>For most recipes at 70–75% hydration, four sets is the standard. But here's what really matters: <em>how the dough feels</em>.</p>
+
+    <ul>
+      <li>If the dough is jiggly and shapeless after four sets, do a fifth.</li>
+      <li>If it has good tension after just three sets and your kitchen is warm, stop there.</li>
+      <li>Colder kitchens require more sets; warmer kitchens, fewer.</li>
+    </ul>
+
+    <p>Sourdough rewards presence and observation. The recipe is a framework — the dough tells you what it actually needs.</p>
+
+    <h2>Common Mistakes to Avoid</h2>
+
+    <ul>
+      <li><strong>Stretching too fast</strong> — slow, deliberate stretches prevent tearing. Give the gluten a moment to extend before you pull.</li>
+      <li><strong>Skipping sets</strong> — each rest period between sets is part of the process. The gluten needs to relax so the next fold can build more strength.</li>
+      <li><strong>Handling too much</strong> — between sets, leave the dough alone. Constant touching disrupts the fermentation activity happening at the surface.</li>
+      <li><strong>Using a bowl that's too small</strong> — your dough needs room to expand during bulk fermentation. Use a container at least three times the dough's starting volume.</li>
+    </ul>
+
+    <h2>When Is Bulk Fermentation Done?</h2>
+
+    <p>Once your sets are complete, bulk fermentation continues untouched. You're waiting for the dough to increase by roughly 50–75% in volume, feel domed on top, look airy, and jiggle like gelatin when you shake the container gently.</p>
+
+    <p>The timing will vary — anywhere from 4 to 12 hours depending on your starter strength, flour, and room temperature. A warmer kitchen ferments faster. Never go purely by the clock; learn to read the signs.</p>
+
+    <p>The stretch and fold is one of those skills that feels uncertain at first and then, one bake later, clicks completely. Trust the process, stay observant, and enjoy the meditative rhythm of working with living dough.</p>
+
+  </article>
+
+  <!-- Related Links -->
+  <div class="mt-16 pt-8 border-t border-outline-variant">
+    <h3 class="font-headline text-2xl mb-6">Continue Learning</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <a href="scoring-aesthetics.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Finishing</span>
+        <h4 class="font-headline text-lg mb-1 group-hover:text-primary transition-colors">Scoring Aesthetics</h4>
+        <p class="text-xs text-on-surface-variant">The lame work that creates beautiful, controlled expansion.</p>
+      </a>
+      <a href="starter-revival.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Maintenance</span>
+        <h4 class="font-headline text-lg mb-1 group-hover:text-primary transition-colors">The Starter Revival</h4>
+        <p class="text-xs text-on-surface-variant">How to bring a neglected starter back to life.</p>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- Bottom Nav -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#fef9ef]/70 backdrop-blur-xl shadow-[0_-12px_32px_rgba(44,24,16,0.06)] rounded-t-[2rem] md:hidden">
+  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl" href="index.html"><span class="material-symbols-outlined">home_max</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1">Dash</span></a>
+  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl" href="bake-log.html"><span class="material-symbols-outlined">timer</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1">Bake</span></a>
+  <a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" href="library.html"><span class="material-symbols-outlined">book_5</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1">Library</span></a>
+  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl" href="archive.html"><span class="material-symbols-outlined">inventory_2</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1">Archive</span></a>
+</nav>
+
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Why Didn't My Bread Rise? — Pancito y Más Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-low": "#f8f3e9","surface": "#fef9ef","on-surface-variant": "#514538","background": "#fef9ef","on-surface": "#1d1c16","primary": "#875305","secondary-container": "#febe98","surface-container": "#f2ede3","surface-container-high": "#ece8de","surface-container-highest": "#e7e2d8","outline": "#847466","outline-variant": "#d6c3b3"
+        },
+        fontFamily: { "headline": ["Noto Serif"], "body": ["Plus Jakarta Sans"], "label": ["Plus Jakarta Sans"] },
+        borderRadius: {"DEFAULT": "0.5rem","lg": "0.5rem","xl": "0.75rem","full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { min-height: max(884px, 100dvh); }
+  .prose-article p { margin-bottom: 1.25rem; line-height: 1.8; color: #514538; }
+  .prose-article h2 { font-family: 'Noto Serif', serif; font-size: 1.75rem; color: #1d1c16; margin-top: 2.5rem; margin-bottom: 1rem; }
+  .prose-article h3 { font-family: 'Noto Serif', serif; font-size: 1.25rem; color: #1d1c16; margin-top: 2rem; margin-bottom: 0.5rem; }
+  .prose-article ul { list-style: none; padding: 0; margin-bottom: 1.25rem; }
+  .prose-article ul li { padding-left: 1.5rem; position: relative; margin-bottom: 0.5rem; color: #514538; line-height: 1.7; }
+  .prose-article ul li::before { content: '—'; position: absolute; left: 0; color: #875305; font-weight: bold; }
+  .culprit-card { background: #f2ede3; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1rem; }
+  .culprit-number { font-family: 'Noto Serif', serif; font-size: 3rem; color: #d6c3b3; font-weight: 700; line-height: 1; margin-bottom: 0.5rem; }
+  .culprit-title { font-family: 'Noto Serif', serif; font-size: 1.2rem; color: #1d1c16; margin-bottom: 0.5rem; }
+  .culprit-body { font-size: 0.875rem; color: #514538; line-height: 1.7; }
+  .fix-box { background: #fef9ef; border: 1px solid #d6c3b3; border-radius: 0.5rem; padding: 1rem 1.25rem; margin-top: 0.75rem; }
+  .fix-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; color: #875305; margin-bottom: 0.25rem; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body">
+
+<header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/40">
+  <div class="flex justify-between items-center px-6 py-4 w-full max-w-4xl mx-auto">
+    <a class="flex items-center gap-3" href="library.html">
+      <span class="material-symbols-outlined text-primary">arrow_back</span>
+      <span class="font-label text-sm text-primary font-bold tracking-wide">Library</span>
+    </a>
+    <a class="flex items-center gap-3" href="index.html"><img alt="Pancito y Más Logo" class="w-12 h-12 object-contain" src="logo.png"/><span class="font-headline italic font-bold text-primary text-2xl tracking-tight">Pancito y Más</span></a>
+    <button class="text-primary hover:opacity-80 transition-opacity p-2 rounded-full">
+      <span class="material-symbols-outlined">account_circle</span>
+    </button>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-6 py-12 pb-32">
+
+  <div class="mb-10">
+    <span class="font-label text-[10px] uppercase tracking-[0.2em] text-primary font-extrabold block mb-4">Troubleshooting</span>
+    <h1 class="font-headline text-4xl md:text-6xl text-on-surface leading-tight mb-6">"Why didn't my bread rise?"</h1>
+    <p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">A flat, dense loaf is one of the most common and most fixable sourdough problems. Here are the three culprits — and how to address each one.</p>
+  </div>
+
+  <div class="w-full aspect-[16/7] rounded-xl overflow-hidden mb-12 bg-surface-container-highest relative shadow-md">
+    <img alt="A flat dense sourdough loaf next to a well-risen airy loaf for comparison" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-rise.jpg" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')"/>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-surface-container-highest hidden">
+      <span class="material-symbols-outlined text-6xl text-primary/30 mb-3">trending_down</span>
+      <span class="font-label text-xs text-outline uppercase tracking-widest">Rise Troubleshooting</span>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-6 mb-12 pb-8 border-b border-outline-variant">
+    <span class="font-label text-xs text-outline">By Pancito y Más</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">7 min read</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">All Levels</span>
+  </div>
+
+  <article class="prose-article">
+
+    <p>You followed the recipe. You were patient. You did every fold. And then you pulled a flat, brick-dense loaf out of the oven and wondered what went wrong.</p>
+
+    <p>The disappointing thing about sourdough is that the failure often looks the same regardless of the cause. A loaf that didn't rise could mean three very different problems at three very different stages of the process. This audit walks through each one so you can identify exactly where your process broke down — and fix it before the next bake.</p>
+
+    <div class="culprit-card">
+      <div class="culprit-number">01</div>
+      <div class="culprit-title">Weak or Inactive Starter</div>
+      <div class="culprit-body">
+        <p style="margin-bottom: 0.75rem;">Your starter is the engine of the entire process. If it isn't active and healthy, no amount of technique will produce a risen loaf. This is the most common cause of flat bread, especially for bakers who don't bake frequently and keep their starter refrigerated.</p>
+        <p style="margin-bottom: 0.5rem;"><strong>How to diagnose it:</strong> Do the float test. Drop a small spoonful of starter into a glass of water just before you plan to mix your dough. If it floats, the starter has enough gas production to leaven bread. If it sinks, it isn't ready.</p>
+        <p style="margin-bottom: 0;"><strong>Other signs of a weak starter:</strong> no visible bubbles after feeding, no predictable rise and fall cycle, flat or unresponsive after 8+ hours at room temperature.</p>
+        <div class="fix-box">
+          <div class="fix-label">The Fix</div>
+          <p style="margin-bottom: 0; font-size: 0.875rem; color: #514538; line-height: 1.7;">Feed your starter twice daily for 2–3 days at room temperature before baking. Use it at peak activity — when it has doubled, is domed, and passes the float test. Never use a starter pulled straight from the refrigerator without this warmup phase.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="culprit-card">
+      <div class="culprit-number">02</div>
+      <div class="culprit-title">Improper Proofing Temperature</div>
+      <div class="culprit-body">
+        <p style="margin-bottom: 0.75rem;">Wild yeast is extremely sensitive to temperature. It thrives between 75–82°F (24–28°C). Below 65°F (18°C), fermentation slows significantly. In a cool kitchen, a bulk fermentation that should take 5 hours might take 10 or 12 — and if you go by the clock instead of the dough, you'll end up underfermented.</p>
+        <p style="margin-bottom: 0.5rem;"><strong>How to diagnose it:</strong> Your dough didn't increase by 50–75% during bulk fermentation. It looks the same as when you started. It feels dense and doesn't jiggle when the container is shaken.</p>
+        <p style="margin-bottom: 0;"><strong>Common scenario:</strong> A 68°F kitchen in winter, following a recipe written for a 75°F summer kitchen. The timing is completely different.</p>
+        <div class="fix-box">
+          <div class="fix-label">The Fix</div>
+          <p style="margin-bottom: 0; font-size: 0.875rem; color: #514538; line-height: 1.7;">Stop following time alone — follow the dough. Use a probe thermometer to know your ambient temperature. For a warmer proofing environment, place your covered container in the oven with just the light on (typically 75–80°F), or near a warm appliance. In summer, do the opposite: move fermentation to a cooler spot to slow things down and avoid over-fermentation.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="culprit-card">
+      <div class="culprit-number">03</div>
+      <div class="culprit-title">Over-Fermentation</div>
+      <div class="culprit-body">
+        <p style="margin-bottom: 0.75rem;">Counterintuitively, a flat loaf can also mean the dough fermented for <em>too long</em>. Over-fermented dough has used up all its food supply and exhausted its gas production. The gluten structure breaks down, becoming slack and unable to hold any structure. The loaf spreads rather than rising.</p>
+        <p style="margin-bottom: 0.5rem;"><strong>How to diagnose it:</strong> The dough is extremely slack and sticky — almost liquid-like — and doesn't hold its shape during shaping. When you cut the baked loaf, the crumb is dense with tiny, uniform bubbles (not open and irregular).</p>
+        <p style="margin-bottom: 0;"><strong>Common scenario:</strong> Left the dough to bulk ferment overnight in a warm kitchen, or used a very active starter at a higher percentage than the recipe intended.</p>
+        <div class="fix-box">
+          <div class="fix-label">The Fix</div>
+          <p style="margin-bottom: 0; font-size: 0.875rem; color: #514538; line-height: 1.7;">Learn the visual cues for the end of bulk fermentation: 50–75% volume increase, a domed (not flat) top, visible bubbles on the sides and surface, and a jelly-like jiggle. If you need to slow things down, move the dough to the refrigerator before it over-ferments. Cold retard can buy you several hours of flexibility.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>The Diagnostic Checklist</h2>
+
+    <p>Next time you get a flat loaf, run through this before your next bake:</p>
+
+    <ul>
+      <li>Did the starter pass the float test before mixing?</li>
+      <li>What was the actual room temperature during bulk fermentation?</li>
+      <li>Did the dough visibly increase in volume during bulk?</li>
+      <li>Was the dough domed or flat at the end of bulk?</li>
+      <li>Was the shaped dough firm or very slack?</li>
+      <li>Did the loaf spring up in the oven at all, or stay flat throughout?</li>
+    </ul>
+
+    <p>The answers to these questions will point clearly to one of the three culprits above. Sourdough has a reputation for being mysterious, but most failures have a straightforward explanation once you know where to look.</p>
+
+    <p>Every flat loaf is a lesson. Keep notes in your bake log, note the temperature, the starter activity, the bulk timing — and the next loaf will be better for it.</p>
+
+  </article>
+
+  <div class="mt-16 pt-8 border-t border-outline-variant">
+    <h3 class="font-headline text-2xl mb-6">More Troubleshooting</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <a href="troubleshoot-sticky.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-primary mb-3 block">water_drop</span>
+        <h4 class="font-headline text-base mb-1 group-hover:text-primary transition-colors">Sticky Dough</h4>
+        <p class="text-xs text-on-surface-variant">Hydration mismatch and the Rubaud method.</p>
+      </a>
+      <a href="troubleshoot-crust.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-primary mb-3 block">oven_gen</span>
+        <h4 class="font-headline text-base mb-1 group-hover:text-primary transition-colors">Tough Crust</h4>
+        <p class="text-xs text-on-surface-variant">Why steam is everything in crust formation.</p>
+      </a>
+      <a href="troubleshoot-gummy.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-primary mb-3 block">texture</span>
+        <h4 class="font-headline text-base mb-1 group-hover:text-primary transition-colors">Gummy Texture</h4>
+        <p class="text-xs text-on-surface-variant">The internal temperature rule every baker must know.</p>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]">
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="index.html">
+<span class="material-symbols-outlined text-[20px]">home_max</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Dash</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="bake-log.html">
+<span class="material-symbols-outlined text-[20px]">timer</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Bake</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" href="library.html">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">book_5</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Library</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="archive.html">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Archive</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="starter-kit.html">
+<span class="material-symbols-outlined text-[20px]">handyman</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Tools</span>
+</a>
+</nav>
+
+</body>
+</html>

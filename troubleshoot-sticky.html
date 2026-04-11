@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dough Is Too Sticky — Pancito y Más Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-low": "#f8f3e9","surface": "#fef9ef","on-surface-variant": "#514538","background": "#fef9ef","on-surface": "#1d1c16","primary": "#875305","secondary-container": "#febe98","surface-container": "#f2ede3","surface-container-high": "#ece8de","surface-container-highest": "#e7e2d8","outline": "#847466","outline-variant": "#d6c3b3"
+        },
+        fontFamily: { "headline": ["Noto Serif"], "body": ["Plus Jakarta Sans"], "label": ["Plus Jakarta Sans"] },
+        borderRadius: {"DEFAULT": "0.5rem","lg": "0.5rem","xl": "0.75rem","full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { min-height: max(884px, 100dvh); }
+  .prose-article p { margin-bottom: 1.25rem; line-height: 1.8; color: #514538; }
+  .prose-article h2 { font-family: 'Noto Serif', serif; font-size: 1.75rem; color: #1d1c16; margin-top: 2.5rem; margin-bottom: 1rem; }
+  .prose-article h3 { font-family: 'Noto Serif', serif; font-size: 1.25rem; color: #1d1c16; margin-top: 2rem; margin-bottom: 0.5rem; }
+  .prose-article ul { list-style: none; padding: 0; margin-bottom: 1.25rem; }
+  .prose-article ul li { padding-left: 1.5rem; position: relative; margin-bottom: 0.5rem; color: #514538; line-height: 1.7; }
+  .prose-article ul li::before { content: '—'; position: absolute; left: 0; color: #875305; font-weight: bold; }
+  .prose-article ol { counter-reset: item; padding: 0; margin-bottom: 1.25rem; }
+  .prose-article ol li { counter-increment: item; padding-left: 2rem; position: relative; margin-bottom: 0.75rem; color: #514538; line-height: 1.7; }
+  .prose-article ol li::before { content: counter(item) "."; position: absolute; left: 0; color: #875305; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body">
+
+<header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/40">
+  <div class="flex justify-between items-center px-6 py-4 w-full max-w-4xl mx-auto">
+    <a class="flex items-center gap-3" href="library.html">
+      <span class="material-symbols-outlined text-primary">arrow_back</span>
+      <span class="font-label text-sm text-primary font-bold tracking-wide">Library</span>
+    </a>
+    <a class="flex items-center gap-3" href="index.html"><img alt="Pancito y Más Logo" class="w-12 h-12 object-contain" src="logo.png"/><span class="font-headline italic font-bold text-primary text-2xl tracking-tight">Pancito y Más</span></a>
+    <button class="text-primary hover:opacity-80 transition-opacity p-2 rounded-full">
+      <span class="material-symbols-outlined">account_circle</span>
+    </button>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-6 py-12 pb-32">
+
+  <div class="mb-10">
+    <span class="font-label text-[10px] uppercase tracking-[0.2em] text-primary font-extrabold block mb-4">Troubleshooting</span>
+    <h1 class="font-headline text-4xl md:text-6xl text-on-surface leading-tight mb-6">Dough Is Too Sticky?</h1>
+    <p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">It's likely a hydration mismatch with your flour. Here's why it happens, how to manage it, and the Rubaud method that changes everything.</p>
+  </div>
+
+  <div class="w-full aspect-[16/7] rounded-xl overflow-hidden mb-12 bg-surface-container-highest relative shadow-md">
+    <img alt="Hands working with wet high-hydration sourdough dough on a clean counter" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-sticky.jpg" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')"/>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-surface-container-highest hidden">
+      <span class="material-symbols-outlined text-6xl text-primary/30 mb-3">water_drop</span>
+      <span class="font-label text-xs text-outline uppercase tracking-widest">Sticky Dough</span>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-6 mb-12 pb-8 border-b border-outline-variant">
+    <span class="font-label text-xs text-outline">By Pancito y Más</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">6 min read</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">Beginner–Intermediate</span>
+  </div>
+
+  <article class="prose-article">
+
+    <p>Sticky dough is one of the most discouraging sensations in baking. It clings to your hands, the counter, every tool you try to use. It feels like it's fighting you. New bakers often react by adding more flour, which creates new problems. Experienced bakers know: sticky dough isn't broken dough. It's just dough asking to be handled differently.</p>
+
+    <h2>Why Dough Gets Sticky</h2>
+
+    <p>Stickiness in sourdough usually comes down to one of three causes: <em>hydration is genuinely too high for your flour</em>, <em>the gluten hasn't developed enough yet to handle itself</em>, or <em>the dough is over-fermented and the gluten has broken down</em>.</p>
+
+    <p>The third cause (over-fermentation) is addressed in the rise troubleshooting guide. This guide focuses on the first two.</p>
+
+    <h3>The Flour Variable</h3>
+
+    <p>Not all all-purpose flour is the same. American all-purpose flour is typically higher in protein (10–12%) than European flours, which means it absorbs more water. A recipe written for a high-protein bread flour at 75% hydration may produce a very different dough than the same ratio made with a softer domestic flour at 10% protein.</p>
+
+    <p>If you switch flour brands and suddenly your dough is far stickier than before, this is almost certainly why. The recipe wasn't wrong — it just wasn't written for your flour.</p>
+
+    <ul>
+      <li><strong>Higher protein flour</strong> (bread flour, 12%+) — absorbs more water, less sticky at the same hydration</li>
+      <li><strong>Lower protein flour</strong> (soft all-purpose, 9–10%) — absorbs less water, stickier at the same hydration</li>
+      <li><strong>Whole wheat flour</strong> — absorbs more water due to the bran, but also weakens gluten over time</li>
+    </ul>
+
+    <p>The fix: reduce your hydration by 5% when switching to a lower-protein flour, or increase it by 5% when switching to a higher-protein flour. Small adjustments make a large difference.</p>
+
+    <h3>Underdeveloped Gluten</h3>
+
+    <p>Even at the right hydration, dough can feel sticky at the beginning of bulk fermentation because the gluten network hasn't formed yet. Freshly mixed dough is shaggy, wet, and unruly. This is normal. After the first few stretch-and-fold sets, the same dough becomes smooth, elastic, and far less adhesive.</p>
+
+    <p>If your dough is still unmanageably sticky after three sets of folds, that's worth investigating — but if it's sticky right after mixing, give it time.</p>
+
+    <h2>The Rubaud Method</h2>
+
+    <p>Developed by French baker Gerard Rubaud, this technique is one of the most effective ways to build gluten strength in a very high-hydration dough without any additional flour. It's a form of slap-and-fold mixing done with wet hands directly in the bowl.</p>
+
+    <ol>
+      <li><strong>Wet your hands generously.</strong></li>
+      <li><strong>Reach under the dough</strong> and scoop it up from below, letting it hang for a moment.</li>
+      <li><strong>Slap it back down</strong> firmly onto the bowl surface, folding it forward as you do.</li>
+      <li><strong>Rotate the bowl slightly</strong> and repeat — always working from underneath, not grabbing from above.</li>
+      <li>Continue for 3–5 minutes. You'll notice the dough beginning to pull away from the sides of the bowl and become more cohesive.</li>
+    </ol>
+
+    <p>The Rubaud method works because it stretches the dough repeatedly in multiple directions while keeping it in the bowl — no mess, no flour, no fighting with the counter. It's particularly effective for 75–80% hydration doughs that are too wet to work on a counter but not quite ready for just folding.</p>
+
+    <h2>Working With Wet Dough on a Counter</h2>
+
+    <p>When the time comes to shape high-hydration dough, technique matters more than dryness.</p>
+
+    <ul>
+      <li><strong>Use wet hands, not floured ones.</strong> Flour clumps stick to high-hydration dough in a way that wet hands don't. A bowl of water nearby lets you re-wet your hands as needed.</li>
+      <li><strong>Use a bench scraper.</strong> This is non-negotiable for wet doughs. The scraper slides under the dough cleanly and lets you fold, rotate, and pre-shape without the dough sticking to every surface it touches.</li>
+      <li><strong>Work fast and decisively.</strong> Hesitation gives the dough time to stick. Confident, swift movements keep you ahead of it.</li>
+      <li><strong>Rest the dough frequently.</strong> If it's fighting you during shaping, cover it and let it rest for 10 minutes. The gluten relaxes and becomes cooperative again.</li>
+    </ul>
+
+    <h2>When to Actually Reduce Hydration</h2>
+
+    <p>Adding flour to a dough that's already been mixed disrupts the fermentation and creates dense patches. But reducing hydration upfront — before mixing — is always valid.</p>
+
+    <p>If you're a beginner, start at 68–70% hydration. This produces a dough that is manageable and still makes excellent bread. As your skills develop and your hands learn to read the dough, work up toward 75%, then 80%. The open crumb that high-hydration doughs produce is worth chasing — but it's easier to chase when you're not fighting the dough every step of the way.</p>
+
+    <p>Sticky dough is a threshold, not a flaw. Every baker crosses it, fumbles, adds too much flour once, and then learns to work with the wetness instead of against it. The bench scraper and the wet hand will become your best tools.</p>
+
+  </article>
+
+  <div class="mt-16 pt-8 border-t border-outline-variant">
+    <h3 class="font-headline text-2xl mb-6">More Troubleshooting</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <a href="troubleshoot-rise.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-primary mb-3 block">trending_down</span>
+        <h4 class="font-headline text-base mb-1 group-hover:text-primary transition-colors">Didn't Rise</h4>
+        <p class="text-xs text-on-surface-variant">Diagnosing weak starter, temperature, and over-fermentation.</p>
+      </a>
+      <a href="troubleshoot-crust.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-primary mb-3 block">oven_gen</span>
+        <h4 class="font-headline text-base mb-1 group-hover:text-primary transition-colors">Tough Crust</h4>
+        <p class="text-xs text-on-surface-variant">Why steam is everything in crust formation.</p>
+      </a>
+      <a href="troubleshoot-gummy.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-primary mb-3 block">texture</span>
+        <h4 class="font-headline text-base mb-1 group-hover:text-primary transition-colors">Gummy Texture</h4>
+        <p class="text-xs text-on-surface-variant">The internal temperature rule every baker must know.</p>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]">
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="index.html">
+<span class="material-symbols-outlined text-[20px]">home_max</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Dash</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="bake-log.html">
+<span class="material-symbols-outlined text-[20px]">timer</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Bake</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" href="library.html">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">book_5</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Library</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="archive.html">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Archive</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="starter-kit.html">
+<span class="material-symbols-outlined text-[20px]">handyman</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Tools</span>
+</a>
+</nav>
+
+</body>
+</html>

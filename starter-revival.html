@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Starter Revival — Pancito y Más Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-low": "#f8f3e9","surface": "#fef9ef","on-surface-variant": "#514538","background": "#fef9ef","on-surface": "#1d1c16","primary": "#875305","secondary-container": "#febe98","surface-container": "#f2ede3","surface-container-high": "#ece8de","surface-container-highest": "#e7e2d8","outline": "#847466","outline-variant": "#d6c3b3"
+        },
+        fontFamily: { "headline": ["Noto Serif"], "body": ["Plus Jakarta Sans"], "label": ["Plus Jakarta Sans"] },
+        borderRadius: {"DEFAULT": "0.5rem","lg": "0.5rem","xl": "0.75rem","full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { min-height: max(884px, 100dvh); }
+  .prose-article p { margin-bottom: 1.25rem; line-height: 1.8; color: #514538; }
+  .prose-article h2 { font-family: 'Noto Serif', serif; font-size: 1.75rem; color: #1d1c16; margin-top: 2.5rem; margin-bottom: 1rem; }
+  .prose-article h3 { font-family: 'Noto Serif', serif; font-size: 1.25rem; color: #1d1c16; margin-top: 2rem; margin-bottom: 0.5rem; }
+  .prose-article ul { list-style: none; padding: 0; margin-bottom: 1.25rem; }
+  .prose-article ul li { padding-left: 1.5rem; position: relative; margin-bottom: 0.5rem; color: #514538; line-height: 1.7; }
+  .prose-article ul li::before { content: '—'; position: absolute; left: 0; color: #875305; font-weight: bold; }
+  .prose-article ol { counter-reset: item; padding: 0; margin-bottom: 1.25rem; }
+  .prose-article ol li { counter-increment: item; padding-left: 2rem; position: relative; margin-bottom: 0.75rem; color: #514538; line-height: 1.7; }
+  .prose-article ol li::before { content: counter(item) "."; position: absolute; left: 0; color: #875305; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; }
+  .day-card { background: #f8f3e9; border-radius: 0.75rem; padding: 1.25rem 1.5rem; margin-bottom: 0.75rem; border-left: 3px solid #875305; }
+  .day-card .day-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; color: #875305; margin-bottom: 0.25rem; }
+  .day-card .day-title { font-family: 'Noto Serif', serif; font-size: 1rem; color: #1d1c16; margin-bottom: 0.25rem; }
+  .day-card .day-body { font-size: 0.875rem; color: #514538; line-height: 1.6; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body">
+
+<header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/40">
+  <div class="flex justify-between items-center px-6 py-4 w-full max-w-4xl mx-auto">
+    <a class="flex items-center gap-3" href="library.html">
+      <span class="material-symbols-outlined text-primary">arrow_back</span>
+      <span class="font-label text-sm text-primary font-bold tracking-wide">Library</span>
+    </a>
+    <a class="flex items-center gap-3" href="index.html"><img alt="Pancito y Más Logo" class="w-12 h-12 object-contain" src="logo.png"/><span class="font-headline italic font-bold text-primary text-2xl tracking-tight">Pancito y Más</span></a>
+    <button class="text-primary hover:opacity-80 transition-opacity p-2 rounded-full">
+      <span class="material-symbols-outlined">account_circle</span>
+    </button>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-6 py-12 pb-32">
+
+  <div class="mb-10">
+    <span class="font-label text-[10px] uppercase tracking-[0.2em] text-primary font-extrabold block mb-4">Maintenance</span>
+    <h1 class="font-headline text-4xl md:text-6xl text-on-surface leading-tight mb-6">The Starter Revival</h1>
+    <p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">How to bring a neglected starter back from dormancy — and the 7-day protocol that almost never fails.</p>
+  </div>
+
+  <div class="w-full aspect-[16/7] rounded-xl overflow-hidden mb-12 bg-surface-container-highest relative shadow-md">
+    <img alt="A jar of bubbly active sourdough starter next to a fresh jar of flour" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-starter.jpg" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')"/>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-surface-container-highest hidden">
+      <span class="material-symbols-outlined text-6xl text-primary/30 mb-3">science</span>
+      <span class="font-label text-xs text-outline uppercase tracking-widest">The Starter Revival</span>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-6 mb-12 pb-8 border-b border-outline-variant">
+    <span class="font-label text-xs text-outline">By Pancito y Más</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">9 min read</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">All Levels</span>
+  </div>
+
+  <article class="prose-article">
+
+    <p>Life happens. The starter gets pushed to the back of the refrigerator, forgotten for a week — or four. When you finally open the jar, you find a dark, pungent liquid sitting on top, a deflated mass below, and possibly a faint but unpleasant smell. It looks dead. It probably isn't.</p>
+
+    <p>Sourdough starters are extraordinarily resilient. The wild yeasts and bacteria that make them work have evolved over millennia to survive periods of dormancy, starvation, and neglect. In almost every case, what looks like a dead starter is just a very hungry one.</p>
+
+    <h2>Reading the Signs</h2>
+
+    <p>Before you start any revival protocol, take a moment to assess what you're actually dealing with.</p>
+
+    <ul>
+      <li><strong>Dark liquid on top (hooch)</strong> — This is alcohol produced by the yeast as it runs out of food. It looks alarming but is completely normal. It means the starter is starving, not dead.</li>
+      <li><strong>Gray or dark color throughout</strong> — Also normal for a long-neglected starter. It will lighten with feeding.</li>
+      <li><strong>Sour or vinegary smell</strong> — A good sign. It means acetic acid bacteria are present and active.</li>
+      <li><strong>Fuzzy mold (pink, orange, or black spots)</strong> — This is the one situation where you discard and start from scratch. Green mold can sometimes be scraped if it's surface-only and the starter below smells fine, but pink or orange contamination means the starter is compromised.</li>
+    </ul>
+
+    <p>If there's no mold, your starter is almost certainly revivable. Pour off the hooch (or stir it back in — both are fine), and begin the protocol below.</p>
+
+    <h2>The 7-Day Revival Protocol</h2>
+
+    <p>This method rebuilds microbial activity gradually, allowing the healthy bacteria and yeast to outcompete anything undesirable that may have taken hold during the dormant period.</p>
+
+    <div class="day-card">
+      <div class="day-label">Day 1</div>
+      <div class="day-title">The Wake-Up</div>
+      <div class="day-body">Discard all but 20g of your starter. Feed it with 40g whole wheat flour and 40g room-temperature water (non-chlorinated). Stir vigorously. Leave it uncovered or loosely covered at room temperature (70–75°F / 21–24°C). Whole wheat at the start accelerates activity because the bran contains more wild yeast and bacteria.</div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-label">Day 2</div>
+      <div class="day-title">First Signs</div>
+      <div class="day-body">You may see a few bubbles forming, or you may see nothing. Both are okay. Discard all but 20g again. Feed with 40g all-purpose flour and 40g water. This begins transitioning back to a standard flour base. Note the smell — it will begin shifting from sharp alcohol to something more yeasty and tangy.</div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-label">Day 3</div>
+      <div class="day-title">The Shift</div>
+      <div class="day-body">Activity should be increasing. Repeat the 1:2:2 feed (20g starter : 40g flour : 40g water) with all-purpose flour. Feed twice today if your kitchen is warm and you can see the starter is active and deflating between feeds.</div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-label">Day 4–5</div>
+      <div class="day-title">Building Momentum</div>
+      <div class="day-body">Feed once or twice daily with a 1:1:1 ratio (50g starter : 50g flour : 50g water). The starter should be visibly rising and falling between feeds. Mark the jar with a rubber band to track the rise — you're looking for it to double within 4–8 hours of feeding.</div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-label">Day 6</div>
+      <div class="day-title">The Float Test</div>
+      <div class="day-body">At peak rise (when the starter has doubled or more and is domed on top), drop a small spoonful into a glass of water. If it floats, it's active enough to leaven bread. If it sinks, give it one more day of twice-daily feedings.</div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-label">Day 7</div>
+      <div class="day-title">Ready to Bake</div>
+      <div class="day-body">If the float test passed and the starter smells pleasantly sour (not harsh or unpleasant), it's ready. Give it one final feeding, wait for it to reach peak activity, and use it in your recipe. The first loaf after revival may be slightly less airy — this is normal. By the second bake, the starter will be performing at full strength.</div>
+    </div>
+
+    <h2>Ratio Guide</h2>
+
+    <p>The feeding ratio you use matters. A 1:1:1 ratio (starter : flour : water, equal parts) produces a faster, more acidic starter because the bacteria have more to eat relative to the dilution. A 1:5:5 ratio produces a milder, slower starter with more yeast character. During revival, stick to 1:2:2 or 1:1:1 to maximize activity.</p>
+
+    <h2>Flour Type and Water Quality</h2>
+
+    <p>Chlorinated tap water can inhibit yeast activity. If your revival is stalling, switch to filtered water or leave tap water uncovered overnight to let the chlorine dissipate.</p>
+
+    <p>Unbleached all-purpose flour is the workhorse. Adding 10–20% whole wheat or rye flour during revival accelerates things significantly due to the higher mineral and enzyme content. You don't have to keep it in the long-term feed — just use it during the first 3 days.</p>
+
+    <h2>Preventing Future Neglect</h2>
+
+    <ul>
+      <li><strong>Keep it in the refrigerator</strong> if you bake less than once a week. Cold storage slows activity to the point where one feeding per week is sufficient.</li>
+      <li><strong>Label your jar</strong> with the last feeding date. A masking tape label on the lid takes five seconds and prevents the guessing game.</li>
+      <li><strong>Maintain a small amount.</strong> 50–100g is plenty for a home baker. Large volumes need more flour to maintain and produce more discard.</li>
+      <li><strong>Dry a backup.</strong> Spread a thin layer of active starter on parchment paper, let it dry completely, crumble it into flakes, and store in a sealed container. Dried starter can last years and can be rehydrated in an emergency.</li>
+    </ul>
+
+    <p>Your starter is not fragile. It has survived everything you've thrown at it so far, and it will continue to do so. The relationship between a baker and their starter is one of the most patient and forgiving ones in the kitchen. Feed it, and it feeds you back.</p>
+
+  </article>
+
+  <div class="mt-16 pt-8 border-t border-outline-variant">
+    <h3 class="font-headline text-2xl mb-6">Continue Learning</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <a href="stretch-and-fold.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Foundations</span>
+        <h4 class="font-headline text-lg mb-1 group-hover:text-primary transition-colors">The Stretch &amp; Fold</h4>
+        <p class="text-xs text-on-surface-variant">The core technique for building sourdough structure.</p>
+      </a>
+      <a href="troubleshoot-rise.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Troubleshooting</span>
+        <h4 class="font-headline text-lg mb-1 group-hover:text-primary transition-colors">Why Didn't It Rise?</h4>
+        <p class="text-xs text-on-surface-variant">Diagnosing the three most common rise problems.</p>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]">
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="index.html">
+<span class="material-symbols-outlined text-[20px]">home_max</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Dash</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="bake-log.html">
+<span class="material-symbols-outlined text-[20px]">timer</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Bake</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" href="library.html">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">book_5</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Library</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="archive.html">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Archive</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="starter-kit.html">
+<span class="material-symbols-outlined text-[20px]">handyman</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Tools</span>
+</a>
+</nav>
+
+</body>
+</html>

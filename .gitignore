@@ -1,0 +1,18 @@
+# Dependencies — excluded from APK copy by Capacitor
+node_modules/
+
+# Generated native projects (rebuilt by GitHub Actions each time)
+android/
+ios/
+
+# Build artifacts
+*.apk
+*.aab
+*.ipa
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/

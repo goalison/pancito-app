@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tough Crust — Pancito y Más Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-low": "#f8f3e9","surface": "#fef9ef","on-surface-variant": "#514538","background": "#fef9ef","on-surface": "#1d1c16","primary": "#875305","secondary-container": "#febe98","surface-container": "#f2ede3","surface-container-high": "#ece8de","surface-container-highest": "#e7e2d8","outline": "#847466","outline-variant": "#d6c3b3"
+        },
+        fontFamily: { "headline": ["Noto Serif"], "body": ["Plus Jakarta Sans"], "label": ["Plus Jakarta Sans"] },
+        borderRadius: {"DEFAULT": "0.5rem","lg": "0.5rem","xl": "0.75rem","full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { min-height: max(884px, 100dvh); }
+  .prose-article p { margin-bottom: 1.25rem; line-height: 1.8; color: #514538; }
+  .prose-article h2 { font-family: 'Noto Serif', serif; font-size: 1.75rem; color: #1d1c16; margin-top: 2.5rem; margin-bottom: 1rem; }
+  .prose-article h3 { font-family: 'Noto Serif', serif; font-size: 1.25rem; color: #1d1c16; margin-top: 2rem; margin-bottom: 0.5rem; }
+  .prose-article ul { list-style: none; padding: 0; margin-bottom: 1.25rem; }
+  .prose-article ul li { padding-left: 1.5rem; position: relative; margin-bottom: 0.5rem; color: #514538; line-height: 1.7; }
+  .prose-article ul li::before { content: '—'; position: absolute; left: 0; color: #875305; font-weight: bold; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body">
+
+<header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/40">
+  <div class="flex justify-between items-center px-6 py-4 w-full max-w-4xl mx-auto">
+    <a class="flex items-center gap-3" href="library.html">
+      <span class="material-symbols-outlined text-primary">arrow_back</span>
+      <span class="font-label text-sm text-primary font-bold tracking-wide">Library</span>
+    </a>
+    <a class="flex items-center gap-3" href="index.html"><img alt="Pancito y Más Logo" class="w-12 h-12 object-contain" src="logo.png"/><span class="font-headline italic font-bold text-primary text-2xl tracking-tight">Pancito y Más</span></a>
+    <button class="text-primary hover:opacity-80 transition-opacity p-2 rounded-full">
+      <span class="material-symbols-outlined">account_circle</span>
+    </button>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-6 py-12 pb-32">
+
+  <div class="mb-10">
+    <span class="font-label text-[10px] uppercase tracking-[0.2em] text-primary font-extrabold block mb-4">Troubleshooting</span>
+    <h1 class="font-headline text-4xl md:text-6xl text-on-surface leading-tight mb-6">Tough Crust</h1>
+    <p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">A crust so hard it's difficult to slice is almost always a steam problem. Here's what's happening — and the home baker's guide to fixing it.</p>
+  </div>
+
+  <div class="w-full aspect-[16/7] rounded-xl overflow-hidden mb-12 bg-surface-container-highest relative shadow-md">
+    <img alt="A perfectly baked sourdough loaf with a deep scored crust and caramelized color" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-crust.jpg" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')"/>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-surface-container-highest hidden">
+      <span class="material-symbols-outlined text-6xl text-primary/30 mb-3">oven_gen</span>
+      <span class="font-label text-xs text-outline uppercase tracking-widest">Tough Crust</span>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-6 mb-12 pb-8 border-b border-outline-variant">
+    <span class="font-label text-xs text-outline">By Pancito y Más</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">6 min read</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">All Levels</span>
+  </div>
+
+  <article class="prose-article">
+
+    <p>There are two very different crust problems in sourdough, and it helps to know which one you have. A crust that is <em>crispy and shatters satisfyingly</em> when you bite into it — that's a great crust. A crust that is <em>leathery, impossibly thick, and takes real effort to cut through</em> — that's a steam problem.</p>
+
+    <p>The difference comes down almost entirely to what happens in the first 20 minutes of baking.</p>
+
+    <h2>What Steam Does</h2>
+
+    <p>When dough enters a hot oven, the surface immediately begins to dry and set into a crust. If this happens too fast — before the interior has had time to fully spring and expand — you get a thick, resistant outer shell that prevents the loaf from opening properly at the score. The result is a cramped, dense bread with a crust that chews like leather.</p>
+
+    <p>Steam delays crust formation. By keeping the surface of the dough moist in the early stages, steam allows the exterior to remain pliable while the interior heats up and expands. The loaf can bloom fully at the score, rise to its potential, and develop a thin, glossy outer layer. When the steam is removed or dissipates in the second half of baking, this layer dries and crisps into a proper crust — crackling, shatterable, gorgeous.</p>
+
+    <p>Professional deck ovens inject steam directly. Home ovens don't. So as home bakers, we have to create our own.</p>
+
+    <h2>The Dutch Oven Method</h2>
+
+    <p>This is, by a wide margin, the best way to bake sourdough at home. A Dutch oven (cast iron or enameled) acts as a miniature steam chamber. The moisture from the dough itself — which would normally evaporate into the open oven — is trapped inside the covered pot, creating exactly the steam environment you need.</p>
+
+    <ul>
+      <li><strong>Preheat the Dutch oven in the oven</strong> for at least 45–60 minutes at 500°F (260°C). The pot needs to be screaming hot when the dough goes in.</li>
+      <li><strong>Score the dough</strong> quickly and transfer it into the Dutch oven as fast as possible using a bread sling or parchment paper. Every second the loaf is in open air, it's losing the cold it needs for a good spring.</li>
+      <li><strong>Bake covered for 20 minutes.</strong> This is the steam phase. Do not open the lid during this time.</li>
+      <li><strong>Remove the lid and bake for 20–25 minutes more</strong> until the crust is deeply colored (darker than you think). The internal temperature should reach 206–210°F (97–99°C).</li>
+    </ul>
+
+    <p>The difference between a pale, under-baked crust and a deeply caramelized one is enormous — not just visually, but in flavor. Crust color = crust flavor. Don't pull it early out of nerves.</p>
+
+    <h2>If You Don't Have a Dutch Oven</h2>
+
+    <p>There are reliable alternatives for generating steam in a standard oven:</p>
+
+    <h3>The Tray Method</h3>
+    <p>Place a metal roasting tray or cast iron skillet on the bottom rack of the oven while preheating. When you load the bread onto a hot baking stone or steel on the middle rack, quickly pour 1 cup of boiling water into the hot tray below and close the oven door immediately. The water flash-steams and fills the oven cavity. Remove the tray after 20 minutes to allow the crust to dry and color.</p>
+
+    <h3>The Covered Baker</h3>
+    <p>A clay baker, lidded bread pan, or even a large stainless steel bowl placed over your loaf on a baking stone creates a similar effect to a Dutch oven. The key is the same: covered for the first 20 minutes, uncovered for the rest.</p>
+
+    <h3>Ice Cubes</h3>
+    <p>Throwing ice cubes into a hot tray at the bottom of the oven is a popular technique, but less reliable than boiling water because the cubes melt slowly. If using this method, pre-fill the tray with ice before preheating so the ice is in contact with the hot pan the moment you need the steam.</p>
+
+    <h2>The Timing Rule</h2>
+
+    <p>Covered: first 20 minutes. Uncovered: last 20–25 minutes. This ratio works for most home sourdough loaves in the 900g–1.2kg range. For smaller loaves, reduce the uncovered time. For larger loaves, extend it slightly.</p>
+
+    <p>One more thing: after baking, let the loaf cool on a wire rack for <em>at least one hour</em> before slicing. The interior is still finishing its bake as it cools, and the crust softens as moisture redistributes from the inside out. Slicing too early breaks the crust's final crackle.</p>
+
+    <h2>Quick Diagnostic</h2>
+    <ul>
+      <li><strong>Crust is very thick and leathery:</strong> Steam was insufficient — switch to Dutch oven baking.</li>
+      <li><strong>Crust is pale and soft:</strong> Baked too short, removed too early — bake longer and at higher heat.</li>
+      <li><strong>Crust cracks and splinters in jagged lines after cooling:</strong> This is actually a sign of proper steam and good oven spring. Desirable.</li>
+      <li><strong>Crust softens completely within an hour of cooling:</strong> Too much moisture in the loaf — extend uncovered bake time by 5 minutes to drive out more moisture.</li>
+    </ul>
+
+    <p>Steam is the single most impactful variable you can control in home sourdough baking. If your loaves have never been baked in a Dutch oven, the improvement on your first attempt will be immediate and dramatic.</p>
+
+  </article>
+
+  <div class="mt-16 pt-8 border-t border-outline-variant">
+    <h3 class="font-headline text-2xl mb-6">More Troubleshooting</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <a href="troubleshoot-rise.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-primary mb-3 block">trending_down</span>
+        <h4 class="font-headline text-base mb-1 group-hover:text-primary transition-colors">Didn't Rise</h4>
+        <p class="text-xs text-on-surface-variant">Diagnosing weak starter, temperature, and over-fermentation.</p>
+      </a>
+      <a href="troubleshoot-sticky.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-primary mb-3 block">water_drop</span>
+        <h4 class="font-headline text-base mb-1 group-hover:text-primary transition-colors">Sticky Dough</h4>
+        <p class="text-xs text-on-surface-variant">Hydration mismatch and the Rubaud method.</p>
+      </a>
+      <a href="troubleshoot-gummy.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-primary mb-3 block">texture</span>
+        <h4 class="font-headline text-base mb-1 group-hover:text-primary transition-colors">Gummy Texture</h4>
+        <p class="text-xs text-on-surface-variant">The internal temperature rule every baker must know.</p>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]">
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="index.html">
+<span class="material-symbols-outlined text-[20px]">home_max</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Dash</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="bake-log.html">
+<span class="material-symbols-outlined text-[20px]">timer</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Bake</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" href="library.html">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">book_5</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Library</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="archive.html">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Archive</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="starter-kit.html">
+<span class="material-symbols-outlined text-[20px]">handyman</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Tools</span>
+</a>
+</nav>
+
+</body>
+</html>

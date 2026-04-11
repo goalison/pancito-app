@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Science of Steam — Pancito y Más Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-low": "#f8f3e9","surface-dim": "#dedad0","surface": "#fef9ef","secondary": "#835334","primary-container": "#c4863a","on-surface-variant": "#514538","background": "#fef9ef","on-surface": "#1d1c16","primary": "#875305","secondary-container": "#febe98","on-secondary-container": "#794b2d","surface-container": "#f2ede3","surface-container-high": "#ece8de","surface-container-highest": "#e7e2d8","outline": "#847466","outline-variant": "#d6c3b3"
+        },
+        fontFamily: { "headline": ["Noto Serif"], "body": ["Plus Jakarta Sans"], "label": ["Plus Jakarta Sans"] },
+        borderRadius: {"DEFAULT": "0.5rem","lg": "0.5rem","xl": "0.75rem","full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { min-height: max(884px, 100dvh); }
+  .prose-article p { margin-bottom: 1.25rem; line-height: 1.8; color: #514538; }
+  .prose-article h2 { font-family: 'Noto Serif', serif; font-size: 1.75rem; color: #1d1c16; margin-top: 2.5rem; margin-bottom: 1rem; }
+  .prose-article h3 { font-family: 'Noto Serif', serif; font-size: 1.25rem; color: #1d1c16; margin-top: 2rem; margin-bottom: 0.5rem; }
+  .prose-article ul { list-style: none; padding: 0; margin-bottom: 1.25rem; }
+  .prose-article ul li { padding-left: 1.5rem; position: relative; margin-bottom: 0.5rem; color: #514538; line-height: 1.7; }
+  .prose-article ul li::before { content: '—'; position: absolute; left: 0; color: #875305; font-weight: bold; }
+  .prose-article ol { counter-reset: item; padding: 0; margin-bottom: 1.25rem; }
+  .prose-article ol li { counter-increment: item; padding-left: 2rem; position: relative; margin-bottom: 0.75rem; color: #514538; line-height: 1.7; }
+  .prose-article ol li::before { content: counter(item) "."; position: absolute; left: 0; color: #875305; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body">
+
+<!-- Header -->
+<header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/40">
+  <div class="flex justify-between items-center px-6 py-4 w-full max-w-4xl mx-auto">
+    <a class="flex items-center gap-3" href="library.html">
+      <span class="material-symbols-outlined text-primary">arrow_back</span>
+      <span class="font-label text-sm text-primary font-bold tracking-wide">Library</span>
+    </a>
+    <a class="flex items-center gap-3" href="index.html"><img alt="Pancito y Más Logo" class="w-12 h-12 object-contain" src="logo.png"/><span class="font-headline italic font-bold text-primary text-2xl tracking-tight">Pancito y Más</span></a>
+    <button class="text-primary hover:opacity-80 transition-opacity p-2 rounded-full">
+      <span class="material-symbols-outlined">account_circle</span>
+    </button>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-6 py-12 pb-32">
+
+  <!-- Category + Title -->
+  <div class="mb-10">
+    <span class="font-label text-[10px] uppercase tracking-[0.2em] text-primary font-extrabold block mb-4">Bake Lab</span>
+    <h1 class="font-headline text-4xl md:text-6xl text-on-surface leading-tight mb-6">The Science of Steam</h1>
+    <p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">Why the first 10 minutes in the oven make or break your loaf — and how to get it right every single time.</p>
+  </div>
+
+  <!-- Featured Image -->
+  <div class="w-full aspect-[16/7] rounded-xl overflow-hidden mb-12 bg-surface-container-highest relative shadow-md">
+    <img alt="Sourdough loaf baking inside a Dutch oven with steam rising" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-science-steam.jpg" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')"/>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-surface-container-highest hidden">
+      <span class="material-symbols-outlined text-6xl text-primary/30 mb-3">local_fire_department</span>
+      <span class="font-label text-xs text-outline uppercase tracking-widest">The Science of Steam</span>
+    </div>
+  </div>
+
+  <!-- Meta -->
+  <div class="flex items-center gap-6 mb-12 pb-8 border-b border-outline-variant">
+    <span class="font-label text-xs text-outline">By Pancito y Más</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">6 min read</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">All Levels</span>
+  </div>
+
+  <!-- Article Body -->
+  <article class="prose-article">
+
+    <p>You've done everything right — a strong starter, good bulk fermentation, a beautiful shape. Then the loaf comes out of the oven flat, dense, and pale. The culprit, more often than not, is steam. Or the lack of it.</p>
+
+    <p>Steam is not a trick or a shortcut. It is a fundamental part of how bread bakes. Understanding what it does — and what happens without it — is one of the most important things a home baker can learn.</p>
+
+    <h2>What Steam Actually Does</h2>
+
+    <p>When your shaped, cold dough hits a screaming-hot oven, two things need to happen simultaneously: the dough needs to expand rapidly (called <em>oven spring</em>), and the crust needs to stay soft long enough to allow that expansion. Here is the problem — heat sets a crust very quickly. Without moisture, the surface firms up within the first few minutes, creating a rigid shell that physically prevents the loaf from opening up.</p>
+
+    <p>Steam solves this by keeping the surface of the dough moist and pliable during that critical first window. The moisture condenses on the cool dough surface, temporarily delaying crust formation and allowing the loaf to push outward freely as the gases inside expand.</p>
+
+    <p>The result is a loaf with dramatic oven spring, a wide, open score, and — once the steam phase ends and the surface dries out — a deep, crackly crust that develops through the Maillard reaction.</p>
+
+    <h2>The Two Phases of Baking</h2>
+
+    <p>Every great sourdough bake has two distinct phases, and understanding them helps you control the outcome.</p>
+
+    <p><strong>Phase 1 — Steam on (first 20–25 minutes):</strong> The oven is as hot as it will go (450–500°F / 230–260°C). The steam environment keeps the crust soft. The loaf springs upward, the score opens, and the internal structure sets. This is when size is determined.</p>
+
+    <p><strong>Phase 2 — Steam off (final 15–25 minutes):</strong> The lid comes off, or the steam source is removed. Dry heat takes over. The crust begins to color — going from pale gold to deep amber. The Maillard reaction creates the hundreds of flavor compounds responsible for that roasted, complex taste. This is when color and crust thickness are determined.</p>
+
+    <p>Rushing Phase 2, or skipping Phase 1 entirely, produces a loaf that is either pale and chewy or dense and cracked in the wrong places.</p>
+
+    <h2>The Dutch Oven Method</h2>
+
+    <p>For home bakers, a Dutch oven (or any heavy lidded pot) is the most reliable way to create a steam environment. The logic is elegant: the loaf itself produces steam as its internal moisture evaporates. The lid traps that steam around the loaf for the first phase of baking.</p>
+
+    <p>This is why the Dutch oven method works so consistently — you are not adding external steam, you are harnessing the loaf's own moisture.</p>
+
+    <ol>
+      <li><strong>Preheat the Dutch oven inside the oven</strong> for at least 45–60 minutes at 500°F (260°C). The pot must be fully saturated with heat, not just warm. A cold pot destroys oven spring.</li>
+      <li><strong>Score the dough directly from the fridge</strong> — cold dough is firmer, easier to score cleanly, and holds its shape longer as it hits the heat.</li>
+      <li><strong>Lower the oven to 450°F (230°C) immediately</strong> after placing the dough inside. The residual heat from 500°F does the work; you're just dialing back to prevent burning.</li>
+      <li><strong>Bake covered for 20–25 minutes</strong>. Resist lifting the lid. Every time you peek, you release steam.</li>
+      <li><strong>Remove the lid</strong> and bake uncovered for another 20–25 minutes until the crust is deeply colored.</li>
+    </ol>
+
+    <h2>Reading the Score</h2>
+
+    <p>Your score is a direct report card on your steam phase. A wide, dramatic ear that peels back from the loaf means steam was present and the crust stayed supple long enough for real expansion. A tight, closed score that barely opened — or that looks burst and ragged — usually means the crust set too fast, either from too little steam or a loaf that wasn't cold enough when it went in.</p>
+
+    <h2>What Happens Without Steam</h2>
+
+    <p>Baking without a lid or steam source produces a "free-baked" loaf. The crust sets within 3–5 minutes. Any remaining gas expansion tears through the crust randomly — producing side bursts and an uneven crumb — rather than expanding through your intentional score. The loaf is also typically shorter and denser, since oven spring is limited by the early crust formation.</p>
+
+    <p>Free-baking works for some styles of bread intentionally, but for a classic sourdough boule or batard, steam is non-negotiable.</p>
+
+    <h2>Common Steam Mistakes</h2>
+
+    <ul>
+      <li><strong>Not preheating long enough</strong> — 30 minutes is not enough. A full hour at temperature gives the cast iron time to reach true equilibrium heat. This is the single most common reason loaves don't spring.</li>
+      <li><strong>Lifting the lid too early</strong> — the steam phase needs its full 20–25 minutes. Opening the lid at 15 minutes releases all the trapped moisture right when the crust is still setting.</li>
+      <li><strong>Scoring too shallow</strong> — even with perfect steam, a shallow score closes quickly. A confident, decisive cut at a 30–45° angle, at least ½ inch deep, gives the loaf a clear path to expand.</li>
+      <li><strong>Baking a warm loaf</strong> — always bake from the fridge. Room-temperature dough spreads laterally in the oven instead of rising vertically. Cold dough holds its shape just long enough for oven spring to take over.</li>
+    </ul>
+
+    <p>Steam is one of those variables that, once you understand it, you cannot un-see. Every loaf tells you exactly what happened in those first ten minutes. The ear, the bloom, the crust color — they're all reading from the same page.</p>
+
+  </article>
+
+  <!-- Related Links -->
+  <div class="mt-16 pt-8 border-t border-outline-variant">
+    <h3 class="font-headline text-2xl mb-6">Continue Learning</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <a href="scoring-aesthetics.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Finishing</span>
+        <h4 class="font-headline text-lg mb-1 group-hover:text-primary transition-colors">Scoring Aesthetics</h4>
+        <p class="text-xs text-on-surface-variant">The lame work that creates beautiful, controlled expansion.</p>
+      </a>
+      <a href="stretch-and-fold.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Foundations</span>
+        <h4 class="font-headline text-lg mb-1 group-hover:text-primary transition-colors">The Stretch &amp; Fold</h4>
+        <p class="text-xs text-on-surface-variant">Mastering hydration without heavy kneading.</p>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- Bottom Nav -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#fef9ef]/70 backdrop-blur-xl shadow-[0_-12px_32px_rgba(44,24,16,0.06)] rounded-t-[2rem] md:hidden">
+  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl" href="index.html"><span class="material-symbols-outlined">home_max</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1">Dash</span></a>
+  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl" href="bake-log.html"><span class="material-symbols-outlined">timer</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1">Bake</span></a>
+  <a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" href="library.html"><span class="material-symbols-outlined">book_5</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1">Library</span></a>
+  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl" href="archive.html"><span class="material-symbols-outlined">inventory_2</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1">Archive</span></a>
+</nav>
+
+</body>
+</html>

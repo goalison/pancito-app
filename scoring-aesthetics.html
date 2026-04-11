@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scoring Aesthetics — Pancito y Más Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-low": "#f8f3e9","surface-dim": "#dedad0","surface": "#fef9ef","secondary": "#835334","primary-container": "#c4863a","on-surface-variant": "#514538","background": "#fef9ef","on-surface": "#1d1c16","primary": "#875305","secondary-container": "#febe98","on-secondary-container": "#794b2d","surface-container": "#f2ede3","surface-container-high": "#ece8de","surface-container-highest": "#e7e2d8","outline": "#847466","outline-variant": "#d6c3b3"
+        },
+        fontFamily: { "headline": ["Noto Serif"], "body": ["Plus Jakarta Sans"], "label": ["Plus Jakarta Sans"] },
+        borderRadius: {"DEFAULT": "0.5rem","lg": "0.5rem","xl": "0.75rem","full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { min-height: max(884px, 100dvh); }
+  .prose-article p { margin-bottom: 1.25rem; line-height: 1.8; color: #514538; }
+  .prose-article h2 { font-family: 'Noto Serif', serif; font-size: 1.75rem; color: #1d1c16; margin-top: 2.5rem; margin-bottom: 1rem; }
+  .prose-article h3 { font-family: 'Noto Serif', serif; font-size: 1.25rem; color: #1d1c16; margin-top: 2rem; margin-bottom: 0.5rem; }
+  .prose-article ul { list-style: none; padding: 0; margin-bottom: 1.25rem; }
+  .prose-article ul li { padding-left: 1.5rem; position: relative; margin-bottom: 0.5rem; color: #514538; line-height: 1.7; }
+  .prose-article ul li::before { content: '—'; position: absolute; left: 0; color: #875305; font-weight: bold; }
+  .prose-article ol { counter-reset: item; padding: 0; margin-bottom: 1.25rem; }
+  .prose-article ol li { counter-increment: item; padding-left: 2rem; position: relative; margin-bottom: 0.75rem; color: #514538; line-height: 1.7; }
+  .prose-article ol li::before { content: counter(item) "."; position: absolute; left: 0; color: #875305; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body">
+
+<header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/40">
+  <div class="flex justify-between items-center px-6 py-4 w-full max-w-4xl mx-auto">
+    <a class="flex items-center gap-3" href="library.html">
+      <span class="material-symbols-outlined text-primary">arrow_back</span>
+      <span class="font-label text-sm text-primary font-bold tracking-wide">Library</span>
+    </a>
+    <a class="flex items-center gap-3" href="index.html"><img alt="Pancito y Más Logo" class="w-12 h-12 object-contain" src="logo.png"/><span class="font-headline italic font-bold text-primary text-2xl tracking-tight">Pancito y Más</span></a>
+    <button class="text-primary hover:opacity-80 transition-opacity p-2 rounded-full">
+      <span class="material-symbols-outlined">account_circle</span>
+    </button>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-6 py-12 pb-32">
+
+  <div class="mb-10">
+    <span class="font-label text-[10px] uppercase tracking-[0.2em] text-primary font-extrabold block mb-4">Finishing</span>
+    <h1 class="font-headline text-4xl md:text-6xl text-on-surface leading-tight mb-6">Scoring Aesthetics</h1>
+    <p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">The decorative lame work that turns a loaf into a canvas — and controls the oven's spring.</p>
+  </div>
+
+  <div class="w-full aspect-[16/7] rounded-xl overflow-hidden mb-12 bg-surface-container-highest relative shadow-md">
+    <img alt="A hand holding a lame scoring an intricate pattern on a round sourdough loaf" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-scoring.jpg" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')"/>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-surface-container-highest hidden">
+      <span class="material-symbols-outlined text-6xl text-primary/30 mb-3">edit</span>
+      <span class="font-label text-xs text-outline uppercase tracking-widest">Scoring Aesthetics</span>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-6 mb-12 pb-8 border-b border-outline-variant">
+    <span class="font-label text-xs text-outline">By Pancito y Más</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">10 min read</span>
+    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+    <span class="font-label text-xs text-outline">Intermediate</span>
+  </div>
+
+  <article class="prose-article">
+
+    <p>Scoring is the last thing you do before a loaf enters the oven — and it might be the most important. That single cut (or elaborate pattern of cuts) is not just artistic expression. It is you telling the bread exactly where to open and how to bloom. Without it, your loaf expands randomly, tears at the sides, and loses the dramatic oven spring you worked so hard to create.</p>
+
+    <p>But scoring is also genuinely beautiful. And that's worth celebrating.</p>
+
+    <h2>Why We Score</h2>
+
+    <p>When shaped dough hits a hot oven, the gases trapped inside expand rapidly — this is called oven spring. The dough must release this pressure somewhere. A score creates a weak point, a controlled opening, that guides the expansion in a predictable direction.</p>
+
+    <p>A single deep ear cut on the side of a batard, for example, will produce a dramatic raised flap called an <em>ear</em> — the hallmark of a well-scored artisan loaf. Symmetrical wheat stalk cuts on a boule spread the oven spring evenly across the surface for a more decorative bloom.</p>
+
+    <p>Without a score, the bread decides on its own — and it almost never chooses somewhere pretty.</p>
+
+    <h2>The Tool: The Lame</h2>
+
+    <p>A <em>lame</em> (pronounced "lahm," French for "blade") is a razor-sharp curved or straight blade designed specifically for scoring bread. A standard lame has a thin, flexible blade curved slightly upward. This curve is important — it allows you to cut at an angle underneath the skin of the dough, which is what creates the ear.</p>
+
+    <p>You can also use a sharp serrated bread knife or a standard razor blade for simpler straight cuts. But for ear cuts and any curved or intricate work, a proper lame is the right tool.</p>
+
+    <ul>
+      <li><strong>Curved blade lames</strong> — best for ear cuts and angled batard scores</li>
+      <li><strong>Straight blade lames</strong> — best for decorative wheat stalks, crosses, and geometric patterns</li>
+      <li><strong>Serrated knife</strong> — acceptable for beginner straight scores, but limited for artistry</li>
+    </ul>
+
+    <p>Replace your blade frequently. A dull blade drags and deflates the loaf instead of slicing cleanly through it. Fresh blades are inexpensive — there is no reason to work with a tired one.</p>
+
+    <h2>The Classic Ear Cut</h2>
+
+    <p>This is the foundational score for any oval batard loaf. Master this and every other cut will come more naturally.</p>
+
+    <ol>
+      <li><strong>Work fast and cold.</strong> Score straight from the refrigerator after the cold proof. Cold dough is firm, which helps the cut stay clean. Room-temperature dough is slack and more likely to deflate under pressure.</li>
+      <li><strong>Hold the lame at a 30–45 degree angle</strong> — almost parallel to the surface of the loaf, not perpendicular to it. This angled cut is what creates the ear. A straight-down cut produces a simple split, not a flap.</li>
+      <li><strong>One confident, continuous motion.</strong> Start above the loaf and draw the blade through in a single fluid arc from one end to the other. Hesitation creates jagged cuts.</li>
+      <li><strong>Depth: 1 to 1.5 cm.</strong> Deep enough to penetrate through the surface tension, shallow enough not to collapse the loaf.</li>
+      <li><strong>Into the oven immediately.</strong> Every second after scoring, the cut is sealing itself back together as surface tension reasserts. Oven door open, score, oven door closed.</li>
+    </ol>
+
+    <h2>Decorative Patterns</h2>
+
+    <p>Once you're comfortable with the ear cut, the world of decorative scoring opens up. These patterns are typically done on boules (round loaves) with a straight blade.</p>
+
+    <h3>The Wheat Stalk</h3>
+    <p>Draw a single line down the center of the boule, then angle leaf-like cuts alternating left and right along the spine. The expansion in the oven fans these cuts open, creating the signature wheat ear pattern. This is one of the most photographed sourdough scores for a reason.</p>
+
+    <h3>The Box Score</h3>
+    <p>Score a square in the center of the boule, then add cuts radiating from each corner. As it bakes, the center blooms upward and the outer cuts fan open. Clean, geometric, striking.</p>
+
+    <h3>The Spiral</h3>
+    <p>Starting from the center of the boule, score a continuous curved line spiraling outward. This is technically challenging — the blade must maintain consistent pressure and depth throughout. The result is one of the most visually elegant patterns in artisan baking.</p>
+
+    <h3>Leaf and Floral Patterns</h3>
+    <p>With a steady hand and a fine-tipped lame or razor, you can draw leaves, flowers, or abstract shapes directly on the dough surface. These are purely decorative — often scored very shallowly — meant to emboss the surface rather than guide major expansion. The functional ear cut is done first; the artistic work follows.</p>
+
+    <h2>Tips for Cleaner Scores</h2>
+
+    <ul>
+      <li><strong>Dust with rice flour before scoring.</strong> Rice flour doesn't absorb into the dough the way bread flour does, giving you a dry, contrast-visible surface to work on. Your patterns show up beautifully after baking.</li>
+      <li><strong>Keep the dough cold.</strong> Every experienced baker says this. Cold dough, clean cuts. It bears repeating.</li>
+      <li><strong>Practice the motion before touching the dough.</strong> Hover over the loaf and trace your planned design in the air. Get the muscle memory before you commit.</li>
+      <li><strong>Good light matters.</strong> You need to see the surface of the dough clearly. Work near a window or under a bright kitchen light.</li>
+      <li><strong>Don't panic if it's imperfect.</strong> Even an irregular score will produce a beautiful loaf. The bread forgives the baker.</li>
+    </ul>
+
+    <h2>When Scores Don't Open</h2>
+
+    <p>If your loaf bakes without opening at the score — or barely opens — one of three things usually happened: the dough was over-proofed and lacked the strength to spring in the oven, the blade was dull and dragged the surface instead of cutting it, or the score wasn't deep enough to break through the surface tension.</p>
+
+    <p>Each of these is fixable. Over-proofing is a timing issue addressed in fermentation. A dull blade is a two-second fix. A shallow score just needs more confidence next time.</p>
+
+    <p>Scoring is part craft, part nerve. The first time you draw a blade across a loaf you've spent 24 hours making, it feels absurd. Then it opens in the oven into something beautiful, and you understand completely why bakers keep doing this.</p>
+
+  </article>
+
+  <div class="mt-16 pt-8 border-t border-outline-variant">
+    <h3 class="font-headline text-2xl mb-6">Continue Learning</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <a href="stretch-and-fold.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Foundations</span>
+        <h4 class="font-headline text-lg mb-1 group-hover:text-primary transition-colors">The Stretch &amp; Fold</h4>
+        <p class="text-xs text-on-surface-variant">Build strength into your dough without heavy kneading.</p>
+      </a>
+      <a href="troubleshoot-rise.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
+        <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Troubleshooting</span>
+        <h4 class="font-headline text-lg mb-1 group-hover:text-primary transition-colors">Why Didn't It Rise?</h4>
+        <p class="text-xs text-on-surface-variant">Diagnosing the three most common rise problems.</p>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]">
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="index.html">
+<span class="material-symbols-outlined text-[20px]">home_max</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Dash</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="bake-log.html">
+<span class="material-symbols-outlined text-[20px]">timer</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Bake</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" href="library.html">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">book_5</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Library</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="archive.html">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Archive</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="starter-kit.html">
+<span class="material-symbols-outlined text-[20px]">handyman</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Tools</span>
+</a>
+</nav>
+
+</body>
+</html>

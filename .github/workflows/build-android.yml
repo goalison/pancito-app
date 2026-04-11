@@ -1,0 +1,108 @@
+name: Build Pancito y Más Android APK
+
+# Runs automatically on every push to main, or manually from the Actions tab
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Get the code ──────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Runtime setup ─────────────────────────────────────────────────────
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Java 17  (required by Android Gradle Plugin 8)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # ── 3. Install Capacitor + plugins ───────────────────────────────────────
+      - name: Install npm dependencies
+        run: npm install
+
+      # ── 4. Bundle web assets into www/ (Capacitor webDir) ───────────────────
+      - name: Prepare www directory with web assets
+        run: |
+          mkdir -p www
+          cp *.html www/ 2>/dev/null || true
+          cp *.js   www/ 2>/dev/null || true
+          cp *.css  www/ 2>/dev/null || true
+          cp *.jpg  www/ 2>/dev/null || true
+          cp *.png  www/ 2>/dev/null || true
+          cp -r Images www/ 2>/dev/null || true
+
+      # ── 5. Generate the Android project ──────────────────────────────────────
+      - name: Add Android platform
+        run: npx cap add android
+
+      # ── 5a. Patch notification plugin to use STREAM_ALARM audio stream ────────
+      # This makes timers ring even when the phone is set to vibrate-only,
+      # exactly like the built-in Clock/Alarm app does.
+      - name: Patch LocalNotifications to use alarm audio stream
+        run: |
+          CHANNEL_FILE=$(find node_modules/@capacitor/local-notifications -name "ChannelManager.java" 2>/dev/null | head -1)
+          if [ -n "$CHANNEL_FILE" ]; then
+            echo "Found: $CHANNEL_FILE"
+            sed -i 's/AudioAttributes\.USAGE_NOTIFICATION/AudioAttributes.USAGE_ALARM/g' "$CHANNEL_FILE"
+            echo "✓ Patched USAGE_NOTIFICATION → USAGE_ALARM"
+            grep -n "USAGE_" "$CHANNEL_FILE" || true
+          else
+            echo "WARNING: ChannelManager.java not found — listing plugin java files:"
+            find node_modules/@capacitor/local-notifications -name "*.java" | head -20
+          fi
+
+      # ── 6. Copy web assets into the Android project ──────────────────────────
+      - name: Sync web assets to Android
+        run: npx cap sync android
+
+      # ── 6a. Add exact-alarm & battery-exemption permissions to AndroidManifest ─
+      # USE_EXACT_ALARM  → Android 13+ fires alarm even in Doze mode, no user prompt needed
+      # SCHEDULE_EXACT_ALARM → Android 12 fallback (user must grant in Settings once)
+      # REQUEST_IGNORE_BATTERY_OPTIMIZATIONS → lets the app ask to be exempt from battery saver
+      # RECEIVE_BOOT_COMPLETED + WAKE_LOCK → restore alarms after reboot, wake CPU to fire them
+      - name: Add alarm permissions to AndroidManifest
+        run: |
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          sed -i 's|</manifest>|    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />\n    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />\n    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />\n    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />\n    <uses-permission android:name="android.permission.WAKE_LOCK" />\n</manifest>|' "$MANIFEST"
+          echo "✓ Manifest permissions:"
+          grep "uses-permission" "$MANIFEST"
+
+      # ── 7. Install Android SDK components and accept licenses ────────────────
+      - name: Install Android SDK components and accept licenses
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+            "platforms;android-34" \
+            "build-tools;34.0.0" \
+            "platform-tools"
+
+      # ── 8. Write local.properties so Gradle finds the Android SDK ────────────
+      - name: Create android/local.properties
+        run: echo "sdk.dir=$ANDROID_HOME" > android/local.properties
+
+      # ── 9. Build the APK ─────────────────────────────────────────────────────
+      - name: Make Gradle wrapper executable
+        run: chmod +x android/gradlew
+
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      # ── 10. Save the APK so you can download it ──────────────────────────────
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pancito-mas-android-v${{ github.run_number }}
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 60

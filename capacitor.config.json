@@ -1,0 +1,26 @@
+{
+  "appId": "com.pancitoymas.app",
+  "appName": "Pancito y Más",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_launcher_foreground",
+      "iconColor": "#875305",
+      "channelId": "bake-timers",
+      "channelName": "Bake Timers",
+      "channelDescription": "Alerts when your sourdough timers finish",
+      "channelImportance": 5,
+      "channelVisibility": "public",
+      "sound": "default",
+      "vibration": true
+    }
+  }
+}
