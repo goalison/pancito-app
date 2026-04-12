@@ -16,3 +16,6 @@ ios/
 # Editor
 .vscode/
 .idea/
+
+# GitHub token — never commit this!
+github-token.txt
