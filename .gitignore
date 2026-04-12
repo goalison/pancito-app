@@ -19,3 +19,6 @@ ios/
 
 # GitHub token — never commit this!
 github-token.txt
+
+# Cowork/Claude internal files
+.claude/
