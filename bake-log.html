@@ -1554,12 +1554,42 @@
 
         async function openAlarmSettings() {
             if (!IS_NATIVE) return;
+
+            let opened = false;
+
+            // Attempt 1: Capacitor LocalNotifications built-in method
             try {
                 const { LocalNotifications } = window.Capacitor.Plugins;
                 await LocalNotifications.openExactAlarmSettings();
-                // Re-check after a short delay so the banner hides if user granted it
-                setTimeout(checkAndShowAlarmBanner, 1500);
-            } catch(_) {}
+                opened = true;
+            } catch(e1) {
+                // Attempt 2: App plugin with Android intent URL
+                try {
+                    const { App } = window.Capacitor.Plugins;
+                    if (App && typeof App.openUrl === 'function') {
+                        await App.openUrl({
+                            url: 'intent:#Intent;action=android.settings.REQUEST_SCHEDULE_EXACT_ALARM;data=package:com.pancitoymas.app;end'
+                        });
+                        opened = true;
+                    }
+                } catch(e2) {}
+            }
+
+            if (!opened) {
+                // Last resort: clear step-by-step instructions
+                alert(
+                    'To make timers ring when the screen is off:\n\n' +
+                    '1. Open the Android Settings app\n' +
+                    '2. Tap Apps → Pancito y Más\n' +
+                    '3. Tap "Alarms & Reminders"\n' +
+                    '4. Turn the toggle ON\n\n' +
+                    'Then come back to the app — the warning will disappear automatically.'
+                );
+                return;
+            }
+
+            // Re-check the permission after returning from Settings
+            setTimeout(checkAndShowAlarmBanner, 2000);
         }
 
         // ── Service Worker (web-only fallback) ────────────────────────────────
