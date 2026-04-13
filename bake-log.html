@@ -274,15 +274,6 @@
   </div>
 </div>
 
-<!-- ── Alarm Permission Banner (shown only on Android when exact alarm is not granted) ── -->
-<div id="alarm-permission-banner" class="hidden bg-amber-50 border border-amber-300 rounded-xl p-4 flex gap-3 items-center">
-  <span class="material-symbols-outlined text-amber-600 text-2xl shrink-0">alarm_off</span>
-  <div class="flex-1">
-    <p class="font-label text-sm font-bold text-amber-800">Timer Alarms Need Permission</p>
-    <p class="text-xs text-amber-700 mt-1">Timers won't ring when the screen is off. Tap <strong>Fix It</strong> — then find <strong>Alarms &amp; Reminders</strong> and turn on <strong>Pancito y Más</strong>. If the app isn't listed, download and install the latest APK from GitHub Actions.</p>
-  </div>
-  <button onclick="openAlarmSettings()" class="px-3 py-2 bg-amber-600 text-white rounded-lg text-xs font-label font-bold uppercase tracking-wide shrink-0 active:scale-95 transition-transform">Fix It</button>
-</div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 <div class="grid grid-cols-2 gap-4">
@@ -1484,29 +1475,27 @@
             if (IS_NATIVE) {
                 try {
                     const { LocalNotifications } = window.Capacitor.Plugins;
-                    // Create a high-priority alarm channel (Android 8+).
-                    // The CI build patches the native plugin so this channel uses
-                    // STREAM_ALARM, which rings even when the phone is on vibrate.
+                    // Delete the old channel first so Android doesn't ignore the
+                    // re-creation (channels are immutable once created on device).
+                    // Using a new ID 'bake-alarms' guarantees a fresh channel that
+                    // picks up the STREAM_ALARM patch from ChannelManager.java.
+                    try { await LocalNotifications.deleteChannel({ id: 'bake-timers' }); } catch(_) {}
                     await LocalNotifications.createChannel({
-                        id: 'bake-timers',
-                        name: 'Bake Timers',
-                        description: 'Sourdough bake timer alerts',
+                        id: 'bake-alarms',
+                        name: 'Bake Alarms',
+                        description: 'Sourdough bake timer alerts — rings even on vibrate',
                         importance: 5,       // IMPORTANCE_HIGH → shows on lock screen
                         visibility: 1,       // VISIBILITY_PUBLIC
                         vibration: true,
                         lights: true,
                         lightColor: '#875305'
-                        // Note: no sound here — channel sound is controlled by the
-                        // STREAM_ALARM patch in ChannelManager.java (applied at build time)
+                        // Audio stream controlled by STREAM_ALARM patch in ChannelManager.java
                     });
 
                     // Request notification permission
                     const perm = await LocalNotifications.requestPermissions();
                     if (perm.display !== 'granted') return false;
 
-                    // Refresh the permission banner — openAlarmSettings() handles
-                    // the confirm dialog and all fallbacks if the OS call fails.
-                    setTimeout(checkAndShowAlarmBanner, 500);
                     return true;
                 } catch(e) { return false; }
             } else {
@@ -1517,63 +1506,6 @@
                 const result = await Notification.requestPermission();
                 return result === 'granted';
             }
-        }
-
-        // ── Alarm permission banner (shown when exact alarm not granted on Android 12+) ──
-        async function checkAndShowAlarmBanner() {
-            if (!IS_NATIVE) return;
-            try {
-                const { LocalNotifications } = window.Capacitor.Plugins;
-                const exact = await LocalNotifications.checkExactNotificationSetting();
-                const banner = document.getElementById('alarm-permission-banner');
-                if (banner) {
-                    if (exact.result !== 'granted') {
-                        banner.classList.remove('hidden');
-                    } else {
-                        banner.classList.add('hidden');
-                    }
-                }
-            } catch(_) { /* Android < 12 — no exact alarm setting needed */ }
-        }
-
-        async function openAlarmSettings() {
-            if (!IS_NATIVE) return;
-
-            let opened = false;
-
-            // Attempt 1: Capacitor LocalNotifications built-in method
-            try {
-                const { LocalNotifications } = window.Capacitor.Plugins;
-                await LocalNotifications.openExactAlarmSettings();
-                opened = true;
-            } catch(e1) {
-                // Attempt 2: App plugin with Android intent URL
-                try {
-                    const { App } = window.Capacitor.Plugins;
-                    if (App && typeof App.openUrl === 'function') {
-                        await App.openUrl({
-                            url: 'intent:#Intent;action=android.settings.REQUEST_SCHEDULE_EXACT_ALARM;data=package:com.pancitoymas.app;end'
-                        });
-                        opened = true;
-                    }
-                } catch(e2) {}
-            }
-
-            if (!opened) {
-                // Last resort: clear step-by-step instructions
-                alert(
-                    'To make timers ring when the screen is off:\n\n' +
-                    '1. Open the Android Settings app\n' +
-                    '2. Tap Apps → Pancito y Más\n' +
-                    '3. Tap "Alarms & Reminders"\n' +
-                    '4. Turn the toggle ON\n\n' +
-                    'Then come back to the app — the warning will disappear automatically.'
-                );
-                return;
-            }
-
-            // Re-check the permission after returning from Settings
-            setTimeout(checkAndShowAlarmBanner, 2000);
         }
 
         // ── Service Worker (web-only fallback) ────────────────────────────────
@@ -1611,7 +1543,7 @@
                                 at: new Date(Date.now() + delaySecs * 1000),
                                 allowWhileIdle: true   // fires even in Doze mode
                             },
-                            channelId: 'bake-timers',
+                            channelId: 'bake-alarms',
                             // No per-notification sound — the channel (patched to
                             // STREAM_ALARM at build time) controls the audio stream.
                             // Adding sound:'default' here can override the channel setting.
@@ -1693,16 +1625,6 @@
             restoreRestTimer();
             restoreRoundTimers();
             restoreStaticTimer();
-
-            // Check exact alarm permission on load and show banner if not granted
-            checkAndShowAlarmBanner();
-
-            // Re-check banner when user returns to the app from Settings
-            document.addEventListener('visibilitychange', function() {
-                if (document.visibilityState === 'visible') {
-                    checkAndShowAlarmBanner();
-                }
-            });
         });
     </script>
 </body></html>
