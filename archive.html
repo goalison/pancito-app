@@ -94,61 +94,15 @@
 <span class="material-symbols-outlined text-xs text-outline">storage</span>
 <span class="text-[10px] font-bold uppercase tracking-wider text-outline-variant" id="storageIndicator">Calculating storage...</span>
 </div>
+<div class="mt-1 flex items-center gap-2" id="autoBackupRow">
+<span class="material-symbols-outlined text-xs text-outline">cloud_done</span>
+<span class="text-[10px] text-outline-variant" id="autoBackupLabel">Auto-backup active</span>
 </div>
-<div class="flex flex-wrap gap-3">
-<button class="bg-[#C4863A] text-white px-6 py-4 rounded-xl flex items-center gap-3 hover:bg-[#C4863A]/90 transition-all shadow-sm" id="exportArchiveBtn">
-<span class="material-symbols-outlined">download</span>
-<span class="font-headline font-bold">Export JSON</span>
+</div>
+<button id="driveBtn" onclick="saveToGoogleDrive()" class="bg-white border border-outline-variant/30 text-on-surface px-6 py-4 rounded-xl flex items-center gap-3 hover:bg-surface-container transition-all shadow-sm active:scale-95">
+<svg class="w-5 h-5 shrink-0" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg"><path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8H0c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/><path d="M43.65 25L29.9 1.2C28.55 2 27.4 3.1 26.6 4.5L1.2 48.5C.4 49.9 0 51.45 0 53h27.5z" fill="#00ac47"/><path d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5H59.8l5.85 11.5z" fill="#ea4335"/><path d="M43.65 25L57.4 1.2C56.05.4 54.5 0 52.95 0H34.35c-1.55 0-3.1.45-4.45 1.2z" fill="#00832d"/><path d="M59.8 53H27.5L13.75 76.8c1.35.8 2.9 1.2 4.45 1.2h50.9c1.55 0 3.1-.45 4.45-1.2z" fill="#2684fc"/><path d="M73.4 26.5l-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3L43.65 25 59.8 53h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/></svg>
+<span class="font-headline font-bold">Save to Google Drive</span>
 </button>
-<button class="bg-[#ece8de] text-on-surface px-6 py-4 rounded-xl flex items-center gap-3 hover:bg-[#e7e2d8] transition-all shadow-sm border border-outline-variant/20" id="cloudSyncBtn">
-<span class="material-symbols-outlined text-primary">backup</span>
-<span class="font-headline font-bold">Backup Now</span>
-</button>
-</div>
-</div>
-</section>
-<!-- Tools & Storage Grid -->
-<section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-<!-- Import Backup -->
-<div class="bg-surface-container-low p-6 rounded-3xl border border-outline-variant/15 border-dashed flex items-start gap-4">
-<div class="bg-secondary/10 p-4 rounded-2xl">
-<span class="material-symbols-outlined text-secondary text-3xl">upload_file</span>
-</div>
-<div class="flex-1">
-<h3 class="font-bold text-lg text-on-surface">Import Backup</h3>
-<p class="text-sm text-on-surface-variant mb-4">Restore your logs from a previously exported JSON file.</p>
-<label class="inline-flex items-center gap-2 bg-[#f2ede3] text-on-surface px-4 py-2 rounded-lg cursor-pointer hover:bg-outline-variant/30 transition-colors font-bold text-xs uppercase tracking-wider">
-<span class="material-symbols-outlined text-sm">attach_file</span>
-                        Choose File
-                        <input accept=".json" class="hidden" id="importInput" type="file"/>
-</label>
-</div>
-</div>
-<!-- Storage Management -->
-<div class="bg-surface-container-low p-6 rounded-3xl border border-outline-variant/15 flex items-start gap-4">
-<div class="bg-error/10 p-4 rounded-2xl">
-<span class="material-symbols-outlined text-error text-3xl">delete_sweep</span>
-</div>
-<div class="flex-1">
-<h3 class="font-bold text-lg text-on-surface">Storage Care</h3>
-<p class="text-sm text-on-surface-variant mb-4">Wipe local data to free up space. Only do this if you have a backup!</p>
-<button class="text-error font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:underline" id="clearDataBtn">
-                        Clear Local Data <span class="material-symbols-outlined text-sm">warning</span>
-</button>
-</div>
-</div>
-<!-- Google Drive -->
-<div class="bg-surface-container-low p-6 rounded-3xl border border-outline-variant/15 flex items-start gap-4">
-<div class="bg-[#4285F4]/10 p-4 rounded-2xl">
-<img alt="Google Drive" class="w-8 h-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVllEAy3S2GHbcC5zOJr8qv3rRyub5j4xodU_KPsgUTkQXaaO-Ol8bSkupZb6w4ME-QhTG8RSZ716XTO19hsgselXfDQWRtlSW63V5f0Vbcd7LgpqFDBJ6IlPTnUQLAZvM55pXk6arb6bkVsebB2TwjP3l6Hygf3W-SQ1YemWf6Ys3sKezYg4Y0QIRmZSZ7hbi16aB8EmvYUWz2OBEKovnhsznSTmDSqfxtS4KMsF08rAZUA1OhfiKSeaYXcApbIDNC2BcDIrIpEQ"/>
-</div>
-<div class="flex-1">
-<h3 class="font-bold text-lg text-on-surface">Google Drive</h3>
-<p class="text-sm text-on-surface-variant mb-4">Export your backup and save it to Google Drive for safekeeping in the cloud.</p>
-<button class="text-[#4285F4] font-bold text-sm flex items-center gap-2 hover:underline" id="connectDriveBtn">
-                        Save to Drive <span class="material-symbols-outlined text-sm">upload</span>
-</button>
-</div>
 </div>
 </section>
 <!-- Filters Bar -->
@@ -177,6 +131,42 @@
                 Record a New Bake
             </a>
 </div>
+
+<!-- ── Data Management (bottom) ─────────────────────────────────────────── -->
+<section class="mt-20 border-t border-outline-variant/20 pt-10 space-y-4 pb-4">
+  <p class="text-[10px] font-bold uppercase tracking-widest text-outline mb-6">Data Management</p>
+
+  <!-- Import Backup -->
+  <div class="bg-surface-container-low p-5 rounded-2xl border border-outline-variant/15 border-dashed flex items-center gap-4">
+    <div class="bg-secondary/10 p-3 rounded-xl shrink-0">
+      <span class="material-symbols-outlined text-secondary text-2xl">upload_file</span>
+    </div>
+    <div class="flex-1 min-w-0">
+      <h3 class="font-bold text-base text-on-surface">Import Backup</h3>
+      <p class="text-xs text-on-surface-variant">Restore logs from a previously exported JSON file.</p>
+    </div>
+    <label class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2.5 rounded-xl cursor-pointer hover:bg-outline-variant/30 transition-colors font-bold text-xs uppercase tracking-wider shrink-0">
+      <span class="material-symbols-outlined text-sm">attach_file</span>
+      Choose File
+      <input accept=".json" class="hidden" id="importInput" type="file"/>
+    </label>
+  </div>
+
+  <!-- Clear Local Data -->
+  <div class="bg-error/5 p-5 rounded-2xl border border-error/15 flex items-center gap-4">
+    <div class="bg-error/10 p-3 rounded-xl shrink-0">
+      <span class="material-symbols-outlined text-error text-2xl">delete_sweep</span>
+    </div>
+    <div class="flex-1 min-w-0">
+      <h3 class="font-bold text-base text-on-surface">Clear Local Data</h3>
+      <p class="text-xs text-on-surface-variant">Permanently wipe all bake records from this device. Export to Google Drive first!</p>
+    </div>
+    <button id="clearDataBtn" class="text-error font-bold text-xs uppercase tracking-widest flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-error/30 hover:bg-error/10 transition-colors shrink-0">
+      <span class="material-symbols-outlined text-sm">warning</span>
+      Clear
+    </button>
+  </div>
+</section>
 </main>
 <!-- Detailed View Modal -->
 <div class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 modal-overlay" id="logModal">
@@ -244,6 +234,7 @@
                     alert('Storage is full. Please export your archive and clear some space.');
                 }
             }
+            autoBackup(logs);
             updateStorageIndicator();
             renderLogs();
         }
@@ -482,33 +473,89 @@
             if (e.target.id === 'logModal') closeModal();
         });
 
-        document.getElementById('exportArchiveBtn').addEventListener('click', () => {
+        // ── Auto-backup ───────────────────────────────────────────────────────
+        // Called every time logs are saved — silently keeps a backup copy and
+        // records the timestamp so the user always has a recent local snapshot.
+        function autoBackup(logs) {
+            try {
+                const json = JSON.stringify(logs);
+                storage.setItem('pym_auto_backup', json);
+                storage.setItem('pym_auto_backup_time', Date.now());
+                updateBackupLabel();
+            } catch(e) {}
+        }
+
+        function updateBackupLabel() {
+            const ts = parseInt(storage.getItem('pym_auto_backup_time') || '0');
+            const label = document.getElementById('autoBackupLabel');
+            if (!label) return;
+            if (!ts) { label.textContent = 'Auto-backup active'; return; }
+            const mins = Math.round((Date.now() - ts) / 60000);
+            if (mins < 2) label.textContent = 'Auto-backed up just now';
+            else if (mins < 60) label.textContent = `Auto-backed up ${mins}m ago`;
+            else {
+                const hrs = Math.floor(mins / 60);
+                label.textContent = `Auto-backed up ${hrs}h ago`;
+            }
+        }
+
+        // ── Google Drive — uses Android native share sheet ────────────────────
+        async function saveToGoogleDrive() {
             const logs = getLogs();
             if (logs.length === 0) {
-                alert('Nothing to export yet! Record your first bake to start your archive.');
+                alert('No bakes to back up yet. Record your first bake first!');
                 return;
             }
-            const blob = new Blob([JSON.stringify(logs, null, 2)], { type: 'application/json' });
+            const filename = `pancito-mas-backup-${new Date().toISOString().split('T')[0]}.json`;
+            const json = JSON.stringify(logs, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const file = new File([blob], filename, { type: 'application/json' });
+
+            // Web Share API with files — on Android this opens the native share sheet
+            // where the user can tap "Save to Drive" to upload directly.
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Pancito y Más Backup',
+                        text: `Bake archive backup — ${logs.length} entries`
+                    });
+                    // Mark backup time after successful share
+                    storage.setItem('pym_auto_backup_time', Date.now());
+                    updateBackupLabel();
+                    return;
+                } catch(e) {
+                    if (e.name === 'AbortError') return; // user cancelled share sheet
+                    // fall through to download fallback
+                }
+            }
+
+            // Fallback: download the file (user can manually upload to Drive)
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `pancito-mas-archive-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = filename;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-        });
+
+            const btn = document.getElementById('driveBtn');
+            if (btn) {
+                const orig = btn.innerHTML;
+                btn.innerHTML = `<span class="material-symbols-outlined text-green-600">check_circle</span><span class="font-headline font-bold">File saved!</span>`;
+                setTimeout(() => { btn.innerHTML = orig; }, 3000);
+            }
+        }
 
         document.getElementById('importInput').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = (event) => {
                 try {
                     const importedLogs = JSON.parse(event.target.result);
                     if (!Array.isArray(importedLogs)) throw new Error('Invalid format');
-                    
                     if (confirm(`Found ${importedLogs.length} entries. Merge with existing archive?`)) {
                         const current = getLogs();
                         const merged = [...current, ...importedLogs].map((item, idx) => ({
@@ -528,61 +575,39 @@
         });
 
         document.getElementById('clearDataBtn').addEventListener('click', () => {
-            const warningText = "DANGER: This will permanently delete ALL bake entries from this device.\n\nHave you exported your JSON backup recently? This cannot be undone.";
-            if (confirm(warningText)) {
-                if (confirm("FINAL WARNING: Are you absolutely sure you want to clear your local database?")) {
+            if (confirm("This will permanently delete ALL bake entries from this device.\n\nSave to Google Drive first! This cannot be undone.")) {
+                if (confirm("Are you absolutely sure? All bake records will be lost.")) {
                     storage.removeItem(STORAGE_KEY);
+                    storage.removeItem('pym_auto_backup');
+                    storage.removeItem('pym_auto_backup_time');
                     saveLogs([]);
-                    alert("Local data storage has been cleared.");
+                    alert("Local data cleared.");
                 }
             }
         });
 
-        document.getElementById('cloudSyncBtn').addEventListener('click', () => {
-            const logs = getLogs();
-            if (logs.length === 0) {
-                alert('Nothing to back up yet! Record your first bake to start your archive.');
-                return;
+        // ── Swipe right / Android back button → go back to Dashboard ─────────
+        (function() {
+            // Capacitor hardware back button + Android gesture navigation
+            if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+                window.Capacitor.Plugins.App.addListener('backButton', function() {
+                    window.location.href = 'index.html';
+                });
             }
-            // Real backup — download a timestamped JSON file
-            const blob = new Blob([JSON.stringify(logs, null, 2)], { type: 'application/json' });
-            const url  = URL.createObjectURL(blob);
-            const a    = document.createElement('a');
-            a.href     = url;
-            a.download = `pancito-mas-backup-${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            // Show confirmation in the button
-            const btn = document.getElementById('cloudSyncBtn');
-            const originalHtml = btn.innerHTML;
-            btn.innerHTML = `<span class="material-symbols-outlined text-green-600">check_circle</span> <span class="font-headline font-bold">Backup saved!</span>`;
-            setTimeout(() => { btn.innerHTML = originalHtml; }, 3000);
-        });
-
-        document.getElementById('connectDriveBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            const logs = getLogs();
-            if (logs.length === 0) {
-                alert('No bakes to back up yet. Record your first bake first!');
-                return;
-            }
-            // Step 1: export the JSON
-            const blob = new Blob([JSON.stringify(logs, null, 2)], { type: 'application/json' });
-            const url  = URL.createObjectURL(blob);
-            const a    = document.createElement('a');
-            a.href     = url;
-            a.download = `pancito-mas-backup-${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            // Step 2: open Google Drive so they can upload it
-            setTimeout(() => {
-                window.open('https://drive.google.com/drive/my-drive', '_blank');
-            }, 500);
-        });
+            // Touch swipe from left edge fallback
+            let touchStartX = 0, touchStartY = 0;
+            document.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].clientX;
+                touchStartY = e.changedTouches[0].clientY;
+            }, { passive: true });
+            document.addEventListener('touchend', function(e) {
+                const dx = e.changedTouches[0].clientX - touchStartX;
+                const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
+                if (touchStartX < 50 && dx > 80 && dy < 60) {
+                    window.location.href = 'index.html';
+                }
+            }, { passive: true });
+        })();
 
         window.deleteLog = (id) => {
             let logs = getLogs();
@@ -633,6 +658,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
+            updateBackupLabel();
             if (storage.getItem(STORAGE_KEY) === null || getLogs().length === 0) {
                 const demoLogs = [
                     { 

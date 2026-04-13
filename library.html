@@ -444,5 +444,26 @@
     }
   });
 })();
+
+// ── Swipe right / Android back button → go back to Dashboard ─────────────
+(function() {
+  if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+    window.Capacitor.Plugins.App.addListener('backButton', function() {
+      window.location.href = 'index.html';
+    });
+  }
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
+    if (touchStartX < 50 && dx > 80 && dy < 60) {
+      window.location.href = 'index.html';
+    }
+  }, { passive: true });
+})();
 </script>
 </body></html>
