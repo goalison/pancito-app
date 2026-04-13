@@ -274,6 +274,16 @@
   </div>
 </div>
 
+<!-- ── Alarm Permission Banner (shown only on Android when exact alarm is not granted) ── -->
+<div id="alarm-permission-banner" class="hidden bg-amber-50 border border-amber-300 rounded-xl p-4 flex gap-3 items-center">
+  <span class="material-symbols-outlined text-amber-600 text-2xl shrink-0">alarm_off</span>
+  <div class="flex-1">
+    <p class="font-label text-sm font-bold text-amber-800">Timer Alarms Need Permission</p>
+    <p class="text-xs text-amber-700 mt-1">Without "Alarms &amp; Reminders" permission, timers won't ring when the screen is off. Tap <strong>Fix It</strong> to open the correct Android setting.</p>
+  </div>
+  <button onclick="openAlarmSettings()" class="px-3 py-2 bg-amber-600 text-white rounded-lg text-xs font-label font-bold uppercase tracking-wide shrink-0 active:scale-95 transition-transform">Fix It</button>
+</div>
+
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 <div class="grid grid-cols-2 gap-4">
 <!-- Timer 1 -->
@@ -1485,8 +1495,9 @@
                         visibility: 1,       // VISIBILITY_PUBLIC
                         vibration: true,
                         lights: true,
-                        lightColor: '#875305',
-                        sound: 'default'
+                        lightColor: '#875305'
+                        // Note: no sound here — channel sound is controlled by the
+                        // STREAM_ALARM patch in ChannelManager.java (applied at build time)
                     });
 
                     // Request notification permission
@@ -1494,23 +1505,24 @@
                     if (perm.display !== 'granted') return false;
 
                     // Android 12+: "Alarms & reminders" special permission.
-                    // Without this the OS can defer or drop exact alarms.
+                    // Without this the OS can defer or drop exact alarms in Doze mode.
+                    // We ask every session (not just once) so the user always has a
+                    // chance to grant it if they previously dismissed the prompt.
                     try {
                         const exact = await LocalNotifications.checkExactNotificationSetting();
                         if (exact.result !== 'granted') {
-                            // Only ask once per install
-                            if (!localStorage.getItem('pym_exact_alarm_asked')) {
-                                localStorage.setItem('pym_exact_alarm_asked', '1');
-                                const go = confirm(
-                                    'Para que los temporizadores suenen aunque la pantalla esté apagada,\n' +
-                                    'necesitas permitir "Alarmas y recordatorios" para Pancito y Más.\n\n' +
-                                    '¿Abrir esa configuración ahora?'
-                                );
-                                if (go) await LocalNotifications.openExactAlarmSettings();
-                            }
+                            const go = confirm(
+                                'Allow Pancito y Más to schedule exact alarms?\n\n' +
+                                'Without this, timers may not ring when the screen is off.\n\n' +
+                                'Tap OK to open "Alarms & Reminders" in Android Settings, ' +
+                                'then turn on the toggle for Pancito y Más.'
+                            );
+                            if (go) await LocalNotifications.openExactAlarmSettings();
                         }
                     } catch (_) { /* API not available on Android < 12 — exact alarms work without it */ }
 
+                    // Refresh the permission banner after checking
+                    setTimeout(checkAndShowAlarmBanner, 500);
                     return true;
                 } catch(e) { return false; }
             } else {
@@ -1521,6 +1533,33 @@
                 const result = await Notification.requestPermission();
                 return result === 'granted';
             }
+        }
+
+        // ── Alarm permission banner (shown when exact alarm not granted on Android 12+) ──
+        async function checkAndShowAlarmBanner() {
+            if (!IS_NATIVE) return;
+            try {
+                const { LocalNotifications } = window.Capacitor.Plugins;
+                const exact = await LocalNotifications.checkExactNotificationSetting();
+                const banner = document.getElementById('alarm-permission-banner');
+                if (banner) {
+                    if (exact.result !== 'granted') {
+                        banner.classList.remove('hidden');
+                    } else {
+                        banner.classList.add('hidden');
+                    }
+                }
+            } catch(_) { /* Android < 12 — no exact alarm setting needed */ }
+        }
+
+        async function openAlarmSettings() {
+            if (!IS_NATIVE) return;
+            try {
+                const { LocalNotifications } = window.Capacitor.Plugins;
+                await LocalNotifications.openExactAlarmSettings();
+                // Re-check after a short delay so the banner hides if user granted it
+                setTimeout(checkAndShowAlarmBanner, 1500);
+            } catch(_) {}
         }
 
         // ── Service Worker (web-only fallback) ────────────────────────────────
@@ -1559,7 +1598,9 @@
                                 allowWhileIdle: true   // fires even in Doze mode
                             },
                             channelId: 'bake-timers',
-                            sound: 'default',
+                            // No per-notification sound — the channel (patched to
+                            // STREAM_ALARM at build time) controls the audio stream.
+                            // Adding sound:'default' here can override the channel setting.
                             extra: { timerId: id }
                         }]
                     });
@@ -1638,6 +1679,16 @@
             restoreRestTimer();
             restoreRoundTimers();
             restoreStaticTimer();
+
+            // Check exact alarm permission on load and show banner if not granted
+            checkAndShowAlarmBanner();
+
+            // Re-check banner when user returns to the app from Settings
+            document.addEventListener('visibilitychange', function() {
+                if (document.visibilityState === 'visible') {
+                    checkAndShowAlarmBanner();
+                }
+            });
         });
     </script>
 </body></html>

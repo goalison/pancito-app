@@ -48,25 +48,34 @@ jobs:
       - name: Add Android platform
         run: npx cap add android
 
-      # ── 5a. Patch notification plugin to use STREAM_ALARM audio stream ────────
+      # ── 6. Copy web assets into the Android project ──────────────────────────
+      - name: Sync web assets to Android
+        run: npx cap sync android
+
+      # ── 6a. Patch notification plugin to use STREAM_ALARM audio stream ───────
+      # Patching AFTER cap sync so we get the final copy of ChannelManager.java
+      # that was written into the android/ project during sync.
       # This makes timers ring even when the phone is set to vibrate-only,
       # exactly like the built-in Clock/Alarm app does.
       - name: Patch LocalNotifications to use alarm audio stream
         run: |
-          CHANNEL_FILE=$(find node_modules/@capacitor/local-notifications -name "ChannelManager.java" 2>/dev/null | head -1)
-          if [ -n "$CHANNEL_FILE" ]; then
-            echo "Found: $CHANNEL_FILE"
-            sed -i 's/AudioAttributes\.USAGE_NOTIFICATION/AudioAttributes.USAGE_ALARM/g' "$CHANNEL_FILE"
-            echo "✓ Patched USAGE_NOTIFICATION → USAGE_ALARM"
-            grep -n "USAGE_" "$CHANNEL_FILE" || true
+          # Patch the copy inside the generated android/ project (authoritative after sync)
+          ANDROID_FILE=$(find android -name "ChannelManager.java" 2>/dev/null | head -1)
+          if [ -n "$ANDROID_FILE" ]; then
+            echo "Found android copy: $ANDROID_FILE"
+            sed -i 's/AudioAttributes\.USAGE_NOTIFICATION/AudioAttributes.USAGE_ALARM/g' "$ANDROID_FILE"
+            echo "✓ Patched android/ copy: USAGE_NOTIFICATION → USAGE_ALARM"
+            grep -n "USAGE_" "$ANDROID_FILE" || true
           else
-            echo "WARNING: ChannelManager.java not found — listing plugin java files:"
-            find node_modules/@capacitor/local-notifications -name "*.java" | head -20
+            echo "WARNING: ChannelManager.java not found in android/ — listing java files:"
+            find android -name "*.java" | grep -i notification | head -20
           fi
-
-      # ── 6. Copy web assets into the Android project ──────────────────────────
-      - name: Sync web assets to Android
-        run: npx cap sync android
+          # Also patch node_modules copy as a fallback
+          NM_FILE=$(find node_modules/@capacitor/local-notifications -name "ChannelManager.java" 2>/dev/null | head -1)
+          if [ -n "$NM_FILE" ]; then
+            sed -i 's/AudioAttributes\.USAGE_NOTIFICATION/AudioAttributes.USAGE_ALARM/g' "$NM_FILE"
+            echo "✓ Also patched node_modules copy"
+          fi
 
       # ── 6a. Add exact-alarm & battery-exemption permissions to AndroidManifest ─
       # USE_EXACT_ALARM  → Android 13+ fires alarm even in Doze mode, no user prompt needed
