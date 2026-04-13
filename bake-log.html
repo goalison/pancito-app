@@ -1504,24 +1504,8 @@
                     const perm = await LocalNotifications.requestPermissions();
                     if (perm.display !== 'granted') return false;
 
-                    // Android 12+: "Alarms & reminders" special permission.
-                    // Without this the OS can defer or drop exact alarms in Doze mode.
-                    // We ask every session (not just once) so the user always has a
-                    // chance to grant it if they previously dismissed the prompt.
-                    try {
-                        const exact = await LocalNotifications.checkExactNotificationSetting();
-                        if (exact.result !== 'granted') {
-                            const go = confirm(
-                                'Allow Pancito y Más to schedule exact alarms?\n\n' +
-                                'Without this, timers may not ring when the screen is off.\n\n' +
-                                'Tap OK to open "Alarms & Reminders" in Android Settings, ' +
-                                'then turn on the toggle for Pancito y Más.'
-                            );
-                            if (go) await LocalNotifications.openExactAlarmSettings();
-                        }
-                    } catch (_) { /* API not available on Android < 12 — exact alarms work without it */ }
-
-                    // Refresh the permission banner after checking
+                    // Refresh the permission banner — openAlarmSettings() handles
+                    // the confirm dialog and all fallbacks if the OS call fails.
                     setTimeout(checkAndShowAlarmBanner, 500);
                     return true;
                 } catch(e) { return false; }
