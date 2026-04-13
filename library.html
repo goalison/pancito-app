@@ -140,7 +140,8 @@
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary">search</span>
 </div>
 </div>
-<div class="w-full md:w-2/3 grid grid-cols-1 gap-y-10" id="glossaryGrid">
+<div class="w-full md:w-2/3 flex flex-col">
+<div class="grid grid-cols-1 gap-y-10" id="glossaryGrid">
 <div class="glossary-item">
 <span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">TECHNIQUE</span>
 <h3 class="font-headline text-xl mb-2">Autolyse</h3>
@@ -191,9 +192,10 @@
 <h3 class="font-headline text-xl mb-2">Boule &amp; Bâtard</h3>
 <p class="text-sm text-on-surface-variant leading-relaxed">The two classic sourdough shapes. A boule is round; a bâtard is oval. Each requires a different shaping technique and scoring pattern.</p>
 </div>
-<!-- Website search results -->
-<div id="siteResults" class="grid grid-cols-1 gap-y-4"></div>
-<!-- No-results message (hidden by default) -->
+</div>
+<!-- Website search results — outside the grid so they don't overlap -->
+<div id="siteResults" class="flex flex-col gap-4 mt-8 border-t border-outline-variant/30 pt-6 empty:hidden"></div>
+<!-- No-results message -->
 <div id="glossaryNoResults" class="py-8 text-center hidden">
 <span class="material-symbols-outlined text-3xl text-outline mb-3 block">search_off</span>
 <p class="text-on-surface-variant text-sm">No matching terms. Try a different word.</p>
