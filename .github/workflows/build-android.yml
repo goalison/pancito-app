@@ -77,17 +77,39 @@ jobs:
             echo "✓ Also patched node_modules copy"
           fi
 
-      # ── 6a. Add exact-alarm & battery-exemption permissions to AndroidManifest ─
-      # USE_EXACT_ALARM  → Android 13+ fires alarm even in Doze mode, no user prompt needed
-      # SCHEDULE_EXACT_ALARM → Android 12 fallback (user must grant in Settings once)
-      # REQUEST_IGNORE_BATTERY_OPTIMIZATIONS → lets the app ask to be exempt from battery saver
+      # ── 6b. Add exact-alarm & battery-exemption permissions to AndroidManifest ─
+      # USE_EXACT_ALARM  → Android 13+: granted automatically at install, no user prompt
+      # SCHEDULE_EXACT_ALARM → Android 12: user grants once in Settings → Alarms & Reminders
+      # REQUEST_IGNORE_BATTERY_OPTIMIZATIONS → lets app ask to be exempt from battery saver
       # RECEIVE_BOOT_COMPLETED + WAKE_LOCK → restore alarms after reboot, wake CPU to fire them
+      # Using Python instead of sed to avoid \n escaping issues on different GNU sed versions.
       - name: Add alarm permissions to AndroidManifest
         run: |
-          MANIFEST="android/app/src/main/AndroidManifest.xml"
-          sed -i 's|</manifest>|    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />\n    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />\n    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />\n    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />\n    <uses-permission android:name="android.permission.WAKE_LOCK" />\n</manifest>|' "$MANIFEST"
-          echo "✓ Manifest permissions:"
-          grep "uses-permission" "$MANIFEST"
+          python3 << 'PYEOF'
+          import sys
+          path = 'android/app/src/main/AndroidManifest.xml'
+          with open(path, 'r') as f:
+              content = f.read()
+          if 'USE_EXACT_ALARM' in content:
+              print('✓ Permissions already present — skipping')
+              sys.exit(0)
+          perms = (
+              '    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />\n'
+              '    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />\n'
+              '    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />\n'
+              '    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />\n'
+              '    <uses-permission android:name="android.permission.WAKE_LOCK" />\n'
+          )
+          if '</manifest>' not in content:
+              print('ERROR: </manifest> tag not found!', file=sys.stderr)
+              sys.exit(1)
+          content = content.replace('</manifest>', perms + '</manifest>')
+          with open(path, 'w') as f:
+              f.write(content)
+          print('✓ Permissions injected')
+          PYEOF
+          echo "✓ Final manifest permissions:"
+          grep "uses-permission" android/app/src/main/AndroidManifest.xml || echo "ERROR: no permissions found!"
 
       # ── 7. Install Android SDK components and accept licenses ────────────────
       - name: Install Android SDK components and accept licenses
