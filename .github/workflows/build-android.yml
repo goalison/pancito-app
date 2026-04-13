@@ -14,8 +14,6 @@ jobs:
       # ── 1. Get the code ──────────────────────────────────────────────────────
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          persist-credentials: false
 
       # ── 2. Runtime setup ─────────────────────────────────────────────────────
       - name: Set up Node.js 22
