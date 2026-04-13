@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Bread Sling — Pancito y Más</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-low": "#f8f3e9","surface-dim": "#dedad0","surface": "#fef9ef","secondary": "#835334","primary-container": "#c4863a","on-surface-variant": "#514538","background": "#fef9ef","on-surface": "#1d1c16","primary": "#875305","secondary-container": "#febe98","on-secondary-container": "#794b2d","surface-container": "#f2ede3","surface-container-high": "#ece8de","surface-container-highest": "#e7e2d8","outline": "#847466","outline-variant": "#d6c3b3","on-primary": "#ffffff","primary-fixed": "#ffddba"
+        },
+        fontFamily: { "headline": ["Noto Serif"], "body": ["Plus Jakarta Sans"], "label": ["Plus Jakarta Sans"] },
+        borderRadius: {"DEFAULT": "0.5rem","lg": "0.5rem","xl": "0.75rem","full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { min-height: max(884px, 100dvh); }
+  .prose-article p { margin-bottom: 1.25rem; line-height: 1.8; color: #514538; }
+  .prose-article h2 { font-family: 'Noto Serif', serif; font-size: 1.75rem; color: #1d1c16; margin-top: 2.5rem; margin-bottom: 1rem; }
+  .prose-article h3 { font-family: 'Noto Serif', serif; font-size: 1.25rem; color: #1d1c16; margin-top: 2rem; margin-bottom: 0.5rem; }
+  .prose-article ul { list-style: none; padding: 0; margin-bottom: 1.25rem; }
+  .prose-article ul li { padding-left: 1.5rem; position: relative; margin-bottom: 0.5rem; color: #514538; line-height: 1.7; }
+  .prose-article ul li::before { content: '—'; position: absolute; left: 0; color: #875305; font-weight: bold; }
+  .prose-article ol { counter-reset: item; padding: 0; margin-bottom: 1.25rem; }
+  .prose-article ol li { counter-increment: item; padding-left: 2rem; position: relative; margin-bottom: 0.75rem; color: #514538; line-height: 1.7; }
+  .prose-article ol li::before { content: counter(item) "."; position: absolute; left: 0; color: #875305; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body">
+
+<!-- Header -->
+<header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/40">
+  <div class="flex justify-between items-center px-6 py-4 w-full max-w-4xl mx-auto">
+    <a class="flex items-center gap-3" href="index.html">
+      <span class="material-symbols-outlined text-primary">arrow_back</span>
+      <span class="font-label text-sm text-primary font-bold tracking-wide">Dashboard</span>
+    </a>
+    <a class="flex items-center gap-3" href="index.html">
+      <img alt="Pancito y Más Logo" class="w-10 h-10 object-contain" src="logo.png"/>
+      <span class="font-headline italic font-bold text-primary text-xl tracking-tight">Pancito y Más</span>
+    </a>
+    <a href="https://www.amazon.com/dp/B0FZWXPXF6?maas=maas_adg_9469FAF870BAA9D072E90EE503019C38_afap_abs&ref_=aa_maas&tag=maas" target="_blank" class="text-primary hover:opacity-80 transition-opacity">
+      <span class="material-symbols-outlined">shopping_bag</span>
+    </a>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-6 py-10 pb-32">
+
+  <!-- Hero Image -->
+  <div class="relative w-full h-[300px] md:h-[420px] rounded-3xl overflow-hidden mb-10 shadow-xl">
+    <img class="w-full h-full object-cover" alt="The Bread Sling" src="https://pancitoymas.com/wp-content/uploads/2026/03/%E7%A1%85%E8%83%B6%E5%90%8A%E5%B8%A6-1140x1140.jpg"/>
+    <div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent"></div>
+    <div class="absolute bottom-0 p-8">
+      <span class="font-label text-[10px] uppercase tracking-[0.2em] text-primary-fixed font-extrabold block mb-3">Essential Equipment</span>
+      <h1 class="font-headline text-4xl md:text-5xl text-white font-bold leading-tight">Bread Sling</h1>
+    </div>
+  </div>
+
+  <!-- Buy CTA -->
+  <div class="flex items-center justify-between bg-surface-container-low rounded-2xl p-5 mb-10 border border-outline-variant/20">
+    <div>
+      <p class="font-label text-xs text-on-surface-variant uppercase tracking-widest mb-1">Sourdough Starter Kit</p>
+      <p class="font-headline text-lg text-on-surface">Get the complete kit on Amazon</p>
+    </div>
+    <a href="https://www.amazon.com/dp/B0FZWXPXF6?maas=maas_adg_9469FAF870BAA9D072E90EE503019C38_afap_abs&ref_=aa_maas&tag=maas" target="_blank" class="bg-gradient-to-br from-[#875305] to-[#c4863a] text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg active:scale-95 transition-transform shrink-0">Get the Kit</a>
+  </div>
+
+  <!-- Article Content -->
+  <article class="prose-article">
+
+    <h2>What It Is</h2>
+    <p>A flexible, heat-resistant mat or sheet — usually made from silicone-coated fabric — designed to simplify the most nerve-wracking moment in sourdough baking: transferring your cold, proofed dough into a screaming-hot Dutch oven.</p>
+    <p>It acts as a hammock for your loaf, letting you lower the dough gently and safely without the traditional acrobatics of flipping a hot lid or fumbling with parchment paper.</p>
+
+    <h2>Why It Matters</h2>
+    <p>The transfer from banneton to Dutch oven is where many loaves get damaged. Cold, delicate dough can deflate if handled roughly, and the pot is dangerously hot. Traditional methods involve juggling a hot lid while somehow flipping the dough in one motion — it's awkward, risky, and rattles even experienced bakers.</p>
+    <p>The bread sling eliminates all of that. You score on the sling, grip both sides, and lower the dough in smoothly. It's the safety net your baking routine needs.</p>
+
+    <h2>How to Use It</h2>
+    <ol>
+      <li>Place the sling flat on your work surface before flipping the banneton.</li>
+      <li>Flip your proofed dough from the banneton directly onto the center of the sling.</li>
+      <li>Score the dough while it rests on the sling — no rushing required.</li>
+      <li>Grip both edges of the sling firmly and lower the dough into the preheated Dutch oven in a controlled motion.</li>
+      <li>Remove the sling after approximately 20 minutes so the loaf bottom can brown directly on the pot.</li>
+    </ol>
+
+    <h2>Tips & Tricks</h2>
+    <ul>
+      <li>Center the dough on the sling so you have even grip on both sides.</li>
+      <li>Pleat or fold the corners slightly for round Dutch ovens to avoid bunching.</li>
+      <li>Always use quality oven mitts — the pot and sling edges can be very hot.</li>
+      <li>Score confidently and quickly; the cold dough warms up fast once out of the fridge.</li>
+      <li>The sling can be reused dozens of times with proper care.</li>
+    </ul>
+
+    <h2>Care Instructions</h2>
+    <ul>
+      <li>Wipe clean after each use with a damp cloth and allow to dry completely.</li>
+      <li>Most silicone slings are dishwasher-safe — check your specific product.</li>
+      <li>Avoid sharp objects like the lame blade when the dough is resting on it.</li>
+      <li>Store flat or loosely rolled — do not fold sharply, which can crease the silicone coating.</li>
+    </ul>
+
+  </article>
+
+  <!-- Related Tools -->
+  <div class="mt-12 pt-8 border-t border-outline-variant/30">
+    <p class="font-label text-[10px] uppercase tracking-widest text-primary font-bold mb-6">More Equipment</p>
+    <div class="grid grid-cols-3 gap-4">
+      <a href="banneton.html" class="group relative overflow-hidden rounded-2xl h-[120px]">
+        <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="The Banneton" src="https://pancitoymas.com/wp-content/uploads/2026/03/%E9%9D%A2%E5%8C%85%E7%AF%AE.jpg"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 to-transparent"></div>
+        <p class="absolute bottom-0 p-3 font-headline text-sm text-white font-bold">The Banneton</p>
+      </a>
+      <a href="lame.html" class="group relative overflow-hidden rounded-2xl h-[120px]">
+        <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="The Lame" src="https://pancitoymas.com/wp-content/uploads/2026/03/%E5%89%B2%E5%88%80%E7%BB%86%E8%8A%82.jpg"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 to-transparent"></div>
+        <p class="absolute bottom-0 p-3 font-headline text-sm text-white font-bold">The Lame</p>
+      </a>
+      <a href="bench-scraper.html" class="group relative overflow-hidden rounded-2xl h-[120px]">
+        <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Bench Scraper" src="https://pancitoymas.com/wp-content/uploads/2026/03/%E5%8D%8A%E5%9C%86%E5%89%B2%E5%88%80.jpg"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 to-transparent"></div>
+        <p class="absolute bottom-0 p-3 font-headline text-sm text-white font-bold">Bench Scraper</p>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]">
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" href="index.html">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">home_max</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Dash</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="bake-log.html">
+<span class="material-symbols-outlined text-[20px]">timer</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Bake</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="library.html">
+<span class="material-symbols-outlined text-[20px]">book_5</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Library</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="archive.html">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Archive</span>
+</a>
+</nav>
+
+</body>
+</html>
