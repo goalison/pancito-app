@@ -800,6 +800,30 @@
             } catch(e) { /* AudioContext not available */ }
         }
 
+        // ── Pending-alarm mechanism ──────────────────────────────────────────────
+        // When the app is killed and reopened via a notification tap, tapping the
+        // system notification does NOT count as a user gesture inside the WebView,
+        // so AudioContext.resume() may be blocked.  We store a flag in localStorage
+        // and re-attempt playback on the very first touch/click inside the WebView.
+        const ALARM_PENDING_KEY = 'pym_alarm_pending';
+
+        function setPendingAlarm() {
+            localStorage.setItem(ALARM_PENDING_KEY, '1');
+            // Try immediately — succeeds when AudioContext is already unlocked
+            setTimeout(function() { tryPlayPendingAlarm(); }, 300);
+        }
+
+        function tryPlayPendingAlarm() {
+            if (localStorage.getItem(ALARM_PENDING_KEY)) {
+                localStorage.removeItem(ALARM_PENDING_KEY);
+                playAlarm();
+            }
+        }
+
+        // Fire pending alarm on the first real user gesture inside the WebView
+        document.addEventListener('touchstart', tryPlayPendingAlarm, { passive: true });
+        document.addEventListener('click',      tryPlayPendingAlarm);
+
         // Static Timers (Preshape, Ambient Proof, Bake, etc.)
         // — timestamp-based AND persisted in localStorage so navigation never resets them
         const STATIC_TIMER_KEY = 'pym_static_timer';
@@ -828,7 +852,20 @@
 
                 var elapsed = Math.floor((Date.now() - saved.startTs) / 1000);
                 var remaining = Math.max(0, saved.baseRemaining - elapsed);
-                if (remaining <= 0) { localStorage.removeItem(STATIC_TIMER_KEY); return; }
+                if (remaining <= 0) {
+                    localStorage.removeItem(STATIC_TIMER_KEY);
+                    // Timer finished while the user was away — restore Done UI and ring
+                    var doneContainer = document.getElementById(saved.id);
+                    if (doneContainer) {
+                        var doneBtn  = doneContainer.querySelector('.start-btn');
+                        var doneDisp = doneContainer.querySelector('.timer-display');
+                        if (doneDisp) doneDisp.innerText = '00:00';
+                        if (doneBtn)  { doneBtn.innerText = 'Done ✓'; doneBtn.disabled = true; }
+                    }
+                    hideGlobalTimer();
+                    setPendingAlarm();   // rings now if AudioContext is ready, else on first touch
+                    return;
+                }
 
                 staticTimerState.id = saved.id;
                 staticTimerState.baseRemaining = saved.baseRemaining;
@@ -1479,17 +1516,28 @@
                     // re-creation (channels are immutable once created on device).
                     // Using a new ID 'bake-alarms' guarantees a fresh channel that
                     // picks up the STREAM_ALARM patch from ChannelManager.java.
-                    try { await LocalNotifications.deleteChannel({ id: 'bake-timers' }); } catch(_) {}
+                    // Delete old channels — Android channel settings are immutable once
+                    // created, so we use a new ID ('bake-alarms-v2') to guarantee a
+                    // fresh channel with sound enabled picks up on every device.
+                    try { await LocalNotifications.deleteChannel({ id: 'bake-timers' });  } catch(_) {}
+                    try { await LocalNotifications.deleteChannel({ id: 'bake-alarms' });  } catch(_) {}
                     await LocalNotifications.createChannel({
-                        id: 'bake-alarms',
-                        name: 'Bake Alarms',
+                        id:          'bake-alarms-v2',
+                        name:        'Bake Alarms',
                         description: 'Sourdough bake timer alerts — rings even on vibrate',
-                        importance: 5,       // IMPORTANCE_HIGH → shows on lock screen
-                        visibility: 1,       // VISIBILITY_PUBLIC
-                        vibration: true,
-                        lights: true,
-                        lightColor: '#875305'
-                        // Audio stream controlled by STREAM_ALARM patch in ChannelManager.java
+                        importance:  5,          // IMPORTANCE_HIGH → heads-up + sound
+                        visibility:  1,          // VISIBILITY_PUBLIC
+                        vibration:   true,
+                        lights:      true,
+                        lightColor:  '#875305',
+                        sound:       'default'   // system default notification sound
+                    });
+
+                    // When the user taps the notification to open the app, ring the alarm
+                    // inside the WebView too (the system notification sound plays once,
+                    // this gives the loud Web Audio beep as well).
+                    LocalNotifications.addListener('localNotificationActionPerformed', function() {
+                        setPendingAlarm();
                     });
 
                     // Request notification permission
@@ -1543,11 +1591,9 @@
                                 at: new Date(Date.now() + delaySecs * 1000),
                                 allowWhileIdle: true   // fires even in Doze mode
                             },
-                            channelId: 'bake-alarms',
-                            // No per-notification sound — the channel (patched to
-                            // STREAM_ALARM at build time) controls the audio stream.
-                            // Adding sound:'default' here can override the channel setting.
-                            extra: { timerId: id }
+                            channelId: 'bake-alarms-v2',
+                            sound:     'default',
+                            extra:     { timerId: id }
                         }]
                     });
                 } catch(e) {}
