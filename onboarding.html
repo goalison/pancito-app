@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pancito y Más — Your Journey Begins</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0..1&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode:'class',
+    theme:{ extend:{
+      colors:{ primary:'#875305', secondary:'#C4863A', background:'#fef9ef', 'on-surface':'#1d1c16', 'on-surface-variant':'#514538', outline:'#847466', 'outline-variant':'#d6c3b3', 'surface-container':'#f2ede3', 'surface-container-high':'#ece8de', error:'#B3261E' },
+      fontFamily:{ headline:['Noto Serif','serif'], body:['Plus Jakarta Sans','sans-serif'] },
+      borderRadius:{ DEFAULT:'0.25rem', lg:'0.5rem', xl:'0.75rem', '2xl':'1rem', '3xl':'1.5rem', full:'9999px' },
+    }},
+  };
+</script>
+<style>
+  body { font-family:'Plus Jakarta Sans',sans-serif; background:#fef9ef; overflow:hidden; }
+  .font-headline { font-family:'Noto Serif',serif; }
+
+  /* ── Jar illustration ── */
+  .jar-wrap { position:relative; width:140px; height:180px; margin:0 auto; }
+  .jar-body {
+    position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+    width:110px; height:150px;
+    background:linear-gradient(135deg,rgba(255,255,255,0.55) 0%,rgba(250,243,225,0.85) 60%,rgba(240,228,200,0.7) 100%);
+    border-radius:8px 8px 20px 20px;
+    border:2px solid rgba(196,134,58,0.35);
+    backdrop-filter:blur(4px);
+    overflow:hidden;
+  }
+  .jar-lid {
+    position:absolute; top:0; left:50%; transform:translateX(-50%);
+    width:90px; height:18px;
+    background:linear-gradient(180deg,#c4863a,#875305);
+    border-radius:6px 6px 0 0;
+  }
+  .jar-label {
+    position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
+    width:70px; height:36px;
+    background:rgba(255,255,255,0.6);
+    border-radius:4px;
+    border:1px solid rgba(196,134,58,0.3);
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; font-weight:700; color:#875305;
+    text-transform:uppercase; letter-spacing:0.1em;
+  }
+  .jar-content {
+    position:absolute; bottom:0; left:0; right:0; height:60%;
+    background:linear-gradient(180deg,rgba(196,134,58,0.15),rgba(135,83,5,0.25));
+  }
+  /* Bubble animations */
+  .bubble {
+    position:absolute; border-radius:50%;
+    background:rgba(255,255,255,0.55);
+    animation:rise var(--dur,3s) var(--delay,0s) infinite ease-in-out;
+    width:var(--sz,8px); height:var(--sz,8px);
+    bottom:5%; left:var(--x,40%);
+  }
+  @keyframes rise {
+    0%   { opacity:0;   transform:translateY(0) scale(0.6); }
+    20%  { opacity:0.8; }
+    80%  { opacity:0.5; }
+    100% { opacity:0;   transform:translateY(-120px) scale(1.1); }
+  }
+  .bubble-slow   { animation-duration:4.5s; }
+  .bubble-medium { animation-duration:3s; }
+  .bubble-fast   { animation-duration:2s; }
+
+  /* Screens & transitions */
+  .screen { position:absolute; inset:0; display:flex; flex-direction:column; transition:opacity 0.4s ease, transform 0.4s ease; }
+  .screen.hidden { opacity:0; pointer-events:none; transform:translateX(40px); }
+  .screen.exit   { opacity:0; pointer-events:none; transform:translateX(-40px); }
+
+  /* Progress dots */
+  .dot { width:8px; height:8px; border-radius:50%; background:#d6c3b3; transition:background 0.3s; }
+  .dot.active { background:#875305; }
+
+  /* Card swipe (Chapter 2) */
+  .lesson-card { transition:opacity 0.35s ease, transform 0.35s ease; }
+  .lesson-card.leaving { opacity:0; transform:translateX(-60px) scale(0.95); }
+
+  /* Equipment toggle */
+  .equip-btn { transition:all 0.2s; }
+  .equip-btn.have { background:#875305; color:#fff; border-color:#875305; }
+  .equip-btn.need { background:#f2ede3; color:#875305; border-color:#d6c3b3; }
+
+  /* Celebration particles */
+  .particle {
+    position:fixed; border-radius:50%; pointer-events:none; z-index:200;
+    animation:float-up 2.5s ease-out forwards;
+  }
+  @keyframes float-up {
+    0%   { opacity:1; transform:translateY(0) rotate(0deg) scale(1); }
+    100% { opacity:0; transform:translateY(-320px) rotate(720deg) scale(0.3); }
+  }
+
+  /* Bottom sheet */
+  .sheet { transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.32,0.72,0,1); }
+  .sheet.open { transform:translateY(0); }
+
+  /* Activity pills */
+  .activity-pill { transition:all 0.18s; cursor:pointer; }
+  .activity-pill.selected { background:#875305; color:#fff; border-color:#875305; }
+</style>
+</head>
+<body class="bg-[#fef9ef] text-[#1d1c16]">
+
+<!-- ══ TOP PROGRESS BAR ══════════════════════════════════════════════════ -->
+<div class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-[#fef9ef]/90 backdrop-blur-sm">
+  <button id="backBtn" onclick="goBack()" class="text-[#847466] hover:text-[#875305] transition-colors p-1 -ml-1 invisible">
+    <span class="material-symbols-outlined">arrow_back</span>
+  </button>
+  <div class="flex gap-2" id="progressDots">
+    <div class="dot active" id="dot1"></div>
+    <div class="dot"       id="dot2"></div>
+    <div class="dot"       id="dot3"></div>
+    <div class="dot"       id="dot4"></div>
+  </div>
+  <div class="text-[10px] font-bold uppercase tracking-widest text-[#847466]" id="chapterLabel">Chapter 1</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 1 — Meet Your Starter                                         -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+
+<!-- C1-S1: Welcome -->
+<div class="screen" id="c1s1">
+  <div class="flex-1 flex flex-col items-center justify-center px-8 text-center pt-16 pb-8">
+    <div class="mb-10">
+      <div class="jar-wrap mx-auto mb-2">
+        <div class="jar-body">
+          <div class="jar-content"></div>
+          <div class="bubble bubble-slow"  style="--x:30%;--sz:6px;--delay:0s"></div>
+          <div class="bubble bubble-medium" style="--x:55%;--sz:9px;--delay:0.8s"></div>
+          <div class="bubble bubble-slow"  style="--x:70%;--sz:5px;--delay:1.6s"></div>
+        </div>
+        <div class="jar-lid"></div>
+        <div class="jar-label">Starter</div>
+      </div>
+    </div>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3">Chapter 1 · Meet Your Starter</p>
+    <h1 class="font-headline font-bold text-4xl leading-tight text-[#1d1c16] mb-5">Something magical<br/>is about to begin.</h1>
+    <p class="text-[#514538] text-base leading-relaxed max-w-xs">You've been given a living thing to care for — wild yeast and bacteria, woven together over time. Together, you'll turn flour and water into something extraordinary.</p>
+    <p class="text-[#514538] text-base leading-relaxed max-w-xs mt-3">This is your sourdough journey. Let's begin.</p>
+  </div>
+  <div class="px-6 pb-10">
+    <button onclick="goTo('c1s2')" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
+      Begin my journey →
+    </button>
+  </div>
+</div>
+
+<!-- C1-S2: Name your starter -->
+<div class="screen hidden" id="c1s2">
+  <div class="flex-1 flex flex-col items-center justify-center px-8 text-center pt-16 pb-8">
+    <span class="material-symbols-outlined text-5xl text-[#C4863A] mb-6" style="font-variation-settings:'FILL' 1">favorite</span>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3">Name Your Starter</p>
+    <h2 class="font-headline font-bold text-3xl leading-tight mb-4">What will you call<br/>your starter?</h2>
+    <p class="text-[#514538] text-sm leading-relaxed max-w-xs mb-8">You'll be feeding this living culture every day. Give it a name that feels right — bakers name their starters the way sailors name their ships.</p>
+    <div class="w-full max-w-xs">
+      <input id="starterNameInput" type="text" maxlength="20" placeholder="e.g. Bubbles, Scout, Dough-Remi…"
+        class="w-full text-center text-xl font-headline font-bold bg-transparent border-b-2 border-[#d6c3b3] focus:border-[#875305] outline-none py-3 text-[#1d1c16] placeholder-[#d6c3b3] transition-colors"
+        oninput="updateNameBtn()"/>
+      <p class="text-[10px] text-[#847466] mt-2">No inspiration? "Bubbles" is always a classic.</p>
+    </div>
+  </div>
+  <div class="px-6 pb-10">
+    <button id="nameBtn" onclick="confirmName()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform" disabled>
+      Meet my starter →
+    </button>
+  </div>
+</div>
+
+<!-- C1-S3: Starter wakes up -->
+<div class="screen hidden" id="c1s3">
+  <div class="flex-1 flex flex-col items-center justify-center px-8 text-center pt-16 pb-8">
+    <div class="jar-wrap mb-6">
+      <div class="jar-body" style="box-shadow:0 0 30px rgba(196,134,58,0.25)">
+        <div class="jar-content" style="height:65%;background:linear-gradient(180deg,rgba(196,134,58,0.2),rgba(135,83,5,0.35))"></div>
+        <div class="bubble bubble-fast"   style="--x:25%;--sz:8px;--delay:0s"></div>
+        <div class="bubble bubble-medium" style="--x:45%;--sz:11px;--delay:0.4s"></div>
+        <div class="bubble bubble-fast"   style="--x:65%;--sz:7px;--delay:0.9s"></div>
+        <div class="bubble bubble-slow"   style="--x:78%;--sz:9px;--delay:1.3s"></div>
+        <div class="bubble bubble-medium" style="--x:35%;--sz:6px;--delay:1.8s"></div>
+      </div>
+      <div class="jar-lid"></div>
+      <div class="jar-label" id="starterJarLabel">Bubbles</div>
+    </div>
+    <!-- Health bar -->
+    <div class="w-40 mb-6">
+      <div class="flex justify-between text-[10px] font-bold uppercase tracking-wider text-[#847466] mb-1">
+        <span>Health</span><span>60%</span>
+      </div>
+      <div class="h-2 bg-[#d6c3b3] rounded-full overflow-hidden">
+        <div class="h-full bg-[#875305] rounded-full" style="width:60%;transition:width 1s ease"></div>
+      </div>
+    </div>
+    <h2 class="font-headline font-bold text-3xl leading-tight mb-4" id="c1s3Headline">Bubbles is alive!</h2>
+    <p class="text-[#514538] text-sm leading-relaxed max-w-xs">A healthy starter doubles in size after feeding and smells pleasantly tangy — almost like yogurt. Let's learn how to keep yours thriving.</p>
+  </div>
+  <div class="px-6 pb-10">
+    <button onclick="completeChapter1()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
+      Let's learn the basics →
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 2 — Sourdough Basics                                          -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="c2s1">
+  <div class="flex-1 flex flex-col px-6 pt-20 pb-6 overflow-hidden">
+    <!-- Chapter header -->
+    <div class="text-center mb-6">
+      <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1">Chapter 2 · The Basics</p>
+      <h2 class="font-headline font-bold text-2xl">What you need to know</h2>
+    </div>
+    <!-- Lesson card -->
+    <div class="flex-1 flex flex-col" id="lessonCardWrap">
+      <div class="lesson-card flex-1 bg-white rounded-3xl shadow-sm border border-[#d6c3b3]/30 p-6 flex flex-col" id="lessonCard">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="bg-[#875305]/10 rounded-xl p-2.5 shrink-0">
+            <span class="material-symbols-outlined text-[#875305] text-2xl" id="lessonIcon">grain</span>
+          </div>
+          <span class="text-[10px] font-bold uppercase tracking-widest text-[#C4863A]" id="lessonNum">1 of 5</span>
+        </div>
+        <h3 class="font-headline font-bold text-xl leading-snug mb-3" id="lessonHeadline">What is sourdough?</h3>
+        <p class="text-[#514538] text-sm leading-relaxed flex-1" id="lessonBody"></p>
+        <div class="mt-6 pt-4 border-t border-[#d6c3b3]/30 flex items-center justify-between">
+          <span class="text-[10px] text-[#847466]" id="lessonProgress">Swipe or tap to continue</span>
+          <div class="flex gap-1" id="lessonDots"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4">
+      <button id="lessonNextBtn" onclick="nextLesson()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
+        Got it →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 3 — Equipment Check                                           -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="c3s1">
+  <div class="flex flex-col h-full pt-16 pb-6">
+    <div class="px-6 text-center mb-5">
+      <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1">Chapter 3 · Your Gear</p>
+      <h2 class="font-headline font-bold text-2xl mb-2">Baker's equipment check</h2>
+      <p class="text-[#514538] text-xs leading-relaxed">Mark what you already have. Don't panic if you're missing something — we'll show you where to learn more.</p>
+    </div>
+    <div class="flex-1 overflow-y-auto px-6 space-y-3" id="equipList"></div>
+    <div class="px-6 pt-4 border-t border-[#d6c3b3]/20">
+      <p class="text-[10px] text-[#847466] italic mb-3 text-center">You don't need everything to start — a Dutch oven and a digital scale will get you through your first 10 bakes.</p>
+      <button onclick="completeChapter3()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
+        I'm ready — let's feed my starter →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 4 — First Feeding                                             -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+
+<!-- C4-S1: Intro -->
+<div class="screen hidden" id="c4s1">
+  <div class="flex-1 flex flex-col items-center justify-center px-8 text-center pt-16 pb-8">
+    <span class="material-symbols-outlined text-5xl text-[#C4863A] mb-6" style="font-variation-settings:'FILL' 1">restaurant</span>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3">Chapter 4 · Your First Feeding</p>
+    <h2 class="font-headline font-bold text-3xl leading-tight mb-5">Let's check in on<br/><span id="c4StarterName" class="text-[#875305] italic">your starter</span> together.</h2>
+    <p class="text-[#514538] text-sm leading-relaxed max-w-xs">A daily starter check-in takes 30 seconds. You note how active it looks — bubbly, doubling, or flat — and log the temperature. This tiny habit is what separates consistent bakers from frustrated ones.</p>
+  </div>
+  <div class="px-6 pb-10">
+    <button onclick="goTo('c4s2')" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
+      Do my first check-in →
+    </button>
+  </div>
+</div>
+
+<!-- C4-S2: Check-in form -->
+<div class="screen hidden" id="c4s2">
+  <div class="flex-1 flex flex-col px-6 pt-20 pb-6">
+    <div class="text-center mb-8">
+      <h2 class="font-headline font-bold text-2xl mb-1">How is <span id="c4StarterName2" class="text-[#875305] italic">your starter</span> looking?</h2>
+      <p class="text-[#514538] text-sm">Be honest — all states are valid. We're just taking note.</p>
+    </div>
+    <!-- Activity pills -->
+    <div class="space-y-3 mb-8">
+      <button class="activity-pill w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#d6c3b3] text-left" onclick="selectActivity('flat',this)">
+        <div class="bg-[#f2ede3] p-2.5 rounded-xl shrink-0">
+          <span class="material-symbols-outlined text-[#847466]">water</span>
+        </div>
+        <div>
+          <div class="font-bold text-sm">Flat</div>
+          <div class="text-xs text-[#514538]">Not much activity. Hungry or cold.</div>
+        </div>
+      </button>
+      <button class="activity-pill w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#d6c3b3] text-left" onclick="selectActivity('bubbly',this)">
+        <div class="bg-[#f2ede3] p-2.5 rounded-xl shrink-0">
+          <span class="material-symbols-outlined text-[#C4863A]">bubble_chart</span>
+        </div>
+        <div>
+          <div class="font-bold text-sm">Bubbly</div>
+          <div class="text-xs text-[#514538]">Lots of bubbles — active and alive.</div>
+        </div>
+      </button>
+      <button class="activity-pill w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#d6c3b3] text-left" onclick="selectActivity('doubling',this)">
+        <div class="bg-[#f2ede3] p-2.5 rounded-xl shrink-0">
+          <span class="material-symbols-outlined text-[#875305]">trending_up</span>
+        </div>
+        <div>
+          <div class="font-bold text-sm">Doubling</div>
+          <div class="text-xs text-[#514538]">Doubled in size — at peak! Bake now.</div>
+        </div>
+      </button>
+    </div>
+    <!-- Optional temp -->
+    <div class="flex items-center gap-3 mb-8 bg-[#f2ede3] rounded-2xl p-4">
+      <span class="material-symbols-outlined text-[#847466]">thermostat</span>
+      <div class="flex-1">
+        <label class="text-xs font-bold uppercase tracking-wider text-[#847466]">Room temp (optional)</label>
+        <input id="tempInput" type="number" min="50" max="100" placeholder="e.g. 72" class="block w-full bg-transparent text-base font-bold text-[#1d1c16] outline-none placeholder-[#d6c3b3] mt-0.5"/>
+      </div>
+      <span class="text-sm text-[#847466]">°F</span>
+    </div>
+    <div class="mt-auto">
+      <button id="feedBtn" onclick="completeCheckin()" disabled
+        class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100">
+        Feed <span id="feedBtnName">my starter</span> →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- C4-S3: Celebration -->
+<div class="screen hidden" id="c4s3">
+  <div class="flex-1 flex flex-col items-center justify-center px-8 text-center pt-16 pb-8">
+    <div class="jar-wrap mb-6">
+      <div class="jar-body" style="box-shadow:0 0 40px rgba(196,134,58,0.4)">
+        <div class="jar-content" style="height:75%;background:linear-gradient(180deg,rgba(196,134,58,0.3),rgba(135,83,5,0.45))"></div>
+        <div class="bubble bubble-fast"   style="--x:20%;--sz:9px;--delay:0s"></div>
+        <div class="bubble bubble-fast"   style="--x:40%;--sz:12px;--delay:0.3s"></div>
+        <div class="bubble bubble-medium" style="--x:60%;--sz:8px;--delay:0.7s"></div>
+        <div class="bubble bubble-fast"   style="--x:75%;--sz:10px;--delay:1.1s"></div>
+        <div class="bubble bubble-medium" style="--x:30%;--sz:7px;--delay:1.5s"></div>
+        <div class="bubble bubble-fast"   style="--x:52%;--sz:11px;--delay:0.9s"></div>
+      </div>
+      <div class="jar-lid"></div>
+      <div class="jar-label" id="c4JarLabel">Bubbles</div>
+    </div>
+    <div class="bg-[#875305]/8 rounded-2xl px-6 py-4 mb-6 inline-flex items-center gap-3">
+      <span class="material-symbols-outlined text-[#875305]" style="font-variation-settings:'FILL' 1">local_fire_department</span>
+      <span class="font-bold text-[#875305]">Day 1 streak started!</span>
+    </div>
+    <h2 class="font-headline font-bold text-3xl leading-tight mb-4"><span id="c4CelebName">Bubbles</span> has been fed!</h2>
+    <p class="text-[#514538] text-sm leading-relaxed max-w-xs mb-2">You've officially started your sourdough journey. Your first bake is unlocked — whenever you're ready.</p>
+    <p class="text-[#514538] text-xs text-[#847466] max-w-xs">Return every day to check in on <span id="c4CelebName2" class="font-bold">your starter</span> and keep your streak alive.</p>
+  </div>
+  <div class="px-6 pb-10">
+    <button onclick="finishOnboarding()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform shadow-lg">
+      Start My First Bake →
+    </button>
+    <button onclick="window.location.href='index.html'" class="w-full py-3 mt-3 text-[#847466] text-sm font-bold">
+      Go to Dashboard first
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<script src="gamification.js"></script>
+<script>
+// ── State ─────────────────────────────────────────────────────────────────
+let currentScreen = 'c1s1';
+let starterName   = 'Bubbles';
+let selectedActivity = null;
+let lessonIndex   = 0;
+let equipState    = {};
+
+const SCREENS_ORDER = ['c1s1','c1s2','c1s3','c2s1','c3s1','c4s1','c4s2','c4s3'];
+
+// ── Safe localStorage ─────────────────────────────────────────────────────
+let _mem2 = {};
+const storage = (() => {
+  try { localStorage.setItem('__t__','1'); localStorage.removeItem('__t__'); return localStorage; }
+  catch(_) { return { getItem:k=>_mem2[k]??null, setItem:(k,v)=>{_mem2[k]=v;}, removeItem:k=>{delete _mem2[k];} }; }
+})();
+
+// ── Navigation ────────────────────────────────────────────────────────────
+function goTo(id, exitCurrent=true) {
+  const cur = document.getElementById(currentScreen);
+  const next = document.getElementById(id);
+  if (!next) return;
+  if (cur && exitCurrent) cur.classList.add('exit');
+  setTimeout(() => {
+    if (cur) { cur.classList.add('hidden'); cur.classList.remove('exit'); }
+    next.classList.remove('hidden');
+    currentScreen = id;
+    updateNav();
+    // Save progress
+    const ob = JSON.parse(storage.getItem('pym_onboarding')||'{}');
+    storage.setItem('pym_onboarding', JSON.stringify({ ...ob, currentScreen: id }));
+  }, 350);
+}
+
+function goBack() {
+  const idx = SCREENS_ORDER.indexOf(currentScreen);
+  if (idx > 0) {
+    const prev = SCREENS_ORDER[idx - 1];
+    const cur = document.getElementById(currentScreen);
+    cur.classList.add('hidden');
+    const p = document.getElementById(prev);
+    p.classList.remove('hidden', 'exit');
+    currentScreen = prev;
+    updateNav();
+  }
+}
+
+function updateNav() {
+  // Chapter dots
+  const chapterMap = { c1s1:1,c1s2:1,c1s3:1, c2s1:2, c3s1:3, c4s1:4,c4s2:4,c4s3:4 };
+  const ch = chapterMap[currentScreen] || 1;
+  for (let i=1;i<=4;i++) {
+    const d = document.getElementById('dot'+i);
+    if (d) d.className = 'dot' + (i <= ch ? ' active' : '');
+  }
+  document.getElementById('chapterLabel').textContent = 'Chapter ' + ch;
+  // Back button
+  const backBtn = document.getElementById('backBtn');
+  backBtn.style.visibility = SCREENS_ORDER.indexOf(currentScreen) > 0 ? 'visible' : 'hidden';
+}
+
+// ── Chapter 1 ─────────────────────────────────────────────────────────────
+function updateNameBtn() {
+  const v = document.getElementById('starterNameInput').value.trim();
+  document.getElementById('nameBtn').disabled = v.length === 0;
+  document.getElementById('nameBtn').textContent = v ? `Meet ${v} →` : 'Meet my starter →';
+}
+
+function confirmName() {
+  const v = document.getElementById('starterNameInput').value.trim();
+  starterName = v || 'Bubbles';
+  document.getElementById('starterJarLabel').textContent = starterName;
+  document.getElementById('c1s3Headline').textContent    = `${starterName} is alive!`;
+  // Populate other name references
+  document.querySelectorAll('#c4StarterName,#c4StarterName2').forEach(el => el.textContent = starterName);
+  document.querySelectorAll('#feedBtnName,#c4JarLabel,#c4CelebName,#c4CelebName2').forEach(el => el.textContent = starterName);
+  goTo('c1s3');
+}
+
+function completeChapter1() {
+  // Persist starter
+  PymGamification.initStarterIfNew(starterName);
+  // Save onboarding progress
+  const ob = JSON.parse(storage.getItem('pym_onboarding')||'{}');
+  storage.setItem('pym_onboarding', JSON.stringify({ ...ob, chapter1Complete: true, starterName }));
+  goTo('c2s1');
+  initLessons();
+}
+
+// ── Chapter 2 (Lessons) ───────────────────────────────────────────────────
+const LESSONS = [
+  {
+    icon: 'grain',
+    headline: 'What is sourdough?',
+    body: 'Unlike commercial yeast bread, sourdough is leavened by wild yeast and beneficial bacteria naturally present in flour and your environment. This living culture — your starter — is what makes sourdough unique. The process is slower, but the flavor, texture, and nutrition are in a completely different league.',
+  },
+  {
+    icon: 'science',
+    headline: 'Your starter is alive',
+    body: 'A healthy starter should roughly double in size within 4–8 hours of feeding and smell pleasantly tangy — like yogurt or beer. If you see a greyish liquid on top (called "hooch"), that\'s just your starter saying it\'s hungry. Pour it off, feed it, and it\'ll bounce right back.',
+  },
+  {
+    icon: 'list_alt',
+    headline: 'The 5 stages of a bake',
+    body: 'Every sourdough bake follows the same rhythm: Mix → Bulk Fermentation → Shaping → Cold Proof → Bake. Your app guides you through each stage with timers and instructions. The first time feels complex. By your third bake, it feels like a familiar ritual.',
+  },
+  {
+    icon: 'touch_app',
+    headline: 'Reading your dough',
+    body: 'The windowpane test tells you when gluten is developed: stretch a small piece of dough thin — if it forms a translucent sheet without tearing, you\'re ready to shape. For fermentation, look for 50–75% volume increase, bubbles on the sides of your container, and a dough that jiggles when you shake it.',
+  },
+  {
+    icon: 'favorite',
+    headline: 'Your first loaf will be ugly — and that\'s perfect',
+    body: 'Every incredible baker started with flat, dense, or pale loaves. That\'s not failure — that\'s data. Did it spring in the oven? How\'s the crumb? What was your bulk time? Write it in your bake notes. Sourdough baking is a practice, not a performance. Be patient with yourself.',
+  },
+];
+
+function initLessons() {
+  lessonIndex = 0;
+  renderLesson();
+}
+
+function renderLesson() {
+  const lesson = LESSONS[lessonIndex];
+  document.getElementById('lessonIcon').textContent     = lesson.icon;
+  document.getElementById('lessonHeadline').textContent = lesson.headline;
+  document.getElementById('lessonBody').textContent     = lesson.body;
+  document.getElementById('lessonNum').textContent      = `${lessonIndex+1} of ${LESSONS.length}`;
+  // Dots
+  const dotsEl = document.getElementById('lessonDots');
+  dotsEl.innerHTML = LESSONS.map((_,i) =>
+    `<div style="width:6px;height:6px;border-radius:50%;background:${i<=lessonIndex?'#875305':'#d6c3b3'};transition:background 0.3s"></div>`
+  ).join('');
+  document.getElementById('lessonNextBtn').textContent =
+    lessonIndex === LESSONS.length-1 ? 'Continue →' : 'Got it →';
+}
+
+function nextLesson() {
+  if (lessonIndex < LESSONS.length - 1) {
+    const card = document.getElementById('lessonCard');
+    card.classList.add('leaving');
+    setTimeout(() => {
+      lessonIndex++;
+      renderLesson();
+      card.classList.remove('leaving');
+    }, 300);
+  } else {
+    // Chapter 2 done
+    const ob = JSON.parse(storage.getItem('pym_onboarding')||'{}');
+    storage.setItem('pym_onboarding', JSON.stringify({ ...ob, chapter2Complete: true }));
+    goTo('c3s1');
+    initEquipment();
+  }
+}
+
+// ── Chapter 3 (Equipment) ─────────────────────────────────────────────────
+const EQUIPMENT = [
+  { id:'scale',       icon:'scale',        name:'Digital kitchen scale',       desc:'Essential — sourdough is measured by weight, not cups.', guide:'banneton.html' },
+  { id:'dutch_oven',  icon:'outdoor_grill',name:'Dutch oven or combo cooker',  desc:'Traps steam for oven spring. This is your #1 tool.', guide:'bread-sling.html' },
+  { id:'banneton',    icon:'circle',       name:'Banneton / proofing basket',   desc:'Shapes and supports the dough during cold proof.', guide:'banneton.html' },
+  { id:'scraper',     icon:'crop_square',  name:'Bench scraper',               desc:'For dividing, shaping, and lifting dough.', guide:'bench-scraper.html' },
+  { id:'lame',        icon:'content_cut',  name:'Lame or razor blade',         desc:'For scoring — that beautiful slash before baking.', guide:'lame.html' },
+  { id:'thermometer', icon:'thermostat',   name:'Instant-read thermometer',    desc:'Knowing dough temp is key to predicting timing.', guide:'starter-kit.html' },
+];
+
+function initEquipment() {
+  const list = document.getElementById('equipList');
+  list.innerHTML = EQUIPMENT.map(e => `
+    <div class="flex items-center gap-4 bg-white rounded-2xl border border-[#d6c3b3]/30 p-4">
+      <div class="bg-[#f2ede3] p-2.5 rounded-xl shrink-0">
+        <span class="material-symbols-outlined text-[#875305]">${e.icon}</span>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="font-bold text-sm text-[#1d1c16]">${e.name}</div>
+        <div class="text-xs text-[#514538] mt-0.5">${e.desc}</div>
+        <a href="${e.guide}" class="text-[10px] text-[#C4863A] font-bold uppercase tracking-wider mt-1 block" onclick="event.stopPropagation()">Learn more →</a>
+      </div>
+      <div class="flex flex-col gap-1.5 shrink-0">
+        <button class="equip-btn have text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all" onclick="toggleEquip('${e.id}','have',this.closest('.flex'))">✓ Have it</button>
+        <button class="equip-btn need text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all" onclick="toggleEquip('${e.id}','need',this.closest('.flex'))">Need it</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleEquip(id, state, row) {
+  equipState[id] = state;
+  const btns = row.querySelectorAll('.equip-btn');
+  btns[0].className = 'equip-btn ' + (state === 'have' ? 'have' : 'text-[10px] font-bold px-2.5 py-1 rounded-lg border border-[#d6c3b3] text-[#847466]') + ' text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all';
+  btns[1].className = 'equip-btn ' + (state === 'need' ? 'need' : 'text-[10px] font-bold px-2.5 py-1 rounded-lg border border-[#d6c3b3] text-[#847466]') + ' text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all';
+  if (state === 'have') { btns[0].style.cssText='background:#875305;color:#fff;border-color:#875305'; btns[1].style.cssText=''; }
+  else { btns[1].style.cssText='background:#f2ede3;color:#875305;border-color:#d6c3b3'; btns[0].style.cssText=''; }
+}
+
+function completeChapter3() {
+  const ob = JSON.parse(storage.getItem('pym_onboarding')||'{}');
+  storage.setItem('pym_onboarding', JSON.stringify({ ...ob, chapter3Complete: true, equipmentChecklist: equipState }));
+  // Update c4 name references
+  document.getElementById('c4StarterName').textContent  = starterName;
+  document.getElementById('c4StarterName2').textContent = starterName;
+  document.getElementById('feedBtnName').textContent     = starterName;
+  goTo('c4s1');
+}
+
+// ── Chapter 4 (Check-in) ──────────────────────────────────────────────────
+function selectActivity(activity, btn) {
+  selectedActivity = activity;
+  document.querySelectorAll('.activity-pill').forEach(b => {
+    b.classList.remove('selected');
+    b.style.cssText = '';
+  });
+  btn.classList.add('selected');
+  btn.style.cssText = 'background:#875305;color:#fff;border-color:#875305';
+  document.getElementById('feedBtn').disabled = false;
+}
+
+function completeCheckin() {
+  if (!selectedActivity) return;
+  const temp = document.getElementById('tempInput').value;
+  // Feed starter via gamification module
+  PymGamification.feedStarter(selectedActivity, temp ? parseInt(temp) : null, '');
+  PymGamification.checkIn();
+  PymGamification.unlockAchievement('first_checkin');
+
+  // Update c4-s3 UI
+  document.getElementById('c4JarLabel').textContent   = starterName;
+  document.getElementById('c4CelebName').textContent  = starterName;
+  document.getElementById('c4CelebName2').textContent = starterName;
+
+  goTo('c4s3');
+  launchParticles();
+}
+
+function finishOnboarding() {
+  const ob = JSON.parse(storage.getItem('pym_onboarding')||'{}');
+  storage.setItem('pym_onboarding', JSON.stringify({
+    ...ob,
+    complete: true,
+    chapter4Complete: true,
+    completedAt: new Date().toISOString(),
+  }));
+  PymGamification.unlockAchievement('named_starter');
+  window.location.href = 'bake-log.html';
+}
+
+// ── Particles ─────────────────────────────────────────────────────────────
+function launchParticles() {
+  const colors = ['#ffb967','#875305','#C4863A','#fef9ef','#d6c3b3'];
+  for (let i = 0; i < 50; i++) {
+    setTimeout(() => {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = 6 + Math.random() * 10;
+      p.style.cssText = `
+        width:${size}px;height:${size}px;
+        left:${20+Math.random()*60}%;
+        bottom:${20+Math.random()*30}%;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        animation-delay:${Math.random()*0.8}s;
+        animation-duration:${1.8+Math.random()*1.2}s;
+        border-radius:${Math.random()>0.5?'50%':'3px'};
+      `;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 3000);
+    }, i * 30);
+  }
+}
+
+// ── Init: check if onboarding is already complete ─────────────────────────
+(function init() {
+  const ob = JSON.parse(storage.getItem('pym_onboarding')||'null');
+  if (ob && ob.complete) {
+    window.location.href = 'index.html';
+    return;
+  }
+  // Restore progress if they left mid-onboarding
+  if (ob && ob.starterName) {
+    starterName = ob.starterName;
+    document.querySelectorAll('#c4StarterName,#c4StarterName2').forEach(el => el.textContent = starterName);
+    document.querySelectorAll('#feedBtnName,#c4JarLabel,#c4CelebName,#c4CelebName2,#starterJarLabel').forEach(el => el.textContent = starterName);
+    document.getElementById('c1s3Headline').textContent = `${starterName} is alive!`;
+  }
+  updateNav();
+})();
+</script>
+</body>
+</html>

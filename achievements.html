@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="gamification.js"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-error": "#ffffff",
+          "tertiary-container": "#ac8c80",
+          "surface-container-low": "#f8f3e9",
+          "surface-dim": "#dedad0",
+          "on-tertiary": "#ffffff",
+          "primary-fixed": "#ffddba",
+          "tertiary-fixed-dim": "#e3bfb2",
+          "on-surface-variant": "#514538",
+          "surface": "#fef9ef",
+          "secondary": "#835334",
+          "inverse-primary": "#ffb967",
+          "tertiary": "#74584e",
+          "outline-variant": "#d6c3b3",
+          "inverse-on-surface": "#f5f0e6",
+          "primary-fixed-dim": "#ffb967",
+          "primary-container": "#c4863a",
+          "on-primary-fixed": "#2b1700",
+          "tertiary-fixed": "#ffdbce",
+          "secondary-fixed-dim": "#f8b993",
+          "on-background": "#1d1c16",
+          "on-secondary-container": "#794b2d",
+          "on-primary": "#ffffff",
+          "surface-bright": "#fef9ef",
+          "on-secondary": "#ffffff",
+          "on-error-container": "#93000a",
+          "surface-tint": "#875305",
+          "on-tertiary-fixed-variant": "#5a4137",
+          "surface-variant": "#e7e2d8",
+          "background": "#fef9ef",
+          "surface-container-highest": "#e7e2d8",
+          "surface-container-high": "#ece8de",
+          "outline": "#847466",
+          "on-secondary-fixed": "#321300",
+          "error": "#ba1a1a",
+          "secondary-fixed": "#ffdbc8",
+          "secondary-container": "#febe98",
+          "inverse-surface": "#32302a",
+          "on-tertiary-fixed": "#2a170f",
+          "surface-container": "#f2ede3",
+          "on-tertiary-container": "#3d261e",
+          "on-primary-fixed-variant": "#673d00",
+          "primary": "#875305",
+          "on-surface": "#1d1c16",
+          "on-primary-container": "#422500",
+          "on-secondary-fixed-variant": "#673c1f",
+          "surface-container-lowest": "#ffffff",
+          "error-container": "#ffdad6"
+        },
+        fontFamily: {
+          "headline": ["Noto Serif"],
+          "body": ["Plus Jakarta Sans"],
+          "label": ["Plus Jakarta Sans"]
+        },
+        borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  /* Badge tooltip */
+  .badge-tooltip {
+    position: fixed;
+    z-index: 9999;
+    max-width: 220px;
+    background: #1d1c16;
+    color: #fef9ef;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 12px;
+    line-height: 1.5;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.18s, transform 0.18s;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  }
+  .badge-tooltip.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Unlocked badge glow */
+  .badge-unlocked .badge-icon-ring {
+    box-shadow: 0 0 0 3px #ffb96755, 0 8px 20px rgba(135,83,5,0.3);
+  }
+  /* Locked badge */
+  .badge-locked {
+    opacity: 0.45;
+    filter: grayscale(1);
+  }
+  /* Progress ring SVG */
+  .progress-ring-circle {
+    transition: stroke-dashoffset 0.7s ease;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+  }
+  body { min-height: max(884px, 100dvh); }
+</style>
+</head>
+<body class="bg-[#fef9ef] text-on-surface font-body">
+
+<!-- TopAppBar -->
+<header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/20">
+  <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+    <a class="flex items-center gap-3" href="index.html">
+      <img alt="Pancito y Más Logo" class="w-12 h-12 object-contain" src="logo.png"/>
+      <span class="font-['Noto_Serif'] text-[#875305] italic font-bold text-2xl tracking-tight">Pancito y Más</span>
+    </a>
+    <div class="flex items-center gap-6">
+      <nav class="hidden md:flex gap-8 items-center font-['Plus_Jakarta_Sans'] text-xs uppercase tracking-widest">
+        <a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors" href="index.html">Dashboard</a>
+        <a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors" href="bake-log.html">Bake</a>
+        <a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors" href="library.html">Library</a>
+        <a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors" href="archive.html">Archive</a>
+        <a class="text-[#875305] font-extrabold hover:text-[#c4863a] transition-colors" href="achievements.html">Badges</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 pt-10 pb-36 space-y-8">
+
+  <!-- Hero -->
+  <section>
+    <p class="font-label text-primary font-bold uppercase tracking-widest text-xs mb-2">Your Journey</p>
+    <h2 class="font-headline text-4xl text-on-surface font-bold leading-tight">Trophy Case</h2>
+    <p class="mt-2 text-sm text-on-surface-variant max-w-sm">Every badge is earned, never purchased. Tap a locked badge to see how to unlock it.</p>
+  </section>
+
+  <!-- Level + Progress Card -->
+  <section class="bg-gradient-to-br from-[#875305] to-[#c4863a] rounded-2xl p-6 text-white relative overflow-hidden">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-[10px] font-bold uppercase tracking-widest text-white/60 mb-1">Baker Level</p>
+        <p class="font-headline text-3xl font-bold italic" id="level-title">Flour Dabbler</p>
+        <p class="text-xs text-white/70 mt-1 max-w-[220px]" id="level-hint">Start your first bake to level up.</p>
+      </div>
+      <div class="relative w-16 h-16 flex-shrink-0">
+        <svg class="w-16 h-16" viewBox="0 0 64 64">
+          <circle cx="32" cy="32" r="28" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="4"/>
+          <circle class="progress-ring-circle" cx="32" cy="32" r="28" fill="none"
+            stroke="white" stroke-width="4" stroke-linecap="round"
+            stroke-dasharray="176" id="level-ring" stroke-dashoffset="176"/>
+        </svg>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <span class="font-headline text-xl font-bold" id="level-num">1</span>
+        </div>
+      </div>
+    </div>
+    <!-- badge count -->
+    <div class="mt-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-base text-white/70" style="font-variation-settings:'FILL' 1;">workspace_premium</span>
+      <span class="text-sm font-bold" id="badge-count-label">0 of 17 badges unlocked</span>
+    </div>
+    <!-- subtle flour pattern -->
+    <div class="absolute -right-8 -bottom-8 w-40 h-40 rounded-full bg-white/5"></div>
+    <div class="absolute -right-2 -bottom-14 w-28 h-28 rounded-full bg-white/5"></div>
+  </section>
+
+  <!-- Badge Grid -->
+  <section>
+    <p class="font-label text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-4">All Badges</p>
+    <div class="grid grid-cols-3 gap-3" id="badge-grid">
+      <!-- filled by JS -->
+    </div>
+  </section>
+
+  <!-- Unlock condition hint bar -->
+  <div class="text-center text-xs text-on-surface-variant opacity-60 pb-2">
+    Tap any badge to see its story
+  </div>
+
+</main>
+
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]">
+  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="index.html">
+    <span class="material-symbols-outlined text-[20px]">home_max</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Dash</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="bake-log.html">
+    <span class="material-symbols-outlined text-[20px]">timer</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Bake</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="library.html">
+    <span class="material-symbols-outlined text-[20px]">book_5</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Library</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="archive.html">
+    <span class="material-symbols-outlined text-[20px]">inventory_2</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Archive</span>
+  </a>
+  <a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" href="achievements.html">
+    <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1;">workspace_premium</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Badges</span>
+  </a>
+</nav>
+
+<!-- Badge tooltip (shared) -->
+<div class="badge-tooltip" id="badge-tooltip"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  if (!window.PymGamification) { console.warn('PymGamification not loaded'); return; }
+
+  const G = window.PymGamification;
+  const logs = (() => { try { return JSON.parse(localStorage.getItem('pym_logs') || '[]'); } catch(_){ return []; }})();
+  const allDefs    = G.getBadgeDefs();
+  const unlocked   = G.getUnlockedBadges();
+  const unlockedIds = new Set(unlocked.map(b => b.id));
+
+  // ── Level card ──────────────────────────────────────────────────────────────
+  const lvl = G.calculateLevel(logs);
+  document.getElementById('level-title').textContent = lvl.title;
+  document.getElementById('level-hint').textContent  = lvl.hint;
+  document.getElementById('level-num').textContent   = lvl.level;
+
+  // Progress ring: 5 levels, fill the ring per level
+  const pct = ((lvl.level - 1) / 4); // 0 to 1
+  const ring = document.getElementById('level-ring');
+  const circ = 2 * Math.PI * 28; // ≈ 175.9
+  ring.setAttribute('stroke-dasharray', circ.toFixed(1));
+  setTimeout(() => {
+    ring.style.strokeDashoffset = (circ * (1 - pct)).toFixed(1);
+  }, 100);
+
+  // Badge count
+  document.getElementById('badge-count-label').textContent =
+    `${unlockedIds.size} of ${allDefs.length} badges unlocked`;
+
+  // ── Badge grid ──────────────────────────────────────────────────────────────
+  const grid = document.getElementById('badge-grid');
+
+  allDefs.forEach(def => {
+    const isUnlocked = unlockedIds.has(def.id);
+    const data = unlocked.find(b => b.id === def.id);
+
+    const card = document.createElement('div');
+    card.className = [
+      'relative flex flex-col items-center gap-2 p-3 rounded-2xl cursor-pointer select-none',
+      'bg-surface-container-low border border-transparent transition-all active:scale-95',
+      isUnlocked ? 'badge-unlocked' : 'badge-locked',
+    ].join(' ');
+    card.dataset.id = def.id;
+
+    // Icon ring
+    const ring = document.createElement('div');
+    ring.className = 'badge-icon-ring w-14 h-14 rounded-full flex items-center justify-center';
+    ring.style.background = isUnlocked
+      ? 'linear-gradient(135deg, #875305, #C4863A)'
+      : '#d6c3b3';
+
+    const icon = document.createElement('span');
+    icon.className = 'material-symbols-outlined';
+    icon.style.fontSize = '26px';
+    icon.style.color = isUnlocked ? '#fef9ef' : '#847466';
+    icon.style.fontVariationSettings = "'FILL' 1, 'wght' 400";
+
+    if (isUnlocked) {
+      icon.textContent = def.icon;
+    } else {
+      icon.textContent = 'lock'; // mystery — locked badges hide icon
+    }
+    ring.appendChild(icon);
+    card.appendChild(ring);
+
+    // Name
+    const name = document.createElement('p');
+    name.className = 'font-label text-[10px] font-bold uppercase tracking-wider text-center leading-tight';
+    name.style.color = isUnlocked ? '#875305' : '#847466';
+    name.textContent = isUnlocked ? def.name : '???';
+    card.appendChild(name);
+
+    // Unlocked date
+    if (isUnlocked && data?.unlockedAt) {
+      const dt = document.createElement('p');
+      dt.className = 'text-[9px] text-on-surface-variant opacity-60 text-center';
+      const d = new Date(data.unlockedAt);
+      dt.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      card.appendChild(dt);
+    }
+
+    // Tap tooltip
+    card.addEventListener('click', (e) => showTooltip(e, def, isUnlocked));
+
+    grid.appendChild(card);
+  });
+
+  // ── Tooltip ─────────────────────────────────────────────────────────────────
+  const tooltip = document.getElementById('badge-tooltip');
+  let tooltipTimer = null;
+
+  function showTooltip(e, def, isUnlocked) {
+    clearTimeout(tooltipTimer);
+
+    const LOCK_HINTS = {
+      named_starter:  'Name your starter in onboarding',
+      first_checkin:  'Complete your first starter check-in',
+      first_loaf:     'Save your first bake to Archive',
+      photo_baker:    'Save a bake with a photo attached',
+      five_star:      'Give a bake a 5-star rating',
+      three_in_a_row: 'Log 3 bakes within 7 days',
+      streak_7:       'Keep a 7-day check-in streak',
+      streak_30:      'Keep a 30-day check-in streak',
+      bake_10:        'Log 10 bakes',
+      bake_25:        'Log 25 bakes',
+      bake_50:        'Log 50 bakes',
+      cold_proof:     'Save a bake with cold proof time > 0',
+      high_hydration: 'Save a bake with hydration ≥ 75%',
+      diff_flours:    'Use 3 different flour types across bakes',
+      comeback:       'Bake again after a 14+ day gap',
+      consistent:     'Rate 5 consecutive bakes ≥ 4 stars',
+      sage:           'Reach Level 5 (Sourdough Sage)',
+    };
+
+    if (isUnlocked) {
+      tooltip.innerHTML = `<strong style="font-size:11px;display:block;margin-bottom:4px;">${def.name}</strong>${def.story}`;
+    } else {
+      tooltip.innerHTML = `<strong style="font-size:11px;display:block;margin-bottom:4px;">🔒 Locked</strong>${LOCK_HINTS[def.id] || 'Keep baking to unlock this badge'}`;
+    }
+
+    // Position near tap
+    const rect = e.currentTarget.getBoundingClientRect();
+    const tW = 220;
+    let left = rect.left + (rect.width / 2) - (tW / 2);
+    left = Math.max(8, Math.min(left, window.innerWidth - tW - 8));
+    const top = rect.top - 8;
+
+    tooltip.style.left   = left + 'px';
+    tooltip.style.top    = (top - 100) + 'px';
+    tooltip.style.width  = tW + 'px';
+    tooltip.classList.add('show');
+
+    tooltipTimer = setTimeout(() => tooltip.classList.remove('show'), 3000);
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-id]')) {
+      tooltip.classList.remove('show');
+    }
+  });
+
+  // ── Scroll-in animation for grid cards ──────────────────────────────────────
+  const cards = grid.querySelectorAll('div[data-id]');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          en.target.style.opacity = '1';
+          en.target.style.transform = 'translateY(0)';
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    cards.forEach((c, i) => {
+      c.style.opacity = '0';
+      c.style.transform = 'translateY(16px)';
+      c.style.transition = `opacity 0.35s ${i * 35}ms, transform 0.35s ${i * 35}ms`;
+      io.observe(c);
+    });
+  }
+});
+</script>
+</body>
+</html>

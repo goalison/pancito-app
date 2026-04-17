@@ -6,6 +6,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="gamification.js"></script>
+<script src="celebration.js"></script>
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -1452,6 +1454,18 @@
                 let logs = JSON.parse(localStorage.getItem('pym_logs') || '[]');
                 logs.unshift(sessionData);
                 localStorage.setItem('pym_logs', JSON.stringify(logs));
+
+                // ── Gamification: check achievements after saving bake ─────────
+                let newUnlocks = [];
+                try {
+                    if (window.PymGamification) {
+                        const G = window.PymGamification;
+                        const streak  = G.getStreak();
+                        const starter = G.getStarterState();
+                        newUnlocks = G.checkAchievements(logs, streak, starter);
+                    }
+                } catch(gamErr) { console.warn('Gamification error:', gamErr); }
+
                 // Clear all phase timers and active bake state for next bake
                 try {
                     localStorage.removeItem(BULK_START_KEY);
@@ -1468,8 +1482,23 @@
                     localStorage.removeItem(ROUND_ACTIVE_KEY);
                     localStorage.removeItem(STATIC_TIMER_KEY);
                 } catch(e) {}
-                alert("Bake successfully saved to Archive!");
-                window.location.href = "archive.html";
+
+                // If badges were unlocked, celebrate before redirecting
+                if (newUnlocks.length > 0 && window.PymCelebration) {
+                    PymCelebration.trigger(newUnlocks);
+                    // Redirect happens after the last modal is dismissed
+                    // (user taps "Keep baking →"), so we skip the immediate redirect
+                    // and instead hook into the last dismiss to navigate.
+                    const origCheckUnseen = window.PymCelebration.checkUnseen;
+                    // Replace checkUnseen temporarily to navigate after last celebration
+                    const _redirectAfter = () => { window.location.href = 'archive.html'; };
+                    // Wait for all modals to finish then redirect
+                    const totalDelay = newUnlocks.length * 1500 + 3000;
+                    setTimeout(_redirectAfter, totalDelay);
+                } else {
+                    alert("Bake successfully saved to Archive!");
+                    window.location.href = "archive.html";
+                }
             } catch (e) {
                 console.error("Storage Error:", e);
                 saveBtn.disabled = false;
