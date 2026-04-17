@@ -136,20 +136,28 @@
 <section class="mt-20 border-t border-outline-variant/20 pt-10 space-y-4 pb-4">
   <p class="text-[10px] font-bold uppercase tracking-widest text-outline mb-6">Data Management</p>
 
-  <!-- Import Backup -->
-  <div class="bg-surface-container-low p-5 rounded-2xl border border-outline-variant/15 border-dashed flex items-center gap-4">
-    <div class="bg-secondary/10 p-3 rounded-xl shrink-0">
-      <span class="material-symbols-outlined text-secondary text-2xl">upload_file</span>
+  <!-- Import / Restore Backup -->
+  <div class="bg-surface-container-low p-5 rounded-2xl border border-outline-variant/15 border-dashed">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="bg-secondary/10 p-3 rounded-xl shrink-0">
+        <span class="material-symbols-outlined text-secondary text-2xl">upload_file</span>
+      </div>
+      <div class="flex-1 min-w-0">
+        <h3 class="font-bold text-base text-on-surface">Restore Backup</h3>
+        <p class="text-xs text-on-surface-variant">Restore your bake archive from a saved backup file.</p>
+      </div>
     </div>
-    <div class="flex-1 min-w-0">
-      <h3 class="font-bold text-base text-on-surface">Import Backup</h3>
-      <p class="text-xs text-on-surface-variant">Restore logs from a previously exported JSON file.</p>
+    <div class="flex flex-wrap gap-3">
+      <button id="driveImportBtn" onclick="importFromGoogleDrive()" class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2.5 rounded-xl hover:bg-outline-variant/30 transition-colors font-bold text-xs uppercase tracking-wider">
+        <svg class="w-4 h-4 shrink-0" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg"><path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8H0c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/><path d="M43.65 25L29.9 1.2C28.55 2 27.4 3.1 26.6 4.5L1.2 48.5C.4 49.9 0 51.45 0 53h27.5z" fill="#00ac47"/><path d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5H59.8l5.85 11.5z" fill="#ea4335"/><path d="M43.65 25L57.4 1.2C56.05.4 54.5 0 52.95 0H34.35c-1.55 0-3.1.45-4.45 1.2z" fill="#00832d"/><path d="M59.8 53H27.5L13.75 76.8c1.35.8 2.9 1.2 4.45 1.2h50.9c1.55 0 3.1-.45 4.45-1.2z" fill="#2684fc"/><path d="M73.4 26.5l-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3L43.65 25 59.8 53h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/></svg>
+        Restore from Drive
+      </button>
+      <label class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2.5 rounded-xl cursor-pointer hover:bg-outline-variant/30 transition-colors font-bold text-xs uppercase tracking-wider">
+        <span class="material-symbols-outlined text-sm">attach_file</span>
+        Choose File
+        <input accept=".json" class="hidden" id="importInput" type="file"/>
+      </label>
     </div>
-    <label class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2.5 rounded-xl cursor-pointer hover:bg-outline-variant/30 transition-colors font-bold text-xs uppercase tracking-wider shrink-0">
-      <span class="material-symbols-outlined text-sm">attach_file</span>
-      Choose File
-      <input accept=".json" class="hidden" id="importInput" type="file"/>
-    </label>
   </div>
 
   <!-- Clear Local Data -->
@@ -200,6 +208,19 @@
         const STORAGE_KEY = 'pym_logs';
         let filterActive = false;
         let currentLogs = [];
+
+        // ── Google Drive config ───────────────────────────────────────────────
+        // To enable full Drive integration (saves directly to a named folder):
+        //   1. https://console.cloud.google.com → new project
+        //   2. Enable "Google Drive API"
+        //   3. APIs & Services → Credentials → Create OAuth 2.0 Client (Web App)
+        //   4. Add https://localhost to "Authorized JavaScript origins"
+        //   5. Paste the Client ID below
+        const GDRIVE_CLIENT_ID = ''; // ← add your Client ID here
+        const BACKUP_FOLDER_NAME = 'Pancito y Más Backups';
+        const DRIVE_API  = 'https://www.googleapis.com/drive/v3';
+        const UPLOAD_API = 'https://www.googleapis.com/upload/drive/v3';
+        let _driveToken = null, _driveTokenExp = 0;
 
         // Safe storage wrapper — handles Safari iframe blocks gracefully
         let _memoryStore = {};
@@ -499,54 +520,260 @@
             }
         }
 
-        // ── Google Drive — uses Android native share sheet ────────────────────
+        // ── Google Drive API helpers ──────────────────────────────────────────
+        // Pre-load Google Identity Services when Client ID is configured so
+        // requestAccessToken() can fire synchronously within the user gesture.
+        if (GDRIVE_CLIENT_ID) {
+            const _gis = document.createElement('script');
+            _gis.src = 'https://accounts.google.com/gsi/client';
+            document.head.appendChild(_gis);
+        }
+
+        function _getDriveToken() {
+            if (_driveToken && Date.now() < _driveTokenExp) return Promise.resolve(_driveToken);
+            if (!GDRIVE_CLIENT_ID || !window.google?.accounts?.oauth2) return Promise.reject(new Error('no_client'));
+            return new Promise((resolve, reject) => {
+                google.accounts.oauth2.initTokenClient({
+                    client_id: GDRIVE_CLIENT_ID,
+                    scope: 'https://www.googleapis.com/auth/drive.file',
+                    callback: r => {
+                        if (r.error) { reject(new Error(r.error)); return; }
+                        _driveToken = r.access_token;
+                        _driveTokenExp = Date.now() + ((r.expires_in || 3600) - 60) * 1000;
+                        resolve(_driveToken);
+                    }
+                }).requestAccessToken();
+            });
+        }
+
+        async function _driveReq(method, path, body, ctype, useUpload) {
+            const base = useUpload ? UPLOAD_API : DRIVE_API;
+            const opts = { method, headers: { Authorization: `Bearer ${_driveToken}` } };
+            if (body) { opts.body = body; opts.headers['Content-Type'] = ctype; }
+            const r = await fetch(base + path, opts);
+            if (r.status === 401) {
+                _driveToken = null;
+                await _getDriveToken();
+                opts.headers.Authorization = `Bearer ${_driveToken}`;
+                return fetch(base + path, opts);
+            }
+            return r;
+        }
+
+        async function _getOrCreateFolder() {
+            const q = `name='${BACKUP_FOLDER_NAME.replace(/'/g,"\\'")}' and mimeType='application/vnd.google-apps.folder' and trashed=false`;
+            const r = await _driveReq('GET', `/files?q=${encodeURIComponent(q)}&fields=files(id)`);
+            const { files } = await r.json();
+            if (files?.length) return files[0].id;
+            const cr = await _driveReq('POST', '/files',
+                JSON.stringify({ name: BACKUP_FOLDER_NAME, mimeType: 'application/vnd.google-apps.folder' }),
+                'application/json');
+            return (await cr.json()).id;
+        }
+
+        async function _uploadToDrive(name, content, folderId) {
+            const boundary = 'pym_bkp';
+            const meta = JSON.stringify({ name, parents: [folderId] });
+            const body = `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n--${boundary}\r\nContent-Type: application/json\r\n\r\n${content}\r\n--${boundary}--`;
+            const r = await _driveReq('POST', '/files?uploadType=multipart&fields=id,name',
+                body, `multipart/related; boundary="${boundary}"`, true);
+            if (!r.ok) throw new Error('upload_failed');
+            return r.json();
+        }
+
+        async function _listDriveBackups() {
+            const fid = await _getOrCreateFolder();
+            const q = `'${fid}' in parents and trashed=false`;
+            const r = await _driveReq('GET', `/files?q=${encodeURIComponent(q)}&fields=files(id,name,modifiedTime,size)&orderBy=modifiedTime desc`);
+            return (await r.json()).files || [];
+        }
+
+        async function _downloadDriveFile(fileId) {
+            const r = await _driveReq('GET', `/files/${fileId}?alt=media`);
+            if (!r.ok) throw new Error('download_failed');
+            return r.text();
+        }
+
+        // ── Info bottom-sheet helper ──────────────────────────────────────────
+        function _showInfoSheet(icon, title, bodyHtml, btnLabel) {
+            const el = document.createElement('div');
+            el.className = 'fixed inset-0 z-[200] flex items-end justify-center';
+            el.style.background = 'rgba(44,24,16,0.5)';
+            el.innerHTML = `
+                <div class="bg-background rounded-t-[2rem] w-full max-w-lg p-7 shadow-2xl">
+                    <div class="flex items-start gap-4 mb-6">
+                        <div class="bg-primary/10 p-3 rounded-xl shrink-0">
+                            <span class="material-symbols-outlined text-primary text-2xl">${icon}</span>
+                        </div>
+                        <div>
+                            <h3 class="font-headline font-bold text-lg text-on-surface">${title}</h3>
+                            <div class="text-sm text-on-surface-variant mt-2 leading-relaxed">${bodyHtml}</div>
+                        </div>
+                    </div>
+                    <button class="w-full py-3.5 bg-primary text-white rounded-2xl font-bold text-sm active:scale-95 transition-transform"
+                        onclick="this.closest('.fixed').remove()">${btnLabel}</button>
+                </div>`;
+            el.addEventListener('click', e => { if (e.target === el) el.remove(); });
+            document.body.appendChild(el);
+        }
+
+        // ── Save backup to Google Drive ───────────────────────────────────────
         async function saveToGoogleDrive() {
             const logs = getLogs();
-            if (logs.length === 0) {
+            if (!logs.length) {
                 alert('No bakes to back up yet. Record your first bake first!');
                 return;
             }
-            const filename = `pancito-mas-backup-${new Date().toISOString().split('T')[0]}.json`;
-            const json = JSON.stringify(logs, null, 2);
-            const blob = new Blob([json], { type: 'application/json' });
-            const file = new File([blob], filename, { type: 'application/json' });
+            const filename = `pancito-backup-${new Date().toISOString().split('T')[0]}.json`;
+            const content  = JSON.stringify(logs, null, 2);
+            const btn      = document.getElementById('driveBtn');
+            const origHTML = btn.innerHTML;
 
-            // Web Share API with files — on Android this opens the native share sheet
-            // where the user can tap "Save to Drive" to upload directly.
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            const setBtn = (icon, text, busy) => {
+                btn.disabled = busy;
+                btn.innerHTML = `<span class="material-symbols-outlined${busy ? ' animate-spin' : ''}">${icon}</span><span class="font-headline font-bold">${text}</span>`;
+            };
+
+            // ── Path A: full Drive API (Client ID configured) ─────────────────
+            if (GDRIVE_CLIENT_ID) {
+                setBtn('sync', 'Signing in to Drive…', true);
                 try {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Pancito y Más Backup',
-                        text: `Bake archive backup — ${logs.length} entries`
-                    });
-                    // Mark backup time after successful share
+                    await _getDriveToken();
+                    setBtn('cloud_upload', 'Uploading…', true);
+                    const fid = await _getOrCreateFolder();
+                    await _uploadToDrive(filename, content, fid);
                     storage.setItem('pym_auto_backup_time', Date.now());
                     updateBackupLabel();
+                    setBtn('check_circle', 'Saved to Drive!', false);
+                    setTimeout(() => { btn.innerHTML = origHTML; btn.disabled = false; }, 3000);
                     return;
                 } catch(e) {
-                    if (e.name === 'AbortError') return; // user cancelled share sheet
-                    // fall through to download fallback
+                    btn.innerHTML = origHTML; btn.disabled = false;
+                    if (e.name === 'AbortError') return;
+                    // fall through to share/download
                 }
             }
 
-            // Fallback: download the file (user can manually upload to Drive)
+            // ── Path B: Android native share sheet → user picks Google Drive ──
+            const blob = new Blob([content], { type: 'application/json' });
+            const file = new File([blob], filename, { type: 'application/json' });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({ files: [file], title: 'Pancito y Más Backup', text: `${logs.length} bake entries` });
+                    storage.setItem('pym_auto_backup_time', Date.now());
+                    updateBackupLabel();
+                    setBtn('check_circle', 'Backup shared!', false);
+                    setTimeout(() => { btn.innerHTML = origHTML; btn.disabled = false; }, 2000);
+                    setTimeout(() => _showInfoSheet('drive_folder', 'Backup saved to Google Drive',
+                        `Your file is in <strong>Google Drive → My Drive</strong>.<br><br>
+                        File name: <code style="font-size:11px">${filename}</code><br><br>
+                        <strong>To restore this backup:</strong> tap <em>Restore from Drive</em> below,
+                        or tap <em>Choose File</em> → Google Drive → My Drive.`, 'Got it'), 800);
+                    return;
+                } catch(e) { if (e.name === 'AbortError') return; }
+            }
+
+            // ── Path C: browser download fallback ─────────────────────────────
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
+            a.href = url; a.download = filename;
+            document.body.appendChild(a); a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            setBtn('download', 'Downloaded!', false);
+            setTimeout(() => { btn.innerHTML = origHTML; btn.disabled = false; }, 3000);
+            _showInfoSheet('folder_open', 'Backup saved to Downloads folder',
+                `File: <code style="font-size:11px">${filename}</code><br><br>
+                Your backup is on this device's <strong>Downloads folder</strong> — not yet in Google Drive.<br><br>
+                <strong>To upload to Google Drive</strong> (recommended for cross-device restore):<br>
+                Open your <em>Files</em> app → Downloads → long-press the file → Share → Google Drive.<br><br>
+                <strong>To restore on this device:</strong> tap <em>Choose File</em> below → Downloads.`,
+                'Got it');
+        }
 
-            const btn = document.getElementById('driveBtn');
-            if (btn) {
-                const orig = btn.innerHTML;
-                btn.innerHTML = `<span class="material-symbols-outlined text-green-600">check_circle</span><span class="font-headline font-bold">File saved!</span>`;
-                setTimeout(() => { btn.innerHTML = orig; }, 3000);
+        // ── Restore from Google Drive ─────────────────────────────────────────
+        async function importFromGoogleDrive() {
+            if (!GDRIVE_CLIENT_ID) {
+                _showInfoSheet('help', 'How to restore from Google Drive',
+                    'Tap <strong>Choose File</strong> below.<br><br>
+                    In the file picker, browse to <em>Google Drive → My Drive</em> and select your backup file
+                    (named <em>pancito-backup-YYYY-MM-DD.json</em>).<br><br>
+                    If you saved via the share sheet, it will be in <strong>My Drive</strong> (the root folder).', 'Got it');
+                return;
+            }
+            const btn = document.getElementById('driveImportBtn');
+            const origHTML = btn ? btn.innerHTML : '';
+            if (btn) { btn.disabled = true; btn.innerHTML = '<span class="material-symbols-outlined animate-spin" style="font-size:14px">sync</span> Loading…'; }
+            try {
+                await _getDriveToken();
+                const files = await _listDriveBackups();
+                if (!files.length) {
+                    _showInfoSheet('search_off', 'No backups found in Drive',
+                        'No backup files were found in your <em>Pancito y Más Backups</em> folder.<br><br>
+                        Save a backup first by tapping <strong>Save to Google Drive</strong> above.', 'OK');
+                    return;
+                }
+                _showDriveFilePicker(files);
+            } catch(e) {
+                if (e.name !== 'AbortError') {
+                    _showInfoSheet('error', 'Could not connect to Google Drive',
+                        'Check your internet connection and try again, or use <em>Choose File</em> to restore from your device.', 'OK');
+                }
+            } finally {
+                if (btn) { btn.disabled = false; btn.innerHTML = origHTML; }
             }
         }
+
+        function _showDriveFilePicker(files) {
+            const fmt  = iso => new Date(iso).toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
+            const fmtB = b => +b > 1048576 ? `${(+b/1048576).toFixed(1)} MB` : `${Math.round(+b/1024)} KB`;
+            const el = document.createElement('div');
+            el.id = 'drivePickerModal';
+            el.className = 'fixed inset-0 z-[200] flex items-end justify-center';
+            el.style.background = 'rgba(44,24,16,0.5)';
+            el.innerHTML = `
+                <div class="bg-background rounded-t-[2rem] w-full max-w-lg shadow-2xl" style="max-height:80vh;display:flex;flex-direction:column">
+                    <div class="p-6 border-b border-outline-variant/20 shrink-0">
+                        <div class="w-10 h-1 bg-outline-variant rounded-full mx-auto mb-4"></div>
+                        <h3 class="font-headline font-bold text-lg">Restore from Drive</h3>
+                        <p class="text-xs text-on-surface-variant mt-1">Choose a backup to restore</p>
+                    </div>
+                    <div class="overflow-y-auto flex-1 p-4 space-y-2">
+                        ${files.map(f => `
+                            <button onclick="_selectDriveFile('${f.id}','${f.name.replace(/'/g,"\\'")}');document.getElementById('drivePickerModal').remove();"
+                                class="w-full text-left flex items-center gap-4 p-4 rounded-2xl hover:bg-surface-container-high active:scale-95 transition-all border border-outline-variant/20">
+                                <span class="material-symbols-outlined text-primary text-2xl shrink-0">backup</span>
+                                <div class="flex-1 min-w-0">
+                                    <div class="font-bold text-sm truncate">${f.name}</div>
+                                    <div class="text-xs text-on-surface-variant">${fmt(f.modifiedTime)}${f.size ? ' · ' + fmtB(f.size) : ''}</div>
+                                </div>
+                                <span class="material-symbols-outlined text-outline text-base">chevron_right</span>
+                            </button>`).join('')}
+                    </div>
+                    <div class="p-4 border-t border-outline-variant/10 shrink-0">
+                        <button class="w-full py-3 text-sm font-bold text-on-surface-variant"
+                            onclick="document.getElementById('drivePickerModal').remove()">Cancel</button>
+                    </div>
+                </div>`;
+            el.addEventListener('click', e => { if (e.target === el) el.remove(); });
+            document.body.appendChild(el);
+        }
+
+        window._selectDriveFile = async function(fileId, name) {
+            try {
+                const text = await _downloadDriveFile(fileId);
+                const imported = JSON.parse(text);
+                if (!Array.isArray(imported)) throw new Error('invalid');
+                if (confirm(`Found ${imported.length} bake entries in "${name}".\nMerge with existing archive?`)) {
+                    const merged = [...getLogs(), ...imported].map((item, i) => ({ ...item, id: item.id || `log-${Date.now()}-${i}` }));
+                    const unique = [...new Map(merged.map(m => [m.id || (m.date + m.recipe), m])).values()];
+                    saveLogs(unique);
+                    alert(`Restored ${imported.length} entries!`);
+                }
+            } catch(e) {
+                alert('Could not read the backup file. It may be corrupted or in the wrong format.');
+            }
+        };
 
         document.getElementById('importInput').addEventListener('change', (e) => {
             const file = e.target.files[0];
