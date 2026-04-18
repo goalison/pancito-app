@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python3 -c ':*)"
+      "Bash(python3 -c ':*)",
+      "Bash(find /c/Users/Alison/Desktop/pancito-app/.claude/worktrees/tender-spence-7281f0 -type f \\\\\\( -name \"gamification.js\" -o -name \"celebration.js\" \\\\\\) -exec wc -l {} \\\\;)"
     ]
   }
 }

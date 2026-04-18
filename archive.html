@@ -321,15 +321,19 @@
                 const recipeTitle = log.recipe || 'Untitled Bake';
                 const ratingValue = log.rating || '0';
                 const commentsText = log.comments || 'No comments recorded.';
-                // Support both standard URLs and data URLs (optimized base64 images)
-                const photoSrc = log.photo || 'https://images.unsplash.com/photo-1585478259715-876a6a81fc08?auto=format&fit=crop&q=80&w=800';
+                // Use base64 photo if present, else show a warm bread illustration placeholder
+                const photoContent = log.photo
+                    ? `<img alt="${recipeTitle}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="${log.photo}"/>`
+                    : `<div class="w-full h-full flex flex-col items-center justify-center" style="background:linear-gradient(145deg,#f5e8c8 0%,#e8d2a0 50%,#c8a96b 100%)">
+                         <span class="material-symbols-outlined" style="font-size:56px;color:rgba(135,83,5,0.3);font-variation-settings:'FILL' 1">bakery_dining</span>
+                         <p style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(135,83,5,0.35);margin-top:8px">No photo</p>
+                       </div>`;
 
                 return `
-                <div class="group animate-in fade-in slide-in-from-bottom-4 duration-500 cursor-pointer" style="animation-delay: ${index * 50}ms" onclick="openDetails('${log.id || index}')">
+                <div class="group cursor-pointer" style="animation-delay: ${index * 50}ms" onclick="openDetails('${log.id || index}')">
                     <div class="relative mb-6">
                         <div class="aspect-square overflow-hidden rounded-[2.5rem] bg-surface-container-low shadow-sm group-hover:shadow-2xl transition-all duration-500">
-                            <img alt="${recipeTitle}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                                 src="${photoSrc}"/>
+                            ${photoContent}
                         </div>
                         <div class="absolute top-6 right-6 bg-white/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-1 shadow-sm border border-black/5">
                             <span class="text-xs font-bold text-on-surface">${ratingValue}</span>
@@ -368,7 +372,7 @@
             const modal = document.getElementById('logModal');
             const content = document.getElementById('modalContent');
             
-            const photo = log.photo || 'https://images.unsplash.com/photo-1585478259715-876a6a81fc08?auto=format&fit=crop&q=80&w=800';
+            const photo = log.photo || null;
             const displayDate = new Date(log.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
             // Handle both old demo field names and new bake-log field names
@@ -407,7 +411,13 @@
             content.innerHTML = `
                 <!-- Photo — full width at top -->
                 <div class="w-full overflow-hidden" style="max-height:320px">
-                    <img src="${photo}" alt="${log.recipe}" class="w-full h-full object-cover" style="max-height:320px">
+                    ${photo
+                        ? `<img src="${photo}" alt="${log.recipe}" class="w-full h-full object-cover" style="max-height:320px">`
+                        : `<div style="height:220px;background:linear-gradient(145deg,#f5e8c8,#e8d2a0,#c8a96b);display:flex;flex-direction:column;align-items:center;justify-content:center">
+                             <span class="material-symbols-outlined" style="font-size:64px;color:rgba(135,83,5,0.28);font-variation-settings:'FILL' 1">bakery_dining</span>
+                             <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(135,83,5,0.35);margin-top:10px">No photo recorded</p>
+                           </div>`
+                    }
                 </div>
                 <div class="p-8">
                     <!-- Recipe name + date -->
@@ -623,7 +633,7 @@
         async function saveToGoogleDrive() {
             const logs = getLogs();
             if (!logs.length) {
-                alert('No bakes to back up yet. Record your first bake first!');
+                _pymToast('No bakes to back up yet — record your first bake first!');
                 return;
             }
             const filename = `pancito-backup-${new Date().toISOString().split('T')[0]}.json`;
@@ -803,16 +813,38 @@
             reader.readAsText(file);
         });
 
+        // Custom confirm dialog — native confirm() is blocked on Capacitor Android WebViews
+        function _pymConfirm(html, okLabel, okColor, onOk) {
+            const ov = document.createElement('div');
+            ov.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(44,24,16,0.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1.5rem';
+            ov.innerHTML = `<div style="background:#fef9ef;border-radius:1.5rem;padding:1.75rem 1.5rem;max-width:320px;width:100%;box-shadow:0 25px 60px rgba(0,0,0,0.22);font-family:'Plus Jakarta Sans',sans-serif">
+                <p style="font-size:14px;color:#514538;line-height:1.65;margin-bottom:1.25rem">${html}</p>
+                <div style="display:flex;gap:10px">
+                    <button onclick="this.closest('[style]').remove()" style="flex:1;padding:13px;border-radius:12px;border:2px solid #d6c3b3;background:transparent;font-weight:700;font-size:13px;color:#847466;cursor:pointer;font-family:inherit">Cancel</button>
+                    <button id="_pymOkBtn" style="flex:1;padding:13px;border-radius:12px;background:${okColor||'#B3261E'};color:#fff;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">${okLabel||'OK'}</button>
+                </div></div>`;
+            document.body.appendChild(ov);
+            document.getElementById('_pymOkBtn').onclick = () => { ov.remove(); onOk(); };
+            ov.addEventListener('click', e => { if (e.target === ov) ov.remove(); });
+        }
+
+        function _pymToast(msg) {
+            let t = document.getElementById('_pym_toast');
+            if (!t) { t = document.createElement('div'); t.id='_pym_toast'; t.style.cssText='position:fixed;bottom:9rem;left:50%;transform:translateX(-50%);z-index:9998;background:#1d1c16;color:#fef9ef;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:10px 22px;border-radius:100px;box-shadow:0 4px 20px rgba(0,0,0,0.3);pointer-events:none;font-family:"Plus Jakarta Sans",sans-serif'; document.body.appendChild(t); }
+            t.textContent = msg; t.style.opacity = '1';
+            clearTimeout(t._timer); t._timer = setTimeout(() => t.style.opacity='0', 2200);
+        }
+
         document.getElementById('clearDataBtn').addEventListener('click', () => {
-            if (confirm("This will permanently delete ALL bake entries from this device.\n\nSave to Google Drive first! This cannot be undone.")) {
-                if (confirm("Are you absolutely sure? All bake records will be lost.")) {
+            _pymConfirm('This will permanently delete <strong>ALL bake entries</strong> from this device.<br><br>Export your archive to Google Drive first — this cannot be undone.', 'Yes, delete all', '#B3261E', () => {
+                _pymConfirm('Are you absolutely sure? Every bake record will be lost forever.', 'Delete everything', '#B3261E', () => {
                     storage.removeItem(STORAGE_KEY);
                     storage.removeItem('pym_auto_backup');
                     storage.removeItem('pym_auto_backup_time');
                     saveLogs([]);
-                    alert("Local data cleared.");
-                }
-            }
+                    _pymToast('Local data cleared');
+                });
+            });
         });
 
         // ── Swipe right / Android back button → go back to Dashboard ─────────
@@ -860,30 +892,27 @@
             }
         };
 
-        document.getElementById('filterRating').addEventListener('click', function() {
-            filterActive = !filterActive;
-            if (filterActive) {
-                this.classList.remove('bg-surface-container-high', 'text-on-surface');
-                this.classList.add('bg-primary', 'text-white');
-                this.querySelector('.material-symbols-outlined').classList.remove('text-primary');
-                this.querySelector('.material-symbols-outlined').classList.add('text-white');
+        function _setRatingFilter(on) {
+            filterActive = on;
+            const rb = document.getElementById('filterRating');
+            const ab = document.getElementById('filterAll');
+            if (on) {
+                rb.style.cssText = 'background:#875305;color:#fff;border-color:#875305';
+                rb.querySelector('.material-symbols-outlined').style.color = '#fff';
+                ab.style.cssText = '';
             } else {
-                this.classList.add('bg-surface-container-high', 'text-on-surface');
-                this.classList.remove('bg-primary', 'text-white');
-                this.querySelector('.material-symbols-outlined').classList.add('text-primary');
-                this.querySelector('.material-symbols-outlined').classList.remove('text-white');
+                rb.style.cssText = '';
+                rb.querySelector('.material-symbols-outlined').style.color = '';
+                ab.style.cssText = 'background:#C4863A;color:#fff';
             }
             renderLogs();
-        });
+        }
 
+        document.getElementById('filterRating').addEventListener('click', function() {
+            _setRatingFilter(!filterActive);
+        });
         document.getElementById('filterAll').addEventListener('click', function() {
-            filterActive = false;
-            const ratingBtn = document.getElementById('filterRating');
-            ratingBtn.classList.add('bg-surface-container-high', 'text-on-surface');
-            ratingBtn.classList.remove('bg-primary', 'text-white');
-            ratingBtn.querySelector('.material-symbols-outlined').classList.add('text-primary');
-            ratingBtn.querySelector('.material-symbols-outlined').classList.remove('text-white');
-            renderLogs();
+            _setRatingFilter(false);
         });
 
         document.addEventListener('DOMContentLoaded', () => {

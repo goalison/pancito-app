@@ -599,11 +599,18 @@
     }
     if (cfg.glow) document.getElementById('starter-jar-body').closest('.pym-jar').classList.add('pym-glow');
 
-    // Reminder toggle state
+    // Reminder toggle + time state
     try {
       const rem = JSON.parse(localStorage.getItem('pym_starter_reminder') || '{}');
       const tog = document.getElementById('reminder-toggle');
       if (tog) tog.checked = !!rem.enabled;
+      // Restore saved notification time
+      const timeInput = document.getElementById('reminder-time');
+      if (timeInput && rem.hour !== undefined && rem.minute !== undefined) {
+        const h = String(rem.hour).padStart(2, '0');
+        const m = String(rem.minute).padStart(2, '0');
+        timeInput.value = `${h}:${m}`;
+      }
     } catch(_) {}
   }
 
