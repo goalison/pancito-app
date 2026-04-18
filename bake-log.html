@@ -1450,6 +1450,12 @@
                 }
             };
 
+            // Guard: if photo is too large, save without it to prevent storage errors
+            if (sessionData.photo && sessionData.photo.length > 400000) {
+                console.warn(`[Pancito] Photo too large (${Math.round(sessionData.photo.length/1024)}KB), saving without photo to protect your bake data.`);
+                sessionData.photo = null;
+            }
+
             try {
                 let logs = JSON.parse(localStorage.getItem('pym_logs') || '[]');
                 logs.unshift(sessionData);

@@ -367,13 +367,18 @@
     Feed &amp; Check In
   </button>
   <!-- Reminder toggle row -->
-  <div class="mt-3 flex items-center justify-between">
-    <p class="text-xs text-on-surface-variant">Daily feeding reminder</p>
-    <label class="relative inline-flex items-center cursor-pointer">
-      <input type="checkbox" id="reminder-toggle" class="sr-only peer" onchange="toggleReminder(this.checked)"/>
-      <div class="w-9 h-5 bg-outline-variant rounded-full peer-checked:bg-primary transition-colors"></div>
-      <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
-    </label>
+  <div class="mt-3 flex items-center justify-between gap-3">
+    <p class="text-xs text-on-surface-variant shrink-0">Daily reminder</p>
+    <div class="flex items-center gap-2">
+      <input type="time" id="reminder-time" value="08:00"
+        class="text-xs font-bold text-primary bg-surface-container rounded-lg px-2 py-1 border border-outline-variant outline-none focus:border-primary transition-colors"
+        onchange="if(document.getElementById('reminder-toggle').checked) toggleReminder(true)"/>
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" id="reminder-toggle" class="sr-only peer" onchange="toggleReminder(this.checked)"/>
+        <div class="w-9 h-5 bg-outline-variant rounded-full peer-checked:bg-primary transition-colors"></div>
+        <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
+      </label>
+    </div>
   </div>
 </section>
 
@@ -547,7 +552,9 @@
   function toggleReminder(enabled) {
     const G = window.PymGamification;
     if (!G) return;
-    G.scheduleStarterReminder(enabled, 8, 0);
+    const timeStr = (document.getElementById('reminder-time') || {}).value || '08:00';
+    const [h, m] = timeStr.split(':').map(Number);
+    G.scheduleStarterReminder(enabled, isNaN(h) ? 8 : h, isNaN(m) ? 0 : m);
   }
 
   // ════════════════════════════════════════════════════════

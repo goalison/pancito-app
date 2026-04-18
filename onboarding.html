@@ -71,9 +71,21 @@
   .bubble-fast   { animation-duration:2s; }
 
   /* Screens & transitions */
-  .screen { position:absolute; inset:0; display:flex; flex-direction:column; transition:opacity 0.4s ease, transform 0.4s ease; }
+  .screen { position:absolute; inset:0; display:flex; flex-direction:column; transition:opacity 0.4s ease, transform 0.4s ease; overflow:hidden; }
   .screen.hidden { opacity:0; pointer-events:none; transform:translateX(40px); }
   .screen.exit   { opacity:0; pointer-events:none; transform:translateX(-40px); }
+
+  /* Large-font / small-screen protection: content scrolls, buttons stay anchored */
+  .screen > .flex-1 { overflow-y:auto !important; min-height:0; -webkit-overflow-scrolling:touch; }
+  .screen > div:last-child { flex-shrink:0; }
+
+  /* Mini-game keyframes */
+  @keyframes flourFall { 0%{opacity:0;transform:translateY(-10px) scale(0.8)} 30%{opacity:1;transform:translateY(10px) scale(1.1)} 100%{opacity:0;transform:translateY(60px) scale(0.9)} }
+  @keyframes waterDrip { 0%{opacity:0;transform:translateY(-5px)} 20%{opacity:1} 100%{opacity:0;transform:translateY(55px)} }
+  @keyframes jarWobble { 0%,100%{transform:rotate(0deg)} 20%{transform:rotate(-4deg)} 40%{transform:rotate(4deg)} 60%{transform:rotate(-3deg)} 80%{transform:rotate(2deg)} }
+  @keyframes doughPoke { 0%{border-radius:50%;transform:scale(1)} 40%{border-radius:48% 52% 55% 45% / 52% 48% 54% 48%;transform:scale(0.92)} 100%{border-radius:50%;transform:scale(1)} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
 
   /* Progress dots */
   .dot { width:8px; height:8px; border-radius:50%; background:#d6c3b3; transition:background 0.3s; }
@@ -120,7 +132,12 @@
     <div class="dot"       id="dot3"></div>
     <div class="dot"       id="dot4"></div>
   </div>
-  <div class="text-[10px] font-bold uppercase tracking-widest text-[#847466]" id="chapterLabel">Chapter 1</div>
+  <div class="flex items-center gap-1.5">
+    <div class="text-[10px] font-bold uppercase tracking-widest text-[#847466]" id="chapterLabel">Chapter 1</div>
+    <button id="muteBtn" onclick="toggleMute()" class="text-[#847466] hover:text-[#875305] transition-colors p-1" title="Toggle sound">
+      <span class="material-symbols-outlined" style="font-size:18px">volume_up</span>
+    </button>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════════════════ -->
@@ -356,6 +373,49 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- C2-GAME — Poke Test Interactive                                        -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="c2game">
+  <div class="flex-1 flex flex-col items-center justify-start px-8 text-center pt-20 pb-4">
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3">Interactive · Bulk Fermentation</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">The Poke Test</h2>
+    <p class="text-[#514538] text-sm leading-relaxed max-w-xs mb-8">When bulk fermentation is complete, a gentle finger poke springs back slowly. Tap the dough to try it!</p>
+
+    <!-- Dough ball -->
+    <div id="doughBall" onclick="pokeDough()" style="
+      width:160px;height:160px;border-radius:50%;cursor:pointer;
+      background:radial-gradient(ellipse at 35% 30%, #f5e8c8 0%, #e8d2a0 35%, #c8a96b 75%, #a07845 100%);
+      box-shadow:0 8px 32px rgba(135,83,5,0.22), inset 0 -4px 12px rgba(135,83,5,0.08);
+      transition:box-shadow 0.4s ease;
+      display:flex;align-items:center;justify-content:center;
+      user-select:none;-webkit-user-select:none;
+      flex-shrink:0;
+    ">
+      <span style="font-size:2.2rem;line-height:1;pointer-events:none">👆</span>
+    </div>
+
+    <p id="pokeMsg" class="mt-6 text-sm text-[#514538] leading-relaxed max-w-xs min-h-[3rem]">Tap the dough to test it!</p>
+
+    <!-- Result card — hidden until 3 pokes -->
+    <div id="doughReadyCard" style="display:none;
+      background:linear-gradient(135deg,#875305,#c4863a);
+      border-radius:16px;padding:14px 18px;margin-top:0.75rem;width:100%;max-width:280px;
+      animation:fadeIn 0.4s ease;
+    ">
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:4px;">Result</p>
+      <p style="font-size:14px;font-weight:700;color:#fff;line-height:1.4;">Dough springs back slowly — bulk fermentation is complete! ✓</p>
+    </div>
+  </div>
+  <div class="px-6 pb-10">
+    <button id="pokeContinueBtn" onclick="afterPokeTest()"
+      class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100"
+      disabled>
+      On to equipment check →
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
 <!-- CHAPTER 3 — Equipment Check                                           -->
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c3s1">
@@ -388,8 +448,82 @@
     <p class="text-[#514538] text-sm leading-relaxed max-w-xs">A daily starter check-in takes 30 seconds. You note how active it looks — bubbly, doubling, or flat — and log the temperature. This tiny habit is what separates consistent bakers from frustrated ones.</p>
   </div>
   <div class="px-6 pb-10">
-    <button onclick="goTo('c4s2')" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
+    <button onclick="goTo('c4game');initFeedingGame();" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
       Do my first check-in →
+    </button>
+  </div>
+</div>
+
+<!-- C4-GAME: Feeding Ritual Mini-Game -->
+<div class="screen hidden" id="c4game">
+  <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-4">
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Feeding Ritual</p>
+    <h2 class="font-headline font-bold text-2xl mb-1">Feed <span id="gameJarName">your starter</span>!</h2>
+    <p id="gameInstText" class="text-[#514538] text-sm mb-5 max-w-xs min-h-[2.5rem] leading-relaxed">Tap the flour bag to add flour to the jar</p>
+
+    <!-- Jar -->
+    <div class="jar-wrap mx-auto mb-4" style="position:relative;flex-shrink:0">
+      <div class="jar-body" id="gameJarBody">
+        <div id="gameJarFill" style="position:absolute;bottom:0;left:0;right:0;height:20%;transition:height 0.7s ease;background:linear-gradient(180deg,rgba(196,134,58,0.15),rgba(135,83,5,0.25))"></div>
+        <div class="bubble bubble-slow" id="gameBubble1" style="--x:30%;--sz:6px;--delay:0s;opacity:0;transition:opacity 1.2s"></div>
+        <div class="bubble bubble-medium" id="gameBubble2" style="--x:58%;--sz:9px;--delay:0.8s;opacity:0;transition:opacity 1.2s"></div>
+      </div>
+      <div class="jar-lid"></div>
+      <div class="jar-label" id="gameJarLabel">Starter</div>
+      <!-- Flour animation overlay -->
+      <div id="flourAnim" style="position:absolute;inset:0;pointer-events:none;z-index:10;display:none;overflow:hidden">
+        <div style="position:absolute;left:30%;top:0;font-size:22px;animation:flourFall 0.85s ease forwards">🌾</div>
+        <div style="position:absolute;left:50%;top:0;font-size:16px;animation:flourFall 0.85s 0.1s ease forwards">🌾</div>
+      </div>
+      <!-- Water animation overlay -->
+      <div id="waterAnim" style="position:absolute;inset:0;pointer-events:none;z-index:10;display:none;overflow:hidden">
+        <div style="position:absolute;left:38%;top:0;font-size:20px;animation:waterDrip 0.85s ease forwards">💧</div>
+      </div>
+    </div>
+
+    <!-- Step indicators -->
+    <div style="display:flex;gap:6px;margin-bottom:14px;width:100%;max-width:280px">
+      <div id="step-flour" style="flex:1;padding:7px 4px;border-radius:10px;border:2px solid #d6c3b3;font-size:10px;font-weight:700;color:#847466;transition:all 0.3s">1. Flour</div>
+      <div id="step-water" style="flex:1;padding:7px 4px;border-radius:10px;border:2px solid #d6c3b3;font-size:10px;font-weight:700;color:#c8b8a8;transition:all 0.3s;opacity:0.45">2. Water</div>
+      <div id="step-mix"   style="flex:1;padding:7px 4px;border-radius:10px;border:2px solid #d6c3b3;font-size:10px;font-weight:700;color:#c8b8a8;transition:all 0.3s;opacity:0.45">3. Mix!</div>
+    </div>
+
+    <!-- Ingredient buttons -->
+    <div style="display:flex;gap:10px;width:100%;max-width:300px">
+      <button id="flourBtn" onclick="gameAddFlour()" style="
+        flex:1;padding:14px 8px;border-radius:18px;
+        background:#f2ede3;border:2px solid #d6c3b3;
+        display:flex;flex-direction:column;align-items:center;gap:5px;
+        cursor:pointer;transition:all 0.2s;font-family:inherit;
+      ">
+        <span style="font-size:28px">🌾</span>
+        <span style="font-size:10px;font-weight:700;color:#875305">100g Flour</span>
+      </button>
+      <button id="waterBtn" onclick="gameAddWater()" disabled style="
+        flex:1;padding:14px 8px;border-radius:18px;
+        background:#f2ede3;border:2px solid #d6c3b3;
+        display:flex;flex-direction:column;align-items:center;gap:5px;
+        cursor:pointer;transition:all 0.2s;opacity:0.4;font-family:inherit;
+      ">
+        <span style="font-size:28px">💧</span>
+        <span style="font-size:10px;font-weight:700;color:#875305">100g Water</span>
+      </button>
+      <button id="mixBtn" onclick="gameMix()" disabled style="
+        flex:1;padding:14px 8px;border-radius:18px;
+        background:#f2ede3;border:2px solid #d6c3b3;
+        display:flex;flex-direction:column;align-items:center;gap:5px;
+        cursor:pointer;transition:all 0.2s;opacity:0.4;font-family:inherit;
+      ">
+        <span style="font-size:28px">🥄</span>
+        <span style="font-size:10px;font-weight:700;color:#875305">Mix!</span>
+      </button>
+    </div>
+  </div>
+  <div class="px-6 pb-10">
+    <button id="gameCheckInBtn" onclick="goTo('c4s2')"
+      class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100"
+      disabled>
+      Now let's do your check-in →
     </button>
   </div>
 </div>
@@ -534,7 +668,7 @@ let lessonIndex   = 0;
 let equipState    = {};
 let creatingStarter = false;
 
-const SCREENS_ORDER = ['c0s1','c0s2','c1s1','c1s2','c1s3','c2s1','c3s1','c4s1','c4s2','c4s3'];
+const SCREENS_ORDER = ['c0s1','c0s2','c1s1','c1s2','c1s3','c2s1','c2game','c3s1','c4s1','c4game','c4s2','c4s3'];
 
 // ── Safe localStorage ─────────────────────────────────────────────────────
 let _mem2 = {};
@@ -575,14 +709,16 @@ function goBack() {
 
 function updateNav() {
   // Chapter dots (pre-chapter screens show no active dot — Chapter 1 dot lights on c1s1)
-  const chapterMap = { c0s1:0, c0s2:0, c1s1:1,c1s2:1,c1s3:1, c2s1:2, c3s1:3, c4s1:4,c4s2:4,c4s3:4 };
+  const chapterMap = { c0s1:0, c0s2:0, c1s1:1,c1s2:1,c1s3:1, c2s1:2,c2game:2, c3s1:3, c4s1:4,c4game:4,c4s2:4,c4s3:4 };
   const ch = chapterMap[currentScreen] || 0;
   for (let i=1;i<=4;i++) {
     const d = document.getElementById('dot'+i);
     if (d) d.className = 'dot' + (i <= ch ? ' active' : '');
   }
   const label = document.getElementById('chapterLabel');
-  if (currentScreen === 'c0s1' || currentScreen === 'c0s2') {
+  if (currentScreen === 'c2game' || currentScreen === 'c4game') {
+    label.textContent = 'Mini-Game 🎮';
+  } else if (currentScreen === 'c0s1' || currentScreen === 'c0s2') {
     label.textContent = 'Getting Started';
   } else {
     label.textContent = 'Chapter ' + ch;
@@ -737,18 +873,14 @@ function showFacebookCard() {
         <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1;">group</span>
         Join the Facebook Group →
       </a>
-      <button onclick="this.closest('[style]').remove();goTo('c3s1');initEquipment();"
+      <button onclick="this.closest('[style]').remove();_pokeCount=0;goTo('c2game');"
         style="width:100%;padding:12px;background:transparent;color:#847466;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">
-        Continue to Equipment Check →
+        Continue →
       </button>
     </div>
-    <style>
-      @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-      @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
-    </style>
   `;
   overlay.addEventListener('click', e => {
-    if (e.target === overlay) { overlay.remove(); goTo('c3s1'); initEquipment(); }
+    if (e.target === overlay) { overlay.remove(); _pokeCount=0; goTo('c2game'); }
   });
   document.body.appendChild(overlay);
 }
@@ -877,6 +1009,275 @@ function finishOnboarding(dest) {
     }
   }
   window.location.href = dest || 'bake-log.html';
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// WEB AUDIO — Sound effects + ambient music
+// ══════════════════════════════════════════════════════════════════════════
+let _audioCtx = null;
+let _isMuted = false;
+let _ambientTick = null;
+let _ambientGainNode = null;
+let _ambientNoteTime = 0;
+let _ambientNoteIdx = 0;
+
+function _ctx() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (_audioCtx.state === 'suspended') _audioCtx.resume();
+  return _audioCtx;
+}
+
+function playSound(type) {
+  if (_isMuted) return;
+  try {
+    const ctx = _ctx();
+    const now = ctx.currentTime;
+    if (type === 'flour') {
+      // Muffled thud — filtered white noise
+      const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.18), ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/d.length, 1.5);
+      const src = ctx.createBufferSource(); src.buffer = buf;
+      const flt = ctx.createBiquadFilter(); flt.type = 'lowpass'; flt.frequency.value = 700;
+      const g = ctx.createGain(); g.gain.setValueAtTime(0.35, now);
+      src.connect(flt); flt.connect(g); g.connect(ctx.destination); src.start();
+    } else if (type === 'water') {
+      // Descending sine sweep — drip
+      const osc = ctx.createOscillator(), g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1400, now);
+      osc.frequency.exponentialRampToValueAtTime(280, now + 0.28);
+      g.gain.setValueAtTime(0.22, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      osc.connect(g); g.connect(ctx.destination); osc.start(); osc.stop(now + 0.3);
+    } else if (type === 'pop') {
+      // Quick sine click — bubble/poke
+      const osc = ctx.createOscillator(), g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(900, now);
+      osc.frequency.exponentialRampToValueAtTime(90, now + 0.09);
+      g.gain.setValueAtTime(0.28, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+      osc.connect(g); g.connect(ctx.destination); osc.start(); osc.stop(now + 0.09);
+    } else if (type === 'stir') {
+      // Rhythmic noise bursts — stirring
+      for (let i = 0; i < 5; i++) {
+        const t = now + i * 0.11;
+        const buf2 = ctx.createBuffer(1, Math.floor(ctx.sampleRate*0.05), ctx.sampleRate);
+        const d2 = buf2.getChannelData(0);
+        for (let j = 0; j < d2.length; j++) d2[j] = (Math.random()*2-1)*(1-j/d2.length);
+        const s2 = ctx.createBufferSource(); s2.buffer = buf2;
+        const g2 = ctx.createGain(); g2.gain.setValueAtTime(0.13, t);
+        s2.connect(g2); g2.connect(ctx.destination); s2.start(t);
+      }
+    } else if (type === 'success') {
+      // Gentle rising chord — C E G
+      [261.63, 329.63, 392.00].forEach((freq, i) => {
+        const osc = ctx.createOscillator(), g = ctx.createGain();
+        const t = now + i * 0.1;
+        osc.type = 'triangle'; osc.frequency.value = freq;
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(0.12, t + 0.05);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
+        osc.connect(g); g.connect(ctx.destination); osc.start(t); osc.stop(t + 0.7);
+      });
+    }
+  } catch(e) { /* Audio blocked — silent fail */ }
+}
+
+const PENTATONIC = [261.63, 293.66, 329.63, 392.00, 440.00]; // C D E G A
+const AMB_SEQ    = [0,2,4,3,1,4,2,0,3,1,2,4,0,3,2,1,4,0,2,3];
+
+function _schedAmbNote(idx, t) {
+  try {
+    const ctx = _ctx();
+    const osc = ctx.createOscillator(), g = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.value = PENTATONIC[AMB_SEQ[idx % AMB_SEQ.length]];
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.5, t + 0.07);
+    g.gain.setValueAtTime(0.5, t + 0.28);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.75);
+    osc.connect(g); g.connect(_ambientGainNode); osc.start(t); osc.stop(t + 0.75);
+  } catch(_) {}
+}
+
+function startAmbientMusic() {
+  if (_isMuted || _ambientTick) return;
+  try {
+    const ctx = _ctx();
+    _ambientGainNode = ctx.createGain();
+    _ambientGainNode.gain.value = 0.065;
+    _ambientGainNode.connect(ctx.destination);
+    _ambientNoteTime = ctx.currentTime + 0.8;
+    _ambientNoteIdx = 0;
+    function tick() {
+      if (_isMuted) return;
+      const now = _ctx().currentTime;
+      while (_ambientNoteTime < now + 2.5) {
+        _schedAmbNote(_ambientNoteIdx++, _ambientNoteTime);
+        _ambientNoteTime += 0.82 + Math.random() * 0.28;
+      }
+      _ambientTick = setTimeout(tick, 800);
+    }
+    tick();
+  } catch(_) {}
+}
+
+function stopAmbientMusic() {
+  if (_ambientTick) { clearTimeout(_ambientTick); _ambientTick = null; }
+  if (_ambientGainNode) {
+    try {
+      _ambientGainNode.gain.linearRampToValueAtTime(0.001, _ctx().currentTime + 0.5);
+    } catch(_) {}
+    _ambientGainNode = null;
+  }
+}
+
+function toggleMute() {
+  _isMuted = !_isMuted;
+  const icon = document.querySelector('#muteBtn .material-symbols-outlined');
+  if (icon) icon.textContent = _isMuted ? 'volume_off' : 'volume_up';
+  if (_isMuted) { stopAmbientMusic(); }
+  else          { startAmbientMusic(); }
+  try { localStorage.setItem('pym_sound_prefs', JSON.stringify({ muted: _isMuted })); } catch(_) {}
+}
+
+// Restore mute preference
+(function() {
+  try {
+    const p = JSON.parse(localStorage.getItem('pym_sound_prefs') || '{}');
+    if (p.muted) {
+      _isMuted = true;
+      const icon = document.querySelector('#muteBtn .material-symbols-outlined');
+      if (icon) icon.textContent = 'volume_off';
+    }
+  } catch(_) {}
+})();
+
+// ══════════════════════════════════════════════════════════════════════════
+// MINI-GAME: Poke Test (c2game)
+// ══════════════════════════════════════════════════════════════════════════
+let _pokeCount = 0;
+const POKE_MSGS = [
+  "The dough feels firm... give it another poke! 👆",
+  "It's starting to spring back... almost there! One more!",
+  "✓ The dough springs back slowly and steadily — bulk fermentation is complete!"
+];
+
+function pokeDough() {
+  // Trigger start ambient music on first interaction
+  if (_pokeCount === 0) startAmbientMusic();
+  playSound('pop');
+
+  const ball = document.getElementById('doughBall');
+  ball.style.animation = 'doughPoke 0.45s ease';
+  setTimeout(() => { ball.style.animation = ''; }, 460);
+
+  const idx = Math.min(_pokeCount, POKE_MSGS.length - 1);
+  document.getElementById('pokeMsg').textContent = POKE_MSGS[idx];
+  _pokeCount++;
+
+  if (_pokeCount >= 3) {
+    document.getElementById('doughReadyCard').style.display = 'block';
+    document.getElementById('pokeContinueBtn').disabled = false;
+    ball.style.boxShadow = '0 8px 32px rgba(135,83,5,0.38), 0 0 22px rgba(196,134,58,0.28), inset 0 -4px 12px rgba(135,83,5,0.08)';
+    setTimeout(() => playSound('success'), 200);
+  }
+}
+
+function afterPokeTest() {
+  goTo('c3s1');
+  initEquipment();
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// MINI-GAME: Feeding Ritual (c4game)
+// ══════════════════════════════════════════════════════════════════════════
+let _feedGameStep = 'flour';
+
+function initFeedingGame() {
+  _feedGameStep = 'flour';
+  const name = starterName || 'your starter';
+  document.getElementById('gameJarName').textContent  = name;
+  document.getElementById('gameJarLabel').textContent = name;
+  document.getElementById('gameInstText').textContent = 'Tap the flour bag to add flour to the jar';
+  // Reset jar fill
+  const fill = document.getElementById('gameJarFill');
+  fill.style.height = '20%';
+  fill.style.background = 'linear-gradient(180deg,rgba(196,134,58,0.15),rgba(135,83,5,0.25))';
+  document.getElementById('gameJarBody').style.animation = '';
+  // Reset bubbles
+  document.getElementById('gameBubble1').style.opacity = '0';
+  document.getElementById('gameBubble2').style.opacity = '0';
+  // Reset steps
+  ['step-flour','step-water','step-mix'].forEach(id => {
+    const el = document.getElementById(id);
+    el.style.borderColor = '#d6c3b3'; el.style.background = '';
+    el.style.color = '#847466'; el.style.opacity = id === 'step-flour' ? '1' : '0.45';
+  });
+  // Reset buttons
+  const fb = document.getElementById('flourBtn'), wb = document.getElementById('waterBtn'), mb = document.getElementById('mixBtn');
+  fb.disabled = false; fb.style.opacity = '1';
+  wb.disabled = true;  wb.style.opacity = '0.4';
+  mb.disabled = true;  mb.style.opacity = '0.4';
+  document.getElementById('gameCheckInBtn').disabled = true;
+  // Start ambient music
+  startAmbientMusic();
+}
+
+function _activateStep(id) {
+  const el = document.getElementById(id);
+  el.style.borderColor = '#875305'; el.style.background = '#875305';
+  el.style.color = '#fff'; el.style.opacity = '1';
+}
+
+function gameAddFlour() {
+  if (_feedGameStep !== 'flour') return;
+  playSound('flour');
+  const anim = document.getElementById('flourAnim');
+  anim.style.display = 'block'; setTimeout(() => anim.style.display = 'none', 920);
+  document.getElementById('gameJarFill').style.height = '42%';
+  _activateStep('step-flour');
+  _feedGameStep = 'water';
+  document.getElementById('gameInstText').textContent = 'Great! Now tap the water to add 100g 💧';
+  document.getElementById('flourBtn').disabled = true; document.getElementById('flourBtn').style.opacity = '0.4';
+  document.getElementById('waterBtn').disabled = false; document.getElementById('waterBtn').style.opacity = '1';
+  document.getElementById('step-water').style.opacity = '1'; document.getElementById('step-water').style.color = '#875305';
+}
+
+function gameAddWater() {
+  if (_feedGameStep !== 'water') return;
+  playSound('water');
+  const anim = document.getElementById('waterAnim');
+  anim.style.display = 'block'; setTimeout(() => anim.style.display = 'none', 920);
+  const fill = document.getElementById('gameJarFill');
+  fill.style.height = '65%';
+  fill.style.background = 'linear-gradient(180deg,rgba(100,160,220,0.18),rgba(135,83,5,0.28))';
+  _activateStep('step-water');
+  _feedGameStep = 'mix';
+  document.getElementById('gameInstText').textContent = 'Perfect! Now tap Mix to stir it all together 🥄';
+  document.getElementById('waterBtn').disabled = true; document.getElementById('waterBtn').style.opacity = '0.4';
+  document.getElementById('mixBtn').disabled = false;  document.getElementById('mixBtn').style.opacity = '1';
+  document.getElementById('step-mix').style.opacity = '1'; document.getElementById('step-mix').style.color = '#875305';
+}
+
+function gameMix() {
+  if (_feedGameStep !== 'mix') return;
+  playSound('stir');
+  const jar = document.getElementById('gameJarBody');
+  jar.style.animation = 'jarWobble 0.7s ease';
+  setTimeout(() => { jar.style.animation = ''; }, 720);
+  const fill = document.getElementById('gameJarFill');
+  fill.style.background = 'linear-gradient(180deg,rgba(196,134,58,0.22),rgba(135,83,5,0.36))';
+  _activateStep('step-mix');
+  _feedGameStep = 'done';
+  document.getElementById('gameInstText').textContent = `${starterName} has been fed! 🎉 Now let's do the real check-in.`;
+  document.getElementById('mixBtn').disabled = true; document.getElementById('mixBtn').style.opacity = '0.4';
+  setTimeout(() => {
+    document.getElementById('gameBubble1').style.opacity = '1';
+    document.getElementById('gameBubble2').style.opacity = '1';
+    document.getElementById('gameCheckInBtn').disabled = false;
+    playSound('success');
+  }, 750);
 }
 
 // ── Particles ─────────────────────────────────────────────────────────────
