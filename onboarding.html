@@ -75,9 +75,38 @@
   .screen.hidden { opacity:0; pointer-events:none; transform:translateX(40px); }
   .screen.exit   { opacity:0; pointer-events:none; transform:translateX(-40px); }
 
-  /* Large-font / small-screen protection: content scrolls, buttons stay anchored */
-  .screen > .flex-1 { overflow-y:auto !important; min-height:0; -webkit-overflow-scrolling:touch; }
-  .screen > div:last-child { flex-shrink:0; }
+  /* ══ Accessible scroll layout — works at ANY system font size ══════════
+     Root cause of the "buttons disappear" bug:
+     justify-content:center in a flex container cannot scroll upward on Android.
+     Fix: switch to flex-start so overflow always scrolls from the TOP (readable),
+     and anchor the button row with flex-shrink:0 + opaque background.          */
+  .screen > .flex-1 {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    min-height: 0 !important;
+    /* Swap justify-center for flex-start — content flows top→down, scrolls cleanly */
+    justify-content: flex-start !important;
+  }
+  /* Button row: never shrinks or scrolls away, solid background covers scroll bleed */
+  .screen > div:last-child {
+    flex-shrink: 0 !important;
+    background: #fef9ef;
+    padding-top: 0.5rem;
+    box-shadow: 0 -14px 22px #fef9ef; /* soft fade over scrolling content */
+  }
+
+  /* ══ Minimum legible text sizes for accessibility ═══════════════════════
+     Women 40+ and users with vision settings benefit from ≥16px body text.
+     These rules nudge the smallest text up one step without changing the
+     visual hierarchy — headings stay large, labels become readable.         */
+  .screen p,
+  .screen li    { font-size: clamp(0.9375rem, 2.5vw, 1.0625rem); line-height: 1.7; }
+  .screen .text-sm { font-size: clamp(0.9375rem, 2.5vw, 1rem) !important; line-height: 1.65 !important; }
+  .screen .text-xs { font-size: 0.8125rem !important; }        /* 13px floor */
+  .screen .text-\[10px\] { font-size: 0.75rem !important; }   /* 12px floor */
+  /* Buttons: large, high-contrast, easy to tap */
+  .screen button.w-full { min-height: 3.25rem; font-size: 1rem !important; }
 
   /* Mini-game keyframes */
   @keyframes flourFall { 0%{opacity:0;transform:translateY(-10px) scale(0.8)} 30%{opacity:1;transform:translateY(10px) scale(1.1)} 100%{opacity:0;transform:translateY(60px) scale(0.9)} }
@@ -144,10 +173,10 @@
 <!-- PRE-CHAPTER — Do you have a starter?                                  -->
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen" id="c0s1">
-  <div class="flex-1 flex flex-col items-center justify-center px-8 text-center pt-16 pb-8">
+  <div class="flex-1 flex flex-col items-center px-8 text-center pt-20 pb-6">
     <span class="material-symbols-outlined text-6xl text-[#C4863A] mb-6" style="font-variation-settings:'FILL' 1;">science</span>
     <h2 class="font-headline font-bold text-3xl leading-tight mb-4">Do you already have a sourdough starter?</h2>
-    <p class="text-[#514538] text-sm leading-relaxed max-w-xs">A sourdough starter is a mixture of flour and water that captures wild yeast from the air. If you already have one, great! If not, we'll walk you through creating yours from scratch — it only takes 10 minutes of hands-on time.</p>
+    <p class="text-[#514538] leading-relaxed max-w-xs">A sourdough starter is a mixture of flour and water that captures wild yeast from the air. If you already have one, great! If not, we'll walk you through creating yours from scratch — it only takes 10 minutes of hands-on time.</p>
   </div>
   <div class="px-6 pb-10 space-y-3">
     <button onclick="goTo('c1s1')" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
@@ -257,8 +286,8 @@
 
 <!-- C1-S1: Welcome -->
 <div class="screen hidden" id="c1s1">
-  <div class="flex-1 flex flex-col items-center justify-center px-8 text-center pt-16 pb-8">
-    <div class="mb-10">
+  <div class="flex-1 flex flex-col items-center px-8 text-center pt-20 pb-6">
+    <div class="mb-8">
       <div class="jar-wrap mx-auto mb-2">
         <div class="jar-body">
           <div class="jar-content"></div>
@@ -270,13 +299,13 @@
         <div class="jar-label">Starter</div>
       </div>
     </div>
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3">Chapter 1 · Meet Your Starter</p>
+    <p class="text-xs font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3">Chapter 1 · Meet Your Starter</p>
     <h1 class="font-headline font-bold text-4xl leading-tight text-[#1d1c16] mb-5">Something magical<br/>is about to begin.</h1>
-    <p class="text-[#514538] text-base leading-relaxed max-w-xs">You've been given a living thing to care for — wild yeast and bacteria, woven together over time. Together, you'll turn flour and water into something extraordinary.</p>
-    <p class="text-[#514538] text-base leading-relaxed max-w-xs mt-3">This is your sourdough journey. Let's begin.</p>
+    <p class="text-[#514538] leading-relaxed max-w-xs">You've been given a living thing to care for — wild yeast and bacteria, woven together over time. Together, you'll turn flour and water into something extraordinary.</p>
+    <p class="text-[#514538] leading-relaxed max-w-xs mt-3">This is your sourdough journey. Let's begin.</p>
   </div>
   <div class="px-6 pb-10">
-    <button onclick="goTo('c1s2')" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
+    <button onclick="goTo('c1s2')" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-lg active:scale-95 transition-transform">
       Begin my journey →
     </button>
   </div>
@@ -284,20 +313,20 @@
 
 <!-- C1-S2: Name your starter -->
 <div class="screen hidden" id="c1s2">
-  <div class="flex-1 flex flex-col items-center justify-center px-8 text-center pt-16 pb-8">
+  <div class="flex-1 flex flex-col items-center px-8 text-center pt-20 pb-6">
     <span class="material-symbols-outlined text-5xl text-[#C4863A] mb-6" style="font-variation-settings:'FILL' 1">favorite</span>
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3">Name Your Starter</p>
+    <p class="text-xs font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3">Name Your Starter</p>
     <h2 class="font-headline font-bold text-3xl leading-tight mb-4">What will you call<br/>your starter?</h2>
-    <p class="text-[#514538] text-sm leading-relaxed max-w-xs mb-8">You'll be feeding this living culture every day. Give it a name that feels right — bakers name their starters the way sailors name their ships.</p>
+    <p class="text-[#514538] leading-relaxed max-w-xs mb-8">You'll be feeding this living culture every day. Give it a name that feels right — bakers name their starters the way sailors name their ships.</p>
     <div class="w-full max-w-xs">
       <input id="starterNameInput" type="text" maxlength="20" placeholder="e.g. Bubbles, Scout, Dough-Remi…"
         class="w-full text-center text-xl font-headline font-bold bg-transparent border-b-2 border-[#d6c3b3] focus:border-[#875305] outline-none py-3 text-[#1d1c16] placeholder-[#d6c3b3] transition-colors"
         oninput="updateNameBtn()"/>
-      <p class="text-[10px] text-[#847466] mt-2">No inspiration? "Bubbles" is always a classic.</p>
+      <p class="text-xs text-[#847466] mt-2">No inspiration? "Bubbles" is always a classic.</p>
     </div>
   </div>
   <div class="px-6 pb-10">
-    <button id="nameBtn" onclick="confirmName()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform" disabled>
+    <button id="nameBtn" onclick="confirmName()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-lg active:scale-95 transition-transform" disabled>
       Meet my starter →
     </button>
   </div>
@@ -305,7 +334,7 @@
 
 <!-- C1-S3: Starter wakes up -->
 <div class="screen hidden" id="c1s3">
-  <div class="flex-1 flex flex-col items-center justify-center px-8 text-center pt-16 pb-8">
+  <div class="flex-1 flex flex-col items-center px-8 text-center pt-20 pb-6">
     <div class="jar-wrap mb-6">
       <div class="jar-body" style="box-shadow:0 0 30px rgba(196,134,58,0.25)">
         <div class="jar-content" style="height:65%;background:linear-gradient(180deg,rgba(196,134,58,0.2),rgba(135,83,5,0.35))"></div>
@@ -328,7 +357,7 @@
       </div>
     </div>
     <h2 class="font-headline font-bold text-3xl leading-tight mb-4" id="c1s3Headline">Bubbles is alive!</h2>
-    <p class="text-[#514538] text-sm leading-relaxed max-w-xs">A healthy starter doubles in size after feeding and smells pleasantly tangy — almost like yogurt. Let's learn how to keep yours thriving.</p>
+    <p class="text-[#514538] leading-relaxed max-w-xs">A healthy starter doubles in size after feeding and smells pleasantly tangy — almost like yogurt. Let's learn how to keep yours thriving.</p>
   </div>
   <div class="px-6 pb-10">
     <button onclick="completeChapter1()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
@@ -441,11 +470,11 @@
 
 <!-- C4-S1: Intro -->
 <div class="screen hidden" id="c4s1">
-  <div class="flex-1 flex flex-col items-center justify-center px-8 text-center pt-16 pb-8">
+  <div class="flex-1 flex flex-col items-center px-8 text-center pt-20 pb-6">
     <span class="material-symbols-outlined text-5xl text-[#C4863A] mb-6" style="font-variation-settings:'FILL' 1">restaurant</span>
     <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3">Chapter 4 · Your First Feeding</p>
     <h2 class="font-headline font-bold text-3xl leading-tight mb-5">Let's check in on<br/><span id="c4StarterName" class="text-[#875305] italic">your starter</span> together.</h2>
-    <p class="text-[#514538] text-sm leading-relaxed max-w-xs">A daily starter check-in takes 30 seconds. You note how active it looks — bubbly, doubling, or flat — and log the temperature. This tiny habit is what separates consistent bakers from frustrated ones.</p>
+    <p class="text-[#514538] leading-relaxed max-w-xs">A daily starter check-in takes 30 seconds. You note how active it looks — bubbly, doubling, or flat — and log the temperature. This tiny habit is what separates consistent bakers from frustrated ones.</p>
   </div>
   <div class="px-6 pb-10">
     <button onclick="goTo('c4game');initFeedingGame();" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
@@ -614,7 +643,7 @@
 
 <!-- C4-S3: Celebration -->
 <div class="screen hidden" id="c4s3">
-  <div class="flex-1 flex flex-col items-center justify-center px-8 text-center pt-16 pb-8">
+  <div class="flex-1 flex flex-col items-center px-8 text-center pt-20 pb-6">
     <div class="jar-wrap mb-6">
       <div class="jar-body" style="box-shadow:0 0 40px rgba(196,134,58,0.4)">
         <div class="jar-content" style="height:75%;background:linear-gradient(180deg,rgba(196,134,58,0.3),rgba(135,83,5,0.45))"></div>
