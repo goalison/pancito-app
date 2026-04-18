@@ -817,6 +817,26 @@ const LESSONS = [
 function initLessons() {
   lessonIndex = 0;
   renderLesson();
+  // Wire up swipe + tap-card to advance lessons (runs once)
+  if (!window._lessonSwipeWired) {
+    window._lessonSwipeWired = true;
+    const card = document.getElementById('lessonCard');
+    let _swipeStartX = 0, _swipeStartY = 0;
+    card.addEventListener('touchstart', e => {
+      _swipeStartX = e.changedTouches[0].clientX;
+      _swipeStartY = e.changedTouches[0].clientY;
+    }, { passive: true });
+    card.addEventListener('touchend', e => {
+      const dx = _swipeStartX - e.changedTouches[0].clientX;
+      const dy = Math.abs(_swipeStartY - e.changedTouches[0].clientY);
+      // Left swipe ≥ 40px and not a vertical scroll
+      if (dx > 40 && dy < 60) nextLesson();
+    }, { passive: true });
+    // Tap anywhere on the card body (not the button) also advances
+    card.addEventListener('click', e => {
+      if (!e.target.closest('button')) nextLesson();
+    });
+  }
 }
 
 function renderLesson() {

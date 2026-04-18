@@ -1457,9 +1457,24 @@
             }
 
             try {
-                let logs = JSON.parse(localStorage.getItem('pym_logs') || '[]');
+                let logs;
+                try {
+                    logs = JSON.parse(localStorage.getItem('pym_logs') || '[]');
+                } catch(_) { logs = []; }
+                if (!Array.isArray(logs)) logs = [];
                 logs.unshift(sessionData);
-                localStorage.setItem('pym_logs', JSON.stringify(logs));
+                // Try saving; if quota hit, strip photos from oldest entries and retry once
+                try {
+                    localStorage.setItem('pym_logs', JSON.stringify(logs));
+                } catch(quotaErr) {
+                    if (quotaErr.name === 'QuotaExceededError' || quotaErr.code === 22) {
+                        // Strip photos from all existing entries to free space
+                        const trimmed = logs.map(l => ({ ...l, photo: null }));
+                        localStorage.setItem('pym_logs', JSON.stringify(trimmed));
+                    } else {
+                        throw quotaErr;
+                    }
+                }
 
                 // ── Gamification: check achievements after saving bake ─────────
                 try {
@@ -1497,12 +1512,15 @@
                 console.error("Storage Error:", e);
                 saveBtn.disabled = false;
                 saveBtn.innerText = "Save to Archive";
-                
-                if (e.name === 'QuotaExceededError' || e.code === 22) {
-                    alert("Storage Limit Reached: Your browser's local storage is full. To save new bakes, please visit your Archive to delete old entries or clear browser data.");
-                } else {
-                    alert("An error occurred while saving. Please try again or check your storage space.");
-                }
+                // Show visible error — alert() is silently blocked on Capacitor Android
+                const msg = (e.name === 'QuotaExceededError' || e.code === 22)
+                    ? 'Storage full! Go to Archive → clear a few old bakes, then try again.'
+                    : 'Save failed — please try again. If this keeps happening, clear old bakes in Archive.';
+                const toast = document.createElement('div');
+                toast.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#B3261E;color:#fff;padding:14px 20px;border-radius:16px;font-size:14px;font-weight:700;z-index:9999;max-width:320px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.2);line-height:1.4';
+                toast.textContent = msg;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 7000);
             }
         }
 

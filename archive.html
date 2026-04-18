@@ -295,7 +295,11 @@
 
         function renderLogs() {
             const grid = document.getElementById('logsGrid');
-            let logs = getLogs();
+            if (!grid) return;
+            let logs;
+            try { logs = getLogs(); } catch(e) { logs = []; }
+            // Safety: ensure it's an array
+            if (!Array.isArray(logs)) logs = [];
 
             if (filterActive) {
                 logs = logs.filter(l => (parseFloat(l.rating) >= 4.0));
@@ -304,15 +308,27 @@
             currentLogs = [...logs].sort((a, b) => new Date(b.date) - new Date(a.date));
 
             if (currentLogs.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full py-20 flex flex-col items-center text-center">
-                        <span class="text-7xl mb-4">🍞</span>
-                        <h3 class="font-headline text-3xl text-on-surface mb-3">Your first loaf is waiting!</h3>
-                        <p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-2">Every great baker started exactly where you are right now. This is where all your bakes will live — dates, notes, ratings, and everything you learn along the way.</p>
-                        <p class="text-on-surface-variant/70 text-sm max-w-xs mx-auto mb-8">Complete your first bake and hit <strong>Save to Archive</strong> at the end to see it appear here.</p>
-                        <a href="bake-log.html" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">Start My First Bake →</a>
-                    </div>
-                `;
+                if (filterActive) {
+                    // Filter is on — bakes exist but none match the rating threshold
+                    grid.innerHTML = `
+                        <div class="col-span-full py-20 flex flex-col items-center text-center">
+                            <span class="text-7xl mb-4">⭐</span>
+                            <h3 class="font-headline text-3xl text-on-surface mb-3">No bakes match this filter</h3>
+                            <p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-6">The <strong>Rating 4.0+</strong> filter is active. Your bakes are here — tap <strong>Type: All</strong> above to see everything.</p>
+                            <button onclick="_setRatingFilter(false)" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">Show All Bakes</button>
+                        </div>
+                    `;
+                } else {
+                    grid.innerHTML = `
+                        <div class="col-span-full py-20 flex flex-col items-center text-center">
+                            <span class="text-7xl mb-4">🍞</span>
+                            <h3 class="font-headline text-3xl text-on-surface mb-3">Your first loaf is waiting!</h3>
+                            <p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-2">Every great baker started exactly where you are right now. This is where all your bakes will live — dates, notes, ratings, and everything you learn along the way.</p>
+                            <p class="text-on-surface-variant/70 text-sm max-w-xs mx-auto mb-8">Complete your first bake and hit <strong>Save to Archive</strong> at the end to see it appear here.</p>
+                            <a href="bake-log.html" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">Start My First Bake →</a>
+                        </div>
+                    `;
+                }
                 return;
             }
 
