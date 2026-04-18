@@ -225,13 +225,16 @@
         let _driveToken = null, _driveTokenExp = 0;
 
         // Safe storage wrapper — handles Safari iframe blocks gracefully
+        // IMPORTANT: test with getItem (never throws), NOT setItem (throws when storage is full).
+        // Using setItem for the test caused archive to fall back to empty in-memory store
+        // whenever localStorage was near-full from accumulated photos.
         let _memoryStore = {};
         const storage = (function() {
             try {
-                localStorage.setItem('__pym_test__', '1');
-                localStorage.removeItem('__pym_test__');
+                localStorage.getItem('__pym_test__'); // read-only test — works even when full
                 return localStorage;
             } catch(e) {
+                // Only reaches here if localStorage itself is inaccessible (strict Safari private mode)
                 return {
                     getItem: k => _memoryStore[k] || null,
                     setItem: (k, v) => { _memoryStore[k] = v; },

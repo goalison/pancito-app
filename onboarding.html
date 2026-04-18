@@ -559,7 +559,8 @@
 
 <!-- C4-S2: Check-in form -->
 <div class="screen hidden" id="c4s2">
-  <div class="flex-1 flex flex-col px-6 pt-20 pb-6">
+  <!-- Scrollable content area — button is pinned OUTSIDE so expanding details doesn't block it -->
+  <div class="flex-1 flex flex-col px-6 pt-20 pb-4" style="overflow-y:auto;-webkit-overflow-scrolling:touch;">
     <div class="text-center mb-8">
       <h2 class="font-headline font-bold text-2xl mb-1">How is <span id="c4StarterName2" class="text-[#875305] italic">your starter</span> looking?</h2>
       <p class="text-[#514538] text-sm">Be honest — all states are valid. We're just taking note.</p>
@@ -603,9 +604,9 @@
       </div>
       <span class="text-sm text-[#847466]">°F</span>
     </div>
-    <!-- Feeding ratio guide -->
-    <details class="bg-white rounded-2xl border border-[#d6c3b3]/40 mb-6 overflow-hidden">
-      <summary class="flex items-center gap-2 px-4 py-3 cursor-pointer list-none font-bold text-sm text-[#875305]">
+    <!-- Feeding ratio guide — expands downward into scrollable area, no clipping -->
+    <details class="bg-white rounded-2xl border border-[#d6c3b3]/40 mb-4" style="border-radius:1rem;">
+      <summary class="flex items-center gap-2 px-4 py-3 cursor-pointer list-none font-bold text-sm text-[#875305]" style="border-radius:1rem;">
         <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">lightbulb</span>
         💡 How much should I feed my starter?
         <span class="ml-auto text-[#d6c3b3] text-lg">›</span>
@@ -632,12 +633,13 @@
         </div>
       </div>
     </details>
-    <div class="mt-auto">
-      <button id="feedBtn" onclick="completeCheckin()" disabled
-        class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100">
-        Feed <span id="feedBtnName">my starter</span> →
-      </button>
-    </div>
+  </div>
+  <!-- Pinned bottom button — outside scrollable area so it's always visible -->
+  <div class="px-6 pb-10 flex-shrink-0 bg-[#fef9ef]" style="box-shadow:0 -12px 20px #fef9ef;">
+    <button id="feedBtn" onclick="completeCheckin()" disabled
+      class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100">
+      Feed <span id="feedBtnName">my starter</span> →
+    </button>
   </div>
 </div>
 

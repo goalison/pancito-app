@@ -82,6 +82,33 @@
     document.head.appendChild(s);
   }
 
+  // ── Achievement chime (Web Audio API — no file needed) ───────────────────
+  function _playAchievementSound() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      // Resume context (required after user gesture on some browsers)
+      if (ctx.state === 'suspended') ctx.resume();
+      // Ascending 4-note chime: C5 → E5 → G5 → C6 (major arpeggio)
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((freq, i) => {
+        const osc  = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        const t = ctx.currentTime + i * 0.12;
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(0.28, t + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.55);
+        osc.start(t);
+        osc.stop(t + 0.6);
+      });
+      // Auto-close context after sound finishes
+      setTimeout(() => { try { ctx.close(); } catch(_) {} }, 1500);
+    } catch(_) { /* Web Audio not available — silently skip */ }
+  }
+
   // ── Particle burst ────────────────────────────────────────────────────────
   function _spawnParticles(count) {
     count = count || 40;
@@ -140,6 +167,7 @@
   function _triggerSequence(ids, idx) {
     if (idx >= ids.length) return;
     _spawnParticles(35);
+    _playAchievementSound(); // ascending chime on every badge
     setTimeout(() => {
       _showModal(ids[idx], () => {
         setTimeout(() => _triggerSequence(ids, idx + 1), 300);
