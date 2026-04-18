@@ -1456,13 +1456,15 @@
                 localStorage.setItem('pym_logs', JSON.stringify(logs));
 
                 // ── Gamification: check achievements after saving bake ─────────
-                let newUnlocks = [];
                 try {
                     if (window.PymGamification) {
                         const G = window.PymGamification;
                         const streak  = G.getStreak();
                         const starter = G.getStarterState();
-                        newUnlocks = G.checkAchievements(logs, streak, starter);
+                        G.checkAchievements(logs, streak, starter);
+                        // Unseen achievements are queued in localStorage.
+                        // archive.html calls PymCelebration.checkUnseen() on load,
+                        // so celebrations will fire there after redirect.
                     }
                 } catch(gamErr) { console.warn('Gamification error:', gamErr); }
 
@@ -1483,22 +1485,8 @@
                     localStorage.removeItem(STATIC_TIMER_KEY);
                 } catch(e) {}
 
-                // If badges were unlocked, celebrate before redirecting
-                if (newUnlocks.length > 0 && window.PymCelebration) {
-                    PymCelebration.trigger(newUnlocks);
-                    // Redirect happens after the last modal is dismissed
-                    // (user taps "Keep baking →"), so we skip the immediate redirect
-                    // and instead hook into the last dismiss to navigate.
-                    const origCheckUnseen = window.PymCelebration.checkUnseen;
-                    // Replace checkUnseen temporarily to navigate after last celebration
-                    const _redirectAfter = () => { window.location.href = 'archive.html'; };
-                    // Wait for all modals to finish then redirect
-                    const totalDelay = newUnlocks.length * 1500 + 3000;
-                    setTimeout(_redirectAfter, totalDelay);
-                } else {
-                    alert("Bake successfully saved to Archive!");
-                    window.location.href = "archive.html";
-                }
+                // Always redirect immediately — celebrations fire on archive.html
+                window.location.href = "archive.html";
             } catch (e) {
                 console.error("Storage Error:", e);
                 saveBtn.disabled = false;

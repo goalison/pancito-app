@@ -124,6 +124,117 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- PRE-CHAPTER — Do you have a starter?                                  -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="screen" id="c0s1">
+  <div class="flex-1 flex flex-col items-center justify-center px-8 text-center pt-16 pb-8">
+    <span class="material-symbols-outlined text-6xl text-[#C4863A] mb-6" style="font-variation-settings:'FILL' 1;">science</span>
+    <h2 class="font-headline font-bold text-3xl leading-tight mb-4">Do you already have a sourdough starter?</h2>
+    <p class="text-[#514538] text-sm leading-relaxed max-w-xs">A sourdough starter is a mixture of flour and water that captures wild yeast from the air. If you already have one, great! If not, we'll walk you through creating yours from scratch — it only takes 10 minutes of hands-on time.</p>
+  </div>
+  <div class="px-6 pb-10 space-y-3">
+    <button onclick="goTo('c1s1')" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
+      Yes, I have a starter →
+    </button>
+    <button onclick="goTo('c0s2')" class="w-full py-3 bg-[#f2ede3] text-[#875305] rounded-2xl font-bold text-base active:scale-95 transition-transform border border-[#d6c3b3]">
+      Help me make one from scratch 🌾
+    </button>
+  </div>
+</div>
+
+<!-- C0-S2: Starter creation intro -->
+<div class="screen hidden" id="c0s2">
+  <div class="flex-1 flex flex-col px-6 pt-20 pb-6 overflow-y-auto">
+    <div class="text-center mb-6">
+      <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1">Creating Your Starter</p>
+      <h2 class="font-headline font-bold text-2xl">Alison's starter recipe</h2>
+      <p class="text-[#514538] text-xs mt-2 leading-relaxed">This process takes 7–10 days. You'll spend about 5 minutes per day. The app will remind you each day.</p>
+    </div>
+
+    <!-- Day 1 -->
+    <div class="bg-white rounded-2xl border border-[#d6c3b3]/30 p-4 mb-3">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-9 h-9 rounded-full bg-[#875305] flex items-center justify-center flex-shrink-0">
+          <span class="text-white font-bold text-sm">1</span>
+        </div>
+        <div>
+          <p class="font-bold text-sm">Day 1 — Mix &amp; Rest</p>
+          <p class="text-[10px] text-[#847466]">~5 minutes hands-on</p>
+        </div>
+      </div>
+      <div class="space-y-2 mb-3">
+        <div class="flex items-center gap-2 text-sm text-[#514538]">
+          <span class="material-symbols-outlined text-[#C4863A] text-base">grain</span>
+          <span>50g all-purpose flour</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm text-[#514538]">
+          <span class="material-symbols-outlined text-[#C4863A] text-base">eco</span>
+          <span>50g whole wheat flour</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm text-[#514538]">
+          <span class="material-symbols-outlined text-[#C4863A] text-base">water_drop</span>
+          <span>100g water (room temperature)</span>
+        </div>
+      </div>
+      <p class="text-xs text-[#514538] bg-[#f8f3e9] rounded-xl p-3 leading-relaxed">Mix everything in a clean jar until no dry flour remains. Cover loosely with a cloth or loosely-placed lid. Leave at room temperature (68–78°F). <strong>That's it for today.</strong></p>
+    </div>
+
+    <!-- Day 2 -->
+    <div class="bg-white rounded-2xl border border-[#d6c3b3]/30 p-4 mb-3">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-9 h-9 rounded-full bg-[#d6c3b3] flex items-center justify-center flex-shrink-0">
+          <span class="text-[#847466] font-bold text-sm">2</span>
+        </div>
+        <div>
+          <p class="font-bold text-sm">Day 2 — Leave it alone</p>
+          <p class="text-[10px] text-[#847466]">No action required</p>
+        </div>
+      </div>
+      <p class="text-xs text-[#514538] leading-relaxed">Don't feed it. Don't stir it. The wild yeast is just beginning to wake up. You might not see much activity yet — that's completely normal.</p>
+    </div>
+
+    <!-- Day 3–10 -->
+    <div class="bg-white rounded-2xl border border-[#875305]/20 p-4 mb-3">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-9 h-9 rounded-full bg-[#875305] flex items-center justify-center flex-shrink-0">
+          <span class="text-white font-bold text-sm">3+</span>
+        </div>
+        <div>
+          <p class="font-bold text-sm">Days 3–10 — Daily feeding</p>
+          <p class="text-[10px] text-[#847466]">Repeat every day until ready</p>
+        </div>
+      </div>
+      <div class="space-y-1.5 mb-3">
+        <div class="flex items-center gap-2 text-sm text-[#514538]">
+          <span class="material-symbols-outlined text-[#C4863A] text-base">remove</span>
+          <span>Discard half (pour out ~100g)</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm text-[#514538]">
+          <span class="material-symbols-outlined text-[#C4863A] text-base">grain</span>
+          <span>Add 100g all-purpose flour</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm text-[#514538]">
+          <span class="material-symbols-outlined text-[#C4863A] text-base">water_drop</span>
+          <span>Add 100g water</span>
+        </div>
+      </div>
+      <p class="text-xs text-[#514538] bg-[#f8f3e9] rounded-xl p-3 leading-relaxed">Stir well, cover loosely, leave at room temperature. <strong>Your starter is ready</strong> when it reliably doubles within 4–6 hours of feeding, smells pleasantly sour (like yogurt), and is full of bubbles throughout. This usually happens between Day 7–10 depending on your kitchen temperature.</p>
+    </div>
+
+    <div class="bg-[#875305]/8 rounded-2xl p-4 mb-4 border border-[#875305]/15">
+      <p class="text-xs text-[#514538] leading-relaxed"><strong class="text-[#875305]">Tip:</strong> Warmer kitchens (75°F+) move faster. Cooler kitchens (65°F) take longer. Both produce great starters — patience is the only ingredient you can't measure.</p>
+    </div>
+  </div>
+
+  <div class="px-6 pb-10 border-t border-[#d6c3b3]/20 pt-4">
+    <button onclick="beginStarterCreation()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform shadow-lg">
+      I'm ready — start Day 1 →
+    </button>
+    <p class="text-center text-[10px] text-[#847466] mt-3">The app will remind you daily to check in on your starter</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
 <!-- CHAPTER 1 — Meet Your Starter                                         -->
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 
@@ -321,7 +432,7 @@
       </button>
     </div>
     <!-- Optional temp -->
-    <div class="flex items-center gap-3 mb-8 bg-[#f2ede3] rounded-2xl p-4">
+    <div class="flex items-center gap-3 mb-5 bg-[#f2ede3] rounded-2xl p-4">
       <span class="material-symbols-outlined text-[#847466]">thermostat</span>
       <div class="flex-1">
         <label class="text-xs font-bold uppercase tracking-wider text-[#847466]">Room temp (optional)</label>
@@ -329,6 +440,35 @@
       </div>
       <span class="text-sm text-[#847466]">°F</span>
     </div>
+    <!-- Feeding ratio guide -->
+    <details class="bg-white rounded-2xl border border-[#d6c3b3]/40 mb-6 overflow-hidden">
+      <summary class="flex items-center gap-2 px-4 py-3 cursor-pointer list-none font-bold text-sm text-[#875305]">
+        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">lightbulb</span>
+        💡 How much should I feed my starter?
+        <span class="ml-auto text-[#d6c3b3] text-lg">›</span>
+      </summary>
+      <div class="px-4 pb-4">
+        <p class="text-xs text-[#514538] mb-3 leading-relaxed">Feeding ratios are written as <strong>Starter : Flour : Water</strong>. Example: <em>1:3:3 means 20g starter + 60g flour + 60g water.</em></p>
+        <div class="space-y-2">
+          <div class="flex items-center gap-3 bg-[#f8f3e9] rounded-xl p-3">
+            <div class="text-base font-bold text-[#875305] w-14 text-center flex-shrink-0">1:1:1</div>
+            <div><div class="text-xs font-bold text-[#1d1c16]">Twice-daily feeding</div><div class="text-[11px] text-[#514538]">Fast activity, great for active baking season</div></div>
+          </div>
+          <div class="flex items-center gap-3 bg-[#f8f3e9] rounded-xl p-3">
+            <div class="text-base font-bold text-[#875305] w-14 text-center flex-shrink-0">1:2:2</div>
+            <div><div class="text-xs font-bold text-[#1d1c16]">Classic daily ratio</div><div class="text-[11px] text-[#514538]">Reliable and predictable — great starting point</div></div>
+          </div>
+          <div class="flex items-center gap-3 bg-[#875305]/10 rounded-xl p-3 border border-[#875305]/20">
+            <div class="text-base font-bold text-[#875305] w-14 text-center flex-shrink-0">1:3:3</div>
+            <div><div class="text-xs font-bold text-[#875305]">Once-a-day ⭐ Recommended</div><div class="text-[11px] text-[#514538]">Keeps starter going longer between meals</div></div>
+          </div>
+          <div class="flex items-center gap-3 bg-[#f8f3e9] rounded-xl p-3">
+            <div class="text-base font-bold text-[#875305] w-14 text-center flex-shrink-0">1:5:5</div>
+            <div><div class="text-xs font-bold text-[#1d1c16]">Fridge rest (1–2 weeks)</div><div class="text-[11px] text-[#514538]">For when you need a break from baking</div></div>
+          </div>
+        </div>
+      </div>
+    </details>
     <div class="mt-auto">
       <button id="feedBtn" onclick="completeCheckin()" disabled
         class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100">
@@ -360,13 +500,24 @@
     </div>
     <h2 class="font-headline font-bold text-3xl leading-tight mb-4"><span id="c4CelebName">Bubbles</span> has been fed!</h2>
     <p class="text-[#514538] text-sm leading-relaxed max-w-xs mb-2">You've officially started your sourdough journey. Your first bake is unlocked — whenever you're ready.</p>
-    <p class="text-[#514538] text-xs text-[#847466] max-w-xs">Return every day to check in on <span id="c4CelebName2" class="font-bold">your starter</span> and keep your streak alive.</p>
+    <p class="text-[#514538] text-xs text-[#847466] max-w-xs mb-5">Return every day to check in on <span id="c4CelebName2" class="font-bold">your starter</span> and keep your streak alive.</p>
+    <!-- Facebook community CTA -->
+    <a href="https://www.facebook.com/groups/1235548458006543" target="_blank"
+      class="flex items-center gap-3 bg-white rounded-2xl border border-[#d6c3b3]/40 px-5 py-3 max-w-xs w-full">
+      <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:#1877F2">
+        <span class="material-symbols-outlined text-white" style="font-size:18px;font-variation-settings:'FILL' 1;">group</span>
+      </div>
+      <div class="text-left">
+        <p class="text-[10px] font-bold uppercase tracking-wider text-[#C4863A]">Baker's Community</p>
+        <p class="text-xs text-[#514538] font-bold">Ask Alison anything in our FB group</p>
+      </div>
+    </a>
   </div>
   <div class="px-6 pb-10">
     <button onclick="finishOnboarding()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform shadow-lg">
       Start My First Bake →
     </button>
-    <button onclick="window.location.href='index.html'" class="w-full py-3 mt-3 text-[#847466] text-sm font-bold">
+    <button onclick="finishOnboarding('index.html')" class="w-full py-3 mt-3 text-[#847466] text-sm font-bold">
       Go to Dashboard first
     </button>
   </div>
@@ -376,13 +527,14 @@
 <script src="gamification.js"></script>
 <script>
 // ── State ─────────────────────────────────────────────────────────────────
-let currentScreen = 'c1s1';
+let currentScreen = 'c0s1';
 let starterName   = 'Bubbles';
 let selectedActivity = null;
 let lessonIndex   = 0;
 let equipState    = {};
+let creatingStarter = false;
 
-const SCREENS_ORDER = ['c1s1','c1s2','c1s3','c2s1','c3s1','c4s1','c4s2','c4s3'];
+const SCREENS_ORDER = ['c0s1','c0s2','c1s1','c1s2','c1s3','c2s1','c3s1','c4s1','c4s2','c4s3'];
 
 // ── Safe localStorage ─────────────────────────────────────────────────────
 let _mem2 = {};
@@ -422,15 +574,20 @@ function goBack() {
 }
 
 function updateNav() {
-  // Chapter dots
-  const chapterMap = { c1s1:1,c1s2:1,c1s3:1, c2s1:2, c3s1:3, c4s1:4,c4s2:4,c4s3:4 };
-  const ch = chapterMap[currentScreen] || 1;
+  // Chapter dots (pre-chapter screens show no active dot — Chapter 1 dot lights on c1s1)
+  const chapterMap = { c0s1:0, c0s2:0, c1s1:1,c1s2:1,c1s3:1, c2s1:2, c3s1:3, c4s1:4,c4s2:4,c4s3:4 };
+  const ch = chapterMap[currentScreen] || 0;
   for (let i=1;i<=4;i++) {
     const d = document.getElementById('dot'+i);
     if (d) d.className = 'dot' + (i <= ch ? ' active' : '');
   }
-  document.getElementById('chapterLabel').textContent = 'Chapter ' + ch;
-  // Back button
+  const label = document.getElementById('chapterLabel');
+  if (currentScreen === 'c0s1' || currentScreen === 'c0s2') {
+    label.textContent = 'Getting Started';
+  } else {
+    label.textContent = 'Chapter ' + ch;
+  }
+  // Back button — hide on first screen
   const backBtn = document.getElementById('backBtn');
   backBtn.style.visibility = SCREENS_ORDER.indexOf(currentScreen) > 0 ? 'visible' : 'hidden';
 }
@@ -522,12 +679,78 @@ function nextLesson() {
       card.classList.remove('leaving');
     }, 300);
   } else {
-    // Chapter 2 done
+    // Chapter 2 done — show Facebook community card then move on
     const ob = JSON.parse(storage.getItem('pym_onboarding')||'{}');
     storage.setItem('pym_onboarding', JSON.stringify({ ...ob, chapter2Complete: true }));
-    goTo('c3s1');
-    initEquipment();
+    showFacebookCard();
   }
+}
+
+// ── Starter Creation (Pre-Chapter) ───────────────────────────────────────
+function beginStarterCreation() {
+  creatingStarter = true;
+  // Save creation flag and start date
+  const ob = JSON.parse(storage.getItem('pym_onboarding')||'{}');
+  storage.setItem('pym_onboarding', JSON.stringify({
+    ...ob,
+    creatingStarter: true,
+    starterCreationStarted: new Date().toISOString(),
+  }));
+  // Schedule daily reminder via gamification module if available
+  if (window.PymGamification) {
+    PymGamification.scheduleStarterReminder(true, 9, 0);
+  }
+  // Unlock born_from_scratch badge at the END of onboarding when creation is done
+  // (We'll check this flag in finishOnboarding)
+  goTo('c1s1'); // Continue to Chapter 1 — name the starter
+}
+
+// ── Facebook community card (after Chapter 2) ─────────────────────────────
+function showFacebookCard() {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position:fixed;inset:0;z-index:9000;
+    background:rgba(44,24,16,0.55);backdrop-filter:blur(3px);
+    display:flex;align-items:flex-end;
+    animation:fadeIn 0.25s ease;
+  `;
+  overlay.innerHTML = `
+    <div style="
+      width:100%;background:#fef9ef;border-radius:2rem 2rem 0 0;
+      padding:1.75rem 1.5rem 2.5rem;
+      font-family:'Plus Jakarta Sans',sans-serif;
+      animation:slideUp 0.3s cubic-bezier(0.34,1.4,0.64,1);
+    ">
+      <div style="width:40px;height:4px;background:#d6c3b3;border-radius:4px;margin:0 auto 1.5rem;"></div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem;">
+        <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#1877F2,#3b5998);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <span class="material-symbols-outlined" style="color:#fff;font-size:24px;font-variation-settings:'FILL' 1;">group</span>
+        </div>
+        <div>
+          <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#C4863A;margin-bottom:2px;">You're not alone</p>
+          <p style="font-family:'Noto Serif',serif;font-size:1.1rem;font-weight:700;color:#1d1c16;line-height:1.2;">Join the Pancito y Más community</p>
+        </div>
+      </div>
+      <p style="font-size:13px;color:#514538;line-height:1.6;margin-bottom:1.25rem;">Ask any sourdough question in our Facebook group — Alison personally replies to every post. No question is too beginner. We've all been there.</p>
+      <a href="https://www.facebook.com/groups/1235548458006543" target="_blank"
+        style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;background:#1877F2;color:#fff;border-radius:14px;font-weight:700;font-size:14px;text-decoration:none;margin-bottom:12px;">
+        <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1;">group</span>
+        Join the Facebook Group →
+      </a>
+      <button onclick="this.closest('[style]').remove();goTo('c3s1');initEquipment();"
+        style="width:100%;padding:12px;background:transparent;color:#847466;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">
+        Continue to Equipment Check →
+      </button>
+    </div>
+    <style>
+      @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+      @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    </style>
+  `;
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) { overlay.remove(); goTo('c3s1'); initEquipment(); }
+  });
+  document.body.appendChild(overlay);
 }
 
 // ── Chapter 3 (Equipment) ─────────────────────────────────────────────────
@@ -560,6 +783,7 @@ function initEquipment() {
   `).join('');
 }
 
+let _kitBannerShown = false;
 function toggleEquip(id, state, row) {
   equipState[id] = state;
   const btns = row.querySelectorAll('.equip-btn');
@@ -567,6 +791,36 @@ function toggleEquip(id, state, row) {
   btns[1].className = 'equip-btn ' + (state === 'need' ? 'need' : 'text-[10px] font-bold px-2.5 py-1 rounded-lg border border-[#d6c3b3] text-[#847466]') + ' text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all';
   if (state === 'have') { btns[0].style.cssText='background:#875305;color:#fff;border-color:#875305'; btns[1].style.cssText=''; }
   else { btns[1].style.cssText='background:#f2ede3;color:#875305;border-color:#d6c3b3'; btns[0].style.cssText=''; }
+
+  // First time user taps "I need this" — show Kit promo at bottom of equip list
+  if (state === 'need' && !_kitBannerShown) {
+    _kitBannerShown = true;
+    const existing = document.getElementById('kit-promo-banner');
+    if (!existing) {
+      const list = document.getElementById('equipList');
+      const promo = document.createElement('a');
+      promo.id = 'kit-promo-banner';
+      promo.href = 'https://www.amazon.com/dp/B0FZWXPXF6?maas=maas_adg_9469FAF870BAA9D072E90EE503019C38_afap_abs&ref_=aa_maas&tag=maas';
+      promo.target = '_blank';
+      promo.style.cssText = `
+        display:flex;align-items:center;gap:12px;
+        background:linear-gradient(135deg,#875305,#c4863a);
+        border-radius:16px;padding:14px;text-decoration:none;
+        animation:slideIn 0.3s ease;
+      `;
+      promo.innerHTML = `
+        <span class="material-symbols-outlined" style="color:#ffb967;font-size:28px;flex-shrink:0;font-variation-settings:'FILL' 1;">shopping_bag</span>
+        <div>
+          <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#ffb967;margin-bottom:2px;">Alison's Starter Kit</p>
+          <p style="font-size:13px;font-weight:700;color:#fff;line-height:1.3;">Get everything you need in one kit →</p>
+          <p style="font-size:11px;color:rgba(255,255,255,0.75);margin-top:2px;">Banneton · Lame · Bread Sling · Bench Scraper</p>
+        </div>
+        <style>@keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}</style>
+      `;
+      list.appendChild(promo);
+      promo.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
 }
 
 function completeChapter3() {
@@ -608,7 +862,7 @@ function completeCheckin() {
   launchParticles();
 }
 
-function finishOnboarding() {
+function finishOnboarding(dest) {
   const ob = JSON.parse(storage.getItem('pym_onboarding')||'{}');
   storage.setItem('pym_onboarding', JSON.stringify({
     ...ob,
@@ -616,8 +870,13 @@ function finishOnboarding() {
     chapter4Complete: true,
     completedAt: new Date().toISOString(),
   }));
-  PymGamification.unlockAchievement('named_starter');
-  window.location.href = 'bake-log.html';
+  if (window.PymGamification) {
+    PymGamification.unlockAchievement('named_starter');
+    if (ob.creatingStarter) {
+      PymGamification.unlockAchievement('born_from_scratch');
+    }
+  }
+  window.location.href = dest || 'bake-log.html';
 }
 
 // ── Particles ─────────────────────────────────────────────────────────────
@@ -650,13 +909,19 @@ function launchParticles() {
     window.location.href = 'index.html';
     return;
   }
-  // Restore progress if they left mid-onboarding
+  // Restore starter name if they left mid-onboarding
   if (ob && ob.starterName) {
     starterName = ob.starterName;
     document.querySelectorAll('#c4StarterName,#c4StarterName2').forEach(el => el.textContent = starterName);
     document.querySelectorAll('#feedBtnName,#c4JarLabel,#c4CelebName,#c4CelebName2,#starterJarLabel').forEach(el => el.textContent = starterName);
     document.getElementById('c1s3Headline').textContent = `${starterName} is alive!`;
+    // They already answered the starter question — skip c0s1
+    currentScreen = 'c1s1';
+    document.getElementById('c0s1').classList.add('hidden');
+    document.getElementById('c1s1').classList.remove('hidden');
+    if (ob.creatingStarter) creatingStarter = true;
   }
+  // else: brand new user starts on c0s1 (visible by default)
   updateNav();
 })();
 </script>

@@ -192,6 +192,7 @@
   // ACHIEVEMENTS
   // ══════════════════════════════════════════════════════════════════════════
   const BADGE_DEFS = [
+    { id: 'born_from_scratch', name: 'Born From Scratch', icon: 'spa', story: 'You created your starter from just flour and water. That\'s wild yeast you captured from the air. It\'s alive because of you.' },
     { id: 'named_starter',  name: 'Named & Claimed',     icon: 'pets',                 story: 'Every great starter deserves a name. Yours has one now.' },
     { id: 'first_checkin',  name: 'Starter Parent',      icon: 'favorite',             story: 'You fed your starter for the very first time. The journey has begun.' },
     { id: 'first_loaf',     name: 'First Crumb',         icon: 'bakery_dining',        story: 'Your very first loaf. Every legend starts exactly here.' },
