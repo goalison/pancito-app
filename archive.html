@@ -748,10 +748,10 @@
         async function importFromGoogleDrive() {
             if (!GDRIVE_CLIENT_ID) {
                 _showInfoSheet('help', 'How to restore from Google Drive',
-                    'Tap <strong>Choose File</strong> below.<br><br>
+                    `Tap <strong>Choose File</strong> below.<br><br>
                     In the file picker, browse to <em>Google Drive → My Drive</em> and select your backup file
                     (named <em>pancito-backup-YYYY-MM-DD.json</em>).<br><br>
-                    If you saved via the share sheet, it will be in <strong>My Drive</strong> (the root folder).', 'Got it');
+                    If you saved via the share sheet, it will be in <strong>My Drive</strong> (the root folder).`, 'Got it');
                 return;
             }
             const btn = document.getElementById('driveImportBtn');
@@ -762,8 +762,8 @@
                 const files = await _listDriveBackups();
                 if (!files.length) {
                     _showInfoSheet('search_off', 'No backups found in Drive',
-                        'No backup files were found in your <em>Pancito y Más Backups</em> folder.<br><br>
-                        Save a backup first by tapping <strong>Save to Google Drive</strong> above.', 'OK');
+                        `No backup files were found in your <em>Pancito y Más Backups</em> folder.<br><br>
+                        Save a backup first by tapping <strong>Save to Google Drive</strong> above.`, 'OK');
                     return;
                 }
                 _showDriveFilePicker(files);
