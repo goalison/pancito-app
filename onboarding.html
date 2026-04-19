@@ -147,6 +147,15 @@
   @keyframes xpPop {
     0%{transform:scale(0.5);opacity:0} 60%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1}
   }
+  @keyframes bulkFold {
+    0%{transform:scaleX(1) scaleY(1)} 25%{transform:scaleX(1.13) scaleY(0.88)} 60%{transform:scaleX(0.91) scaleY(1.09)} 100%{transform:scaleX(1) scaleY(1)}
+  }
+  @keyframes starterDrip {
+    0%{opacity:0;transform:translateY(-8px) scale(0.85)} 25%{opacity:1;transform:translateY(14px) scale(1.05)} 100%{opacity:0;transform:translateY(68px) scale(0.9)}
+  }
+  @keyframes warmPulse {
+    0%,100%{opacity:0.5} 50%{opacity:0.9}
+  }
 
   /* Bottom sheet */
   .sheet { transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.32,0.72,0,1); }
@@ -448,41 +457,102 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════════════════════════ -->
-<!-- C2-GAME — Poke Test Interactive                                        -->
+<!-- C2-GAME — Bulk Fermentation Interactive Lab                            -->
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c2game">
-  <div class="flex-1 flex flex-col items-center justify-start px-8 text-center pt-20 pb-4">
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3">Interactive · Bulk Fermentation</p>
-    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">The Poke Test</h2>
-    <p class="text-[#514538] text-sm leading-relaxed max-w-xs mb-8">When bulk fermentation is complete, a gentle finger poke springs back slowly. Tap the dough to try it!</p>
+  <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Bulk Fermentation</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Work the Dough 🤲</h2>
+    <p id="bulkInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-4 min-h-[2.5rem]">Tap the starter jar to add it to your flour</p>
 
-    <!-- Dough ball -->
-    <div id="doughBall" onclick="pokeDough()" style="
-      width:160px;height:160px;border-radius:50%;cursor:pointer;
-      background:radial-gradient(ellipse at 35% 30%, #f5e8c8 0%, #e8d2a0 35%, #c8a96b 75%, #a07845 100%);
-      box-shadow:0 8px 32px rgba(135,83,5,0.22), inset 0 -4px 12px rgba(135,83,5,0.08);
-      transition:box-shadow 0.4s ease;
-      display:flex;align-items:center;justify-content:center;
-      user-select:none;-webkit-user-select:none;
-      flex-shrink:0;
-    ">
-      <span style="font-size:2.2rem;line-height:1;pointer-events:none">👆</span>
+    <!-- ── Proofing bowl visual ─────────────────────────────────────────── -->
+    <div style="position:relative;flex-shrink:0;width:204px;margin:0 auto 0.9rem">
+      <!-- Bowl rim (ellipse) -->
+      <div style="
+        width:208px;height:20px;margin-left:-2px;
+        background:linear-gradient(180deg,#e0cdb0 0%,#c4a070 100%);
+        border-radius:50%;border:3px solid #875305;
+        position:relative;z-index:2;
+      "></div>
+      <!-- Bowl body -->
+      <div id="bulkBowlBody" onclick="bulkBowlTap()" style="
+        width:204px;height:118px;
+        background:radial-gradient(ellipse at 50% 108%,#fef3de 0%,#ecdfc0 45%,#d4b870 85%,#b08040 100%);
+        border-radius:0 0 102px 102px / 0 0 72px 72px;
+        border:3px solid #875305;border-top:none;
+        position:relative;overflow:hidden;cursor:pointer;
+        box-shadow:0 8px 28px rgba(135,83,5,0.18),inset 0 -3px 12px rgba(135,83,5,0.06);
+        transition:box-shadow 0.4s ease;
+        user-select:none;-webkit-user-select:none;
+      ">
+        <!-- Dough mound -->
+        <div id="bulkDough" style="
+          position:absolute;bottom:0;left:9%;right:9%;
+          height:50%;
+          background:radial-gradient(ellipse at 50% 0%,#f5e8c8 0%,#e0c89a 35%,#c8a86b 75%,#a07845 100%);
+          border-radius:50% 50% 0 0 / 60% 60% 0 0;
+          transition:height 1.5s cubic-bezier(.34,1.56,.64,1), background 0.8s ease;
+          box-shadow:inset 0 -2px 8px rgba(135,83,5,0.08);
+          transform-origin:bottom center;
+        "></div>
+        <!-- Starter pour animation -->
+        <div id="bulkStarterAnim" style="position:absolute;inset:0;pointer-events:none;z-index:5;display:none;overflow:hidden">
+          <div style="position:absolute;left:32%;top:-4px;font-size:24px;animation:starterDrip 0.9s ease forwards">🫙</div>
+          <div style="position:absolute;left:50%;top:-4px;font-size:16px;animation:starterDrip 0.9s 0.12s ease forwards;opacity:0">💧</div>
+        </div>
+        <!-- Bubbles on dough surface (show after rest) -->
+        <div id="blkBub1" style="position:absolute;bottom:55%;left:18%;width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.52);opacity:0;transition:opacity 1.4s;z-index:3;pointer-events:none"></div>
+        <div id="blkBub2" style="position:absolute;bottom:62%;left:52%;width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.45);opacity:0;transition:opacity 1.4s;z-index:3;pointer-events:none"></div>
+        <div id="blkBub3" style="position:absolute;bottom:57%;left:75%;width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.42);opacity:0;transition:opacity 1.4s;z-index:3;pointer-events:none"></div>
+        <!-- Warmth glow (animates during rest) -->
+        <div id="bulkWarmth" style="
+          position:absolute;inset:0;
+          background:transparent;
+          transition:background 2s ease;pointer-events:none;z-index:1;
+        "></div>
+      </div>
+      <!-- Poke finger hint — floats above bowl during poke step -->
+      <div id="bulkPokeHint" style="
+        position:absolute;top:-18px;right:22px;font-size:28px;
+        opacity:0;transition:opacity 0.5s;pointer-events:none;z-index:5;
+        animation:none;
+      ">👆</div>
     </div>
 
-    <p id="pokeMsg" class="mt-6 text-sm text-[#514538] leading-relaxed max-w-xs min-h-[3rem]">Tap the dough to test it!</p>
+    <!-- ── Step tracker: Add | Fold | Rest | Poke ──────────────────────── -->
+    <div style="display:flex;gap:5px;width:100%;max-width:300px;margin-bottom:12px">
+      <div id="bulk-step-add"  style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:9px;font-weight:700;color:#847466;transition:all 0.3s;text-align:center">1. Add</div>
+      <div id="bulk-step-fold" style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:9px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">2. Fold</div>
+      <div id="bulk-step-rest" style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:9px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">3. Rest</div>
+      <div id="bulk-step-poke" style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:9px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">4. Poke</div>
+    </div>
 
-    <!-- Result card — hidden until 3 pokes -->
-    <div id="doughReadyCard" style="display:none;
+    <!-- ── Action button (changes each step; hidden when bowl is the target) -->
+    <div id="bulkActionWrap" style="width:100%;max-width:300px">
+      <button id="bulkActionBtn" onclick="bulkActionBtnTap()" style="
+        width:100%;padding:14px 8px;border-radius:18px;
+        background:#f2ede3;border:2px solid #d6c3b3;
+        display:flex;flex-direction:column;align-items:center;gap:5px;
+        cursor:pointer;transition:all 0.2s;font-family:inherit;
+      ">
+        <span id="bulkActionEmoji" style="font-size:30px">🫙</span>
+        <span id="bulkActionLabel" style="font-size:10px;font-weight:700;color:#875305">Add Starter</span>
+      </button>
+    </div>
+
+    <!-- ── Fact card (appears after rest and poke) ──────────────────────── -->
+    <div id="bulkFactCard" style="display:none;
       background:linear-gradient(135deg,#875305,#c4863a);
-      border-radius:16px;padding:14px 18px;margin-top:0.75rem;width:100%;max-width:280px;
+      border-radius:16px;padding:14px 18px;margin-top:10px;width:100%;max-width:300px;
       animation:fadeIn 0.4s ease;
     ">
-      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:4px;">Result</p>
-      <p style="font-size:14px;font-weight:700;color:#fff;line-height:1.4;">Dough springs back slowly — bulk fermentation is complete! ✓</p>
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
+      <p id="bulkFactText" style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left"></p>
     </div>
   </div>
+
   <div class="px-6 pb-10">
-    <button id="pokeContinueBtn" onclick="afterPokeTest()"
+    <button id="bulkContinueBtn" onclick="afterBulkGame()"
       class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100"
       disabled>
       On to equipment check →
@@ -847,9 +917,10 @@ function goBack() {
     currentScreen = prev;
     updateNav();
 
-    // Re-init quiz screens so they're fresh when navigated back to
+    // Re-init interactive screens so they're fresh when navigated back to
     if (prev === 'c1game') initQuiz('c1');
     if (prev === 'c3game') initQuiz('c3');
+    if (prev === 'c2game') initBulkGame();
   }, 320);
 }
 
@@ -862,7 +933,9 @@ function updateNav() {
     if (d) d.className = 'dot' + (i <= ch ? ' active' : '');
   }
   const label = document.getElementById('chapterLabel');
-  if (currentScreen === 'c2game' || currentScreen === 'c4game' || currentScreen === 'c1game' || currentScreen === 'c3game') {
+  if (currentScreen === 'c2game' || currentScreen === 'c4game') {
+    label.textContent = 'Interactive Lab 🧪';
+  } else if (currentScreen === 'c1game' || currentScreen === 'c3game') {
     label.textContent = 'Quiz Time! 🎮';
   } else if (currentScreen === 'c0s1' || currentScreen === 'c0s2') {
     label.textContent = 'Getting Started';
@@ -1040,14 +1113,14 @@ function showFacebookCard() {
         <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1;">group</span>
         Join the Facebook Group →
       </a>
-      <button onclick="this.closest('[style]').remove();_pokeCount=0;goTo('c2game');"
+      <button onclick="this.closest('[style]').remove();goTo('c2game');initBulkGame();"
         style="width:100%;padding:12px;background:transparent;color:#847466;border:none;font-weight:600;font-size:13px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">
         Maybe later
       </button>
     </div>
   `;
   overlay.addEventListener('click', e => {
-    if (e.target === overlay) { overlay.remove(); _pokeCount=0; goTo('c2game'); }
+    if (e.target === overlay) { overlay.remove(); goTo('c2game'); initBulkGame(); }
   });
   document.body.appendChild(overlay);
 }
@@ -1357,37 +1430,185 @@ window.addEventListener('focus', () => {
 });
 
 // ══════════════════════════════════════════════════════════════════════════
-// MINI-GAME: Poke Test (c2game)
+// MINI-GAME: Bulk Fermentation Lab (c2game)
 // ══════════════════════════════════════════════════════════════════════════
-let _pokeCount = 0;
-const POKE_MSGS = [
-  "The dough feels firm... give it another poke! 👆",
-  "It's starting to spring back... almost there! One more!",
-  "✓ The dough springs back slowly and steadily — bulk fermentation is complete!"
+let _bulkStep      = 'add';  // 'add' | 'fold' | 'rest' | 'poke' | 'done'
+let _bulkFoldCount = 0;
+
+const BULK_INSIGHTS = [
+  'Bulk fermentation is done when your dough has grown 50–75% and feels airy and jiggly — not 100% doubled like a starter. Watch for bubbles on the sides too.',
+  'Temperature is everything: at 78°F bulk takes ~4–5 hours; at 68°F it can take 8–12 hours. Warmer kitchen = faster fermentation.',
+  'The poke test is your best tool — if the dough springs back slowly and halfway, it\'s ready to shape. Too fast = underproofed. Doesn\'t spring back = overproofed.',
 ];
 
-function pokeDough() {
-  // Trigger start ambient music on first interaction
-  if (_pokeCount === 0) startAmbientMusic();
-  playSound('pop');
+function initBulkGame() {
+  _bulkStep      = 'add';
+  _bulkFoldCount = 0;
+  // Reset dough shape and color
+  const dough = document.getElementById('bulkDough');
+  dough.style.height     = '50%';
+  dough.style.transform  = '';
+  dough.style.background = 'radial-gradient(ellipse at 50% 0%,#f5e8c8 0%,#e0c89a 35%,#c8a86b 75%,#a07845 100%)';
+  // Reset bubbles
+  ['blkBub1','blkBub2','blkBub3'].forEach(id => { document.getElementById(id).style.opacity = '0'; });
+  // Reset warmth
+  document.getElementById('bulkWarmth').style.background = 'transparent';
+  // Reset poke hint
+  document.getElementById('bulkPokeHint').style.opacity = '0';
+  // Reset step pills
+  _bulkSetStep('bulk-step-add', 'active');
+  ['bulk-step-fold','bulk-step-rest','bulk-step-poke'].forEach(id => _bulkSetStep(id, 'idle'));
+  // Reset instruction
+  document.getElementById('bulkInstText').textContent = 'Tap the starter jar to add it to your flour';
+  // Reset action button
+  _bulkShowBtn('🫙', 'Add Starter');
+  // Reset fact card and continue
+  document.getElementById('bulkFactCard').style.display = 'none';
+  document.getElementById('bulkContinueBtn').disabled = true;
+  startAmbientMusic();
+}
 
-  const ball = document.getElementById('doughBall');
-  ball.style.animation = 'doughPoke 0.45s ease';
-  setTimeout(() => { ball.style.animation = ''; }, 460);
-
-  const idx = Math.min(_pokeCount, POKE_MSGS.length - 1);
-  document.getElementById('pokeMsg').textContent = POKE_MSGS[idx];
-  _pokeCount++;
-
-  if (_pokeCount >= 3) {
-    document.getElementById('doughReadyCard').style.display = 'block';
-    document.getElementById('pokeContinueBtn').disabled = false;
-    ball.style.boxShadow = '0 8px 32px rgba(135,83,5,0.38), 0 0 22px rgba(196,134,58,0.28), inset 0 -4px 12px rgba(135,83,5,0.08)';
-    setTimeout(() => playSound('success'), 200);
+function _bulkSetStep(id, state) {
+  const el = document.getElementById(id); if (!el) return;
+  if (state === 'done') {
+    el.style.cssText += ';border-color:#198754;background:#198754;color:#fff;opacity:1';
+  } else if (state === 'active') {
+    el.style.cssText += ';border-color:#875305;background:transparent;color:#875305;opacity:1';
+  } else { // idle
+    el.style.borderColor = '#d6c3b3'; el.style.background = 'transparent';
+    el.style.color = '#c8b8a8'; el.style.opacity = '0.45';
   }
 }
 
-function afterPokeTest() {
+function _bulkShowBtn(emoji, label) {
+  document.getElementById('bulkActionWrap').style.display = 'block';
+  document.getElementById('bulkActionEmoji').textContent  = emoji;
+  document.getElementById('bulkActionLabel').textContent  = label;
+}
+
+function _bulkHideBtn() {
+  document.getElementById('bulkActionWrap').style.display = 'none';
+}
+
+// Tap on the action button (for Add Starter and Cover & Rest steps)
+function bulkActionBtnTap() {
+  if (_bulkStep === 'add')  _bulkAddStarter();
+  if (_bulkStep === 'rest') _bulkRest();
+}
+
+// Tap directly on the bowl (for Fold and Poke steps)
+function bulkBowlTap() {
+  if (_bulkStep === 'fold') _bulkFold();
+  if (_bulkStep === 'poke') _bulkPoke();
+}
+
+// ── Step 1: Add Starter ───────────────────────────────────────────────────
+function _bulkAddStarter() {
+  startAmbientMusic();
+  playSound('water');
+  // Pour animation
+  const anim = document.getElementById('bulkStarterAnim');
+  anim.style.display = 'block'; setTimeout(() => { anim.style.display = 'none'; }, 960);
+  // Dough shifts to mixed color
+  setTimeout(() => {
+    document.getElementById('bulkDough').style.background =
+      'radial-gradient(ellipse at 50% 0%,#f0dda8 0%,#d4a860 40%,#b08038 80%,#886020 100%)';
+  }, 600);
+  // Mark step done, advance
+  _bulkSetStep('bulk-step-add', 'done');
+  _bulkSetStep('bulk-step-fold', 'active');
+  _bulkStep = 'fold';
+  _bulkFoldCount = 0;
+  _bulkHideBtn();
+  document.getElementById('bulkInstText').textContent = 'Starter is in! Now tap the bowl to stretch & fold the dough — 4 times total 💪';
+}
+
+// ── Step 2: Stretch & Fold (4×) ───────────────────────────────────────────
+function _bulkFold() {
+  if (_bulkFoldCount >= 4) return;
+  playSound('stir');
+  _bulkFoldCount++;
+  // Bowl wobble
+  const bowl = document.getElementById('bulkBowlBody');
+  bowl.style.animation = 'jarWobble 0.6s ease';
+  setTimeout(() => { bowl.style.animation = ''; }, 640);
+  // Dough stretches then springs back — alternating direction
+  const dough = document.getElementById('bulkDough');
+  const sx = _bulkFoldCount % 2 === 0 ? 1.13 : 0.89;
+  const sy = _bulkFoldCount % 2 === 0 ? 0.88 : 1.10;
+  dough.style.transition = 'transform 0.16s ease-out, height 1.5s cubic-bezier(.34,1.56,.64,1), background 0.8s ease';
+  dough.style.transform  = `scaleX(${sx}) scaleY(${sy})`;
+  setTimeout(() => {
+    dough.style.transition = 'transform 0.34s cubic-bezier(.34,1.56,.64,1), height 1.5s cubic-bezier(.34,1.56,.64,1), background 0.8s ease';
+    dough.style.transform  = 'scaleX(1) scaleY(1)';
+  }, 190);
+
+  if (_bulkFoldCount < 4) {
+    document.getElementById('bulkInstText').textContent =
+      `Fold ${_bulkFoldCount} of 4 ✓  —  Keep going, each fold builds strength!`;
+  } else {
+    // All 4 folds done
+    _bulkSetStep('bulk-step-fold', 'done');
+    _bulkSetStep('bulk-step-rest', 'active');
+    _bulkStep = 'rest';
+    document.getElementById('bulkInstText').textContent =
+      'Gluten is strong now! Cover the bowl and place in a warm spot (75–78°F) 🌡️';
+    _bulkShowBtn('🌡️', 'Cover & Rest');
+  }
+}
+
+// ── Step 3: Cover & Rest ──────────────────────────────────────────────────
+function _bulkRest() {
+  playSound('success');
+  _bulkHideBtn();
+  document.getElementById('bulkInstText').textContent = 'Resting… wild yeast is feasting on the flour 🦠✨';
+  // Warmth glow builds up
+  document.getElementById('bulkWarmth').style.background =
+    'radial-gradient(ellipse at 50% 110%,rgba(255,185,103,0.28) 0%,rgba(255,185,103,0.0) 68%)';
+  // After 1.8s: dough rises
+  setTimeout(() => {
+    document.getElementById('bulkDough').style.height = '74%';
+    // After another 0.9s: bubbles appear, fact card shows
+    setTimeout(() => {
+      ['blkBub1','blkBub2','blkBub3'].forEach(id => { document.getElementById(id).style.opacity = '1'; });
+      _bulkSetStep('bulk-step-rest', 'done');
+      _bulkSetStep('bulk-step-poke', 'active');
+      _bulkStep = 'poke';
+      document.getElementById('bulkInstText').textContent =
+        'Dough has grown 50–75% and smells incredible! Tap to poke-test it 👆';
+      // Show poke hint finger
+      document.getElementById('bulkPokeHint').style.opacity = '1';
+      // Show baker's insight
+      const insight = BULK_INSIGHTS[Math.floor(Math.random() * BULK_INSIGHTS.length)];
+      document.getElementById('bulkFactText').textContent  = insight;
+      document.getElementById('bulkFactCard').style.display = 'block';
+    }, 900);
+  }, 1800);
+}
+
+// ── Step 4: Poke Test ─────────────────────────────────────────────────────
+function _bulkPoke() {
+  playSound('pop');
+  document.getElementById('bulkPokeHint').style.opacity = '0';
+  // Poke deform on the bowl
+  const bowl = document.getElementById('bulkBowlBody');
+  bowl.style.animation = 'doughPoke 0.48s ease';
+  setTimeout(() => { bowl.style.animation = ''; }, 490);
+  // Mark done
+  _bulkSetStep('bulk-step-poke', 'done');
+  _bulkStep = 'done';
+  document.getElementById('bulkInstText').textContent =
+    '✓ Springs back slowly — bulk fermentation complete! You\'re ready to shape. 🎉';
+  // Warmth glows brighter as a success indicator
+  document.getElementById('bulkWarmth').style.background =
+    'radial-gradient(ellipse at 50% 110%,rgba(255,185,103,0.42) 0%,rgba(255,185,103,0.0) 68%)';
+  setTimeout(() => {
+    playSound('success');
+    document.getElementById('bulkContinueBtn').disabled = false;
+  }, 480);
+}
+
+function afterBulkGame() {
   goTo('c3s1');
   initEquipment();
 }
