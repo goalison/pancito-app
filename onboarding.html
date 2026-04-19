@@ -810,15 +810,47 @@ function goTo(id, exitCurrent=true) {
 
 function goBack() {
   const idx = SCREENS_ORDER.indexOf(currentScreen);
-  if (idx > 0) {
-    const prev = SCREENS_ORDER[idx - 1];
-    const cur = document.getElementById(currentScreen);
-    cur.classList.add('hidden');
-    const p = document.getElementById(prev);
+  if (idx <= 0) return;
+  const prev = SCREENS_ORDER[idx - 1];
+  const cur  = document.getElementById(currentScreen);
+  const p    = document.getElementById(prev);
+  if (!p) return;
+
+  // Remove any quiz-completion overlay on the screen we're leaving
+  if (cur) {
+    const qzOverlay = cur.querySelector('[style*="z-index:50"]');
+    if (qzOverlay) qzOverlay.remove();
+  }
+
+  // Slide current out to the RIGHT (reverse of forward navigation)
+  if (cur) {
+    cur.style.transition = 'opacity 0.32s ease, transform 0.32s ease';
+    cur.style.opacity    = '0';
+    cur.style.transform  = 'translateX(40px)';
+  }
+  setTimeout(() => {
+    if (cur) {
+      cur.classList.add('hidden');
+      cur.style.transition = cur.style.opacity = cur.style.transform = '';
+    }
     p.classList.remove('hidden', 'exit');
+    p.style.transition = 'opacity 0.32s ease, transform 0.32s ease';
+    p.style.opacity    = '0';
+    p.style.transform  = 'translateX(-40px)';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        p.style.opacity   = '1';
+        p.style.transform = 'translateX(0)';
+        setTimeout(() => { p.style.transition = p.style.opacity = p.style.transform = ''; }, 330);
+      });
+    });
     currentScreen = prev;
     updateNav();
-  }
+
+    // Re-init quiz screens so they're fresh when navigated back to
+    if (prev === 'c1game') initQuiz('c1');
+    if (prev === 'c3game') initQuiz('c3');
+  }, 320);
 }
 
 function updateNav() {
@@ -1009,8 +1041,8 @@ function showFacebookCard() {
         Join the Facebook Group →
       </a>
       <button onclick="this.closest('[style]').remove();_pokeCount=0;goTo('c2game');"
-        style="width:100%;padding:12px;background:transparent;color:#847466;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">
-        Continue →
+        style="width:100%;padding:12px;background:transparent;color:#847466;border:none;font-weight:600;font-size:13px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">
+        Maybe later
       </button>
     </div>
   `;
@@ -1078,7 +1110,7 @@ function toggleEquip(id, state, row) {
       promo.innerHTML = `
         <span class="material-symbols-outlined" style="color:#ffb967;font-size:28px;flex-shrink:0;font-variation-settings:'FILL' 1;">shopping_bag</span>
         <div>
-          <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#ffb967;margin-bottom:2px;">Alison's Starter Kit</p>
+          <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#ffb967;margin-bottom:2px;">Pancito y Más Kit</p>
           <p style="font-size:13px;font-weight:700;color:#fff;line-height:1.3;">Get everything you need in one kit →</p>
           <p style="font-size:11px;color:rgba(255,255,255,0.75);margin-top:2px;">Banneton · Lame · Bread Sling · Bench Scraper</p>
         </div>
@@ -1427,37 +1459,43 @@ const QUIZ_DATA = {
         emoji: '🫧',
         q: 'What does a healthy, active starter look like?',
         choices: [
-          { e:'🫧', t:'Full of bubbles and doubled in size', ok:true },
-          { e:'😴', t:'Completely flat with no change', ok:false },
-          { e:'🍄', t:'Green fuzzy spots on top', ok:false },
-          { e:'🌊', t:'Grey liquid floating on top', ok:false },
-        ],
-        fb: { ok:'Bubbles + doubling in size = your starter is actively fermenting. This is exactly what you want to see!',
-              no:'Bubbles and doubling are the signs of life. Grey liquid (called hooch) just means it\'s hungry, not active.' }
+          { e:'🫧', t:'Full of bubbles and doubled in size', ok:true,
+            why:'Correct! Bubbles are CO₂ from yeast eating fresh flour, and doubling means fermentation is in full swing. This is exactly what you want.' },
+          { e:'😴', t:'Completely flat with no change', ok:false,
+            why:'A flat starter has very low yeast activity — it needs feeding or more warmup time. No bubbles means it can\'t leaven bread yet.' },
+          { e:'🍄', t:'Green fuzzy spots on top', ok:false,
+            why:'Fuzzy colored spots are mold contamination. If you ever see this, start a fresh batch — your starter has been invaded and isn\'t recoverable.' },
+          { e:'🌊', t:'Grey liquid floating on top', ok:false,
+            why:'That grey layer is hooch — a sign your starter is hungry, not active. The good news: just pour it off and feed it and it\'ll bounce right back.' },
+        ]
       },
       {
         emoji: '💧',
         q: 'You spot grey liquid (hooch) on top of your starter. What do you do?',
         choices: [
-          { e:'↩️', t:'Pour it off, then feed your starter', ok:true },
-          { e:'🤔', t:'Leave it — it adds sour flavor', ok:false },
-          { e:'🗑️', t:'Throw the whole starter away', ok:false },
-          { e:'💧', t:'Add more water to dilute it', ok:false },
-        ],
-        fb: { ok:'Exactly! Hooch just means hungry starter. Pour it off, feed with flour + water, and it bounces right back.',
-              no:'Don\'t panic! Hooch = hungry starter. Just pour it off and feed it — never throw a healthy starter away!' }
+          { e:'↩️', t:'Pour it off, then feed your starter', ok:true,
+            why:'Exactly right! Hooch means the yeast has eaten through all its food. Pour it off, add fresh flour and water, and your starter will be bubbly again in hours.' },
+          { e:'🤔', t:'Leave it — it adds sour flavor', ok:false,
+            why:'Letting hooch sit makes your starter increasingly acidic and sluggish over time. It\'s a signal to feed now, not something to let accumulate.' },
+          { e:'🗑️', t:'Throw the whole starter away', ok:false,
+            why:'Never throw it out over hooch! It\'s just a sign of hunger — your starter is completely fine underneath. Pour the liquid off and feed it.' },
+          { e:'💧', t:'Add more water to dilute it', ok:false,
+            why:'Water alone doesn\'t help — the yeast needs fresh flour as food. Diluting without flour just gives you a wetter, still-hungry starter.' },
+        ]
       },
       {
         emoji: '⏰',
         q: 'When is the BEST moment to use your starter for baking?',
         choices: [
-          { e:'⬆️', t:'At peak rise — doubled and bubbly', ok:true },
-          { e:'🕐', t:'Right after you feed it', ok:false },
-          { e:'⬇️', t:'When it has fully deflated', ok:false },
-          { e:'🤷', t:'Anytime — it doesn\'t matter', ok:false },
-        ],
-        fb: { ok:'Peak timing! Use starter at its peak rise for max leavening power — better oven spring, better crumb.',
-              no:'Use it at PEAK rise — doubled and bubbly, just before it falls. That\'s when yeast activity is maximum!' }
+          { e:'⬆️', t:'At peak rise — doubled and bubbly', ok:true,
+            why:'Perfect! Peak rise = maximum yeast activity = maximum lift. Using starter at its peak gives you the best oven spring, best crumb, and best flavor.' },
+          { e:'🕐', t:'Right after you feed it', ok:false,
+            why:'Right after feeding the yeast is just waking up and hasn\'t multiplied enough yet. Give it 4–8 hours to reach its peak before you use it.' },
+          { e:'⬇️', t:'When it has fully deflated', ok:false,
+            why:'A deflated starter has already burned through its food — yeast activity is falling. Past-peak starter makes dense, under-risen bread.' },
+          { e:'🤷', t:'Anytime — it doesn\'t matter', ok:false,
+            why:'Timing really does matter! Starter at peak vs. past-peak can be the difference between a gorgeous open crumb and a dense brick.' },
+        ]
       }
     ]
   },
@@ -1467,49 +1505,57 @@ const QUIZ_DATA = {
         emoji: '✂️',
         q: 'Your dough is sticky during shaping. Which tool cuts, folds, and lifts it without sticking?',
         choices: [
-          { e:'🔪', t:'Bench scraper', ok:true },
-          { e:'🏺', t:'Dutch oven', ok:false },
-          { e:'🧺', t:'Banneton basket', ok:false },
-          { e:'⏱️', t:'Kitchen timer', ok:false },
-        ],
-        fb: { ok:'The bench scraper is your shaping superpower — it divides, folds, and lifts sticky dough like a pro!',
-              no:'The bench scraper is the hero here — specifically designed to handle sticky dough on any surface.' }
+          { e:'🔪', t:'Bench scraper', ok:true,
+            why:'Exactly! The bench scraper slides cleanly under sticky dough, folds it without tearing, and helps build surface tension for a tight round shape.' },
+          { e:'🏺', t:'Dutch oven', ok:false,
+            why:'The Dutch oven is your baking vessel — it goes inside a 500°F oven. It plays no role in shaping dough on the counter.' },
+          { e:'🧺', t:'Banneton basket', ok:false,
+            why:'The banneton comes AFTER shaping — you place the already-shaped loaf inside it for the cold proof. It can\'t help during the shaping itself.' },
+          { e:'⏱️', t:'Kitchen timer', ok:false,
+            why:'A timer is great for tracking fermentation stages, but it\'s a time-measuring device — it physically can\'t handle sticky dough!' },
+        ]
       },
       {
         emoji: '🌙',
         q: 'Your shaped loaf needs to hold its round form during a 12-hour cold proof. Where does it sleep?',
         choices: [
-          { e:'🧺', t:'Banneton basket', ok:true },
-          { e:'🏺', t:'Dutch oven', ok:false },
-          { e:'🍳', t:'Regular baking tray', ok:false },
-          { e:'🥣', t:'Mixing bowl', ok:false },
-        ],
-        fb: { ok:'The banneton\'s coiled structure supports the shape AND creates that beautiful spiral pattern on the crust!',
-              no:'The banneton basket is designed for this — it cradles the loaf all night and imprints the iconic spiral.' }
+          { e:'🧺', t:'Banneton basket', ok:true,
+            why:'The banneton\'s coiled linen supports the dough\'s shape through the entire cold proof AND imprints that beautiful spiral pattern on your finished crust!' },
+          { e:'🏺', t:'Dutch oven', ok:false,
+            why:'The Dutch oven is for baking at high heat — its shape and material aren\'t suited for proofing dough in the fridge overnight.' },
+          { e:'🍳', t:'Regular baking tray', ok:false,
+            why:'A flat tray offers zero side support — your loaf would slowly spread sideways during the long proof instead of staying tall and round.' },
+          { e:'🥣', t:'Mixing bowl', ok:false,
+            why:'A bowl can work in a pinch with a well-floured cloth, but it doesn\'t support the shape as well and won\'t leave the beautiful spiral pattern.' },
+        ]
       },
       {
         emoji: '🔥',
         q: 'What creates the crackly crust and dramatic oven spring in sourdough?',
         choices: [
-          { e:'🏺', t:'Dutch oven, lid on first 20 min', ok:true },
-          { e:'🍳', t:'Open baking tray at high heat', ok:false },
-          { e:'💦', t:'Spraying oven walls with water', ok:false },
-          { e:'🧈', t:'Brushing the loaf with butter', ok:false },
-        ],
-        fb: { ok:'The Dutch oven traps steam from the dough itself — that\'s the secret to incredible oven spring and thick crust!',
-              no:'The Dutch oven is the magic tool — it traps steam from the dough, creating a mini steam chamber for the crust.' }
+          { e:'🏺', t:'Dutch oven, lid on first 20 min', ok:true,
+            why:'The lid traps steam rising from the dough itself, keeping the surface moist so the loaf can fully expand before the crust sets. That\'s what drives oven spring and the thick, crackly crust!' },
+          { e:'🍳', t:'Open baking tray at high heat', ok:false,
+            why:'Without enclosed steam, the crust sets too fast and the loaf can\'t fully expand. You\'ll get much less oven spring and a thinner, paler crust.' },
+          { e:'💦', t:'Spraying oven walls with water', ok:false,
+            why:'A quick spray helps some breads, but the steam disperses too fast. A Dutch oven traps steam right around the loaf for the full 20 minutes — far more effective.' },
+          { e:'🧈', t:'Brushing the loaf with butter', ok:false,
+            why:'Butter creates a soft, golden crust — the opposite of sourdough\'s thick crackle. The crust comes from sustained steam, not added fat.' },
+        ]
       },
       {
         emoji: '⚖️',
         q: 'Your recipe says 78% hydration. What\'s the most important tool to nail this?',
         choices: [
-          { e:'⚖️', t:'Digital kitchen scale', ok:true },
-          { e:'📏', t:'Measuring cups', ok:false },
-          { e:'🌡️', t:'Thermometer', ok:false },
-          { e:'🤔', t:'Eyeballing it works fine', ok:false },
-        ],
-        fb: { ok:'Grams are everything in sourdough. Even 2g off on salt changes the whole bake — digital scale is non-negotiable!',
-              no:'Measuring cups aren\'t precise enough. Sourdough is baking science — only a digital scale gives you grams.' }
+          { e:'⚖️', t:'Digital kitchen scale', ok:true,
+            why:'Sourdough is baking science. Even 5g off on flour changes the hydration and dough feel. Grams are the only unit precise enough for consistent results bake after bake.' },
+          { e:'📏', t:'Measuring cups', ok:false,
+            why:'A cup of flour varies by 20–30g depending on how it\'s scooped. That huge swing makes it impossible to reliably hit a specific hydration percentage.' },
+          { e:'🌡️', t:'Thermometer', ok:false,
+            why:'A thermometer measures temperature — crucial for dough temp and oven temp, but it can\'t weigh your flour and water. You still need a scale for hydration.' },
+          { e:'🤔', t:'Eyeballing it works fine', ok:false,
+            why:'Eyeballing gives you different results every single bake. Even 2g off on salt noticeably changes fermentation speed and flavor — precision is everything.' },
+        ]
       }
     ]
   }
@@ -1621,7 +1667,14 @@ function quizAnswer(id, choiceIdx) {
     fb.style.display = 'block';
     fb.style.background = isCorrect ? '#d4edda' : '#f8d7da';
     fbTxt.style.color = isCorrect ? '#155724' : '#842029';
-    fbTxt.textContent = (isCorrect ? '✓ ' : '✗ ') + (isCorrect ? q.fb.ok : q.fb.no);
+    const chosenWhy = q.choices[choiceIdx].why || '';
+    const correctChoice = q.choices.find(c => c.ok);
+    if (isCorrect) {
+      fbTxt.textContent = '✓ ' + chosenWhy;
+    } else {
+      fbTxt.textContent = '✗ ' + chosenWhy
+        + (correctChoice ? ' The right answer: "' + correctChoice.t + '" — ' + correctChoice.why : '');
+    }
   }
 
   // Sound
