@@ -138,6 +138,15 @@
     0%   { opacity:1; transform:translateY(0) rotate(0deg) scale(1); }
     100% { opacity:0; transform:translateY(-320px) rotate(720deg) scale(0.3); }
   }
+  @keyframes shake {
+    0%,100%{transform:translateX(0)} 20%{transform:translateX(-7px)} 40%{transform:translateX(7px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(4px)}
+  }
+  @keyframes heartLost {
+    0%{transform:scale(1)} 25%{transform:scale(1.5)} 50%{transform:scale(0.8)} 100%{transform:scale(1)}
+  }
+  @keyframes xpPop {
+    0%{transform:scale(0.5);opacity:0} 60%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1}
+  }
 
   /* Bottom sheet */
   .sheet { transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.32,0.72,0,1); }
@@ -367,6 +376,43 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- C1-GAME — Chapter 1 Quiz: Starter IQ Check 🫧                        -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="c1game" style="position:relative">
+  <div class="flex-1 flex flex-col px-6 pt-16" style="overflow-y:auto;-webkit-overflow-scrolling:touch">
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1">Chapter 1 · Quiz Time!</p>
+    <h2 class="font-headline font-bold text-2xl mb-5">Starter IQ Check 🫧</h2>
+    <!-- Hearts + progress bar -->
+    <div class="flex items-center gap-3 mb-7">
+      <div class="flex gap-0.5 shrink-0" style="font-size:22px">
+        <span id="c1gH0">❤️</span><span id="c1gH1">❤️</span><span id="c1gH2">❤️</span>
+      </div>
+      <div class="flex-1 h-3 rounded-full overflow-hidden" style="background:#f2ede3">
+        <div id="c1gBar" style="height:100%;width:0%;background:linear-gradient(90deg,#875305,#C4863A);border-radius:9999px;transition:width 0.55s cubic-bezier(.34,1.56,.64,1)"></div>
+      </div>
+    </div>
+    <!-- Question emoji + text -->
+    <div class="text-center mb-6">
+      <div id="c1gEmoji" style="font-size:64px;line-height:1;margin-bottom:14px">🫧</div>
+      <p id="c1gQText" class="font-headline font-bold text-[1.1rem] text-[#1d1c16] leading-snug max-w-[17rem] mx-auto"></p>
+    </div>
+    <!-- 2×2 answer grid -->
+    <div id="c1gChoices" class="grid grid-cols-2 gap-3 mb-4"></div>
+    <!-- Feedback strip -->
+    <div id="c1gFeedback" style="display:none;border-radius:14px;padding:14px 16px;margin-bottom:6px">
+      <p id="c1gFeedbackText" class="text-[13px] font-bold leading-relaxed text-center"></p>
+    </div>
+  </div>
+  <div class="px-6 pb-10 pt-3">
+    <button id="c1gContinue" onclick="quizNext('c1')"
+      class="w-full py-4 text-white rounded-2xl font-bold text-base active:scale-95 transition-transform"
+      style="display:none;background:#875305;border:none;cursor:pointer;font-family:inherit">
+      Continue →
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
 <!-- CHAPTER 2 — Sourdough Basics                                          -->
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c2s1">
@@ -461,6 +507,43 @@
         I'm ready — let's feed my starter →
       </button>
     </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- C3-GAME — Chapter 3 Quiz: Baker's Toolkit 🔧                         -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="c3game" style="position:relative">
+  <div class="flex-1 flex flex-col px-6 pt-16" style="overflow-y:auto;-webkit-overflow-scrolling:touch">
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1">Chapter 3 · Quiz Time!</p>
+    <h2 class="font-headline font-bold text-2xl mb-5">Baker's Toolkit 🔧</h2>
+    <!-- Hearts + progress bar -->
+    <div class="flex items-center gap-3 mb-7">
+      <div class="flex gap-0.5 shrink-0" style="font-size:22px">
+        <span id="c3gH0">❤️</span><span id="c3gH1">❤️</span><span id="c3gH2">❤️</span>
+      </div>
+      <div class="flex-1 h-3 rounded-full overflow-hidden" style="background:#f2ede3">
+        <div id="c3gBar" style="height:100%;width:0%;background:linear-gradient(90deg,#875305,#C4863A);border-radius:9999px;transition:width 0.55s cubic-bezier(.34,1.56,.64,1)"></div>
+      </div>
+    </div>
+    <!-- Question emoji + text -->
+    <div class="text-center mb-6">
+      <div id="c3gEmoji" style="font-size:64px;line-height:1;margin-bottom:14px">🔧</div>
+      <p id="c3gQText" class="font-headline font-bold text-[1.1rem] text-[#1d1c16] leading-snug max-w-[17rem] mx-auto"></p>
+    </div>
+    <!-- 2×2 answer grid -->
+    <div id="c3gChoices" class="grid grid-cols-2 gap-3 mb-4"></div>
+    <!-- Feedback strip -->
+    <div id="c3gFeedback" style="display:none;border-radius:14px;padding:14px 16px;margin-bottom:6px">
+      <p id="c3gFeedbackText" class="text-[13px] font-bold leading-relaxed text-center"></p>
+    </div>
+  </div>
+  <div class="px-6 pb-10 pt-3">
+    <button id="c3gContinue" onclick="quizNext('c3')"
+      class="w-full py-4 text-white rounded-2xl font-bold text-base active:scale-95 transition-transform"
+      style="display:none;background:#875305;border:none;cursor:pointer;font-family:inherit">
+      Continue →
+    </button>
   </div>
 </div>
 
@@ -699,7 +782,7 @@ let lessonIndex   = 0;
 let equipState    = {};
 let creatingStarter = false;
 
-const SCREENS_ORDER = ['c0s1','c0s2','c1s1','c1s2','c1s3','c2s1','c2game','c3s1','c4s1','c4game','c4s2','c4s3'];
+const SCREENS_ORDER = ['c0s1','c0s2','c1s1','c1s2','c1s3','c1game','c2s1','c2game','c3s1','c3game','c4s1','c4game','c4s2','c4s3'];
 
 // ── Safe localStorage ─────────────────────────────────────────────────────
 let _mem2 = {};
@@ -740,15 +823,15 @@ function goBack() {
 
 function updateNav() {
   // Chapter dots (pre-chapter screens show no active dot — Chapter 1 dot lights on c1s1)
-  const chapterMap = { c0s1:0, c0s2:0, c1s1:1,c1s2:1,c1s3:1, c2s1:2,c2game:2, c3s1:3, c4s1:4,c4game:4,c4s2:4,c4s3:4 };
+  const chapterMap = { c0s1:0, c0s2:0, c1s1:1,c1s2:1,c1s3:1,c1game:1, c2s1:2,c2game:2, c3s1:3,c3game:3, c4s1:4,c4game:4,c4s2:4,c4s3:4 };
   const ch = chapterMap[currentScreen] || 0;
   for (let i=1;i<=4;i++) {
     const d = document.getElementById('dot'+i);
     if (d) d.className = 'dot' + (i <= ch ? ' active' : '');
   }
   const label = document.getElementById('chapterLabel');
-  if (currentScreen === 'c2game' || currentScreen === 'c4game') {
-    label.textContent = 'Mini-Game 🎮';
+  if (currentScreen === 'c2game' || currentScreen === 'c4game' || currentScreen === 'c1game' || currentScreen === 'c3game') {
+    label.textContent = 'Quiz Time! 🎮';
   } else if (currentScreen === 'c0s1' || currentScreen === 'c0s2') {
     label.textContent = 'Getting Started';
   } else {
@@ -783,8 +866,9 @@ function completeChapter1() {
   // Save onboarding progress
   const ob = JSON.parse(storage.getItem('pym_onboarding')||'{}');
   storage.setItem('pym_onboarding', JSON.stringify({ ...ob, chapter1Complete: true, starterName }));
-  goTo('c2s1');
-  initLessons();
+  // Route through Chapter 1 quiz before Chapter 2
+  goTo('c1game');
+  initQuiz('c1');
 }
 
 // ── Chapter 2 (Lessons) ───────────────────────────────────────────────────
@@ -1013,7 +1097,9 @@ function completeChapter3() {
   document.getElementById('c4StarterName').textContent  = starterName;
   document.getElementById('c4StarterName2').textContent = starterName;
   document.getElementById('feedBtnName').textContent     = starterName;
-  goTo('c4s1');
+  // Route through Chapter 3 quiz before Chapter 4
+  goTo('c3game');
+  initQuiz('c3');
 }
 
 // ── Chapter 4 (Check-in) ──────────────────────────────────────────────────
@@ -1329,6 +1415,327 @@ function gameMix() {
     document.getElementById('gameCheckInBtn').disabled = false;
     playSound('success');
   }, 750);
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// QUIZ ENGINE — Chapters 1 & 3 (Duolingo-style, 3 hearts, XP rewards)
+// ══════════════════════════════════════════════════════════════════════════
+const QUIZ_DATA = {
+  c1: {
+    questions: [
+      {
+        emoji: '🫧',
+        q: 'What does a healthy, active starter look like?',
+        choices: [
+          { e:'🫧', t:'Full of bubbles and doubled in size', ok:true },
+          { e:'😴', t:'Completely flat with no change', ok:false },
+          { e:'🍄', t:'Green fuzzy spots on top', ok:false },
+          { e:'🌊', t:'Grey liquid floating on top', ok:false },
+        ],
+        fb: { ok:'Bubbles + doubling in size = your starter is actively fermenting. This is exactly what you want to see!',
+              no:'Bubbles and doubling are the signs of life. Grey liquid (called hooch) just means it\'s hungry, not active.' }
+      },
+      {
+        emoji: '💧',
+        q: 'You spot grey liquid (hooch) on top of your starter. What do you do?',
+        choices: [
+          { e:'↩️', t:'Pour it off, then feed your starter', ok:true },
+          { e:'🤔', t:'Leave it — it adds sour flavor', ok:false },
+          { e:'🗑️', t:'Throw the whole starter away', ok:false },
+          { e:'💧', t:'Add more water to dilute it', ok:false },
+        ],
+        fb: { ok:'Exactly! Hooch just means hungry starter. Pour it off, feed with flour + water, and it bounces right back.',
+              no:'Don\'t panic! Hooch = hungry starter. Just pour it off and feed it — never throw a healthy starter away!' }
+      },
+      {
+        emoji: '⏰',
+        q: 'When is the BEST moment to use your starter for baking?',
+        choices: [
+          { e:'⬆️', t:'At peak rise — doubled and bubbly', ok:true },
+          { e:'🕐', t:'Right after you feed it', ok:false },
+          { e:'⬇️', t:'When it has fully deflated', ok:false },
+          { e:'🤷', t:'Anytime — it doesn\'t matter', ok:false },
+        ],
+        fb: { ok:'Peak timing! Use starter at its peak rise for max leavening power — better oven spring, better crumb.',
+              no:'Use it at PEAK rise — doubled and bubbly, just before it falls. That\'s when yeast activity is maximum!' }
+      }
+    ]
+  },
+  c3: {
+    questions: [
+      {
+        emoji: '✂️',
+        q: 'Your dough is sticky during shaping. Which tool cuts, folds, and lifts it without sticking?',
+        choices: [
+          { e:'🔪', t:'Bench scraper', ok:true },
+          { e:'🏺', t:'Dutch oven', ok:false },
+          { e:'🧺', t:'Banneton basket', ok:false },
+          { e:'⏱️', t:'Kitchen timer', ok:false },
+        ],
+        fb: { ok:'The bench scraper is your shaping superpower — it divides, folds, and lifts sticky dough like a pro!',
+              no:'The bench scraper is the hero here — specifically designed to handle sticky dough on any surface.' }
+      },
+      {
+        emoji: '🌙',
+        q: 'Your shaped loaf needs to hold its round form during a 12-hour cold proof. Where does it sleep?',
+        choices: [
+          { e:'🧺', t:'Banneton basket', ok:true },
+          { e:'🏺', t:'Dutch oven', ok:false },
+          { e:'🍳', t:'Regular baking tray', ok:false },
+          { e:'🥣', t:'Mixing bowl', ok:false },
+        ],
+        fb: { ok:'The banneton\'s coiled structure supports the shape AND creates that beautiful spiral pattern on the crust!',
+              no:'The banneton basket is designed for this — it cradles the loaf all night and imprints the iconic spiral.' }
+      },
+      {
+        emoji: '🔥',
+        q: 'What creates the crackly crust and dramatic oven spring in sourdough?',
+        choices: [
+          { e:'🏺', t:'Dutch oven, lid on first 20 min', ok:true },
+          { e:'🍳', t:'Open baking tray at high heat', ok:false },
+          { e:'💦', t:'Spraying oven walls with water', ok:false },
+          { e:'🧈', t:'Brushing the loaf with butter', ok:false },
+        ],
+        fb: { ok:'The Dutch oven traps steam from the dough itself — that\'s the secret to incredible oven spring and thick crust!',
+              no:'The Dutch oven is the magic tool — it traps steam from the dough, creating a mini steam chamber for the crust.' }
+      },
+      {
+        emoji: '⚖️',
+        q: 'Your recipe says 78% hydration. What\'s the most important tool to nail this?',
+        choices: [
+          { e:'⚖️', t:'Digital kitchen scale', ok:true },
+          { e:'📏', t:'Measuring cups', ok:false },
+          { e:'🌡️', t:'Thermometer', ok:false },
+          { e:'🤔', t:'Eyeballing it works fine', ok:false },
+        ],
+        fb: { ok:'Grams are everything in sourdough. Even 2g off on salt changes the whole bake — digital scale is non-negotiable!',
+              no:'Measuring cups aren\'t precise enough. Sourdough is baking science — only a digital scale gives you grams.' }
+      }
+    ]
+  }
+};
+
+let _qzState = { id: null, qIdx: 0, hearts: 3, wrong: 0, answered: false };
+
+function initQuiz(id) {
+  _qzState = { id, qIdx: 0, hearts: 3, wrong: 0, answered: false };
+  _renderQuizQ();
+}
+
+function _renderQuizQ() {
+  const { id, qIdx } = _qzState;
+  const quiz = QUIZ_DATA[id];
+  const q = quiz.questions[qIdx];
+  const total = quiz.questions.length;
+  const pfx = id + 'g';
+
+  // Hearts
+  for (let i = 0; i < 3; i++) {
+    const h = document.getElementById(pfx + 'H' + i);
+    if (h) { h.textContent = i < _qzState.hearts ? '❤️' : '🤍'; h.style.animation = ''; }
+  }
+
+  // Progress bar
+  const bar = document.getElementById(pfx + 'Bar');
+  if (bar) bar.style.width = (qIdx / total * 100) + '%';
+
+  // Question
+  const em = document.getElementById(pfx + 'Emoji');
+  const qt = document.getElementById(pfx + 'QText');
+  if (em) { em.textContent = q.emoji; em.style.animation = 'xpPop 0.4s ease'; setTimeout(()=>{ if(em) em.style.animation=''; }, 400); }
+  if (qt) qt.textContent = q.q;
+
+  // Choices
+  const grid = document.getElementById(pfx + 'Choices');
+  if (grid) {
+    grid.innerHTML = q.choices.map((c, i) => `
+      <button onclick="quizAnswer('${id}',${i})" style="
+        background:#fef9ef;border:2.5px solid #d6c3b3;border-radius:16px;
+        padding:16px 10px;display:flex;flex-direction:column;align-items:center;
+        gap:7px;cursor:pointer;transition:transform 0.12s,border-color 0.2s,background 0.2s;
+        font-family:inherit;width:100%;text-align:center;min-height:88px;
+      " ontouchstart="this.style.transform='scale(0.94)'" ontouchend="this.style.transform=''">
+        <span style="font-size:30px;line-height:1">${c.e}</span>
+        <span style="font-size:11px;font-weight:700;color:#1d1c16;line-height:1.35">${c.t}</span>
+      </button>
+    `).join('');
+  }
+
+  // Hide feedback + continue
+  const fb = document.getElementById(pfx + 'Feedback');
+  const cont = document.getElementById(pfx + 'Continue');
+  if (fb) fb.style.display = 'none';
+  if (cont) cont.style.display = 'none';
+  _qzState.answered = false;
+}
+
+function quizAnswer(id, choiceIdx) {
+  if (_qzState.answered || _qzState.id !== id) return;
+  _qzState.answered = true;
+
+  const quiz = QUIZ_DATA[id];
+  const q = quiz.questions[_qzState.qIdx];
+  const isCorrect = q.choices[choiceIdx].ok;
+  const pfx = id + 'g';
+
+  // Style answer buttons
+  const grid = document.getElementById(pfx + 'Choices');
+  if (grid) {
+    const btns = grid.querySelectorAll('button');
+    btns.forEach((btn, i) => {
+      btn.disabled = true;
+      btn.ontouchstart = null; btn.ontouchend = null;
+      btn.style.transform = '';
+      if (q.choices[i].ok) {
+        btn.style.background = '#d4edda'; btn.style.borderColor = '#198754';
+        btn.querySelector('span:last-child').style.color = '#155724';
+      } else if (i === choiceIdx && !isCorrect) {
+        btn.style.background = '#f8d7da'; btn.style.borderColor = '#dc3545';
+        btn.querySelector('span:last-child').style.color = '#842029';
+        btn.style.animation = 'shake 0.45s ease';
+        setTimeout(() => { if (btn) btn.style.animation = ''; }, 450);
+      } else {
+        btn.style.opacity = '0.38';
+      }
+    });
+  }
+
+  // Lose a heart if wrong
+  if (!isCorrect) {
+    _qzState.wrong++;
+    const newHearts = Math.max(0, _qzState.hearts - 1);
+    const lostIdx = _qzState.hearts - 1;
+    _qzState.hearts = newHearts;
+    for (let i = 0; i < 3; i++) {
+      const h = document.getElementById(pfx + 'H' + i);
+      if (!h) continue;
+      h.textContent = i < newHearts ? '❤️' : '🤍';
+      if (i === lostIdx) { h.style.animation = 'heartLost 0.4s ease'; setTimeout(()=>{ if(h) h.style.animation=''; }, 400); }
+    }
+  }
+
+  // Feedback
+  const fb = document.getElementById(pfx + 'Feedback');
+  const fbTxt = document.getElementById(pfx + 'FeedbackText');
+  if (fb && fbTxt) {
+    fb.style.display = 'block';
+    fb.style.background = isCorrect ? '#d4edda' : '#f8d7da';
+    fbTxt.style.color = isCorrect ? '#155724' : '#842029';
+    fbTxt.textContent = (isCorrect ? '✓ ' : '✗ ') + (isCorrect ? q.fb.ok : q.fb.no);
+  }
+
+  // Sound
+  _quizPlaySound(isCorrect);
+
+  // Continue button
+  const isLast = _qzState.qIdx >= quiz.questions.length - 1;
+  const cont = document.getElementById(pfx + 'Continue');
+  if (cont) {
+    cont.style.display = 'block';
+    if (isLast) {
+      cont.textContent = id === 'c1' ? 'Chapter 2 unlocked! 🔓' : 'Chapter 4 unlocked! 🔓';
+      cont.style.background = 'linear-gradient(135deg,#875305,#C4863A)';
+    } else {
+      cont.textContent = 'Continue →';
+      cont.style.background = '#875305';
+    }
+  }
+}
+
+function quizNext(id) {
+  const isLast = _qzState.qIdx >= QUIZ_DATA[id].questions.length - 1;
+  if (isLast) { _quizShowComplete(id); return; }
+  _qzState.qIdx++;
+  _renderQuizQ();
+}
+
+function _quizShowComplete(id) {
+  const wrong  = _qzState.wrong;
+  const total  = QUIZ_DATA[id].questions.length;
+  const correct = total - wrong;
+  const xp     = wrong === 0 ? 150 : wrong === 1 ? 100 : 75;
+  const stars  = wrong === 0 ? '⭐⭐⭐' : wrong === 1 ? '⭐⭐' : '⭐';
+  const title  = wrong === 0 ? 'Perfect! 🎉' : wrong <= 1 ? 'Well done! 🙌' : 'Good effort! 💪';
+  const msg    = wrong === 0
+    ? 'You nailed every question. You\'re already thinking like a baker!'
+    : `You got ${correct} of ${total} right. Every miss is a lesson that sticks!`;
+  const nextLabel = id === 'c1' ? 'Start Chapter 2 →' : 'Start Chapter 4 →';
+  const nextFn    = id === 'c1' ? "goTo('c2s1');initLessons()" : "goTo('c4s1')";
+
+  if (!_isMuted) _quizPlayChime(wrong === 0);
+
+  const screen = document.getElementById(id + 'game');
+  if (!screen) return;
+
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:absolute;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;background:#fef9ef;animation:fadeIn 0.4s ease';
+  overlay.innerHTML = `
+    <div style="font-size:52px;margin-bottom:.75rem;text-align:center;animation:xpPop 0.5s ease">${stars}</div>
+    <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:#C4863A;margin-bottom:.4rem">Quiz complete</p>
+    <h2 style="font-family:'Noto Serif',serif;font-weight:700;font-size:1.85rem;color:#1d1c16;margin-bottom:.5rem;text-align:center">${title}</h2>
+    <p style="font-size:13px;color:#514538;text-align:center;max-width:260px;line-height:1.55;margin-bottom:1.25rem">${msg}</p>
+    <div style="background:linear-gradient(135deg,#875305,#C4863A);border-radius:9999px;padding:.5rem 1.75rem;margin-bottom:1.75rem;animation:xpPop 0.6s 0.15s ease both">
+      <span style="font-size:1.2rem;font-weight:800;color:#fff">+${xp} XP earned</span>
+    </div>
+    <button onclick="${nextFn}"
+      style="width:100%;max-width:300px;padding:1rem 1.5rem;background:#875305;color:#fff;border-radius:1rem;font-weight:700;font-size:.9375rem;border:none;cursor:pointer;font-family:inherit"
+      ontouchstart="this.style.transform='scale(0.96)'" ontouchend="this.style.transform=''">
+      ${nextLabel}
+    </button>
+  `;
+  screen.appendChild(overlay);
+
+  if (wrong === 0) launchParticles();
+}
+
+function _quizPlaySound(correct) {
+  if (_isMuted) return;
+  try {
+    const ctx = _ctx();
+    const now = ctx.currentTime;
+    if (correct) {
+      // Bright ascending arpeggio C5→E5→G5
+      [[523.25,0],[659.25,0.09],[783.99,0.2]].forEach(([freq,delay]) => {
+        const osc = ctx.createOscillator(), g = ctx.createGain();
+        osc.type = 'triangle'; osc.frequency.value = freq;
+        g.gain.setValueAtTime(0, now+delay);
+        g.gain.linearRampToValueAtTime(0.22, now+delay+0.03);
+        g.gain.exponentialRampToValueAtTime(0.001, now+delay+0.38);
+        osc.connect(g); g.connect(ctx.destination);
+        osc.start(now+delay); osc.stop(now+delay+0.42);
+      });
+    } else {
+      // Wrong buzz — descending D4→Bb3
+      [[293.66,0],[233.08,0.17]].forEach(([freq,delay]) => {
+        const osc = ctx.createOscillator(), g = ctx.createGain();
+        osc.type = 'sawtooth'; osc.frequency.value = freq;
+        g.gain.setValueAtTime(0.17, now+delay);
+        g.gain.exponentialRampToValueAtTime(0.001, now+delay+0.28);
+        osc.connect(g); g.connect(ctx.destination);
+        osc.start(now+delay); osc.stop(now+delay+0.3);
+      });
+    }
+  } catch(_) {}
+}
+
+function _quizPlayChime(perfect) {
+  if (_isMuted) return;
+  try {
+    const ctx = _ctx();
+    const notes = perfect
+      ? [523.25, 659.25, 783.99, 1046.50]  // C5 E5 G5 C6 — victory
+      : [523.25, 659.25, 783.99];            // C5 E5 G5 — well done
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator(), g = ctx.createGain();
+      osc.type = 'sine'; osc.frequency.value = freq;
+      const t = ctx.currentTime + i * 0.13;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.25, t+0.04);
+      g.gain.exponentialRampToValueAtTime(0.001, t+0.55);
+      osc.connect(g); g.connect(ctx.destination);
+      osc.start(t); osc.stop(t+0.6);
+    });
+  } catch(_) {}
 }
 
 // ── Particles ─────────────────────────────────────────────────────────────
