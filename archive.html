@@ -277,8 +277,18 @@
             // Assuming a rough limit of 5MB for LocalStorage
             const percent = Math.min(100, (sizeInBytes / (5 * 1024 * 1024)) * 100).toFixed(1);
 
-            indicator.innerText = `${count} bakes stored (${sizeInKb} KB used • ${percent}% of local capacity)`;
-            
+            // Raw check — reads localStorage completely independently of getLogs()
+            const rawCheck = (() => {
+                try {
+                    const d = localStorage.getItem('pym_logs');
+                    if (d === null) return 'key missing';
+                    const arr = JSON.parse(d);
+                    return Array.isArray(arr) ? `${arr.length} entries` : 'not-an-array';
+                } catch(_) { return 'parse-error'; }
+            })();
+
+            indicator.innerText = `${count} bakes stored · ${sizeInKb} KB · raw check: ${rawCheck}`;
+
             if (percent > 80) {
                 indicator.classList.remove('text-outline-variant');
                 indicator.classList.add('text-error');
@@ -324,6 +334,15 @@
                         </div>
                     `;
                 } else {
+                    // Diagnostic: read localStorage completely independently
+                    const _diagRaw = (() => {
+                        try {
+                            const d = localStorage.getItem('pym_logs');
+                            if (d === null) return '(key not found)';
+                            const arr = JSON.parse(d);
+                            return Array.isArray(arr) ? `${arr.length} bake(s) in storage` : '(not an array)';
+                        } catch(e) { return '(parse error: ' + e.message + ')'; }
+                    })();
                     grid.innerHTML = `
                         <div class="col-span-full py-20 flex flex-col items-center text-center">
                             <span class="text-7xl mb-4">🍞</span>
@@ -331,6 +350,7 @@
                             <p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-2">Every great baker started exactly where you are right now. This is where all your bakes will live — dates, notes, ratings, and everything you learn along the way.</p>
                             <p class="text-on-surface-variant/70 text-sm max-w-xs mx-auto mb-8">Complete your first bake and hit <strong>Save to Archive</strong> at the end to see it appear here.</p>
                             <a href="bake-log.html" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">Start My First Bake →</a>
+                            <p style="margin-top:24px;font-size:11px;color:#c9b8a8;font-family:monospace">diag: ${_diagRaw}</p>
                         </div>
                     `;
                 }
@@ -929,33 +949,31 @@
             renderLogs();
         }
 
-        document.getElementById('filterRating').addEventListener('click', function() {
-            _setRatingFilter(!filterActive);
-        });
-        document.getElementById('filterAll').addEventListener('click', function() {
-            _setRatingFilter(false);
-        });
+        // Guard addEventListener calls — a null-deref here would silently abort the
+        // entire script block including _initArchivePage(), leaving the grid empty.
+        const _frBtn = document.getElementById('filterRating');
+        const _faBtn = document.getElementById('filterAll');
+        if (_frBtn) _frBtn.addEventListener('click', function() { _setRatingFilter(!filterActive); });
+        if (_faBtn) _faBtn.addEventListener('click', function() { _setRatingFilter(false); });
 
         // ── Page init ─────────────────────────────────────────────────────────
-        // index.html runs init code directly (no DOMContentLoaded wrapper) and
-        // works fine. archive.html was using DOMContentLoaded, but in Capacitor
-        // Android's WebView that event can fire before inline scripts execute,
-        // meaning the listener was registered after the event fired — so
-        // renderLogs() was never called and the archive always looked empty.
-        // Fix: mirror index.html's pattern — use readyState to decide whether
-        // to call immediately or wait for the event.
         function _initArchivePage() {
-            if (window.PymCelebration) {
-                setTimeout(() => PymCelebration.checkUnseen(), 800);
+            try {
+                if (window.PymCelebration) {
+                    setTimeout(() => { try { PymCelebration.checkUnseen(); } catch(_) {} }, 800);
+                }
+                try { updateBackupLabel(); } catch(_) {}
+                updateStorageIndicator();
+                renderLogs();
+            } catch(err) {
+                // Surface any hidden init error directly in the grid
+                const g = document.getElementById('logsGrid');
+                if (g) g.innerHTML = `<div class="col-span-full py-10 text-center"><p style="color:#B3261E;font-size:13px;font-family:monospace">Init error: ${err.message}</p></div>`;
             }
-            updateBackupLabel();
-            updateStorageIndicator();
-            renderLogs();
         }
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', _initArchivePage);
         } else {
-            // DOM already ready (DOMContentLoaded already fired) — run now
             _initArchivePage();
         }
     </script>
