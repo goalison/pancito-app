@@ -934,14 +934,27 @@
             _setRatingFilter(false);
         });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Fire unseen achievement celebrations (badges earned during last bake save)
+        // ── Page init ─────────────────────────────────────────────────────────
+        // index.html runs init code directly (no DOMContentLoaded wrapper) and
+        // works fine. archive.html was using DOMContentLoaded, but in Capacitor
+        // Android's WebView that event can fire before inline scripts execute,
+        // meaning the listener was registered after the event fired — so
+        // renderLogs() was never called and the archive always looked empty.
+        // Fix: mirror index.html's pattern — use readyState to decide whether
+        // to call immediately or wait for the event.
+        function _initArchivePage() {
             if (window.PymCelebration) {
                 setTimeout(() => PymCelebration.checkUnseen(), 800);
             }
             updateBackupLabel();
             updateStorageIndicator();
             renderLogs();
-        });
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', _initArchivePage);
+        } else {
+            // DOM already ready (DOMContentLoaded already fired) — run now
+            _initArchivePage();
+        }
     </script>
 </body></html>
