@@ -1258,14 +1258,26 @@ const AMB_SEQ    = [0,2,4,3,1,4,2,0,3,1,2,4,0,3,2,1,4,0,2,3];
 function _schedAmbNote(idx, t) {
   try {
     const ctx = _ctx();
+    const freq = PENTATONIC[AMB_SEQ[idx % AMB_SEQ.length]];
+    // Warm low-pass on each note — rounds off the top like a muted piano key
+    const flt = ctx.createBiquadFilter();
+    flt.type = 'lowpass'; flt.frequency.value = 1200; flt.Q.value = 0.5;
+    flt.connect(_ambientGainNode);
+    // Main note — sine for warmth instead of triangle
     const osc = ctx.createOscillator(), g = ctx.createGain();
-    osc.type = 'triangle';
-    osc.frequency.value = PENTATONIC[AMB_SEQ[idx % AMB_SEQ.length]];
+    osc.type = 'sine'; osc.frequency.value = freq;
     g.gain.setValueAtTime(0, t);
-    g.gain.linearRampToValueAtTime(0.5, t + 0.07);
-    g.gain.setValueAtTime(0.5, t + 0.28);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.75);
-    osc.connect(g); g.connect(_ambientGainNode); osc.start(t); osc.stop(t + 0.75);
+    g.gain.linearRampToValueAtTime(0.6, t + 0.06);
+    g.gain.setValueAtTime(0.6, t + 0.22);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 1.1);
+    osc.connect(g); g.connect(flt); osc.start(t); osc.stop(t + 1.15);
+    // Subtle octave above — gives the lofi shimmer
+    const osc2 = ctx.createOscillator(), g2 = ctx.createGain();
+    osc2.type = 'sine'; osc2.frequency.value = freq * 2;
+    g2.gain.setValueAtTime(0, t);
+    g2.gain.linearRampToValueAtTime(0.12, t + 0.04);
+    g2.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+    osc2.connect(g2); g2.connect(flt); osc2.start(t); osc2.stop(t + 0.55);
   } catch(_) {}
 }
 
@@ -1274,18 +1286,18 @@ function startAmbientMusic() {
   try {
     const ctx = _ctx();
     _ambientGainNode = ctx.createGain();
-    _ambientGainNode.gain.value = 0.065;
+    _ambientGainNode.gain.value = 0.048;  // a touch quieter — lofi sits under everything
     _ambientGainNode.connect(ctx.destination);
-    _ambientNoteTime = ctx.currentTime + 0.8;
+    _ambientNoteTime = ctx.currentTime + 1.0;
     _ambientNoteIdx = 0;
     function tick() {
       if (_isMuted) return;
       const now = _ctx().currentTime;
-      while (_ambientNoteTime < now + 2.5) {
+      while (_ambientNoteTime < now + 3.0) {
         _schedAmbNote(_ambientNoteIdx++, _ambientNoteTime);
-        _ambientNoteTime += 0.82 + Math.random() * 0.28;
+        _ambientNoteTime += 1.1 + Math.random() * 0.55;  // slower, more breathing room
       }
-      _ambientTick = setTimeout(tick, 800);
+      _ambientTick = setTimeout(tick, 900);
     }
     tick();
   } catch(_) {}
@@ -1321,6 +1333,28 @@ function toggleMute() {
     }
   } catch(_) {}
 })();
+
+// ── Pause audio when app goes to background / user opens another app ─────────
+// visibilitychange fires when the screen locks, the user switches apps, or an
+// external link (Amazon, Facebook) pulls them out of the WebView.
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    stopAmbientMusic();
+    try { if (_audioCtx) _audioCtx.suspend(); } catch(_) {}
+  } else {
+    try { if (_audioCtx) _audioCtx.resume(); } catch(_) {}
+    if (!_isMuted) startAmbientMusic();
+  }
+});
+// Fallback for browsers / Capacitor builds where visibilitychange is unreliable
+window.addEventListener('blur', () => {
+  stopAmbientMusic();
+  try { if (_audioCtx) _audioCtx.suspend(); } catch(_) {}
+});
+window.addEventListener('focus', () => {
+  try { if (_audioCtx) _audioCtx.resume(); } catch(_) {}
+  if (!_isMuted) startAmbientMusic();
+});
 
 // ══════════════════════════════════════════════════════════════════════════
 // MINI-GAME: Poke Test (c2game)
@@ -1747,26 +1781,46 @@ function _quizPlaySound(correct) {
     const ctx = _ctx();
     const now = ctx.currentTime;
     if (correct) {
-      // Bright ascending arpeggio C5→E5→G5
-      [[523.25,0],[659.25,0.09],[783.99,0.2]].forEach(([freq,delay]) => {
+      // Warm bamboo/marimba chime — C5 E5 G5
+      [[523.25, 0], [659.25, 0.11], [783.99, 0.24]].forEach(([freq, delay]) => {
+        const t = now + delay;
+        // Shared warm low-pass — softens the tone like wood/bamboo
+        const flt = ctx.createBiquadFilter();
+        flt.type = 'lowpass'; flt.frequency.value = 1900; flt.Q.value = 0.6;
+        flt.connect(ctx.destination);
+        // Main sine — fast "hit" attack, long natural decay
         const osc = ctx.createOscillator(), g = ctx.createGain();
-        osc.type = 'triangle'; osc.frequency.value = freq;
-        g.gain.setValueAtTime(0, now+delay);
-        g.gain.linearRampToValueAtTime(0.22, now+delay+0.03);
-        g.gain.exponentialRampToValueAtTime(0.001, now+delay+0.38);
-        osc.connect(g); g.connect(ctx.destination);
-        osc.start(now+delay); osc.stop(now+delay+0.42);
+        osc.type = 'sine'; osc.frequency.value = freq;
+        g.gain.setValueAtTime(0.001, t);
+        g.gain.linearRampToValueAtTime(0.15, t + 0.007);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.95);
+        osc.connect(g); g.connect(flt);
+        osc.start(t); osc.stop(t + 1.0);
+        // Chorus layer — +3 cents detuned for warmth
+        const osc2 = ctx.createOscillator(), g2 = ctx.createGain();
+        osc2.type = 'sine'; osc2.frequency.value = freq * 1.00173;
+        g2.gain.setValueAtTime(0.001, t);
+        g2.gain.linearRampToValueAtTime(0.055, t + 0.007);
+        g2.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
+        osc2.connect(g2); g2.connect(flt);
+        osc2.start(t); osc2.stop(t + 0.75);
       });
     } else {
-      // Wrong buzz — descending D4→Bb3
-      [[293.66,0],[233.08,0.17]].forEach(([freq,delay]) => {
-        const osc = ctx.createOscillator(), g = ctx.createGain();
-        osc.type = 'sawtooth'; osc.frequency.value = freq;
-        g.gain.setValueAtTime(0.17, now+delay);
-        g.gain.exponentialRampToValueAtTime(0.001, now+delay+0.28);
-        osc.connect(g); g.connect(ctx.destination);
-        osc.start(now+delay); osc.stop(now+delay+0.3);
-      });
+      // Soft muffled thud — no harsh buzz, just a gentle "nope"
+      const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.13), ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/d.length, 2.2);
+      const src = ctx.createBufferSource(); src.buffer = buf;
+      const flt = ctx.createBiquadFilter(); flt.type = 'lowpass'; flt.frequency.value = 170; flt.Q.value = 1.1;
+      const g = ctx.createGain(); g.gain.setValueAtTime(0.2, now);
+      src.connect(flt); flt.connect(g); g.connect(ctx.destination); src.start();
+      // Low sine sweep — gives the thud some body
+      const osc = ctx.createOscillator(), og = ctx.createGain();
+      osc.type = 'sine'; osc.frequency.setValueAtTime(150, now);
+      osc.frequency.exponentialRampToValueAtTime(75, now + 0.2);
+      og.gain.setValueAtTime(0.09, now); og.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+      osc.connect(og); og.connect(ctx.destination);
+      osc.start(now); osc.stop(now + 0.27);
     }
   } catch(_) {}
 }
@@ -1775,18 +1829,33 @@ function _quizPlayChime(perfect) {
   if (_isMuted) return;
   try {
     const ctx = _ctx();
+    // Master output — quiet and warm
+    const master = ctx.createGain(); master.gain.value = 0.1;
+    const masterFlt = ctx.createBiquadFilter();
+    masterFlt.type = 'lowpass'; masterFlt.frequency.value = 3200; masterFlt.Q.value = 0.5;
+    masterFlt.connect(master); master.connect(ctx.destination);
+
     const notes = perfect
-      ? [523.25, 659.25, 783.99, 1046.50]  // C5 E5 G5 C6 — victory
-      : [523.25, 659.25, 783.99];            // C5 E5 G5 — well done
+      ? [392.00, 523.25, 659.25, 783.99, 1046.50]  // G4 C5 E5 G5 C6 — crystal bowl ascent
+      : [392.00, 523.25, 659.25, 783.99];            // G4 C5 E5 G5 — gentle wind chime
     notes.forEach((freq, i) => {
+      const t = ctx.currentTime + i * 0.2;
+      // Main tone — slow attack, long airy decay (crystal bowl feel)
       const osc = ctx.createOscillator(), g = ctx.createGain();
       osc.type = 'sine'; osc.frequency.value = freq;
-      const t = ctx.currentTime + i * 0.13;
-      g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(0.25, t+0.04);
-      g.gain.exponentialRampToValueAtTime(0.001, t+0.55);
-      osc.connect(g); g.connect(ctx.destination);
-      osc.start(t); osc.stop(t+0.6);
+      g.gain.setValueAtTime(0.001, t);
+      g.gain.linearRampToValueAtTime(1.0, t + 0.014);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 1.5);
+      osc.connect(g); g.connect(masterFlt);
+      osc.start(t); osc.stop(t + 1.6);
+      // Inharmonic shimmer at 2.75× — what makes bells and bowls sound "real"
+      const sh = ctx.createOscillator(), sg = ctx.createGain();
+      sh.type = 'sine'; sh.frequency.value = freq * 2.75;
+      sg.gain.setValueAtTime(0.001, t);
+      sg.gain.linearRampToValueAtTime(0.18, t + 0.008);
+      sg.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+      sh.connect(sg); sg.connect(masterFlt);
+      sh.start(t); sh.stop(t + 0.45);
     });
   } catch(_) {}
 }

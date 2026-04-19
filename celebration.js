@@ -82,30 +82,42 @@
     document.head.appendChild(s);
   }
 
-  // ── Achievement chime (Web Audio API — no file needed) ───────────────────
+  // ── Achievement chime (Web Audio API — nature/lofi crystal bowl style) ────
   function _playAchievementSound() {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      // Resume context (required after user gesture on some browsers)
       if (ctx.state === 'suspended') ctx.resume();
-      // Ascending 4-note chime: C5 → E5 → G5 → C6 (major arpeggio)
-      const notes = [523.25, 659.25, 783.99, 1046.50];
+
+      // Warm master chain — low-pass to soften, gentle gain
+      const master = ctx.createGain(); master.gain.value = 0.11;
+      const masterFlt = ctx.createBiquadFilter();
+      masterFlt.type = 'lowpass'; masterFlt.frequency.value = 3500; masterFlt.Q.value = 0.5;
+      masterFlt.connect(master); master.connect(ctx.destination);
+
+      // Ascending 5-note bamboo/crystal bowl arpeggio: G4 C5 E5 G5 C6
+      const notes = [392.00, 523.25, 659.25, 783.99, 1046.50];
       notes.forEach((freq, i) => {
-        const osc  = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.type = 'sine';
-        osc.frequency.value = freq;
-        const t = ctx.currentTime + i * 0.12;
-        gain.gain.setValueAtTime(0, t);
-        gain.gain.linearRampToValueAtTime(0.28, t + 0.04);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.55);
-        osc.start(t);
-        osc.stop(t + 0.6);
+        const t = ctx.currentTime + i * 0.18;
+        // Main tone — fast hit, long warm decay
+        const osc = ctx.createOscillator(), g = ctx.createGain();
+        osc.type = 'sine'; osc.frequency.value = freq;
+        g.gain.setValueAtTime(0.001, t);
+        g.gain.linearRampToValueAtTime(1.0, t + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 1.4);
+        osc.connect(g); g.connect(masterFlt);
+        osc.start(t); osc.stop(t + 1.5);
+        // Inharmonic shimmer at 2.75× — natural bell/bowl character
+        const sh = ctx.createOscillator(), sg = ctx.createGain();
+        sh.type = 'sine'; sh.frequency.value = freq * 2.75;
+        sg.gain.setValueAtTime(0.001, t);
+        sg.gain.linearRampToValueAtTime(0.2, t + 0.007);
+        sg.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+        sh.connect(sg); sg.connect(masterFlt);
+        sh.start(t); sh.stop(t + 0.42);
       });
-      // Auto-close context after sound finishes
-      setTimeout(() => { try { ctx.close(); } catch(_) {} }, 1500);
+
+      // Auto-close after all notes finish
+      setTimeout(() => { try { ctx.close(); } catch(_) {} }, 2200);
     } catch(_) { /* Web Audio not available — silently skip */ }
   }
 
