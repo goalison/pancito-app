@@ -1506,8 +1506,17 @@
                     localStorage.removeItem(STATIC_TIMER_KEY);
                 } catch(e) {}
 
-                // Always redirect immediately — celebrations fire on archive.html
-                window.location.href = "archive.html";
+                // Read back to confirm write succeeded, show toast, then redirect
+                const verifyCount = (() => {
+                    try { return JSON.parse(localStorage.getItem('pym_logs') || '[]').length; }
+                    catch(_) { return 0; }
+                })();
+                const _saveToast = document.createElement('div');
+                _saveToast.style.cssText = 'position:fixed;bottom:120px;left:50%;transform:translateX(-50%);background:#875305;color:#fff;padding:14px 24px;border-radius:100px;font-weight:700;font-size:14px;z-index:9999;box-shadow:0 8px 24px rgba(135,83,5,0.35);white-space:nowrap';
+                _saveToast.textContent = `✓ Saved — ${verifyCount} bake${verifyCount !== 1 ? 's' : ''} in archive`;
+                document.body.appendChild(_saveToast);
+                // 1.5s delay lets localStorage flush to disk on slower Android devices
+                setTimeout(() => { window.location.href = 'archive.html'; }, 1500);
             } catch (e) {
                 console.error("Storage Error:", e);
                 saveBtn.disabled = false;

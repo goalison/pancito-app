@@ -243,10 +243,16 @@
             }
         })();
 
+        // Read directly from localStorage — same as index.html.
+        // The old storage-wrapper approach fell back to an empty in-memory
+        // store whenever the IIFE threw in Capacitor's WebView, making every
+        // read return null even though bake-log.html wrote the data correctly.
         function getLogs() {
             try {
-                const data = storage.getItem(STORAGE_KEY);
-                return data ? JSON.parse(data) : [];
+                const raw = localStorage.getItem('pym_logs');
+                if (!raw) return [];
+                const parsed = JSON.parse(raw);
+                return Array.isArray(parsed) ? parsed : [];
             } catch(e) {
                 return [];
             }
@@ -254,12 +260,8 @@
 
         function saveLogs(logs) {
             try {
-                storage.setItem(STORAGE_KEY, JSON.stringify(logs));
-            } catch(e) {
-                if (e.name === 'QuotaExceededError') {
-                    alert('Storage is full. Please export your archive and clear some space.');
-                }
-            }
+                localStorage.setItem('pym_logs', JSON.stringify(logs));
+            } catch(e) { /* quota — handled upstream */ }
             autoBackup(logs);
             updateStorageIndicator();
             renderLogs();
@@ -271,10 +273,10 @@
             const sizeInBytes = new Blob([JSON.stringify(logs)]).size;
             const sizeInKb = (sizeInBytes / 1024).toFixed(1);
             const indicator = document.getElementById('storageIndicator');
-            
+
             // Assuming a rough limit of 5MB for LocalStorage
             const percent = Math.min(100, (sizeInBytes / (5 * 1024 * 1024)) * 100).toFixed(1);
-            
+
             indicator.innerText = `${count} bakes stored (${sizeInKb} KB used • ${percent}% of local capacity)`;
             
             if (percent > 80) {
@@ -857,9 +859,9 @@
         document.getElementById('clearDataBtn').addEventListener('click', () => {
             _pymConfirm('This will permanently delete <strong>ALL bake entries</strong> from this device.<br><br>Export your archive to Google Drive first — this cannot be undone.', 'Yes, delete all', '#B3261E', () => {
                 _pymConfirm('Are you absolutely sure? Every bake record will be lost forever.', 'Delete everything', '#B3261E', () => {
-                    storage.removeItem(STORAGE_KEY);
-                    storage.removeItem('pym_auto_backup');
-                    storage.removeItem('pym_auto_backup_time');
+                    localStorage.removeItem('pym_logs');
+                    localStorage.removeItem('pym_auto_backup');
+                    localStorage.removeItem('pym_auto_backup_time');
                     saveLogs([]);
                     _pymToast('Local data cleared');
                 });
