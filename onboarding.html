@@ -422,6 +422,123 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- GAME c5 — Mix & Autolyse                                              -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="c5game">
+  <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Mixing</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Mix &amp; Autolyse 🥣</h2>
+    <p id="mixInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-3 min-h-[2.5rem]">Tap the flour bag to add flour to your bowl</p>
+
+    <!-- Ingredient icon row -->
+    <div style="display:flex;justify-content:space-around;margin-bottom:6px;width:208px;flex-shrink:0">
+      <button onclick="mixTapIngredient('flour')"   id="mixFlourBtn"   style="font-size:28px;cursor:pointer;background:none;border:none;opacity:1;transition:opacity 0.3s;padding:4px">🌾</button>
+      <button onclick="mixTapIngredient('water')"   id="mixWaterBtn"   style="font-size:28px;cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px">💧</button>
+      <button onclick="mixTapIngredient('starter')" id="mixStarterBtn" style="font-size:28px;cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px">🫙</button>
+      <button onclick="mixTapIngredient('salt')"    id="mixSaltBtn"    style="font-size:28px;cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px">🧂</button>
+    </div>
+
+    <!-- Bowl visual -->
+    <div style="position:relative;flex-shrink:0;width:204px;margin:0 auto 0.75rem">
+      <div style="width:208px;height:20px;margin-left:-2px;background:linear-gradient(180deg,#e0cdb0 0%,#c4a070 100%);border-radius:50%;border:3px solid #875305;position:relative;z-index:2;"></div>
+      <div id="mixBowlBody" onclick="mixBowlTap()" style="width:204px;height:118px;background:radial-gradient(ellipse at 50% 108%,#fef3de 0%,#ecdfc0 45%,#d4b870 85%,#b08040 100%);border-radius:0 0 102px 102px / 0 0 72px 72px;border:3px solid #875305;border-top:none;position:relative;overflow:hidden;cursor:pointer;box-shadow:0 8px 28px rgba(135,83,5,0.18);transition:box-shadow 0.4s ease;user-select:none;-webkit-user-select:none;">
+        <div id="mixDough" style="position:absolute;bottom:0;left:9%;right:9%;height:30%;background:rgba(220,190,140,0.4);border-radius:50% 50% 0 0 / 60% 60% 0 0;transition:height 1.2s cubic-bezier(.34,1.56,.64,1),background 0.8s ease;"></div>
+        <div id="mixAnim" style="position:absolute;inset:0;pointer-events:none;z-index:5;display:none;overflow:hidden">
+          <div id="mixAnimEmoji" style="position:absolute;left:35%;top:-4px;font-size:22px;animation:starterDrip 0.85s ease forwards">🌾</div>
+        </div>
+        <div id="mixSwirl" style="position:absolute;inset:0;pointer-events:none;display:none;align-items:center;justify-content:center;font-size:34px;">🌀</div>
+      </div>
+    </div>
+
+    <!-- Step tracker -->
+    <div style="display:flex;gap:4px;width:100%;max-width:300px;margin-bottom:10px">
+      <div id="mix-step-flour"   style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #875305;font-size:8px;font-weight:700;color:#875305;transition:all 0.3s;text-align:center">🌾 Flour</div>
+      <div id="mix-step-water"   style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">💧 Water</div>
+      <div id="mix-step-rest"    style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">💤 Rest</div>
+      <div id="mix-step-starter" style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">🫙 Start</div>
+      <div id="mix-step-mix"     style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">👐 Mix</div>
+    </div>
+
+    <!-- Autolyse action button -->
+    <div id="mixActionWrap" style="width:100%;max-width:300px;display:none;margin-bottom:8px">
+      <button onclick="mixActionTap()" style="width:100%;padding:12px 8px;border-radius:18px;background:#f2ede3;border:2px solid #d6c3b3;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.2s;font-family:inherit;">
+        <span style="font-size:28px">💤</span>
+        <span style="font-size:10px;font-weight:700;color:#875305">Autolyse Rest (30 min)</span>
+      </button>
+    </div>
+
+    <!-- Fact card -->
+    <div id="mixFactCard" style="display:none;background:linear-gradient(135deg,#875305,#c4863a);border-radius:16px;padding:14px 18px;width:100%;max-width:300px;">
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
+      <p id="mixFactText" style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left"></p>
+    </div>
+  </div>
+  <div class="px-6 pb-10">
+    <button id="mixContinueBtn" onclick="afterMixGame()"
+      class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100"
+      disabled>Next: Stretch &amp; Fold →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- GAME c6 — Stretch & Fold / Coil Folds                                 -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="c6game">
+  <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Stretch &amp; Fold</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Build Strength 💪</h2>
+    <p id="foldInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-3 min-h-[2.5rem]">Tap the dough to start your first coil fold — grab, lift, and fold it over</p>
+
+    <!-- Dough container (bird's-eye view) -->
+    <div style="position:relative;flex-shrink:0;width:220px;height:148px;margin:0 auto 0.5rem">
+      <div style="position:absolute;inset:0;border-radius:18px;border:3px solid #c4a070;background:linear-gradient(135deg,#ecdfc0 0%,#f5e8c8 100%);box-shadow:0 6px 20px rgba(135,83,5,0.14);overflow:hidden">
+        <div id="foldDough" onclick="foldTap()" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:142px;height:92px;background:radial-gradient(ellipse at 50% 30%,#f0dda8 0%,#d4a860 40%,#b08038 80%,#7a5520 100%);border-radius:45% 55% 50% 50% / 55% 45% 60% 40%;cursor:pointer;transition:transform 0.18s ease, border-radius 0.25s ease;box-shadow:0 4px 16px rgba(135,83,5,0.25);user-select:none;-webkit-user-select:none;display:flex;align-items:center;justify-content:center">
+          <span id="foldCountBadge" style="font-size:12px;font-weight:800;color:rgba(255,255,255,0.88);pointer-events:none">Tap to fold</span>
+        </div>
+        <div style="position:absolute;top:6px;right:8px;width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,0.55)"></div>
+        <div style="position:absolute;bottom:8px;left:10px;width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.45)"></div>
+      </div>
+      <!-- Strength bar -->
+      <div style="position:absolute;bottom:-26px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span style="font-size:10px;font-weight:700;color:#514538">Gluten</span>
+        <div style="width:88px;height:6px;border-radius:99px;background:#e8ddd0;overflow:hidden">
+          <div id="foldStrengthBar" style="height:100%;width:0%;background:linear-gradient(90deg,#875305,#C4863A);border-radius:99px;transition:width 0.55s cubic-bezier(.34,1.56,.64,1)"></div>
+        </div>
+        <span id="foldStrengthPct" style="font-size:10px;font-weight:700;color:#875305">0%</span>
+      </div>
+    </div>
+
+    <!-- Step tracker -->
+    <div style="display:flex;gap:5px;width:100%;max-width:300px;margin-top:2rem;margin-bottom:8px">
+      <div id="fold-step-s1"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #875305;font-size:9px;font-weight:700;color:#875305;transition:all 0.3s;text-align:center">Set 1</div>
+      <div id="fold-step-rest" style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:9px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">Rest</div>
+      <div id="fold-step-s2"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:9px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">Set 2</div>
+      <div id="fold-step-done" style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:9px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">Strong!</div>
+    </div>
+    <p id="foldCountText" style="font-size:11px;font-weight:700;color:#847466;margin-bottom:8px">0 of 4 folds — Set 1</p>
+
+    <!-- Rest button (appears between sets) -->
+    <div id="foldRestWrap" style="width:100%;max-width:300px;display:none;margin-bottom:8px">
+      <button onclick="foldRestTap()" style="width:100%;padding:12px 8px;border-radius:18px;background:#f2ede3;border:2px solid #d6c3b3;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;font-family:inherit;">
+        <span style="font-size:28px">⏱️</span>
+        <span style="font-size:10px;font-weight:700;color:#875305">Rest 30 min between sets</span>
+      </button>
+    </div>
+
+    <!-- Fact card -->
+    <div id="foldFactCard" style="display:none;background:linear-gradient(135deg,#875305,#c4863a);border-radius:16px;padding:14px 18px;width:100%;max-width:300px;">
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
+      <p id="foldFactText" style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left"></p>
+    </div>
+  </div>
+  <div class="px-6 pb-10">
+    <button id="foldContinueBtn" onclick="afterFoldGame()"
+      class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100"
+      disabled>Next: Bulk Fermentation →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
 <!-- CHAPTER 2 — Sourdough Basics                                          -->
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c2s1">
@@ -555,8 +672,260 @@
     <button id="bulkContinueBtn" onclick="afterBulkGame()"
       class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100"
       disabled>
-      On to equipment check →
+      Explore: Bulk Timing →
     </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- GAME c7 — Bulk Timing: Temperature & Time                             -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="c7game">
+  <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3 overflow-y-auto">
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Bulk Timing</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Find Your Bulk Window 🌡️</h2>
+    <p id="tempInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-4 min-h-[2.5rem]">Tap each kitchen to discover how temperature changes your bulk time</p>
+
+    <!-- 3 temperature cards -->
+    <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px;margin-bottom:12px">
+      <div id="tempCard65" onclick="tempReveal(65)" style="border-radius:16px;border:2px solid #d6c3b3;padding:13px 16px;cursor:pointer;transition:all 0.3s;background:#f2ede3;user-select:none;-webkit-user-select:none;">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="font-size:30px">🥶</div>
+          <div style="text-align:left;flex:1">
+            <div style="font-size:14px;font-weight:800;color:#1d1c16">65°F / 18°C</div>
+            <div style="font-size:11px;color:#514538">Cool kitchen</div>
+          </div>
+          <div id="tempReveal65" style="font-size:13px;font-weight:800;color:#6688cc;opacity:0;transition:opacity 0.4s;text-align:right;min-width:68px"></div>
+        </div>
+        <div id="tempBar65" style="height:5px;background:#e8ddd0;border-radius:99px;margin-top:9px;overflow:hidden;display:none">
+          <div style="height:100%;width:100%;background:linear-gradient(90deg,#99aacc,#7788bb);border-radius:99px;transform:scaleX(0);transform-origin:left;transition:transform 0.9s ease"></div>
+        </div>
+      </div>
+
+      <div id="tempCard76" onclick="tempReveal(76)" style="border-radius:16px;border:2px solid #d6c3b3;padding:13px 16px;cursor:pointer;transition:all 0.3s;background:#f2ede3;user-select:none;-webkit-user-select:none;">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="font-size:30px">😊</div>
+          <div style="text-align:left;flex:1">
+            <div style="font-size:14px;font-weight:800;color:#1d1c16">76°F / 24°C</div>
+            <div style="font-size:11px;color:#514538">Ideal kitchen</div>
+          </div>
+          <div id="tempReveal76" style="font-size:13px;font-weight:800;color:#875305;opacity:0;transition:opacity 0.4s;text-align:right;min-width:68px"></div>
+        </div>
+        <div id="tempBar76" style="height:5px;background:#e8ddd0;border-radius:99px;margin-top:9px;overflow:hidden;display:none">
+          <div style="height:100%;width:100%;background:linear-gradient(90deg,#875305,#C4863A);border-radius:99px;transform:scaleX(0);transform-origin:left;transition:transform 0.9s ease"></div>
+        </div>
+      </div>
+
+      <div id="tempCard82" onclick="tempReveal(82)" style="border-radius:16px;border:2px solid #d6c3b3;padding:13px 16px;cursor:pointer;transition:all 0.3s;background:#f2ede3;user-select:none;-webkit-user-select:none;">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="font-size:30px">🥵</div>
+          <div style="text-align:left;flex:1">
+            <div style="font-size:14px;font-weight:800;color:#1d1c16">82°F / 28°C</div>
+            <div style="font-size:11px;color:#514538">Warm kitchen</div>
+          </div>
+          <div id="tempReveal82" style="font-size:13px;font-weight:800;color:#cc4422;opacity:0;transition:opacity 0.4s;text-align:right;min-width:68px"></div>
+        </div>
+        <div id="tempBar82" style="height:5px;background:#e8ddd0;border-radius:99px;margin-top:9px;overflow:hidden;display:none">
+          <div style="height:100%;width:100%;background:linear-gradient(90deg,#cc4422,#ee7744);border-radius:99px;transform:scaleX(0);transform-origin:left;transition:transform 0.9s ease"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tempSummary" style="display:none;background:linear-gradient(135deg,#875305,#c4863a);border-radius:16px;padding:14px 18px;width:100%;max-width:300px;">
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">The Golden Rule</p>
+      <p style="font-size:13px;font-weight:600;color:#fff;line-height:1.6;text-align:left">Every 10°F warmer roughly halves your bulk time. Track your dough temperature (not room temp!) with a probe thermometer. 74–78°F is the sweet spot for predictable, flavorful fermentation.</p>
+    </div>
+  </div>
+  <div class="px-6 pb-10">
+    <button id="tempContinueBtn" onclick="afterTempGame()"
+      class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100"
+      disabled>Next: Pre-shape →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- GAME c8 — Pre-shaping                                                 -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="c8game">
+  <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Pre-shaping</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Pre-shape the Dough 🔪</h2>
+    <p id="preshapeInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-4 min-h-[2.5rem]">Tap the dough to release it from the bowl with your bench scraper</p>
+
+    <!-- Counter + dough visual -->
+    <div style="position:relative;flex-shrink:0;width:240px;height:154px;margin:0 auto 0.9rem">
+      <div style="position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,#e8e2d8 0%,#f0ead8 100%);border:2px solid #d6c3b3;box-shadow:0 4px 16px rgba(0,0,0,0.07)">
+        <div style="position:absolute;top:7px;left:14px;right:14px;height:2px;background:rgba(255,255,255,0.65);border-radius:99px;filter:blur(1px)"></div>
+        <div id="preshapeDough" onclick="preshapeTap()" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:110px;height:80px;background:radial-gradient(ellipse at 40% 30%,#f0dda8 0%,#d4a860 45%,#b08038 80%,#7a5520 100%);border-radius:48% 52% 55% 45% / 52% 48% 54% 48%;cursor:pointer;transition:all 0.45s cubic-bezier(.34,1.56,.64,1);box-shadow:0 6px 20px rgba(135,83,5,0.25);user-select:none;-webkit-user-select:none;"></div>
+        <div id="preshapeScraper" style="position:absolute;top:10px;right:10px;font-size:22px;transition:opacity 0.4s;pointer-events:none">🔪</div>
+        <div id="preshapeRestPill" style="display:none;position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:#875305;color:#fff;border-radius:99px;padding:4px 14px;font-size:11px;font-weight:700;white-space:nowrap">⏱️ Bench resting 20–30 min…</div>
+      </div>
+    </div>
+
+    <!-- Step tracker -->
+    <div style="display:flex;gap:5px;width:100%;max-width:300px;margin-bottom:10px">
+      <div id="ps-step-scrape" style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #875305;font-size:8px;font-weight:700;color:#875305;transition:all 0.3s;text-align:center">🔪 Release</div>
+      <div id="ps-step-shape"  style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">👐 Shape</div>
+      <div id="ps-step-rest"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">💤 Rest</div>
+      <div id="ps-step-done"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">✅ Ready</div>
+    </div>
+
+    <div id="preshapeFactCard" style="display:none;background:linear-gradient(135deg,#875305,#c4863a);border-radius:16px;padding:14px 18px;width:100%;max-width:300px;">
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
+      <p style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left">The bench rest (20–30 min) lets gluten relax after pre-shaping. This makes final shaping much smoother — the dough will stretch without tearing and hold its shape beautifully.</p>
+    </div>
+  </div>
+  <div class="px-6 pb-10">
+    <button id="preshapeContinueBtn" onclick="afterPreshapeGame()"
+      class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100"
+      disabled>Next: Final Shaping →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- GAME c9 — Final Shaping                                               -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="c9game">
+  <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Final Shaping</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Shape Your Loaf 🍞</h2>
+    <p id="shapeInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-4 min-h-[2.5rem]">Tap the dough to gently stretch the top outward</p>
+
+    <!-- Dough + banneton -->
+    <div style="position:relative;flex-shrink:0;width:240px;height:148px;margin:0 auto 0.9rem;display:flex;align-items:center;justify-content:center;gap:18px">
+      <div style="position:relative">
+        <div id="shapeDough" onclick="shapeTap()" style="width:120px;height:120px;background:radial-gradient(ellipse at 40% 30%,#f0dda8 0%,#d4a860 40%,#b08038 78%,#7a5520 100%);border-radius:50%;cursor:pointer;transition:all 0.5s cubic-bezier(.34,1.56,.64,1);box-shadow:0 6px 20px rgba(135,83,5,0.25);position:relative;overflow:hidden;user-select:none;-webkit-user-select:none;">
+          <div id="shapeLine1" style="position:absolute;top:22%;left:15%;right:15%;height:2px;background:rgba(135,83,5,0.28);border-radius:1px;opacity:0;transition:opacity 0.35s;transform:rotate(-12deg)"></div>
+          <div id="shapeLine2" style="position:absolute;top:38%;left:10%;right:10%;height:2px;background:rgba(135,83,5,0.25);border-radius:1px;opacity:0;transition:opacity 0.35s;transform:rotate(6deg)"></div>
+          <div id="shapeLine3" style="position:absolute;top:54%;left:18%;right:18%;height:2px;background:rgba(135,83,5,0.22);border-radius:1px;opacity:0;transition:opacity 0.35s"></div>
+          <div id="shapeLine4" style="position:absolute;top:68%;left:15%;right:15%;height:2px;background:rgba(135,83,5,0.2);border-radius:1px;opacity:0;transition:opacity 0.35s;transform:rotate(-5deg)"></div>
+        </div>
+      </div>
+      <div id="shapeBanneton" style="width:82px;height:82px;border-radius:50%;border:3px dashed #d6c3b3;display:flex;align-items:center;justify-content:center;font-size:32px;transition:all 0.4s;opacity:0.35">🧺</div>
+    </div>
+
+    <!-- Step tracker -->
+    <div style="display:flex;gap:4px;width:100%;max-width:300px;margin-bottom:8px">
+      <div id="sh-step-stretch"  style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #875305;font-size:8px;font-weight:700;color:#875305;transition:all 0.3s;text-align:center">↔ Stretch</div>
+      <div id="sh-step-fold"     style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">🔼 Fold</div>
+      <div id="sh-step-tension"  style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">💪 Tension</div>
+      <div id="sh-step-banneton" style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">🧺 Banneton</div>
+    </div>
+    <p id="shapeTapText" style="font-size:11px;font-weight:700;color:#847466;margin-bottom:8px">Tap the dough to begin</p>
+
+    <div id="shapeFactCard" style="display:none;background:linear-gradient(135deg,#875305,#c4863a);border-radius:16px;padding:14px 18px;width:100%;max-width:300px;">
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
+      <p style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left">Surface tension is everything. A tight, smooth outer skin traps gases and helps the loaf rise upward — not outward. Shaping with confidence leads to better oven spring.</p>
+    </div>
+  </div>
+  <div class="px-6 pb-10">
+    <button id="shapeContinueBtn" onclick="afterShapeGame()"
+      class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100"
+      disabled>Next: Cold Proof →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- GAME c10 — Cold Proof                                                 -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="c10game">
+  <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Cold Proof</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Into the Fridge ❄️</h2>
+    <p id="proofInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-4 min-h-[2.5rem]">Tap the banneton to dust it with rice flour</p>
+
+    <!-- Banneton + fridge -->
+    <div style="position:relative;flex-shrink:0;width:240px;height:148px;margin:0 auto 0.9rem;display:flex;align-items:center;justify-content:center;gap:20px">
+      <!-- Banneton (tappable) -->
+      <div id="proofBanneton" onclick="proofBannetonTap()" style="cursor:pointer;user-select:none;-webkit-user-select:none;transition:all 0.6s cubic-bezier(.34,1.56,.64,1);position:relative">
+        <div style="width:104px;height:104px;border-radius:50%;background:radial-gradient(ellipse at 50% 30%,#d4b870 0%,#b08040 40%,#8a6030 75%,#6a4820 100%);box-shadow:0 4px 16px rgba(135,83,5,0.28);position:relative;overflow:hidden;border:3px solid #875305">
+          <div style="position:absolute;inset:8px;border-radius:50%;border:2px solid rgba(255,255,255,0.16)"></div>
+          <div style="position:absolute;inset:18px;border-radius:50%;border:2px solid rgba(255,255,255,0.1)"></div>
+          <div style="position:absolute;inset:28px;border-radius:50%;border:2px solid rgba(255,255,255,0.08)"></div>
+          <div id="proofFlour" style="position:absolute;inset:0;border-radius:50%;background:rgba(255,255,255,0);transition:background 0.6s ease;pointer-events:none"></div>
+          <div id="proofDoughInside" style="position:absolute;inset:12px;border-radius:50%;background:radial-gradient(ellipse at 45% 35%,#f0dda8 0%,#d4a860 50%,#b08038 100%);opacity:0;transition:opacity 0.6s ease"></div>
+          <div id="proofWrap" style="position:absolute;inset:0;border-radius:50%;background:rgba(200,225,255,0.38);opacity:0;transition:opacity 0.4s ease;pointer-events:none;border:1px solid rgba(150,200,255,0.4)"></div>
+        </div>
+        <div id="proofFlourBtn" style="position:absolute;top:-8px;right:-12px;font-size:22px;transition:opacity 0.3s;pointer-events:none">🌾</div>
+      </div>
+      <!-- Fridge -->
+      <div id="proofFridge" onclick="proofFridgeTap()" style="width:88px;height:128px;background:linear-gradient(135deg,#e8f0f8 0%,#d4e4f4 100%);border-radius:12px;border:3px solid #b0c8e0;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 4px 16px rgba(100,150,200,0.18);transition:all 0.4s;user-select:none;-webkit-user-select:none;opacity:0.4">
+        <div style="position:absolute;top:50%;right:7px;transform:translateY(-50%);width:4px;height:38px;background:#b0c8e0;border-radius:2px"></div>
+        <div id="proofFridgeInside" style="position:absolute;inset:4px 12px 4px 4px;background:rgba(240,248,255,0.9);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;opacity:0;transition:opacity 0.4s">❄️</div>
+        <div style="position:absolute;bottom:7px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:700;color:#6898c0;white-space:nowrap">38°F / 3°C</div>
+      </div>
+    </div>
+
+    <!-- Step tracker -->
+    <div style="display:flex;gap:5px;width:100%;max-width:300px;margin-bottom:10px">
+      <div id="pr-step-dust"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #875305;font-size:8px;font-weight:700;color:#875305;transition:all 0.3s;text-align:center">🌾 Dust</div>
+      <div id="pr-step-place"  style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">🍞 Place</div>
+      <div id="pr-step-cover"  style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">🎁 Cover</div>
+      <div id="pr-step-fridge" style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">❄️ Fridge</div>
+    </div>
+
+    <div id="proofFactCard" style="display:none;background:linear-gradient(135deg,#875305,#c4863a);border-radius:16px;padding:14px 18px;width:100%;max-width:300px;">
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
+      <p style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left">Cold proofing 8–16 hours develops complex flavor through slow fermentation. The cold also firms up the dough, making it easier to score a beautiful pattern before baking.</p>
+    </div>
+  </div>
+  <div class="px-6 pb-10">
+    <button id="proofContinueBtn" onclick="afterProofGame()"
+      class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100"
+      disabled>Next: Bake Day! →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- GAME c11 — Bake Day!                                                  -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="c11game">
+  <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Baking</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Bake Day! 🔥</h2>
+    <p id="bakeInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-3 min-h-[2.5rem]">Tap the Dutch oven to preheat at 500°F (260°C) — needs 1 hour to get screaming hot!</p>
+
+    <!-- Dutch oven -->
+    <div style="position:relative;flex-shrink:0;width:176px;height:176px;margin:0 auto 0.9rem">
+      <div id="bakePot" onclick="bakePotTap()" style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse at 40% 30%,#5a5a5a 0%,#3a3a3a 50%,#1a1a1a 100%);border:4px solid #1a1a1a;box-shadow:0 8px 32px rgba(0,0,0,0.38),inset 0 2px 8px rgba(255,255,255,0.07);cursor:pointer;transition:all 0.6s ease;user-select:none;-webkit-user-select:none;overflow:hidden">
+        <div id="bakeHeatGlow" style="position:absolute;inset:0;border-radius:50%;background:transparent;transition:background 1.5s ease;pointer-events:none"></div>
+        <div id="bakeDough" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:112px;height:112px;border-radius:50%;background:radial-gradient(ellipse at 45% 35%,#f0dda8 0%,#d4a860 45%,#b08038 80%,#7a5520 100%);opacity:0;transition:opacity 0.6s ease,background 2.2s ease;box-shadow:0 2px 12px rgba(0,0,0,0.22);pointer-events:none">
+          <div id="bakeScore1" style="position:absolute;top:30%;left:18%;width:64%;height:2px;background:rgba(80,40,0,0.55);border-radius:1px;opacity:0;transition:opacity 0.3s;transform:rotate(-22deg)"></div>
+          <div id="bakeScore2" style="position:absolute;top:48%;left:14%;width:72%;height:2px;background:rgba(80,40,0,0.5);border-radius:1px;opacity:0;transition:opacity 0.3s;transform:rotate(-22deg)"></div>
+        </div>
+        <div id="bakeLid" style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:170px;height:30px;background:linear-gradient(180deg,#4a4a4a,#2a2a2a);border-radius:50%;border:3px solid #1a1a1a;transition:all 0.5s ease;box-shadow:0 4px 12px rgba(0,0,0,0.45)">
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#555;border:2px solid #333"></div>
+        </div>
+      </div>
+      <div id="bakeWaves" style="position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);display:none;font-size:18px;animation:warmPulse 1.5s infinite">🔥</div>
+      <div id="bakeKnifeHint" style="position:absolute;top:-8px;right:-4px;font-size:24px;opacity:0;transition:opacity 0.4s;pointer-events:none">🗡️</div>
+    </div>
+
+    <!-- Step tracker -->
+    <div style="display:flex;gap:4px;width:100%;max-width:300px;margin-bottom:10px">
+      <div id="bk-step-preheat"  style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #875305;font-size:8px;font-weight:700;color:#875305;transition:all 0.3s;text-align:center">🔥 Preheat</div>
+      <div id="bk-step-score"    style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">🗡️ Score</div>
+      <div id="bk-step-bake"     style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">♨️ Steam</div>
+      <div id="bk-step-uncover"  style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">✨ Crust</div>
+    </div>
+
+    <!-- Action button (transfer / remove lid) -->
+    <div id="bakeActionWrap" style="width:100%;max-width:300px;display:none;margin-bottom:8px">
+      <button id="bakeActionBtn" onclick="bakeActionTap()" style="width:100%;padding:12px 8px;border-radius:18px;background:#f2ede3;border:2px solid #d6c3b3;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.2s;font-family:inherit;">
+        <span id="bakeActionEmoji" style="font-size:28px">🍞</span>
+        <span id="bakeActionLabel" style="font-size:10px;font-weight:700;color:#875305">Transfer + Lid On (20 min)</span>
+      </button>
+    </div>
+
+    <div id="bakeFactCard" style="display:none;background:linear-gradient(135deg,#875305,#c4863a);border-radius:16px;padding:14px 18px;width:100%;max-width:300px;">
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
+      <p style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left">The Dutch oven creates steam in the first 20 minutes — keeping the crust soft so the loaf expands fully (oven spring). Removing the lid after 20 min lets the Maillard reaction work its magic: that gorgeous golden crunch.</p>
+    </div>
+  </div>
+  <div class="px-6 pb-10">
+    <button id="bakeContinueBtn" onclick="afterBakeGame()"
+      class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100"
+      disabled>Next: Check Your Gear →</button>
   </div>
 </div>
 
@@ -852,7 +1221,13 @@ let lessonIndex   = 0;
 let equipState    = {};
 let creatingStarter = false;
 
-const SCREENS_ORDER = ['c0s1','c0s2','c1s1','c1s2','c1s3','c1game','c2s1','c2game','c3s1','c3game','c4s1','c4game','c4s2','c4s3'];
+const SCREENS_ORDER = [
+  'c0s1','c0s2','c1s1','c1s2','c1s3','c1game',
+  'c5game','c6game',
+  'c2s1','c2game',
+  'c7game','c8game','c9game','c10game','c11game',
+  'c3s1','c3game','c4s1','c4game','c4s2','c4s3'
+];
 
 // ── Safe localStorage ─────────────────────────────────────────────────────
 let _mem2 = {};
@@ -918,22 +1293,36 @@ function goBack() {
     updateNav();
 
     // Re-init interactive screens so they're fresh when navigated back to
-    if (prev === 'c1game') initQuiz('c1');
-    if (prev === 'c3game') initQuiz('c3');
-    if (prev === 'c2game') initBulkGame();
+    if (prev === 'c1game')  initQuiz('c1');
+    if (prev === 'c3game')  initQuiz('c3');
+    if (prev === 'c2game')  initBulkGame();
+    if (prev === 'c5game')  initMixGame();
+    if (prev === 'c6game')  initFoldGame();
+    if (prev === 'c7game')  initTempGame();
+    if (prev === 'c8game')  initPreshapeGame();
+    if (prev === 'c9game')  initShapeGame();
+    if (prev === 'c10game') initProofGame();
+    if (prev === 'c11game') initBakeGame();
   }, 320);
 }
 
 function updateNav() {
   // Chapter dots (pre-chapter screens show no active dot — Chapter 1 dot lights on c1s1)
-  const chapterMap = { c0s1:0, c0s2:0, c1s1:1,c1s2:1,c1s3:1,c1game:1, c2s1:2,c2game:2, c3s1:3,c3game:3, c4s1:4,c4game:4,c4s2:4,c4s3:4 };
+  const chapterMap = {
+    c0s1:0, c0s2:0,
+    c1s1:1,c1s2:1,c1s3:1,c1game:1,
+    c5game:2,c6game:2, c2s1:2,c2game:2, c7game:2,c8game:2,c9game:2,c10game:2,c11game:2,
+    c3s1:3,c3game:3,
+    c4s1:4,c4game:4,c4s2:4,c4s3:4
+  };
   const ch = chapterMap[currentScreen] || 0;
   for (let i=1;i<=4;i++) {
     const d = document.getElementById('dot'+i);
     if (d) d.className = 'dot' + (i <= ch ? ' active' : '');
   }
   const label = document.getElementById('chapterLabel');
-  if (currentScreen === 'c2game' || currentScreen === 'c4game') {
+  const _interactiveLabs = ['c2game','c4game','c5game','c6game','c7game','c8game','c9game','c10game','c11game'];
+  if (_interactiveLabs.includes(currentScreen)) {
     label.textContent = 'Interactive Lab 🧪';
   } else if (currentScreen === 'c1game' || currentScreen === 'c3game') {
     label.textContent = 'Quiz Time! 🎮';
@@ -1609,9 +1998,661 @@ function _bulkPoke() {
 }
 
 function afterBulkGame() {
-  goTo('c3s1');
-  initEquipment();
+  goTo('c7game');
+  initTempGame();
 }
+
+// ══════════════════════════════════════════════════════════════════════════
+// MINI-GAME: Mix & Autolyse (c5game)
+// ══════════════════════════════════════════════════════════════════════════
+let _mixStep = 'flour'; // flour | water | rest | starter | salt | mix | done
+let _mixBowlTaps = 0;
+
+const MIX_INSIGHTS = [
+  'Autolyse gives flour and water 30 min together before adding starter or salt. Gluten forms on its own — making your dough stronger and more extensible with far less mixing effort.',
+  'Add salt AFTER your starter is fully incorporated. Salt slows yeast activity, so mixing it in too early weakens your fermentation. The order is: flour → water → autolyse → starter → salt.',
+  'A shaggy, sticky dough at the end of mixing is perfect! Gluten develops further during bulk fermentation through your stretch & folds. There is no need to knead sourdough bread.',
+];
+
+function initMixGame() {
+  _mixStep = 'flour';
+  _mixBowlTaps = 0;
+  document.getElementById('mixFlourBtn').style.opacity   = '1';
+  document.getElementById('mixWaterBtn').style.opacity   = '0.35';
+  document.getElementById('mixStarterBtn').style.opacity = '0.35';
+  document.getElementById('mixSaltBtn').style.opacity    = '0.35';
+  const d = document.getElementById('mixDough');
+  d.style.height = '30%'; d.style.background = 'rgba(220,190,140,0.4)';
+  document.getElementById('mixAnim').style.display       = 'none';
+  document.getElementById('mixSwirl').style.display      = 'none';
+  document.getElementById('mixActionWrap').style.display = 'none';
+  document.getElementById('mixFactCard').style.display   = 'none';
+  document.getElementById('mixContinueBtn').disabled     = true;
+  document.getElementById('mixInstText').textContent = 'Tap the flour bag to add flour to your bowl';
+  _mxSetStep('mix-step-flour', 'active');
+  ['mix-step-water','mix-step-rest','mix-step-starter','mix-step-mix'].forEach(id => _mxSetStep(id, 'idle'));
+  startAmbientMusic();
+}
+
+function _mxSetStep(id, state) {
+  const el = document.getElementById(id); if (!el) return;
+  if (state === 'done') {
+    el.style.cssText += ';border-color:#198754;background:#198754;color:#fff;opacity:1';
+  } else if (state === 'active') {
+    el.style.cssText += ';border-color:#875305;background:transparent;color:#875305;opacity:1';
+  } else {
+    el.style.borderColor = '#d6c3b3'; el.style.background = 'transparent';
+    el.style.color = '#c8b8a8'; el.style.opacity = '0.4';
+  }
+}
+
+function _mixAnimDrop(emoji) {
+  const anim = document.getElementById('mixAnim');
+  document.getElementById('mixAnimEmoji').textContent = emoji;
+  anim.style.display = 'block';
+  setTimeout(() => { anim.style.display = 'none'; }, 900);
+}
+
+function mixTapIngredient(type) {
+  if (type === 'flour' && _mixStep === 'flour') {
+    playSound('flour'); _mixAnimDrop('🌾');
+    document.getElementById('mixFlourBtn').style.opacity = '0.2';
+    document.getElementById('mixWaterBtn').style.opacity = '1';
+    const d = document.getElementById('mixDough');
+    d.style.height = '46%'; d.style.background = 'rgba(240,230,200,0.72)';
+    _mxSetStep('mix-step-flour', 'done'); _mxSetStep('mix-step-water', 'active');
+    _mixStep = 'water';
+    document.getElementById('mixInstText').textContent = 'Flour is in! Now add water — mix until no dry flour remains';
+
+  } else if (type === 'water' && _mixStep === 'water') {
+    playSound('water'); _mixAnimDrop('💧');
+    document.getElementById('mixWaterBtn').style.opacity = '0.2';
+    const d = document.getElementById('mixDough');
+    d.style.height = '52%'; d.style.background = 'rgba(210,185,140,0.88)';
+    _mxSetStep('mix-step-water', 'done'); _mxSetStep('mix-step-rest', 'active');
+    _mixStep = 'rest';
+    document.getElementById('mixInstText').textContent = 'Shaggy dough formed! Let it autolyse — tap below to rest 30 min before adding starter';
+    document.getElementById('mixActionWrap').style.display = 'block';
+
+  } else if (type === 'starter' && _mixStep === 'starter') {
+    playSound('water'); _mixAnimDrop('🫙');
+    document.getElementById('mixStarterBtn').style.opacity = '0.2';
+    document.getElementById('mixSaltBtn').style.opacity = '1';
+    const d = document.getElementById('mixDough');
+    d.style.height = '56%'; d.style.background = 'radial-gradient(ellipse at 50% 0%,#f0dda8 0%,#d4a860 40%,#b08038 80%,#886020 100%)';
+    _mixStep = 'salt';
+    document.getElementById('mixInstText').textContent = 'Starter incorporated! Now add a pinch of salt last 🧂';
+
+  } else if (type === 'salt' && _mixStep === 'salt') {
+    playSound('pop'); _mixAnimDrop('🧂');
+    document.getElementById('mixSaltBtn').style.opacity = '0.2';
+    _mxSetStep('mix-step-starter', 'done'); _mxSetStep('mix-step-mix', 'active');
+    _mixStep = 'mix';
+    _mixBowlTaps = 0;
+    document.getElementById('mixInstText').textContent = 'Salt is in! Tap the bowl 3 times to mix everything together 👐';
+  }
+}
+
+function mixActionTap() {
+  if (_mixStep !== 'rest') return;
+  playSound('success');
+  document.getElementById('mixActionWrap').style.display = 'none';
+  _mxSetStep('mix-step-rest', 'done'); _mxSetStep('mix-step-starter', 'active');
+  document.getElementById('mixStarterBtn').style.opacity = '1';
+  _mixStep = 'starter';
+  document.getElementById('mixInstText').textContent = 'Rested! Gluten has developed. Now add your active starter 🫙';
+}
+
+function mixBowlTap() {
+  if (_mixStep !== 'mix') return;
+  _mixBowlTaps++;
+  playSound('stir');
+  const bowl = document.getElementById('mixBowlBody');
+  bowl.style.animation = 'jarWobble 0.5s ease';
+  setTimeout(() => { bowl.style.animation = ''; }, 520);
+  const swirl = document.getElementById('mixSwirl');
+  swirl.style.display = 'flex'; setTimeout(() => { swirl.style.display = 'none'; }, 480);
+  if (_mixBowlTaps < 3) {
+    document.getElementById('mixInstText').textContent = `Mix ${_mixBowlTaps} of 3 — keep going!`;
+  } else {
+    document.getElementById('mixInstText').textContent = '✓ Mixed! Shaggy and sticky is exactly right 🎉';
+    const d = document.getElementById('mixDough');
+    d.style.height = '62%'; d.style.background = 'radial-gradient(ellipse at 50% 0%,#f5e8c8 0%,#e0c89a 35%,#c8a86b 75%,#a07845 100%)';
+    _mxSetStep('mix-step-mix', 'done');
+    _mixStep = 'done';
+    document.getElementById('mixFactText').textContent = MIX_INSIGHTS[Math.floor(Math.random() * MIX_INSIGHTS.length)];
+    document.getElementById('mixFactCard').style.display = 'block';
+    setTimeout(() => { playSound('success'); document.getElementById('mixContinueBtn').disabled = false; }, 420);
+  }
+}
+
+function afterMixGame() { goTo('c6game'); initFoldGame(); }
+
+// ══════════════════════════════════════════════════════════════════════════
+// MINI-GAME: Stretch & Fold / Coil Folds (c6game)
+// ══════════════════════════════════════════════════════════════════════════
+let _foldStep = 's1'; // s1 | rest | s2 | done
+let _foldTotalTaps = 0;
+
+const FOLD_INSIGHTS = [
+  'Coil folds build the gluten network by aligning protein strands. 2–4 sets of 4 folds during the first 2 hours of bulk gives you incredible structure without over-working the dough.',
+  'Unlike kneading, coil folds use the weight of the dough — lift it from underneath and let gravity fold it over. This builds strength while keeping gas bubbles intact.',
+  'Your dough should feel noticeably more elastic after each set. By the last set it should hold its shape when lifted — that is the gluten network you have built!',
+];
+
+function initFoldGame() {
+  _foldStep = 's1';
+  _foldTotalTaps = 0;
+  const d = document.getElementById('foldDough');
+  d.style.width = '142px'; d.style.height = '92px';
+  d.style.borderRadius = '45% 55% 50% 50% / 55% 45% 60% 40%';
+  d.style.transform = 'translate(-50%,-50%)';
+  document.getElementById('foldCountBadge').textContent = 'Tap to fold';
+  document.getElementById('foldStrengthBar').style.width = '0%';
+  const pct = document.getElementById('foldStrengthPct');
+  if (pct) pct.textContent = '0%';
+  document.getElementById('foldRestWrap').style.display = 'none';
+  document.getElementById('foldFactCard').style.display = 'none';
+  document.getElementById('foldContinueBtn').disabled = true;
+  document.getElementById('foldCountText').textContent = '0 of 4 folds — Set 1';
+  document.getElementById('foldInstText').textContent = 'Tap the dough to start your first coil fold — grab, lift, fold';
+  _flSetStep('fold-step-s1', 'active');
+  ['fold-step-rest','fold-step-s2','fold-step-done'].forEach(id => _flSetStep(id, 'idle'));
+  startAmbientMusic();
+}
+
+function _flSetStep(id, state) {
+  const el = document.getElementById(id); if (!el) return;
+  if (state === 'done') {
+    el.style.cssText += ';border-color:#198754;background:#198754;color:#fff;opacity:1';
+  } else if (state === 'active') {
+    el.style.cssText += ';border-color:#875305;background:transparent;color:#875305;opacity:1';
+  } else {
+    el.style.borderColor = '#d6c3b3'; el.style.background = 'transparent';
+    el.style.color = '#c8b8a8'; el.style.opacity = '0.4';
+  }
+}
+
+function foldTap() {
+  if (_foldStep !== 's1' && _foldStep !== 's2') return;
+  const setStart  = _foldStep === 's2' ? 4 : 0;
+  const inSet     = _foldTotalTaps - setStart; // 0-based within current set
+  if (inSet >= 4) return;
+  _foldTotalTaps++;
+  playSound('stir');
+  const d = document.getElementById('foldDough');
+  const sx = _foldTotalTaps % 2 === 0 ? 1.18 : 0.84;
+  const sy = _foldTotalTaps % 2 === 0 ? 0.84 : 1.18;
+  d.style.transition = 'transform 0.14s ease-out';
+  d.style.transform = `translate(-50%,-50%) scaleX(${sx}) scaleY(${sy})`;
+  setTimeout(() => {
+    d.style.transition = 'transform 0.38s cubic-bezier(.34,1.56,.64,1)';
+    d.style.transform = 'translate(-50%,-50%)';
+  }, 160);
+  const pct = Math.min(100, Math.round((_foldTotalTaps / 8) * 100));
+  document.getElementById('foldStrengthBar').style.width = pct + '%';
+  const pctEl = document.getElementById('foldStrengthPct');
+  if (pctEl) pctEl.textContent = pct + '%';
+  const inSetCount = inSet + 1; // 1-based
+  document.getElementById('foldCountBadge').textContent = `Fold ${inSetCount}/4`;
+  if (inSetCount < 4) {
+    const setNum = _foldStep === 's1' ? 1 : 2;
+    document.getElementById('foldCountText').textContent = `${_foldTotalTaps} fold${_foldTotalTaps !== 1 ? 's' : ''} total — Set ${setNum}`;
+    document.getElementById('foldInstText').textContent = `Fold ${inSetCount} of 4 ✓ — each fold builds strength!`;
+  } else {
+    if (_foldStep === 's1') {
+      _flSetStep('fold-step-s1', 'done'); _flSetStep('fold-step-rest', 'active');
+      _foldStep = 'rest';
+      document.getElementById('foldCountBadge').textContent = 'Set 1 ✓';
+      document.getElementById('foldCountText').textContent = '4 folds done — rest the dough';
+      document.getElementById('foldInstText').textContent = 'Set 1 complete! Cover and rest 30 min before Set 2';
+      document.getElementById('foldRestWrap').style.display = 'block';
+    } else {
+      _flSetStep('fold-step-s2', 'done'); _flSetStep('fold-step-done', 'done');
+      _foldStep = 'done';
+      document.getElementById('foldCountBadge').textContent = '💪 Strong!';
+      document.getElementById('foldCountText').textContent = '8 folds total — gluten is built!';
+      document.getElementById('foldInstText').textContent = '✓ 2 sets complete — your dough is strong and ready for bulk fermentation! 🎉';
+      document.getElementById('foldFactText').textContent = FOLD_INSIGHTS[Math.floor(Math.random() * FOLD_INSIGHTS.length)];
+      document.getElementById('foldFactCard').style.display = 'block';
+      setTimeout(() => { playSound('success'); document.getElementById('foldContinueBtn').disabled = false; }, 420);
+    }
+  }
+}
+
+function foldRestTap() {
+  playSound('success');
+  document.getElementById('foldRestWrap').style.display = 'none';
+  _flSetStep('fold-step-rest', 'done'); _flSetStep('fold-step-s2', 'active');
+  _foldStep = 's2';
+  document.getElementById('foldCountBadge').textContent = 'Tap to fold';
+  document.getElementById('foldCountText').textContent = '4 folds done — Set 2 starting';
+  document.getElementById('foldInstText').textContent = 'Rested! Dough relaxed. Start Set 2 — 4 more coil folds';
+}
+
+function afterFoldGame() { goTo('c2s1'); initLessons(); }
+
+// ══════════════════════════════════════════════════════════════════════════
+// MINI-GAME: Bulk Timing — Temperature & Time (c7game)
+// ══════════════════════════════════════════════════════════════════════════
+let _tempRevealed = new Set();
+
+const TEMP_DATA = {
+  65: { time: '8–12 hrs',  label: '🐢 Slow',  color: '#6688cc', barPct: '100%' },
+  76: { time: '4–5 hrs',   label: '✓ Ideal',  color: '#875305', barPct: '50%'  },
+  82: { time: '2–3 hrs',   label: '⚡ Fast',   color: '#cc4422', barPct: '25%'  },
+};
+
+function initTempGame() {
+  _tempRevealed = new Set();
+  [65, 76, 82].forEach(t => {
+    const card = document.getElementById('tempCard' + t);
+    if (card) { card.style.borderColor = '#d6c3b3'; card.style.background = '#f2ede3'; }
+    const r = document.getElementById('tempReveal' + t);
+    if (r) r.style.opacity = '0';
+    const bar = document.getElementById('tempBar' + t);
+    if (bar) {
+      bar.style.display = 'none';
+      const fill = bar.querySelector('div');
+      if (fill) { fill.style.transform = 'scaleX(0)'; fill.style.width = '100%'; }
+    }
+  });
+  document.getElementById('tempSummary').style.display = 'none';
+  document.getElementById('tempContinueBtn').disabled = true;
+  document.getElementById('tempInstText').textContent = 'Tap each kitchen to discover how temperature changes your bulk time';
+  startAmbientMusic();
+}
+
+function tempReveal(temp) {
+  if (_tempRevealed.has(temp)) return;
+  _tempRevealed.add(temp);
+  playSound('pop');
+  const data = TEMP_DATA[temp];
+  const card = document.getElementById('tempCard' + temp);
+  card.style.borderColor = data.color;
+  card.style.background  = temp === 76 ? '#fff8ef' : '#f9f6f2';
+  const rev = document.getElementById('tempReveal' + temp);
+  rev.innerHTML = `<span style="display:block;font-size:11px">${data.label}</span>${data.time}`;
+  rev.style.opacity = '1';
+  const bar = document.getElementById('tempBar' + temp);
+  bar.style.display = 'block';
+  setTimeout(() => {
+    const fill = bar.querySelector('div');
+    if (fill) { fill.style.width = data.barPct; fill.style.transform = 'scaleX(1)'; }
+  }, 30);
+  if (_tempRevealed.size === 3) {
+    playSound('success');
+    document.getElementById('tempInstText').textContent = '✓ Temperature is your most powerful tool — warmer is faster, cooler builds more flavor time';
+    document.getElementById('tempSummary').style.display = 'block';
+    setTimeout(() => { document.getElementById('tempContinueBtn').disabled = false; }, 600);
+  } else {
+    document.getElementById('tempInstText').textContent = `${3 - _tempRevealed.size} more kitchen${3 - _tempRevealed.size !== 1 ? 's' : ''} to reveal!`;
+  }
+}
+
+function afterTempGame() { goTo('c8game'); initPreshapeGame(); }
+
+// ══════════════════════════════════════════════════════════════════════════
+// MINI-GAME: Pre-shaping (c8game)
+// ══════════════════════════════════════════════════════════════════════════
+let _preshapeStep = 'scrape'; // scrape | shape | rest | done
+let _preshapeTaps = 0;
+
+function initPreshapeGame() {
+  _preshapeStep = 'scrape';
+  _preshapeTaps = 0;
+  const d = document.getElementById('preshapeDough');
+  d.style.width = '110px'; d.style.height = '80px';
+  d.style.borderRadius = '48% 52% 55% 45% / 52% 48% 54% 48%';
+  d.style.background = 'radial-gradient(ellipse at 40% 30%,#f0dda8 0%,#d4a860 45%,#b08038 80%,#7a5520 100%)';
+  document.getElementById('preshapeScraper').style.opacity = '1';
+  document.getElementById('preshapeRestPill').style.display = 'none';
+  document.getElementById('preshapeFactCard').style.display = 'none';
+  document.getElementById('preshapeContinueBtn').disabled = true;
+  document.getElementById('preshapeInstText').textContent = 'Tap the dough to release it from the bowl with your bench scraper';
+  _psSetStep('ps-step-scrape', 'active');
+  ['ps-step-shape','ps-step-rest','ps-step-done'].forEach(id => _psSetStep(id, 'idle'));
+  startAmbientMusic();
+}
+
+function _psSetStep(id, state) {
+  const el = document.getElementById(id); if (!el) return;
+  if (state === 'done') {
+    el.style.cssText += ';border-color:#198754;background:#198754;color:#fff;opacity:1';
+  } else if (state === 'active') {
+    el.style.cssText += ';border-color:#875305;background:transparent;color:#875305;opacity:1';
+  } else {
+    el.style.borderColor = '#d6c3b3'; el.style.background = 'transparent';
+    el.style.color = '#c8b8a8'; el.style.opacity = '0.4';
+  }
+}
+
+function preshapeTap() {
+  if (_preshapeStep === 'scrape') {
+    playSound('stir');
+    document.getElementById('preshapeScraper').style.opacity = '0.2';
+    const d = document.getElementById('preshapeDough');
+    d.style.width = '102px'; d.style.height = '76px';
+    d.style.borderRadius = '50% 50% 52% 48% / 48% 50% 52% 50%';
+    _psSetStep('ps-step-scrape', 'done'); _psSetStep('ps-step-shape', 'active');
+    _preshapeStep = 'shape'; _preshapeTaps = 0;
+    document.getElementById('preshapeInstText').textContent = 'Released! Tap 3× to fold the edges under and build a rough ball';
+
+  } else if (_preshapeStep === 'shape') {
+    _preshapeTaps++;
+    playSound('pop');
+    const d = document.getElementById('preshapeDough');
+    const pct = _preshapeTaps / 3;
+    d.style.width  = Math.round(102 - pct * 20) + 'px';
+    d.style.height = Math.round(76  - pct * 14) + 'px';
+    d.style.borderRadius = Math.round(40 + pct * 10) + '%';
+    document.getElementById('preshapeInstText').textContent = `Fold ${_preshapeTaps} of 3 — building surface tension!`;
+    if (_preshapeTaps >= 3) {
+      d.style.width = '80px'; d.style.height = '80px'; d.style.borderRadius = '50%';
+      _psSetStep('ps-step-shape', 'done'); _psSetStep('ps-step-rest', 'active');
+      _preshapeStep = 'rest';
+      document.getElementById('preshapeInstText').textContent = 'Pre-shaped! Tap to cover and start the bench rest 💤';
+    }
+
+  } else if (_preshapeStep === 'rest') {
+    playSound('success');
+    document.getElementById('preshapeRestPill').style.display = 'block';
+    _psSetStep('ps-step-rest', 'done'); _psSetStep('ps-step-done', 'done');
+    _preshapeStep = 'done';
+    document.getElementById('preshapeInstText').textContent = '✓ Bench resting! 20–30 min lets gluten relax for easier final shaping 🎉';
+    document.getElementById('preshapeFactCard').style.display = 'block';
+    setTimeout(() => { playSound('success'); document.getElementById('preshapeContinueBtn').disabled = false; }, 500);
+  }
+}
+
+function afterPreshapeGame() { goTo('c9game'); initShapeGame(); }
+
+// ══════════════════════════════════════════════════════════════════════════
+// MINI-GAME: Final Shaping (c9game)
+// ══════════════════════════════════════════════════════════════════════════
+let _shapeStep = 'stretch'; // stretch | fold | tension | banneton | done
+let _shapeTaps = 0;
+
+function initShapeGame() {
+  _shapeStep = 'stretch';
+  _shapeTaps = 0;
+  const d = document.getElementById('shapeDough');
+  d.style.width = '120px'; d.style.height = '120px';
+  d.style.borderRadius = '50%';
+  d.style.boxShadow = '0 6px 20px rgba(135,83,5,0.25)';
+  d.style.opacity = '1';
+  d.style.background = 'radial-gradient(ellipse at 40% 30%,#f0dda8 0%,#d4a860 40%,#b08038 78%,#7a5520 100%)';
+  ['shapeLine1','shapeLine2','shapeLine3','shapeLine4'].forEach(id => {
+    document.getElementById(id).style.opacity = '0';
+  });
+  const b = document.getElementById('shapeBanneton');
+  b.style.opacity = '0.35'; b.style.fontSize = '32px'; b.textContent = '🧺';
+  document.getElementById('shapeFactCard').style.display = 'none';
+  document.getElementById('shapeContinueBtn').disabled = true;
+  document.getElementById('shapeTapText').textContent = 'Tap the dough to begin';
+  document.getElementById('shapeInstText').textContent = 'Tap the dough to gently stretch the top outward';
+  _shSetStep('sh-step-stretch', 'active');
+  ['sh-step-fold','sh-step-tension','sh-step-banneton'].forEach(id => _shSetStep(id, 'idle'));
+  startAmbientMusic();
+}
+
+function _shSetStep(id, state) {
+  const el = document.getElementById(id); if (!el) return;
+  if (state === 'done') {
+    el.style.cssText += ';border-color:#198754;background:#198754;color:#fff;opacity:1';
+  } else if (state === 'active') {
+    el.style.cssText += ';border-color:#875305;background:transparent;color:#875305;opacity:1';
+  } else {
+    el.style.borderColor = '#d6c3b3'; el.style.background = 'transparent';
+    el.style.color = '#c8b8a8'; el.style.opacity = '0.4';
+  }
+}
+
+function shapeTap() {
+  const d = document.getElementById('shapeDough');
+  if (_shapeStep === 'stretch') {
+    playSound('stir');
+    d.style.borderRadius = '48% 52% 60% 40% / 36% 40% 60% 64%';
+    document.getElementById('shapeLine1').style.opacity = '1';
+    setTimeout(() => { _shSetStep('sh-step-stretch','done'); _shSetStep('sh-step-fold','active'); }, 280);
+    _shapeStep = 'fold'; _shapeTaps = 0;
+    document.getElementById('shapeTapText').textContent = 'Tap 3× to fold corners in';
+    document.getElementById('shapeInstText').textContent = 'Now fold the sides in like an envelope — tap 3 times';
+
+  } else if (_shapeStep === 'fold') {
+    _shapeTaps++;
+    playSound('pop');
+    const lines = ['shapeLine1','shapeLine2','shapeLine3','shapeLine4'];
+    if (_shapeTaps <= 4) document.getElementById(lines[_shapeTaps - 1]).style.opacity = '0.85';
+    document.getElementById('shapeTapText').textContent = `Fold ${_shapeTaps} of 3`;
+    if (_shapeTaps >= 3) {
+      d.style.borderRadius = '50% 50% 46% 54% / 46% 48% 52% 54%';
+      _shSetStep('sh-step-fold', 'done'); _shSetStep('sh-step-tension', 'active');
+      _shapeStep = 'tension';
+      document.getElementById('shapeTapText').textContent = 'Tap to build tension';
+      document.getElementById('shapeInstText').textContent = 'Almost there! Tap to drag toward you and build surface tension';
+    }
+
+  } else if (_shapeStep === 'tension') {
+    playSound('pop');
+    d.style.width = '96px'; d.style.height = '96px'; d.style.borderRadius = '50%';
+    d.style.boxShadow = '0 8px 28px rgba(135,83,5,0.40)';
+    _shSetStep('sh-step-tension', 'done'); _shSetStep('sh-step-banneton', 'active');
+    _shapeStep = 'banneton';
+    document.getElementById('shapeBanneton').style.opacity = '1';
+    document.getElementById('shapeTapText').textContent = 'Tap to place in banneton';
+    document.getElementById('shapeInstText').textContent = 'Beautiful tension! Tap to flip seam-side up into the banneton 🧺';
+
+  } else if (_shapeStep === 'banneton') {
+    playSound('success');
+    d.style.opacity = '0';
+    setTimeout(() => { document.getElementById('shapeBanneton').style.fontSize = '52px'; }, 350);
+    _shSetStep('sh-step-banneton', 'done');
+    _shapeStep = 'done';
+    document.getElementById('shapeTapText').textContent = 'Shaped! ✓';
+    document.getElementById('shapeInstText').textContent = '✓ In the banneton! Seam side up — the rings hold your loaf shape perfectly 🎉';
+    document.getElementById('shapeFactCard').style.display = 'block';
+    setTimeout(() => { playSound('success'); document.getElementById('shapeContinueBtn').disabled = false; }, 620);
+  }
+}
+
+function afterShapeGame() { goTo('c10game'); initProofGame(); }
+
+// ══════════════════════════════════════════════════════════════════════════
+// MINI-GAME: Cold Proof (c10game)
+// ══════════════════════════════════════════════════════════════════════════
+let _proofStep = 'dust'; // dust | place | cover | fridge | done
+
+function initProofGame() {
+  _proofStep = 'dust';
+  document.getElementById('proofFlour').style.background     = 'rgba(255,255,255,0)';
+  document.getElementById('proofDoughInside').style.opacity  = '0';
+  document.getElementById('proofWrap').style.opacity         = '0';
+  document.getElementById('proofFlourBtn').style.opacity     = '1';
+  document.getElementById('proofFridge').style.opacity       = '0.4';
+  document.getElementById('proofFridge').style.background    = 'linear-gradient(135deg,#e8f0f8 0%,#d4e4f4 100%)';
+  document.getElementById('proofFridge').style.borderColor   = '#b0c8e0';
+  document.getElementById('proofFridgeInside').style.opacity = '0';
+  const b = document.getElementById('proofBanneton');
+  b.style.transform = 'scale(1)'; b.style.opacity = '1';
+  document.getElementById('proofFactCard').style.display     = 'none';
+  document.getElementById('proofContinueBtn').disabled       = true;
+  document.getElementById('proofInstText').textContent = 'Tap the banneton to dust it with rice flour';
+  _prSetStep('pr-step-dust', 'active');
+  ['pr-step-place','pr-step-cover','pr-step-fridge'].forEach(id => _prSetStep(id, 'idle'));
+  startAmbientMusic();
+}
+
+function _prSetStep(id, state) {
+  const el = document.getElementById(id); if (!el) return;
+  if (state === 'done') {
+    el.style.cssText += ';border-color:#198754;background:#198754;color:#fff;opacity:1';
+  } else if (state === 'active') {
+    el.style.cssText += ';border-color:#875305;background:transparent;color:#875305;opacity:1';
+  } else {
+    el.style.borderColor = '#d6c3b3'; el.style.background = 'transparent';
+    el.style.color = '#c8b8a8'; el.style.opacity = '0.4';
+  }
+}
+
+function proofBannetonTap() {
+  if (_proofStep === 'dust') {
+    playSound('flour');
+    document.getElementById('proofFlour').style.background = 'rgba(255,255,255,0.54)';
+    document.getElementById('proofFlourBtn').style.opacity = '0.15';
+    _prSetStep('pr-step-dust', 'done'); _prSetStep('pr-step-place', 'active');
+    _proofStep = 'place';
+    document.getElementById('proofInstText').textContent = 'Dusted! Tap to place your shaped dough inside, seam side up';
+
+  } else if (_proofStep === 'place') {
+    playSound('pop');
+    document.getElementById('proofDoughInside').style.opacity = '1';
+    _prSetStep('pr-step-place', 'done'); _prSetStep('pr-step-cover', 'active');
+    _proofStep = 'cover';
+    document.getElementById('proofInstText').textContent = 'Dough is in! Tap to cover with plastic wrap or a damp cloth';
+
+  } else if (_proofStep === 'cover') {
+    playSound('stir');
+    document.getElementById('proofWrap').style.opacity = '1';
+    _prSetStep('pr-step-cover', 'done'); _prSetStep('pr-step-fridge', 'active');
+    _proofStep = 'fridge';
+    document.getElementById('proofFridge').style.opacity = '1';
+    document.getElementById('proofInstText').textContent = 'Covered! Now tap the fridge to start your cold proof ❄️';
+  }
+}
+
+function proofFridgeTap() {
+  if (_proofStep !== 'fridge') return;
+  playSound('success');
+  document.getElementById('proofFridgeInside').style.opacity = '1';
+  document.getElementById('proofFridge').style.background  = 'linear-gradient(135deg,#c8e4f8 0%,#a8cce8 100%)';
+  document.getElementById('proofFridge').style.borderColor = '#7aaad8';
+  const b = document.getElementById('proofBanneton');
+  b.style.transition = 'all 0.7s cubic-bezier(.34,1.56,.64,1)';
+  b.style.opacity = '0.55'; b.style.transform = 'scale(0.66)';
+  _prSetStep('pr-step-fridge', 'done');
+  _proofStep = 'done';
+  document.getElementById('proofInstText').textContent = '✓ Into the fridge! 8–16 hours of slow fermentation builds incredible flavor 🎉';
+  document.getElementById('proofFactCard').style.display = 'block';
+  setTimeout(() => { playSound('success'); document.getElementById('proofContinueBtn').disabled = false; }, 650);
+}
+
+function afterProofGame() { goTo('c11game'); initBakeGame(); }
+
+// ══════════════════════════════════════════════════════════════════════════
+// MINI-GAME: Bake Day! (c11game)
+// ══════════════════════════════════════════════════════════════════════════
+let _bakeStep = 'preheat'; // preheat | score | bake | uncover | done
+let _bakePotTaps = 0;
+let _bakeScoreTaps = 0;
+
+function initBakeGame() {
+  _bakeStep = 'preheat'; _bakePotTaps = 0; _bakeScoreTaps = 0;
+  document.getElementById('bakePot').style.background = 'radial-gradient(ellipse at 40% 30%,#5a5a5a 0%,#3a3a3a 50%,#1a1a1a 100%)';
+  document.getElementById('bakeHeatGlow').style.background = 'transparent';
+  const bd = document.getElementById('bakeDough');
+  bd.style.opacity = '0';
+  bd.style.background = 'radial-gradient(ellipse at 45% 35%,#f0dda8 0%,#d4a860 45%,#b08038 80%,#7a5520 100%)';
+  ['bakeScore1','bakeScore2'].forEach(id => { document.getElementById(id).style.opacity = '0'; });
+  const lid = document.getElementById('bakeLid');
+  lid.style.top = '-10px'; lid.style.opacity = '1';
+  document.getElementById('bakeWaves').style.display     = 'none';
+  document.getElementById('bakeKnifeHint').style.opacity = '0';
+  document.getElementById('bakeActionWrap').style.display= 'none';
+  document.getElementById('bakeFactCard').style.display  = 'none';
+  document.getElementById('bakeContinueBtn').disabled    = true;
+  document.getElementById('bakeInstText').textContent = 'Tap the Dutch oven to preheat at 500°F (260°C) — needs 1 hour to get screaming hot!';
+  _bkSetStep('bk-step-preheat', 'active');
+  ['bk-step-score','bk-step-bake','bk-step-uncover'].forEach(id => _bkSetStep(id, 'idle'));
+  startAmbientMusic();
+}
+
+function _bkSetStep(id, state) {
+  const el = document.getElementById(id); if (!el) return;
+  if (state === 'done') {
+    el.style.cssText += ';border-color:#198754;background:#198754;color:#fff;opacity:1';
+  } else if (state === 'active') {
+    el.style.cssText += ';border-color:#875305;background:transparent;color:#875305;opacity:1';
+  } else {
+    el.style.borderColor = '#d6c3b3'; el.style.background = 'transparent';
+    el.style.color = '#c8b8a8'; el.style.opacity = '0.4';
+  }
+}
+
+function bakePotTap() {
+  if (_bakeStep === 'preheat') {
+    _bakePotTaps++;
+    if (_bakePotTaps === 1) {
+      document.getElementById('bakeWaves').style.display = 'flex';
+      document.getElementById('bakeHeatGlow').style.background = 'radial-gradient(ellipse at 50% 90%,rgba(255,140,0,0.28) 0%,transparent 60%)';
+      document.getElementById('bakeInstText').textContent = 'Preheating… it needs to be scorching hot for maximum oven spring! Tap again ♨️';
+    } else if (_bakePotTaps >= 2) {
+      document.getElementById('bakeHeatGlow').style.background = 'radial-gradient(ellipse at 50% 90%,rgba(255,70,0,0.44) 0%,rgba(255,150,0,0.18) 55%,transparent 75%)';
+      document.getElementById('bakePot').style.background = 'radial-gradient(ellipse at 40% 30%,#6a4040 0%,#4a2020 50%,#280808 100%)';
+      _bkSetStep('bk-step-preheat', 'done'); _bkSetStep('bk-step-score', 'active');
+      _bakeStep = 'score'; _bakeScoreTaps = 0;
+      document.getElementById('bakeKnifeHint').style.opacity = '1';
+      document.getElementById('bakeDough').style.opacity = '0.65';
+      document.getElementById('bakeInstText').textContent = 'Scorching hot! 🔥 Place your cold dough on top and score it — tap twice for cuts';
+    }
+
+  } else if (_bakeStep === 'score') {
+    _bakeScoreTaps++;
+    playSound('stir');
+    if (_bakeScoreTaps >= 1) document.getElementById('bakeScore1').style.opacity = '1';
+    if (_bakeScoreTaps >= 2) document.getElementById('bakeScore2').style.opacity = '1';
+    document.getElementById('bakeInstText').textContent = _bakeScoreTaps < 2
+      ? `Score ${_bakeScoreTaps} of 2 — confident, decisive cuts!`
+      : '✓ Scored! Now transfer to the Dutch oven';
+    if (_bakeScoreTaps >= 2) {
+      document.getElementById('bakeKnifeHint').style.opacity = '0';
+      _bkSetStep('bk-step-score', 'done'); _bkSetStep('bk-step-bake', 'active');
+      _bakeStep = 'bake';
+      document.getElementById('bakeActionWrap').style.display = 'block';
+      document.getElementById('bakeActionEmoji').textContent = '🍞';
+      document.getElementById('bakeActionLabel').textContent = 'Transfer + Lid On (20 min)';
+    }
+  }
+}
+
+function bakeActionTap() {
+  if (_bakeStep === 'bake') {
+    playSound('pop');
+    document.getElementById('bakeActionWrap').style.display = 'none';
+    document.getElementById('bakeDough').style.opacity = '1';
+    document.getElementById('bakeInstText').textContent = 'In the pot! Lid on — 20 min with steam keeps crust soft for oven spring 💨';
+    setTimeout(() => {
+      _bkSetStep('bk-step-bake', 'done'); _bkSetStep('bk-step-uncover', 'active');
+      _bakeStep = 'uncover';
+      document.getElementById('bakeActionWrap').style.display = 'block';
+      document.getElementById('bakeActionEmoji').textContent = '✋';
+      document.getElementById('bakeActionLabel').textContent = 'Remove Lid — Open Bake (20 min)';
+      document.getElementById('bakeInstText').textContent = '20 min steamed — loaf has sprung! Remove the lid to build that gorgeous crust 🟫';
+    }, 1600);
+
+  } else if (_bakeStep === 'uncover') {
+    playSound('success');
+    document.getElementById('bakeActionWrap').style.display = 'none';
+    const lid = document.getElementById('bakeLid');
+    lid.style.top = '-55px'; lid.style.opacity = '0';
+    setTimeout(() => {
+      document.getElementById('bakeDough').style.background = 'radial-gradient(ellipse at 45% 35%,#d4941a 0%,#aa5810 45%,#782a04 80%,#420800 100%)';
+      document.getElementById('bakeHeatGlow').style.background = 'radial-gradient(ellipse at 50% 90%,rgba(255,100,0,0.5) 0%,rgba(255,170,0,0.22) 50%,transparent 72%)';
+    }, 700);
+    setTimeout(() => {
+      document.getElementById('bakeDough').style.background = 'radial-gradient(ellipse at 45% 35%,#b87010 0%,#883808 40%,#541802 78%,#280400 100%)';
+    }, 2100);
+    _bkSetStep('bk-step-uncover', 'done');
+    _bakeStep = 'done';
+    setTimeout(() => {
+      document.getElementById('bakeInstText').textContent = '✓ Golden crust! The Maillard reaction created that perfect color and crunch 🎉';
+      document.getElementById('bakeFactCard').style.display = 'block';
+      setTimeout(() => { playSound('success'); document.getElementById('bakeContinueBtn').disabled = false; }, 420);
+    }, 2300);
+  }
+}
+
+function afterBakeGame() { goTo('c3s1'); initEquipment(); }
 
 // ══════════════════════════════════════════════════════════════════════════
 // MINI-GAME: Feeding Ritual (c4game)
@@ -1967,8 +3008,8 @@ function _quizShowComplete(id) {
   const msg    = wrong === 0
     ? 'You nailed every question. You\'re already thinking like a baker!'
     : `You got ${correct} of ${total} right. Every miss is a lesson that sticks!`;
-  const nextLabel = id === 'c1' ? 'Start Chapter 2 →' : 'Start Chapter 4 →';
-  const nextFn    = id === 'c1' ? "goTo('c2s1');initLessons()" : "goTo('c4s1')";
+  const nextLabel = id === 'c1' ? 'Next: Mix the Dough →' : 'Start Chapter 4 →';
+  const nextFn    = id === 'c1' ? "goTo('c5game');initMixGame()" : "goTo('c4s1')";
 
   if (!_isMuted) _quizPlayChime(wrong === 0);
 
