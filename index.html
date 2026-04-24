@@ -554,7 +554,35 @@
     if (!G) return;
     const timeStr = (document.getElementById('reminder-time') || {}).value || '08:00';
     const [h, m] = timeStr.split(':').map(Number);
-    G.scheduleStarterReminder(enabled, isNaN(h) ? 8 : h, isNaN(m) ? 0 : m);
+    const hour   = isNaN(h) ? 8 : h;
+    const minute = isNaN(m) ? 0 : m;
+    G.scheduleStarterReminder(enabled, hour, minute).then(function() {
+      _showReminderToast(enabled, hour, minute, false);
+    }).catch(function() {
+      _showReminderToast(enabled, hour, minute, true);
+    });
+  }
+
+  function _showReminderToast(enabled, hour, minute, failed) {
+    const existing = document.getElementById('pym-reminder-toast');
+    if (existing) existing.remove();
+    const t = document.createElement('div');
+    t.id = 'pym-reminder-toast';
+    const pad   = n => String(n).padStart(2, '0');
+    const hDisp = hour % 12 || 12;
+    const ampm  = hour < 12 ? 'AM' : 'PM';
+    let msg;
+    if (failed) {
+      msg = '⚠️ Reminder permission denied — check app settings';
+    } else if (!enabled) {
+      msg = '🔕 Reminder turned off';
+    } else {
+      msg = `✓ Reminder set for ${hDisp}:${pad(minute)} ${ampm} daily`;
+    }
+    t.style.cssText = 'position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:#875305;color:#fff;padding:12px 22px;border-radius:100px;font-weight:700;font-size:13px;z-index:9999;white-space:nowrap;box-shadow:0 4px 16px rgba(135,83,5,0.3);transition:opacity 0.3s';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.style.opacity = '0'; setTimeout(function() { t.remove(); }, 320); }, 2800);
   }
 
   // ════════════════════════════════════════════════════════

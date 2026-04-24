@@ -425,8 +425,11 @@
   // STARTER FEEDING REMINDER  (Capacitor LocalNotifications)
   // ══════════════════════════════════════════════════════════════════════════
   async function scheduleStarterReminder(enabled, hour, minute) {
-    const NOTIF_ID = 9001;
-    const settings = { enabled: !!enabled, frequency: '24h', hour: hour ?? 8, minute: minute ?? 0, lastScheduled: _today() };
+    const NOTIF_ID   = 9001;
+    const CHANNEL_ID = 'starter-reminders';
+    const h = hour   ?? 8;
+    const m = minute ?? 0;
+    const settings = { enabled: !!enabled, hour: h, minute: m, lastScheduled: _today() };
     _set('pym_starter_reminder', settings);
 
     const cap = window.Capacitor?.Plugins?.LocalNotifications;
@@ -435,24 +438,48 @@
     await cap.cancel({ notifications: [{ id: NOTIF_ID }] }).catch(() => {});
     if (!enabled) return;
 
+    // Request permission first — required on Android 13+
+    try {
+      const perm = await cap.requestPermissions();
+      if (perm.display !== 'granted') return;
+    } catch (_) { return; }
+
+    // Create a dedicated channel so bake-log.html deleting 'bake-timers' won't kill these
+    await cap.createChannel({
+      id:          CHANNEL_ID,
+      name:        'Starter Feeding Reminders',
+      description: 'Daily reminders to feed and check in on your sourdough starter',
+      importance:  4,
+      vibration:   true,
+      sound:       'default',
+    }).catch(() => {});
+
     const starter = getStarterState();
-    const name = starter?.name || 'your starter';
+    const name    = starter?.name || 'your starter';
     const messages = [
-      `${name} might be getting hungry! 🫙 Tap to check in.`,
-      `Time to feed ${name} — they're waiting for you.`,
+      `${name} is hungry! 🫙 Time for a quick check-in and feed.`,
+      `Time to feed ${name} — they're counting on you. 💪`,
       `A quick check-in keeps ${name} thriving. See you in the kitchen?`,
+      `Don't forget ${name}! Feed now to keep that starter strong. 🍞`,
     ];
     const body = messages[Math.floor(Math.random() * messages.length)];
 
-    const now = new Date();
-    const fire = new Date(now);
-    fire.setHours(hour ?? 8, minute ?? 0, 0, 0);
-    if (fire <= now) fire.setDate(fire.getDate() + 1);
+    const fire = new Date();
+    fire.setHours(h, m, 0, 0);
+    if (fire <= new Date()) fire.setDate(fire.getDate() + 1);
 
     await cap.schedule({ notifications: [{
-      id: NOTIF_ID, title: 'Pancito y Más 🍞', body,
-      schedule: { at: fire, repeats: true, every: 'day' },
-      channelId: 'bake-timers',
+      id:        NOTIF_ID,
+      title:     'Pancito y Más 🍞',
+      body,
+      channelId: CHANNEL_ID,
+      sound:     'default',
+      schedule:  {
+        at:             fire,
+        repeats:        true,
+        every:          'day',
+        allowWhileIdle: true,
+      },
     }]}).catch(() => {});
   }
 
