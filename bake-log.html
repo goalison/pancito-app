@@ -811,15 +811,41 @@
 
         function setPendingAlarm() {
             localStorage.setItem(ALARM_PENDING_KEY, '1');
-            // Try immediately — succeeds when AudioContext is already unlocked
-            setTimeout(function() { tryPlayPendingAlarm(); }, 300);
+            // Auto-retry after 1 second — by then Capacitor's WebView has usually
+            // had time to resume the AudioContext automatically. If still suspended,
+            // tryPlayPendingAlarm() leaves the key set and the touchstart/click
+            // listeners will fire it on the first user gesture instead.
+            setTimeout(function() { tryPlayPendingAlarm(); }, 1000);
         }
 
+        // Track whether a ctx.resume() is already in flight so we don't stack them
+        let _alarmResumePending = false;
+
         function tryPlayPendingAlarm() {
-            if (localStorage.getItem(ALARM_PENDING_KEY)) {
+            if (!localStorage.getItem(ALARM_PENDING_KEY)) return;
+            if (_alarmResumePending) return;  // resume already in-flight
+            try {
+                const ctx = getAudioCtx();
+                if (ctx.state === 'suspended') {
+                    // AudioContext not ready — kick off resume and play when it unlocks.
+                    // Leave the key set so a future gesture can retry if resume fails.
+                    _alarmResumePending = true;
+                    ctx.resume().then(function() {
+                        _alarmResumePending = false;
+                        if (localStorage.getItem(ALARM_PENDING_KEY)) {
+                            localStorage.removeItem(ALARM_PENDING_KEY);
+                            playAlarm();
+                        }
+                    }).catch(function() {
+                        _alarmResumePending = false;
+                        // Key intentionally left set — will retry on next gesture
+                    });
+                    return;
+                }
+                // Context already running — play immediately
                 localStorage.removeItem(ALARM_PENDING_KEY);
                 playAlarm();
-            }
+            } catch(e) { localStorage.removeItem(ALARM_PENDING_KEY); }
         }
 
         // Fire pending alarm on the first real user gesture inside the WebView
@@ -1689,9 +1715,18 @@
                     var container = document.getElementById('bulk-timer-' + num);
                     var btn = container.querySelector('.start-btn');
                     if (left <= 0) {
-                        // Timer finished while the user was away — complete it now
+                        // Timer finished while the user was away.
+                        // Do all UI work synchronously, but defer the alarm beep —
+                        // calling playAlarm() here (before any user gesture) silently
+                        // fails because AudioContext is still suspended on page load.
+                        // setPendingAlarm() retries via ctx.resume() and then falls back
+                        // to the first touch/click so the alarm never gets lost.
                         t.running = false;
-                        completeTimer(num);
+                        applyRoundComplete(num);
+                        markRoundDone(num);
+                        hideGlobalTimer();
+                        if (num < 4) applyRoundUnlocked(num + 1);
+                        setPendingAlarm();
                     } else if (t.startTs) {
                         // Was actively running — resume it
                         t.running = true;
@@ -1710,8 +1745,21 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Register Service Worker for background alarm notifications
+            // Register Service Worker for background alarm notifications (web fallback)
             initSW();
+
+            // Re-register Capacitor notification listener on every page load.
+            // initNotifications() is only called from completeStep1() (once per bake),
+            // but the listener is cleared every time the page reloads — so we re-attach
+            // it here to make sure tapping ANY notification always triggers the alarm.
+            if (IS_NATIVE) {
+                try {
+                    const { LocalNotifications } = window.Capacitor.Plugins;
+                    LocalNotifications.addListener('localNotificationActionPerformed', function() {
+                        setPendingAlarm();
+                    });
+                } catch(e) {}
+            }
 
             // Unlock AudioContext on ANY click/tap so alarms work even after navigation
             document.addEventListener('click', function() {
