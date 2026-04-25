@@ -197,7 +197,7 @@
     <p class="text-[#514538] leading-relaxed max-w-xs">A sourdough starter is a mixture of flour and water that captures wild yeast from the air. If you already have one, great! If not, we'll walk you through creating yours from scratch — it only takes 10 minutes of hands-on time.</p>
   </div>
   <div class="px-6 pb-10 space-y-3">
-    <button onclick="goTo('c1s1')" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
+    <button onclick="hasStarter()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
       Yes, I have a starter →
     </button>
     <button onclick="goTo('c0s2')" class="w-full py-3 bg-[#f2ede3] text-[#875305] rounded-2xl font-bold text-base active:scale-95 transition-transform border border-[#d6c3b3]">
@@ -430,12 +430,14 @@
     <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Mix &amp; Autolyse 🥣</h2>
     <p id="mixInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-3 min-h-[2.5rem]">Tap the flour bag to add flour to your bowl</p>
 
+    <!-- Active step label -->
+    <div id="mixActiveLabel" style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#875305;margin-bottom:4px;min-height:16px;text-align:center">↓ Tap to add flour</div>
     <!-- Ingredient icon row -->
     <div style="display:flex;justify-content:space-around;margin-bottom:6px;width:208px;flex-shrink:0">
-      <button onclick="mixTapIngredient('flour')"   id="mixFlourBtn"   style="font-size:28px;cursor:pointer;background:none;border:none;opacity:1;transition:opacity 0.3s;padding:4px">🌾</button>
-      <button onclick="mixTapIngredient('water')"   id="mixWaterBtn"   style="font-size:28px;cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px">💧</button>
-      <button onclick="mixTapIngredient('starter')" id="mixStarterBtn" style="font-size:28px;cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px">🫙</button>
-      <button onclick="mixTapIngredient('salt')"    id="mixSaltBtn"    style="font-size:28px;cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px">🧂</button>
+      <button onclick="mixTapIngredient('flour')"   id="mixFlourBtn"   style="font-size:28px;cursor:pointer;background:none;border:none;opacity:1;transition:opacity 0.3s;padding:4px" title="Flour">🌾</button>
+      <button onclick="mixTapIngredient('water')"   id="mixWaterBtn"   style="font-size:28px;cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px" title="Water">💧</button>
+      <button onclick="mixTapIngredient('starter')" id="mixStarterBtn" style="font-size:28px;cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px" title="Starter">🫙</button>
+      <button onclick="mixTapIngredient('salt')"    id="mixSaltBtn"    style="font-size:28px;cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px" title="Salt">🧂</button>
     </div>
 
     <!-- Bowl visual -->
@@ -454,16 +456,17 @@
     <div style="display:flex;gap:4px;width:100%;max-width:300px;margin-bottom:10px">
       <div id="mix-step-flour"   style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #875305;font-size:8px;font-weight:700;color:#875305;transition:all 0.3s;text-align:center">🌾 Flour</div>
       <div id="mix-step-water"   style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">💧 Water</div>
-      <div id="mix-step-rest"    style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">💤 Rest</div>
       <div id="mix-step-starter" style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">🫙 Start</div>
       <div id="mix-step-mix"     style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">👐 Mix</div>
+      <div id="mix-step-rest"    style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">💤 Rest</div>
+      <div id="mix-step-salt"    style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">🧂 Salt</div>
     </div>
 
-    <!-- Autolyse action button -->
+    <!-- Rest action button -->
     <div id="mixActionWrap" style="width:100%;max-width:300px;display:none;margin-bottom:8px">
       <button onclick="mixActionTap()" style="width:100%;padding:12px 8px;border-radius:18px;background:#f2ede3;border:2px solid #d6c3b3;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.2s;font-family:inherit;">
         <span style="font-size:28px">💤</span>
-        <span style="font-size:10px;font-weight:700;color:#875305">Autolyse Rest (30 min)</span>
+        <span style="font-size:10px;font-weight:700;color:#875305">Rest 1 Hour</span>
       </button>
     </div>
 
@@ -534,7 +537,7 @@
   <div class="px-6 pb-10">
     <button id="foldContinueBtn" onclick="afterFoldGame()"
       class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100"
-      disabled>Next: Bulk Fermentation →</button>
+      disabled>Next: Chapter 2 Quiz →</button>
   </div>
 </div>
 
@@ -545,7 +548,7 @@
   <div class="flex-1 flex flex-col px-6 pt-20 pb-6 overflow-hidden">
     <!-- Chapter header -->
     <div class="text-center mb-6">
-      <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1">Chapter 2 · The Basics</p>
+      <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1">Chapter 1 · What is Sourdough</p>
       <h2 class="font-headline font-bold text-2xl">What you need to know</h2>
     </div>
     <!-- Lesson card -->
@@ -574,13 +577,50 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- C2-QUIZ — Chapter 2 Quiz: Mix & Autolyse 🥣                           -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="c2quiz" style="position:relative">
+  <div class="flex-1 flex flex-col px-6 pt-16" style="overflow-y:auto;-webkit-overflow-scrolling:touch">
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1">Chapter 2 · Quiz Time!</p>
+    <h2 class="font-headline font-bold text-2xl mb-5">Mix &amp; Autolyse Check 🥣</h2>
+    <!-- Hearts + progress bar -->
+    <div class="flex items-center gap-3 mb-7">
+      <div class="flex gap-0.5 shrink-0" style="font-size:22px">
+        <span id="c2gH0">❤️</span><span id="c2gH1">❤️</span><span id="c2gH2">❤️</span>
+      </div>
+      <div class="flex-1 h-3 rounded-full overflow-hidden" style="background:#f2ede3">
+        <div id="c2gBar" style="height:100%;width:0%;background:linear-gradient(90deg,#875305,#C4863A);border-radius:9999px;transition:width 0.55s cubic-bezier(.34,1.56,.64,1)"></div>
+      </div>
+    </div>
+    <!-- Question emoji + text -->
+    <div class="text-center mb-6">
+      <div id="c2gEmoji" style="font-size:64px;line-height:1;margin-bottom:14px">🥣</div>
+      <p id="c2gQText" class="font-headline font-bold text-[1.1rem] text-[#1d1c16] leading-snug max-w-[17rem] mx-auto"></p>
+    </div>
+    <!-- 2×2 answer grid -->
+    <div id="c2gChoices" class="grid grid-cols-2 gap-3 mb-4"></div>
+    <!-- Feedback strip -->
+    <div id="c2gFeedback" style="display:none;border-radius:14px;padding:14px 16px;margin-bottom:6px">
+      <p id="c2gFeedbackText" class="text-[13px] font-bold leading-relaxed text-center"></p>
+    </div>
+  </div>
+  <div class="px-6 pb-10 pt-3">
+    <button id="c2gContinue" onclick="quizNext('c2')"
+      class="w-full py-4 text-white rounded-2xl font-bold text-base active:scale-95 transition-transform"
+      style="display:none;background:#875305;border:none;cursor:pointer;font-family:inherit">
+      Continue →
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
 <!-- C2-GAME — Bulk Fermentation Interactive Lab                            -->
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c2game">
   <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
     <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Bulk Fermentation</p>
-    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Work the Dough 🤲</h2>
-    <p id="bulkInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-4 min-h-[2.5rem]">Tap the starter jar to add it to your flour</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Watch It Rise 🔍</h2>
+    <p id="bulkInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-4 min-h-[2.5rem]">Your dough is mixed and ready! Tap below to start the bulk fermentation rest.</p>
 
     <!-- ── Proofing bowl visual ─────────────────────────────────────────── -->
     <div style="position:relative;flex-shrink:0;width:204px;margin:0 auto 0.9rem">
@@ -636,15 +676,17 @@
       ">👆</div>
     </div>
 
-    <!-- ── Step tracker: Add | Fold | Rest | Poke ──────────────────────── -->
-    <div style="display:flex;gap:5px;width:100%;max-width:300px;margin-bottom:12px">
-      <div id="bulk-step-add"  style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:9px;font-weight:700;color:#847466;transition:all 0.3s;text-align:center">1. Add</div>
-      <div id="bulk-step-fold" style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:9px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">2. Fold</div>
-      <div id="bulk-step-rest" style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:9px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">3. Rest</div>
-      <div id="bulk-step-poke" style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:9px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">4. Poke</div>
+    <!-- ── Step tracker: Rest | Temp | Grow | Shake | Poke | Pane ─────── -->
+    <div style="display:flex;gap:4px;width:100%;max-width:300px;margin-bottom:12px">
+      <div id="bulk-step-rest"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #875305;font-size:8px;font-weight:700;color:#875305;transition:all 0.3s;text-align:center">💤 Rest</div>
+      <div id="bulk-step-temp"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">🌡️ Temp</div>
+      <div id="bulk-step-grow"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">📈 Grow</div>
+      <div id="bulk-step-shake"  style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">🤝 Shake</div>
+      <div id="bulk-step-poke"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">👆 Poke</div>
+      <div id="bulk-step-pane"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">🔍 Pane</div>
     </div>
 
-    <!-- ── Action button (changes each step; hidden when bowl is the target) -->
+    <!-- ── Action button (changes each step) ──────────────────────────── -->
     <div id="bulkActionWrap" style="width:100%;max-width:300px">
       <button id="bulkActionBtn" onclick="bulkActionBtnTap()" style="
         width:100%;padding:14px 8px;border-radius:18px;
@@ -652,8 +694,8 @@
         display:flex;flex-direction:column;align-items:center;gap:5px;
         cursor:pointer;transition:all 0.2s;font-family:inherit;
       ">
-        <span id="bulkActionEmoji" style="font-size:30px">🫙</span>
-        <span id="bulkActionLabel" style="font-size:10px;font-weight:700;color:#875305">Add Starter</span>
+        <span id="bulkActionEmoji" style="font-size:30px">💤</span>
+        <span id="bulkActionLabel" style="font-size:10px;font-weight:700;color:#875305">Start Resting</span>
       </button>
     </div>
 
@@ -716,16 +758,16 @@
         </div>
       </div>
 
-      <div id="tempCard82" onclick="tempReveal(82)" style="border-radius:16px;border:2px solid #d6c3b3;padding:13px 16px;cursor:pointer;transition:all 0.3s;background:#f2ede3;user-select:none;-webkit-user-select:none;">
+      <div id="tempCard80" onclick="tempReveal(80)" style="border-radius:16px;border:2px solid #d6c3b3;padding:13px 16px;cursor:pointer;transition:all 0.3s;background:#f2ede3;user-select:none;-webkit-user-select:none;">
         <div style="display:flex;align-items:center;gap:12px">
           <div style="font-size:30px">🥵</div>
           <div style="text-align:left;flex:1">
-            <div style="font-size:14px;font-weight:800;color:#1d1c16">82°F / 28°C</div>
+            <div style="font-size:14px;font-weight:800;color:#1d1c16">80°F / 27°C</div>
             <div style="font-size:11px;color:#514538">Warm kitchen</div>
           </div>
-          <div id="tempReveal82" style="font-size:13px;font-weight:800;color:#cc4422;opacity:0;transition:opacity 0.4s;text-align:right;min-width:68px"></div>
+          <div id="tempReveal80" style="font-size:13px;font-weight:800;color:#cc4422;opacity:0;transition:opacity 0.4s;text-align:right;min-width:68px"></div>
         </div>
-        <div id="tempBar82" style="height:5px;background:#e8ddd0;border-radius:99px;margin-top:9px;overflow:hidden;display:none">
+        <div id="tempBar80" style="height:5px;background:#e8ddd0;border-radius:99px;margin-top:9px;overflow:hidden;display:none">
           <div style="height:100%;width:100%;background:linear-gradient(90deg,#cc4422,#ee7744);border-radius:99px;transform:scaleX(0);transform-origin:left;transition:transform 0.9s ease"></div>
         </div>
       </div>
@@ -750,7 +792,7 @@
   <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
     <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Pre-shaping</p>
     <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Pre-shape the Dough 🔪</h2>
-    <p id="preshapeInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-4 min-h-[2.5rem]">Tap the dough to release it from the bowl with your bench scraper</p>
+    <p id="preshapeInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-4 min-h-[2.5rem]">Tap to flip the dough onto your surface — bench scraper slides under and flips it out</p>
 
     <!-- Counter + dough visual -->
     <div style="position:relative;flex-shrink:0;width:240px;height:154px;margin:0 auto 0.9rem">
@@ -890,8 +932,8 @@
       <div id="bakePot" onclick="bakePotTap()" style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse at 40% 30%,#5a5a5a 0%,#3a3a3a 50%,#1a1a1a 100%);border:4px solid #1a1a1a;box-shadow:0 8px 32px rgba(0,0,0,0.38),inset 0 2px 8px rgba(255,255,255,0.07);cursor:pointer;transition:all 0.6s ease;user-select:none;-webkit-user-select:none;overflow:hidden">
         <div id="bakeHeatGlow" style="position:absolute;inset:0;border-radius:50%;background:transparent;transition:background 1.5s ease;pointer-events:none"></div>
         <div id="bakeDough" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:112px;height:112px;border-radius:50%;background:radial-gradient(ellipse at 45% 35%,#f0dda8 0%,#d4a860 45%,#b08038 80%,#7a5520 100%);opacity:0;transition:opacity 0.6s ease,background 2.2s ease;box-shadow:0 2px 12px rgba(0,0,0,0.22);pointer-events:none">
-          <div id="bakeScore1" style="position:absolute;top:30%;left:18%;width:64%;height:2px;background:rgba(80,40,0,0.55);border-radius:1px;opacity:0;transition:opacity 0.3s;transform:rotate(-22deg)"></div>
-          <div id="bakeScore2" style="position:absolute;top:48%;left:14%;width:72%;height:2px;background:rgba(80,40,0,0.5);border-radius:1px;opacity:0;transition:opacity 0.3s;transform:rotate(-22deg)"></div>
+          <div id="bakeScore1" style="position:absolute;top:50%;left:20%;width:60%;height:2px;background:rgba(80,40,0,0.6);border-radius:1px;opacity:0;transition:opacity 0.3s;transform:translateY(-50%) rotate(-45deg);transform-origin:center"></div>
+          <div id="bakeScore2" style="position:absolute;top:50%;left:20%;width:60%;height:2px;background:rgba(80,40,0,0.55);border-radius:1px;opacity:0;transition:opacity 0.3s;transform:translateY(-50%) rotate(45deg);transform-origin:center"></div>
         </div>
         <div id="bakeLid" style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:170px;height:30px;background:linear-gradient(180deg,#4a4a4a,#2a2a2a);border-radius:50%;border:3px solid #1a1a1a;transition:all 0.5s ease;box-shadow:0 4px 12px rgba(0,0,0,0.45)">
           <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#555;border:2px solid #333"></div>
@@ -1222,9 +1264,9 @@ let equipState    = {};
 let creatingStarter = false;
 
 const SCREENS_ORDER = [
-  'c0s1','c0s2','c1s1','c1s2','c1s3','c1game',
-  'c5game','c6game',
-  'c2s1','c2game',
+  'c0s1','c0s2','c1s1','c1s2','c1s3','c2s1','c1game',
+  'c5game','c6game','c2quiz',
+  'c2game',
   'c7game','c8game','c9game','c10game','c11game',
   'c3s1','c3game','c4s1','c4game','c4s2','c4s3'
 ];
@@ -1294,6 +1336,7 @@ function goBack() {
 
     // Re-init interactive screens so they're fresh when navigated back to
     if (prev === 'c1game')  initQuiz('c1');
+    if (prev === 'c2quiz')  initQuiz('c2');
     if (prev === 'c3game')  initQuiz('c3');
     if (prev === 'c2game')  initBulkGame();
     if (prev === 'c5game')  initMixGame();
@@ -1310,8 +1353,8 @@ function updateNav() {
   // Chapter dots (pre-chapter screens show no active dot — Chapter 1 dot lights on c1s1)
   const chapterMap = {
     c0s1:0, c0s2:0,
-    c1s1:1,c1s2:1,c1s3:1,c1game:1,
-    c5game:2,c6game:2, c2s1:2,c2game:2, c7game:2,c8game:2,c9game:2,c10game:2,c11game:2,
+    c1s1:1,c1s2:1,c1s3:1,c2s1:1,c1game:1,
+    c5game:2,c6game:2,c2quiz:2,c2game:2, c7game:2,c8game:2,c9game:2,c10game:2,c11game:2,
     c3s1:3,c3game:3,
     c4s1:4,c4game:4,c4s2:4,c4s3:4
   };
@@ -1324,7 +1367,7 @@ function updateNav() {
   const _interactiveLabs = ['c2game','c4game','c5game','c6game','c7game','c8game','c9game','c10game','c11game'];
   if (_interactiveLabs.includes(currentScreen)) {
     label.textContent = 'Interactive Lab 🧪';
-  } else if (currentScreen === 'c1game' || currentScreen === 'c3game') {
+  } else if (currentScreen === 'c1game' || currentScreen === 'c2quiz' || currentScreen === 'c3game') {
     label.textContent = 'Quiz Time! 🎮';
   } else if (currentScreen === 'c0s1' || currentScreen === 'c0s2') {
     label.textContent = 'Getting Started';
@@ -1360,9 +1403,9 @@ function completeChapter1() {
   // Save onboarding progress
   const ob = JSON.parse(storage.getItem('pym_onboarding')||'{}');
   storage.setItem('pym_onboarding', JSON.stringify({ ...ob, chapter1Complete: true, starterName }));
-  // Route through Chapter 1 quiz before Chapter 2
-  goTo('c1game');
-  initQuiz('c1');
+  // Route to Sourdough Basics lessons (quiz is at the END of Chapter 1)
+  goTo('c2s1');
+  initLessons();
 }
 
 // ── Chapter 2 (Lessons) ───────────────────────────────────────────────────
@@ -1444,11 +1487,20 @@ function nextLesson() {
       card.classList.remove('leaving');
     }, 300);
   } else {
-    // Chapter 2 done — show Facebook community card then move on
+    // Chapter 1 lessons done — show Facebook community card, then quiz
     const ob = JSON.parse(storage.getItem('pym_onboarding')||'{}');
-    storage.setItem('pym_onboarding', JSON.stringify({ ...ob, chapter2Complete: true }));
+    storage.setItem('pym_onboarding', JSON.stringify({ ...ob, chapter1LessonsComplete: true }));
     showFacebookCard();
   }
+}
+
+// ── Already has a starter ─────────────────────────────────────────────────
+function hasStarter() {
+  // Request notification permission regardless of starter creation path
+  if (window.PymGamification) {
+    PymGamification.scheduleStarterReminder(true, 9, 0);
+  }
+  goTo('c1s1');
 }
 
 // ── Starter Creation (Pre-Chapter) ───────────────────────────────────────
@@ -1470,9 +1522,22 @@ function beginStarterCreation() {
   goTo('c1s1'); // Continue to Chapter 1 — name the starter
 }
 
-// ── Facebook community card (after Chapter 2) ─────────────────────────────
+// ── Facebook community card (after Chapter 1 lessons) ────────────────────
+let _fbCardShown = false;
 function showFacebookCard() {
+  // Only show once per session
+  if (_fbCardShown) { goTo('c1game'); initQuiz('c1'); return; }
+  _fbCardShown = true;
+
+  function _dismiss() {
+    const ov = document.getElementById('fbCardOverlay');
+    if (ov) ov.remove();
+    goTo('c1game');
+    initQuiz('c1');
+  }
+
   const overlay = document.createElement('div');
+  overlay.id = 'fbCardOverlay';
   overlay.style.cssText = `
     position:fixed;inset:0;z-index:9000;
     background:rgba(44,24,16,0.55);backdrop-filter:blur(3px);
@@ -1502,16 +1567,15 @@ function showFacebookCard() {
         <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1;">group</span>
         Join the Facebook Group →
       </a>
-      <button onclick="this.closest('[style]').remove();goTo('c2game');initBulkGame();"
+      <button id="fbMaybeLaterBtn"
         style="width:100%;padding:12px;background:transparent;color:#847466;border:none;font-weight:600;font-size:13px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">
         Maybe later
       </button>
     </div>
   `;
-  overlay.addEventListener('click', e => {
-    if (e.target === overlay) { overlay.remove(); goTo('c2game'); initBulkGame(); }
-  });
+  overlay.addEventListener('click', e => { if (e.target === overlay) _dismiss(); });
   document.body.appendChild(overlay);
+  document.getElementById('fbMaybeLaterBtn').addEventListener('click', _dismiss);
 }
 
 // ── Chapter 3 (Equipment) ─────────────────────────────────────────────────
@@ -1821,37 +1885,32 @@ window.addEventListener('focus', () => {
 // ══════════════════════════════════════════════════════════════════════════
 // MINI-GAME: Bulk Fermentation Lab (c2game)
 // ══════════════════════════════════════════════════════════════════════════
-let _bulkStep      = 'add';  // 'add' | 'fold' | 'rest' | 'poke' | 'done'
-let _bulkFoldCount = 0;
-
 const BULK_INSIGHTS = [
-  'Bulk fermentation is done when your dough has grown 50–75% and feels airy and jiggly — not 100% doubled like a starter. Watch for bubbles on the sides too.',
-  'Temperature is everything: at 78°F bulk takes ~4–5 hours; at 68°F it can take 8–12 hours. Warmer kitchen = faster fermentation.',
-  'The poke test is your best tool — if the dough springs back slowly and halfway, it\'s ready to shape. Too fast = underproofed. Doesn\'t spring back = overproofed.',
+  'The windowpane test confirms gluten development: stretch a small piece thin — if it forms a translucent sheet without tearing, bulk is complete and your dough is ready to shape.',
+  'Bulk fermentation is done at 50–75% volume increase — not 100% doubled. Look for bubbles on the sides, a dough that jiggles when shaken, and slow spring-back on the poke test.',
+  'Temperature drives everything: at 78°F bulk takes ~4–5 hours; at 68°F it can take 8–12 hours. Tracking dough temperature (not room temp!) gives you the most accurate timing.',
 ];
 
+// New sequence: rest → temp → grow → shake → poke → pane → done
+let _bulkStep = 'rest';
+
 function initBulkGame() {
-  _bulkStep      = 'add';
-  _bulkFoldCount = 0;
-  // Reset dough shape and color
+  _bulkStep = 'rest';
+  // Reset dough
   const dough = document.getElementById('bulkDough');
-  dough.style.height     = '50%';
+  dough.style.height     = '45%';
   dough.style.transform  = '';
-  dough.style.background = 'radial-gradient(ellipse at 50% 0%,#f5e8c8 0%,#e0c89a 35%,#c8a86b 75%,#a07845 100%)';
-  // Reset bubbles
+  dough.style.background = 'radial-gradient(ellipse at 50% 0%,#f0dda8 0%,#d4a860 40%,#b08038 80%,#886020 100%)';
+  // Reset bubbles + warmth + poke hint
   ['blkBub1','blkBub2','blkBub3'].forEach(id => { document.getElementById(id).style.opacity = '0'; });
-  // Reset warmth
   document.getElementById('bulkWarmth').style.background = 'transparent';
-  // Reset poke hint
   document.getElementById('bulkPokeHint').style.opacity = '0';
   // Reset step pills
-  _bulkSetStep('bulk-step-add', 'active');
-  ['bulk-step-fold','bulk-step-rest','bulk-step-poke'].forEach(id => _bulkSetStep(id, 'idle'));
-  // Reset instruction
-  document.getElementById('bulkInstText').textContent = 'Tap the starter jar to add it to your flour';
-  // Reset action button
-  _bulkShowBtn('🫙', 'Add Starter');
-  // Reset fact card and continue
+  _bulkSetStep('bulk-step-rest', 'active');
+  ['bulk-step-temp','bulk-step-grow','bulk-step-shake','bulk-step-poke','bulk-step-pane'].forEach(id => _bulkSetStep(id, 'idle'));
+  // Reset instruction + button + cards
+  document.getElementById('bulkInstText').textContent = 'Your dough is mixed and ready! Tap below to start the bulk fermentation rest.';
+  _bulkShowBtn('💤', 'Start Resting');
   document.getElementById('bulkFactCard').style.display = 'none';
   document.getElementById('bulkContinueBtn').disabled = true;
   startAmbientMusic();
@@ -1863,7 +1922,7 @@ function _bulkSetStep(id, state) {
     el.style.cssText += ';border-color:#198754;background:#198754;color:#fff;opacity:1';
   } else if (state === 'active') {
     el.style.cssText += ';border-color:#875305;background:transparent;color:#875305;opacity:1';
-  } else { // idle
+  } else {
     el.style.borderColor = '#d6c3b3'; el.style.background = 'transparent';
     el.style.color = '#c8b8a8'; el.style.opacity = '0.45';
   }
@@ -1879,122 +1938,104 @@ function _bulkHideBtn() {
   document.getElementById('bulkActionWrap').style.display = 'none';
 }
 
-// Tap on the action button (for Add Starter and Cover & Rest steps)
 function bulkActionBtnTap() {
-  if (_bulkStep === 'add')  _bulkAddStarter();
-  if (_bulkStep === 'rest') _bulkRest();
+  if (_bulkStep === 'rest')  _bulkStartRest();
+  if (_bulkStep === 'temp')  _bulkCheckTemp();
+  if (_bulkStep === 'shake') _bulkShake();
+  if (_bulkStep === 'pane')  _bulkWindowpane();
 }
 
-// Tap directly on the bowl (for Fold and Poke steps)
 function bulkBowlTap() {
-  if (_bulkStep === 'fold') _bulkFold();
+  if (_bulkStep === 'grow') _bulkCheckGrowth();
   if (_bulkStep === 'poke') _bulkPoke();
 }
 
-// ── Step 1: Add Starter ───────────────────────────────────────────────────
-function _bulkAddStarter() {
-  startAmbientMusic();
-  playSound('water');
-  // Pour animation
-  const anim = document.getElementById('bulkStarterAnim');
-  anim.style.display = 'block'; setTimeout(() => { anim.style.display = 'none'; }, 960);
-  // Dough shifts to mixed color
-  setTimeout(() => {
-    document.getElementById('bulkDough').style.background =
-      'radial-gradient(ellipse at 50% 0%,#f0dda8 0%,#d4a860 40%,#b08038 80%,#886020 100%)';
-  }, 600);
-  // Mark step done, advance
-  _bulkSetStep('bulk-step-add', 'done');
-  _bulkSetStep('bulk-step-fold', 'active');
-  _bulkStep = 'fold';
-  _bulkFoldCount = 0;
-  _bulkHideBtn();
-  document.getElementById('bulkInstText').textContent = 'Starter is in! Now tap the bowl to stretch & fold the dough — 4 times total 💪';
-}
-
-// ── Step 2: Stretch & Fold (4×) ───────────────────────────────────────────
-function _bulkFold() {
-  if (_bulkFoldCount >= 4) return;
-  playSound('stir');
-  _bulkFoldCount++;
-  // Bowl wobble
-  const bowl = document.getElementById('bulkBowlBody');
-  bowl.style.animation = 'jarWobble 0.6s ease';
-  setTimeout(() => { bowl.style.animation = ''; }, 640);
-  // Dough stretches then springs back — alternating direction
-  const dough = document.getElementById('bulkDough');
-  const sx = _bulkFoldCount % 2 === 0 ? 1.13 : 0.89;
-  const sy = _bulkFoldCount % 2 === 0 ? 0.88 : 1.10;
-  dough.style.transition = 'transform 0.16s ease-out, height 1.5s cubic-bezier(.34,1.56,.64,1), background 0.8s ease';
-  dough.style.transform  = `scaleX(${sx}) scaleY(${sy})`;
-  setTimeout(() => {
-    dough.style.transition = 'transform 0.34s cubic-bezier(.34,1.56,.64,1), height 1.5s cubic-bezier(.34,1.56,.64,1), background 0.8s ease';
-    dough.style.transform  = 'scaleX(1) scaleY(1)';
-  }, 190);
-
-  if (_bulkFoldCount < 4) {
-    document.getElementById('bulkInstText').textContent =
-      `Fold ${_bulkFoldCount} of 4 ✓  —  Keep going, each fold builds strength!`;
-  } else {
-    // All 4 folds done
-    _bulkSetStep('bulk-step-fold', 'done');
-    _bulkSetStep('bulk-step-rest', 'active');
-    _bulkStep = 'rest';
-    document.getElementById('bulkInstText').textContent =
-      'Gluten is strong now! Cover the bowl and place in a warm spot (75–78°F) 🌡️';
-    _bulkShowBtn('🌡️', 'Cover & Rest');
-  }
-}
-
-// ── Step 3: Cover & Rest ──────────────────────────────────────────────────
-function _bulkRest() {
+// ── Step 1: Start Resting ─────────────────────────────────────────────────
+function _bulkStartRest() {
   playSound('success');
   _bulkHideBtn();
-  document.getElementById('bulkInstText').textContent = 'Resting… wild yeast is feasting on the flour 🦠✨';
-  // Warmth glow builds up
+  _bulkSetStep('bulk-step-rest', 'done');
+  _bulkSetStep('bulk-step-temp', 'active');
+  _bulkStep = 'temp';
+  document.getElementById('bulkInstText').textContent = 'Resting… dough is warming up. Tap below to check the temperature 🌡️';
   document.getElementById('bulkWarmth').style.background =
-    'radial-gradient(ellipse at 50% 110%,rgba(255,185,103,0.28) 0%,rgba(255,185,103,0.0) 68%)';
-  // After 1.8s: dough rises
-  setTimeout(() => {
-    document.getElementById('bulkDough').style.height = '74%';
-    // After another 0.9s: bubbles appear, fact card shows
-    setTimeout(() => {
-      ['blkBub1','blkBub2','blkBub3'].forEach(id => { document.getElementById(id).style.opacity = '1'; });
-      _bulkSetStep('bulk-step-rest', 'done');
-      _bulkSetStep('bulk-step-poke', 'active');
-      _bulkStep = 'poke';
-      document.getElementById('bulkInstText').textContent =
-        'Dough has grown 50–75% and smells incredible! Tap to poke-test it 👆';
-      // Show poke hint finger
-      document.getElementById('bulkPokeHint').style.opacity = '1';
-      // Show baker's insight
-      const insight = BULK_INSIGHTS[Math.floor(Math.random() * BULK_INSIGHTS.length)];
-      document.getElementById('bulkFactText').textContent  = insight;
-      document.getElementById('bulkFactCard').style.display = 'block';
-    }, 900);
-  }, 1800);
+    'radial-gradient(ellipse at 50% 110%,rgba(255,185,103,0.18) 0%,rgba(255,185,103,0.0) 68%)';
+  setTimeout(() => { _bulkShowBtn('🌡️', 'Check Temperature'); }, 800);
 }
 
-// ── Step 4: Poke Test ─────────────────────────────────────────────────────
+// ── Step 2: Temperature Check ─────────────────────────────────────────────
+function _bulkCheckTemp() {
+  playSound('pop');
+  _bulkHideBtn();
+  _bulkSetStep('bulk-step-temp', 'done');
+  _bulkSetStep('bulk-step-grow', 'active');
+  _bulkStep = 'grow';
+  document.getElementById('bulkWarmth').style.background =
+    'radial-gradient(ellipse at 50% 110%,rgba(255,185,103,0.28) 0%,rgba(255,185,103,0.0) 68%)';
+  document.getElementById('bulkInstText').textContent = '74–78°F is the sweet spot! Now tap the bowl to watch your dough grow 📈';
+}
+
+// ── Step 3: Growth Tracking ───────────────────────────────────────────────
+function _bulkCheckGrowth() {
+  playSound('stir');
+  _bulkSetStep('bulk-step-grow', 'done');
+  _bulkSetStep('bulk-step-shake', 'active');
+  _bulkStep = 'shake';
+  // Dough rises to 65%
+  document.getElementById('bulkDough').style.height = '65%';
+  document.getElementById('bulkInstText').textContent = 'Dough is growing! Now shake the bowl — tap below to do the jiggle test 🤝';
+  setTimeout(() => { _bulkShowBtn('🤝', 'Shake Test'); }, 600);
+}
+
+// ── Step 4: Shake Test ────────────────────────────────────────────────────
+function _bulkShake() {
+  playSound('stir');
+  _bulkHideBtn();
+  const bowl = document.getElementById('bulkBowlBody');
+  bowl.style.animation = 'jarWobble 0.7s ease';
+  setTimeout(() => { bowl.style.animation = ''; }, 720);
+  _bulkSetStep('bulk-step-shake', 'done');
+  _bulkSetStep('bulk-step-poke', 'active');
+  _bulkStep = 'poke';
+  // Bubbles appear, dough rises more
+  setTimeout(() => {
+    document.getElementById('bulkDough').style.height = '72%';
+    ['blkBub1','blkBub2','blkBub3'].forEach(id => { document.getElementById(id).style.opacity = '1'; });
+    document.getElementById('bulkInstText').textContent = 'It jiggles like a marshmallow! Bubbles visible on sides. Tap the bowl for the poke test 👆';
+    document.getElementById('bulkPokeHint').style.opacity = '1';
+  }, 400);
+}
+
+// ── Step 5: Poke Test ─────────────────────────────────────────────────────
 function _bulkPoke() {
   playSound('pop');
   document.getElementById('bulkPokeHint').style.opacity = '0';
-  // Poke deform on the bowl
   const bowl = document.getElementById('bulkBowlBody');
   bowl.style.animation = 'doughPoke 0.48s ease';
   setTimeout(() => { bowl.style.animation = ''; }, 490);
-  // Mark done
   _bulkSetStep('bulk-step-poke', 'done');
+  _bulkSetStep('bulk-step-pane', 'active');
+  _bulkStep = 'pane';
+  document.getElementById('bulkInstText').textContent = 'Slowly springs back — perfect! One last test: the windowpane. Tap below 🔍';
+  setTimeout(() => { _bulkShowBtn('🔍', 'Windowpane Test'); }, 500);
+}
+
+// ── Step 6: Windowpane Test ───────────────────────────────────────────────
+function _bulkWindowpane() {
+  playSound('success');
+  _bulkHideBtn();
+  _bulkSetStep('bulk-step-pane', 'done');
   _bulkStep = 'done';
-  document.getElementById('bulkInstText').textContent =
-    '✓ Springs back slowly — bulk fermentation complete! You\'re ready to shape. 🎉';
-  // Warmth glows brighter as a success indicator
+  // Full rise + brighter warmth
+  document.getElementById('bulkDough').style.height = '78%';
   document.getElementById('bulkWarmth').style.background =
     'radial-gradient(ellipse at 50% 110%,rgba(255,185,103,0.42) 0%,rgba(255,185,103,0.0) 68%)';
-  setTimeout(() => {
-    playSound('success');
-    document.getElementById('bulkContinueBtn').disabled = false;
-  }, 480);
+  document.getElementById('bulkInstText').textContent =
+    '✓ Stretches thin without tearing — bulk fermentation complete! Time to shape. 🎉';
+  const insight = BULK_INSIGHTS[Math.floor(Math.random() * BULK_INSIGHTS.length)];
+  document.getElementById('bulkFactText').textContent  = insight;
+  document.getElementById('bulkFactCard').style.display = 'block';
+  setTimeout(() => { document.getElementById('bulkContinueBtn').disabled = false; }, 500);
 }
 
 function afterBulkGame() {
@@ -2005,14 +2046,29 @@ function afterBulkGame() {
 // ══════════════════════════════════════════════════════════════════════════
 // MINI-GAME: Mix & Autolyse (c5game)
 // ══════════════════════════════════════════════════════════════════════════
-let _mixStep = 'flour'; // flour | water | rest | starter | salt | mix | done
+let _mixStep = 'flour'; // flour | water | starter | mix | rest | salt | done
 let _mixBowlTaps = 0;
 
 const MIX_INSIGHTS = [
-  'Autolyse gives flour and water 30 min together before adding starter or salt. Gluten forms on its own — making your dough stronger and more extensible with far less mixing effort.',
-  'Add salt AFTER your starter is fully incorporated. Salt slows yeast activity, so mixing it in too early weakens your fermentation. The order is: flour → water → autolyse → starter → salt.',
-  'A shaggy, sticky dough at the end of mixing is perfect! Gluten develops further during bulk fermentation through your stretch & folds. There is no need to knead sourdough bread.',
+  'Adding salt last protects your starter\'s yeast activity. Salt slows fermentation — so always mix flour, water, and starter first, then fold in salt after the 1-hour rest.',
+  'A shaggy, sticky dough after mixing is perfect! Gluten develops further during the 1-hour rest and bulk fermentation. Sourdough never needs kneading.',
+  'The 1-hour rest after mixing (before salt) lets flour proteins fully hydrate and bond. This autolyse window builds gluten naturally — making your dough stronger with zero extra effort.',
 ];
+
+function _mxUpdateActiveLabel() {
+  const lbl = document.getElementById('mixActiveLabel');
+  if (!lbl) return;
+  const hints = {
+    flour:   '↓ Tap to add flour',
+    water:   '↓ Tap to add water',
+    starter: '↓ Tap to add starter',
+    mix:     '↓ Tap the bowl to mix',
+    rest:    '',
+    salt:    '↓ Tap to add salt',
+    done:    ''
+  };
+  lbl.textContent = hints[_mixStep] || '';
+}
 
 function initMixGame() {
   _mixStep = 'flour';
@@ -2030,7 +2086,8 @@ function initMixGame() {
   document.getElementById('mixContinueBtn').disabled     = true;
   document.getElementById('mixInstText').textContent = 'Tap the flour bag to add flour to your bowl';
   _mxSetStep('mix-step-flour', 'active');
-  ['mix-step-water','mix-step-rest','mix-step-starter','mix-step-mix'].forEach(id => _mxSetStep(id, 'idle'));
+  ['mix-step-water','mix-step-starter','mix-step-mix','mix-step-rest','mix-step-salt'].forEach(id => _mxSetStep(id, 'idle'));
+  _mxUpdateActiveLabel();
   startAmbientMusic();
 }
 
@@ -2062,34 +2119,41 @@ function mixTapIngredient(type) {
     d.style.height = '46%'; d.style.background = 'rgba(240,230,200,0.72)';
     _mxSetStep('mix-step-flour', 'done'); _mxSetStep('mix-step-water', 'active');
     _mixStep = 'water';
-    document.getElementById('mixInstText').textContent = 'Flour is in! Now add water — mix until no dry flour remains';
+    document.getElementById('mixInstText').textContent = 'Flour is in! Now add water';
+    _mxUpdateActiveLabel();
 
   } else if (type === 'water' && _mixStep === 'water') {
     playSound('water'); _mixAnimDrop('💧');
     document.getElementById('mixWaterBtn').style.opacity = '0.2';
+    document.getElementById('mixStarterBtn').style.opacity = '1';
     const d = document.getElementById('mixDough');
     d.style.height = '52%'; d.style.background = 'rgba(210,185,140,0.88)';
-    _mxSetStep('mix-step-water', 'done'); _mxSetStep('mix-step-rest', 'active');
-    _mixStep = 'rest';
-    document.getElementById('mixInstText').textContent = 'Shaggy dough formed! Let it autolyse — tap below to rest 30 min before adding starter';
-    document.getElementById('mixActionWrap').style.display = 'block';
+    _mxSetStep('mix-step-water', 'done'); _mxSetStep('mix-step-starter', 'active');
+    _mixStep = 'starter';
+    document.getElementById('mixInstText').textContent = 'Water added! Now add your active starter 🫙';
+    _mxUpdateActiveLabel();
 
   } else if (type === 'starter' && _mixStep === 'starter') {
     playSound('water'); _mixAnimDrop('🫙');
     document.getElementById('mixStarterBtn').style.opacity = '0.2';
-    document.getElementById('mixSaltBtn').style.opacity = '1';
     const d = document.getElementById('mixDough');
     d.style.height = '56%'; d.style.background = 'radial-gradient(ellipse at 50% 0%,#f0dda8 0%,#d4a860 40%,#b08038 80%,#886020 100%)';
-    _mixStep = 'salt';
-    document.getElementById('mixInstText').textContent = 'Starter incorporated! Now add a pinch of salt last 🧂';
+    _mxSetStep('mix-step-starter', 'done'); _mxSetStep('mix-step-mix', 'active');
+    _mixStep = 'mix';
+    _mixBowlTaps = 0;
+    document.getElementById('mixInstText').textContent = 'Starter is in! Tap the bowl 3 times to mix everything together 👐';
+    _mxUpdateActiveLabel();
 
   } else if (type === 'salt' && _mixStep === 'salt') {
     playSound('pop'); _mixAnimDrop('🧂');
     document.getElementById('mixSaltBtn').style.opacity = '0.2';
-    _mxSetStep('mix-step-starter', 'done'); _mxSetStep('mix-step-mix', 'active');
-    _mixStep = 'mix';
-    _mixBowlTaps = 0;
-    document.getElementById('mixInstText').textContent = 'Salt is in! Tap the bowl 3 times to mix everything together 👐';
+    _mxSetStep('mix-step-salt', 'done');
+    _mixStep = 'done';
+    document.getElementById('mixInstText').textContent = '✓ Salt folded in! Your dough is ready for bulk fermentation 🎉';
+    document.getElementById('mixFactText').textContent = MIX_INSIGHTS[Math.floor(Math.random() * MIX_INSIGHTS.length)];
+    document.getElementById('mixFactCard').style.display = 'block';
+    _mxUpdateActiveLabel();
+    setTimeout(() => { playSound('success'); document.getElementById('mixContinueBtn').disabled = false; }, 420);
   }
 }
 
@@ -2097,10 +2161,11 @@ function mixActionTap() {
   if (_mixStep !== 'rest') return;
   playSound('success');
   document.getElementById('mixActionWrap').style.display = 'none';
-  _mxSetStep('mix-step-rest', 'done'); _mxSetStep('mix-step-starter', 'active');
-  document.getElementById('mixStarterBtn').style.opacity = '1';
-  _mixStep = 'starter';
-  document.getElementById('mixInstText').textContent = 'Rested! Gluten has developed. Now add your active starter 🫙';
+  _mxSetStep('mix-step-rest', 'done'); _mxSetStep('mix-step-salt', 'active');
+  document.getElementById('mixSaltBtn').style.opacity = '1';
+  _mixStep = 'salt';
+  document.getElementById('mixInstText').textContent = 'Rest complete! Now fold in the salt 🧂';
+  _mxUpdateActiveLabel();
 }
 
 function mixBowlTap() {
@@ -2115,14 +2180,13 @@ function mixBowlTap() {
   if (_mixBowlTaps < 3) {
     document.getElementById('mixInstText').textContent = `Mix ${_mixBowlTaps} of 3 — keep going!`;
   } else {
-    document.getElementById('mixInstText').textContent = '✓ Mixed! Shaggy and sticky is exactly right 🎉';
+    document.getElementById('mixInstText').textContent = 'Mixed! Now rest 1 hour so gluten develops before adding salt 💤';
     const d = document.getElementById('mixDough');
-    d.style.height = '62%'; d.style.background = 'radial-gradient(ellipse at 50% 0%,#f5e8c8 0%,#e0c89a 35%,#c8a86b 75%,#a07845 100%)';
-    _mxSetStep('mix-step-mix', 'done');
-    _mixStep = 'done';
-    document.getElementById('mixFactText').textContent = MIX_INSIGHTS[Math.floor(Math.random() * MIX_INSIGHTS.length)];
-    document.getElementById('mixFactCard').style.display = 'block';
-    setTimeout(() => { playSound('success'); document.getElementById('mixContinueBtn').disabled = false; }, 420);
+    d.style.height = '60%'; d.style.background = 'radial-gradient(ellipse at 50% 0%,#f5e8c8 0%,#e0c89a 35%,#c8a86b 75%,#a07845 100%)';
+    _mxSetStep('mix-step-mix', 'done'); _mxSetStep('mix-step-rest', 'active');
+    _mixStep = 'rest';
+    document.getElementById('mixActionWrap').style.display = 'block';
+    _mxUpdateActiveLabel();
   }
 }
 
@@ -2230,7 +2294,7 @@ function foldRestTap() {
   document.getElementById('foldInstText').textContent = 'Rested! Dough relaxed. Start Set 2 — 4 more coil folds';
 }
 
-function afterFoldGame() { goTo('c2s1'); initLessons(); }
+function afterFoldGame() { goTo('c2quiz'); initQuiz('c2'); }
 
 // ══════════════════════════════════════════════════════════════════════════
 // MINI-GAME: Bulk Timing — Temperature & Time (c7game)
@@ -2239,13 +2303,13 @@ let _tempRevealed = new Set();
 
 const TEMP_DATA = {
   65: { time: '8–12 hrs',  label: '🐢 Slow',  color: '#6688cc', barPct: '100%' },
-  76: { time: '4–5 hrs',   label: '✓ Ideal',  color: '#875305', barPct: '50%'  },
-  82: { time: '2–3 hrs',   label: '⚡ Fast',   color: '#cc4422', barPct: '25%'  },
+  76: { time: '5–6 hrs',   label: '✓ Ideal',  color: '#875305', barPct: '55%'  },
+  80: { time: '4–5 hrs',   label: '⚡ Warm',   color: '#cc4422', barPct: '38%'  },
 };
 
 function initTempGame() {
   _tempRevealed = new Set();
-  [65, 76, 82].forEach(t => {
+  [65, 76, 80].forEach(t => {
     const card = document.getElementById('tempCard' + t);
     if (card) { card.style.borderColor = '#d6c3b3'; card.style.background = '#f2ede3'; }
     const r = document.getElementById('tempReveal' + t);
@@ -2309,7 +2373,7 @@ function initPreshapeGame() {
   document.getElementById('preshapeRestPill').style.display = 'none';
   document.getElementById('preshapeFactCard').style.display = 'none';
   document.getElementById('preshapeContinueBtn').disabled = true;
-  document.getElementById('preshapeInstText').textContent = 'Tap the dough to release it from the bowl with your bench scraper';
+  document.getElementById('preshapeInstText').textContent = 'Tap to flip the dough onto your surface — bench scraper slides under and flips it out';
   _psSetStep('ps-step-scrape', 'active');
   ['ps-step-shape','ps-step-rest','ps-step-done'].forEach(id => _psSetStep(id, 'idle'));
   startAmbientMusic();
@@ -2336,18 +2400,18 @@ function preshapeTap() {
     d.style.borderRadius = '50% 50% 52% 48% / 48% 50% 52% 50%';
     _psSetStep('ps-step-scrape', 'done'); _psSetStep('ps-step-shape', 'active');
     _preshapeStep = 'shape'; _preshapeTaps = 0;
-    document.getElementById('preshapeInstText').textContent = 'Released! Tap 3× to fold the edges under and build a rough ball';
+    document.getElementById('preshapeInstText').textContent = 'Dough is out! Tap 4× — slide scraper under dough, push toward you to round it up';
 
   } else if (_preshapeStep === 'shape') {
     _preshapeTaps++;
     playSound('pop');
     const d = document.getElementById('preshapeDough');
-    const pct = _preshapeTaps / 3;
-    d.style.width  = Math.round(102 - pct * 20) + 'px';
-    d.style.height = Math.round(76  - pct * 14) + 'px';
+    const pct = _preshapeTaps / 4;
+    d.style.width  = Math.round(102 - pct * 22) + 'px';
+    d.style.height = Math.round(76  - pct * 10) + 'px';
     d.style.borderRadius = Math.round(40 + pct * 10) + '%';
-    document.getElementById('preshapeInstText').textContent = `Fold ${_preshapeTaps} of 3 — building surface tension!`;
-    if (_preshapeTaps >= 3) {
+    document.getElementById('preshapeInstText').textContent = `Push ${_preshapeTaps} of 4 — scraper under, push toward you, dough rounds up!`;
+    if (_preshapeTaps >= 4) {
       d.style.width = '80px'; d.style.height = '80px'; d.style.borderRadius = '50%';
       _psSetStep('ps-step-shape', 'done'); _psSetStep('ps-step-rest', 'active');
       _preshapeStep = 'rest';
@@ -2752,45 +2816,91 @@ const QUIZ_DATA = {
   c1: {
     questions: [
       {
-        emoji: '🫧',
-        q: 'What does a healthy, active starter look like?',
+        emoji: '🌾',
+        q: 'What makes sourdough bread different from regular bread?',
         choices: [
-          { e:'🫧', t:'Full of bubbles and doubled in size', ok:true,
-            why:'Correct! Bubbles are CO₂ from yeast eating fresh flour, and doubling means fermentation is in full swing. This is exactly what you want.' },
-          { e:'😴', t:'Completely flat with no change', ok:false,
-            why:'A flat starter has very low yeast activity — it needs feeding or more warmup time. No bubbles means it can\'t leaven bread yet.' },
-          { e:'🍄', t:'Green fuzzy spots on top', ok:false,
-            why:'Fuzzy colored spots are mold contamination. If you ever see this, start a fresh batch — your starter has been invaded and isn\'t recoverable.' },
-          { e:'🌊', t:'Grey liquid floating on top', ok:false,
-            why:'That grey layer is hooch — a sign your starter is hungry, not active. The good news: just pour it off and feed it and it\'ll bounce right back.' },
+          { e:'🦠', t:'Wild yeast and bacteria captured from your environment', ok:true,
+            why:'That\'s right! Sourdough is leavened by wild yeast and beneficial bacteria — not commercial yeast. This living culture is what gives sourdough its complex flavor, chewy texture, and longer fermentation.' },
+          { e:'🧪', t:'More commercial yeast added', ok:false,
+            why:'Commercial yeast gives you fast, predictable rise — but sourdough uses no commercial yeast at all. The wild yeast in your starter does all the leavening work, and it takes much longer.' },
+          { e:'🌊', t:'Higher water content only', ok:false,
+            why:'While sourdough hydration varies, water content alone doesn\'t define it. The wild yeast and bacteria from your living starter are what truly make sourdough unique.' },
+          { e:'⚙️', t:'A special kneading technique', ok:false,
+            why:'Sourdough doesn\'t even need kneading! You use stretch-and-fold instead. The real difference is the living starter culture — wild yeast and bacteria — not the technique.' },
         ]
       },
       {
-        emoji: '💧',
-        q: 'You spot grey liquid (hooch) on top of your starter. What do you do?',
+        emoji: '🍞',
+        q: 'What is the correct order of the 5 sourdough baking stages?',
         choices: [
-          { e:'↩️', t:'Pour it off, then feed your starter', ok:true,
-            why:'Exactly right! Hooch means the yeast has eaten through all its food. Pour it off, add fresh flour and water, and your starter will be bubbly again in hours.' },
-          { e:'🤔', t:'Leave it — it adds sour flavor', ok:false,
-            why:'Letting hooch sit makes your starter increasingly acidic and sluggish over time. It\'s a signal to feed now, not something to let accumulate.' },
-          { e:'🗑️', t:'Throw the whole starter away', ok:false,
-            why:'Never throw it out over hooch! It\'s just a sign of hunger — your starter is completely fine underneath. Pour the liquid off and feed it.' },
-          { e:'💧', t:'Add more water to dilute it', ok:false,
-            why:'Water alone doesn\'t help — the yeast needs fresh flour as food. Diluting without flour just gives you a wetter, still-hungry starter.' },
+          { e:'✅', t:'Mix → Bulk Ferment → Shape → Cold Proof → Bake', ok:true,
+            why:'Perfect! That\'s the exact rhythm of every sourdough bake. This sequence ensures proper gluten development, full fermentation, good structure, and a beautiful crackly crust.' },
+          { e:'❌', t:'Bake → Shape → Mix → Proof → Bulk', ok:false,
+            why:'You can\'t bake first — the dough needs to be mixed, fermented, shaped, and cold-proofed before it ever sees the oven. The order is everything in sourdough!' },
+          { e:'🔄', t:'Bulk → Mix → Shape → Proof → Bake', ok:false,
+            why:'You can\'t bulk ferment before mixing! The dough must come together first so gluten can form and yeast has something to work with during bulk fermentation.' },
+          { e:'⏩', t:'Mix → Shape → Bulk → Bake → Proof', ok:false,
+            why:'Shaping comes AFTER bulk fermentation, not before. And cold proofing always happens right before baking — the oven is always the final step.' },
         ]
       },
       {
-        emoji: '⏰',
-        q: 'When is the BEST moment to use your starter for baking?',
+        emoji: '🔍',
+        q: 'How do you know when your gluten is fully developed after mixing?',
         choices: [
-          { e:'⬆️', t:'At peak rise — doubled and bubbly', ok:true,
-            why:'Perfect! Peak rise = maximum yeast activity = maximum lift. Using starter at its peak gives you the best oven spring, best crumb, and best flavor.' },
-          { e:'🕐', t:'Right after you feed it', ok:false,
-            why:'Right after feeding the yeast is just waking up and hasn\'t multiplied enough yet. Give it 4–8 hours to reach its peak before you use it.' },
-          { e:'⬇️', t:'When it has fully deflated', ok:false,
-            why:'A deflated starter has already burned through its food — yeast activity is falling. Past-peak starter makes dense, under-risen bread.' },
-          { e:'🤷', t:'Anytime — it doesn\'t matter', ok:false,
-            why:'Timing really does matter! Starter at peak vs. past-peak can be the difference between a gorgeous open crumb and a dense brick.' },
+          { e:'💡', t:'Dough stretches thin and translucent — the windowpane test', ok:true,
+            why:'Exactly! Stretch a small piece until you can almost see light through it without tearing — that\'s the windowpane test. It means your gluten network is strong enough to trap gas and give you a great rise.' },
+          { e:'⏰', t:'Wait exactly 30 minutes after mixing', ok:false,
+            why:'Time alone can\'t tell you when gluten is ready. Dough develops differently depending on flour type, hydration, and technique. The windowpane test gives you a physical check you can actually see.' },
+          { e:'📏', t:'The dough doubles in size', ok:false,
+            why:'Doubling in size shows fermentation activity (bulk proofing), not gluten development from mixing. Use the windowpane test right after mixing to check gluten strength — not size.' },
+          { e:'🎨', t:'Dough changes from white to yellow', ok:false,
+            why:'Color change isn\'t a reliable indicator of gluten development. The windowpane test — stretching a piece thin and checking for translucency without tearing — is the classic baker\'s check.' },
+        ]
+      }
+    ]
+  },
+  c2: {
+    questions: [
+      {
+        emoji: '🥣',
+        q: 'In which order should you add ingredients during the Mix step?',
+        choices: [
+          { e:'✅', t:'Flour + water + starter → mix → rest → salt last', ok:true,
+            why:'Correct! Everything except salt goes in first, then you mix, then rest for 1 hour to develop gluten — and salt always goes in LAST. Adding salt too early slows your starter\'s yeast activity.' },
+          { e:'❌', t:'All ingredients at once', ok:false,
+            why:'Salt should never go in with everything else at the start. Salt inhibits yeast activity — adding it early weakens your starter before it even gets incorporated. Always add salt last.' },
+          { e:'🧂', t:'Salt first, then flour and water', ok:false,
+            why:'Salt first is the worst approach — it directly inhibits the yeast in your starter. Salt always goes in last, after everything else has had a chance to come together and mix.' },
+          { e:'💧', t:'Water only → rest → flour → starter → salt', ok:false,
+            why:'Water by itself doesn\'t start anything useful. The right order is flour + water + starter together first (everything except salt), mix, rest 1 hour, then fold in salt at the end.' },
+        ]
+      },
+      {
+        emoji: '💤',
+        q: 'Why do we rest the dough for 1 hour after mixing — before adding salt?',
+        choices: [
+          { e:'🦠', t:'To let gluten develop on its own, making the dough stronger', ok:true,
+            why:'Exactly! Letting flour, water, and starter rest together allows gluten bonds to form naturally without kneading. This creates a stronger, more extensible dough — and means less overall effort.' },
+          { e:'❄️', t:'To cool the dough down after mixing', ok:false,
+            why:'Resting isn\'t about temperature control. It\'s about gluten development — flour proteins absorb water and form gluten networks naturally during rest, with no physical effort required.' },
+          { e:'🧂', t:'So the salt dissolves more easily when added', ok:false,
+            why:'The rest happens BEFORE salt is even added! The purpose is purely gluten development — letting the dough become more extensible and structured before you fold in the salt.' },
+          { e:'⏩', t:'To speed up the fermentation process', ok:false,
+            why:'The 1-hour rest isn\'t primarily about fermentation speed — it\'s about gluten development. The dough rests so proteins can hydrate and bond, making it stronger and easier to shape later.' },
+        ]
+      },
+      {
+        emoji: '💪',
+        q: 'What does the Stretch & Fold technique build in your dough?',
+        choices: [
+          { e:'💪', t:'Gluten strength without deflating gas bubbles', ok:true,
+            why:'Exactly right! Stretch and fold aligns gluten proteins and builds strength — but unlike kneading, it carefully preserves the gas bubbles fermentation creates. Structure without destroying the rise.' },
+          { e:'🌡️', t:'Heat to speed up fermentation', ok:false,
+            why:'Stretch and folds don\'t significantly change dough temperature. Their purpose is purely structural — building gluten strength while keeping gas bubbles intact inside the dough.' },
+          { e:'💧', t:'Extra moisture into the dough', ok:false,
+            why:'Stretch and folds don\'t add water. Your hydration is set when you mix. Folding builds gluten structure and surface tension — it has no effect on how wet or dry the dough is.' },
+          { e:'🥄', t:'A uniform texture by breaking up bubbles', ok:false,
+            why:'Breaking bubbles would be the WRONG goal! Stretch and folds build gluten structure while carefully preserving gas bubbles. Popping them would undo all your fermentation work.' },
         ]
       }
     ]
@@ -2963,6 +3073,7 @@ function quizAnswer(id, choiceIdx) {
     fb.style.display = 'block';
     fb.style.background = isCorrect ? '#d4edda' : '#f8d7da';
     fbTxt.style.color = isCorrect ? '#155724' : '#842029';
+    setTimeout(() => { fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
     const chosenWhy = q.choices[choiceIdx].why || '';
     const correctChoice = q.choices.find(c => c.ok);
     if (isCorrect) {
@@ -2982,7 +3093,7 @@ function quizAnswer(id, choiceIdx) {
   if (cont) {
     cont.style.display = 'block';
     if (isLast) {
-      cont.textContent = id === 'c1' ? 'Chapter 2 unlocked! 🔓' : 'Chapter 4 unlocked! 🔓';
+      cont.textContent = id === 'c1' ? 'Chapter 2 unlocked! 🔓' : id === 'c2' ? 'Chapter 3 unlocked! 🔓' : 'Chapter 4 unlocked! 🔓';
       cont.style.background = 'linear-gradient(135deg,#875305,#C4863A)';
     } else {
       cont.textContent = 'Continue →';
@@ -3008,8 +3119,8 @@ function _quizShowComplete(id) {
   const msg    = wrong === 0
     ? 'You nailed every question. You\'re already thinking like a baker!'
     : `You got ${correct} of ${total} right. Every miss is a lesson that sticks!`;
-  const nextLabel = id === 'c1' ? 'Next: Mix the Dough →' : 'Start Chapter 4 →';
-  const nextFn    = id === 'c1' ? "goTo('c5game');initMixGame()" : "goTo('c4s1')";
+  const nextLabel = id === 'c1' ? 'Next: Mix the Dough →' : id === 'c2' ? 'Continue to Bulk Fermentation →' : 'Start Chapter 4 →';
+  const nextFn    = id === 'c1' ? "goTo('c5game');initMixGame()" : id === 'c2' ? "goTo('c2game');initBulkGame()" : "goTo('c4s1')";
 
   if (!_isMuted) _quizPlayChime(wrong === 0);
 
