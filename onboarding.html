@@ -1113,7 +1113,7 @@
     <div class="px-6 pt-4 border-t border-[#d6c3b3]/20">
       <p class="text-[10px] text-[#847466] italic mb-3 text-center">You don't need everything to start — a Dutch oven and a digital scale will get you through your first 10 bakes.</p>
       <button onclick="completeChapter3()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
-        I'm ready — let's feed my starter →
+        Continue to quiz →
       </button>
     </div>
   </div>
@@ -1440,7 +1440,22 @@ async function _initGameNotifications() {
     });
   } catch(e) { console.warn('_initGameNotifications', e); }
 }
-document.addEventListener('DOMContentLoaded', function() { _initGameNotifications(); });
+document.addEventListener('DOMContentLoaded', function() {
+  _initGameNotifications();
+  updateNav(); // fix initial chapter label on first screen
+
+  // Global right-swipe gesture → go back (works on all Chapter 1+ screens)
+  let _gSwipeX = 0, _gSwipeY = 0;
+  document.addEventListener('touchstart', function(e) {
+    _gSwipeX = e.changedTouches[0].clientX;
+    _gSwipeY = e.changedTouches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].clientX - _gSwipeX;
+    const dy = Math.abs(e.changedTouches[0].clientY - _gSwipeY);
+    if (dx > 50 && dy < 80) goBack();
+  }, { passive: true });
+});
 
 const SCREENS_ORDER = [
   'c0s1','c0s2','c1s1','c1s2','c1s3','c2s1','c1game',
@@ -1857,7 +1872,6 @@ function completeCheckin() {
   // Feed starter via gamification module
   PymGamification.feedStarter(selectedActivity, temp ? parseInt(temp) : null, '');
   PymGamification.checkIn();
-  PymGamification.unlockAchievement('first_checkin');
 
   // Update c4-s3 UI
   document.getElementById('c4JarLabel').textContent   = starterName;
@@ -1877,10 +1891,7 @@ function finishOnboarding(dest) {
     completedAt: new Date().toISOString(),
   }));
   if (window.PymGamification) {
-    PymGamification.unlockAchievement('named_starter');
-    if (ob.creatingStarter) {
-      PymGamification.unlockAchievement('born_from_scratch');
-    }
+    PymGamification.unlockAchievement('tutorial_completed');
   }
   window.location.href = dest || 'bake-log.html';
 }
