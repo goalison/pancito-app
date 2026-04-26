@@ -1593,12 +1593,13 @@
                     // Using a new ID 'bake-alarms' guarantees a fresh channel that
                     // picks up the STREAM_ALARM patch from ChannelManager.java.
                     // Delete old channels — Android channel settings are immutable once
-                    // created, so we use a new ID ('bake-alarms-v2') to guarantee a
-                    // fresh channel with sound enabled picks up on every device.
+                    // created, so we use a new ID ('bake-alarms-v3') to guarantee a
+                    // fresh channel with STREAM_ALARM audio attributes on every device.
                     try { await LocalNotifications.deleteChannel({ id: 'bake-timers' });  } catch(_) {}
                     try { await LocalNotifications.deleteChannel({ id: 'bake-alarms' });  } catch(_) {}
+                    try { await LocalNotifications.deleteChannel({ id: 'bake-alarms-v2' }); } catch(_) {}
                     await LocalNotifications.createChannel({
-                        id:          'bake-alarms-v2',
+                        id:          'bake-alarms-v3',
                         name:        'Bake Alarms',
                         description: 'Sourdough bake timer alerts — rings even on vibrate',
                         importance:  5,          // IMPORTANCE_HIGH → heads-up + sound
@@ -1615,10 +1616,22 @@
                     LocalNotifications.addListener('localNotificationActionPerformed', function() {
                         setPendingAlarm();
                     });
+                    // Play alarm immediately if notification arrives while app is in foreground
+                    LocalNotifications.addListener('localNotificationReceived', function(notification) {
+                        if (notification.channelId === 'bake-alarms-v3') playAlarm();
+                    });
 
                     // Request notification permission
                     const perm = await LocalNotifications.requestPermissions();
                     if (perm.display !== 'granted') return false;
+
+                    // Android 12+: request exact alarm permission so setExactAndAllowWhileIdle works
+                    try {
+                        const exactSetting = await LocalNotifications.checkExactNotificationSetting();
+                        if (exactSetting.result === 'denied') {
+                            await LocalNotifications.requestExactNotificationSetting();
+                        }
+                    } catch(_) {}
 
                     return true;
                 } catch(e) { return false; }
@@ -1667,7 +1680,7 @@
                                 at: new Date(Date.now() + delaySecs * 1000),
                                 allowWhileIdle: true   // fires even in Doze mode
                             },
-                            channelId: 'bake-alarms-v2',
+                            channelId: 'bake-alarms-v3',
                             sound:     'default',
                             extra:     { timerId: id }
                         }]
@@ -1757,6 +1770,9 @@
                     const { LocalNotifications } = window.Capacitor.Plugins;
                     LocalNotifications.addListener('localNotificationActionPerformed', function() {
                         setPendingAlarm();
+                    });
+                    LocalNotifications.addListener('localNotificationReceived', function(notification) {
+                        if (notification.channelId === 'bake-alarms-v3') playAlarm();
                     });
                 } catch(e) {}
             }
