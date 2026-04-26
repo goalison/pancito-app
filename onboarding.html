@@ -1392,6 +1392,56 @@ let lessonIndex   = 0;
 let equipState    = {};
 let creatingStarter = false;
 
+// ── Native detection ──────────────────────────────────────────────────────
+const IS_NATIVE = !!(window.Capacitor?.isNativePlatform?.());
+
+// ── Game rest-period alarms ───────────────────────────────────────────────
+// IDs 8001-8003: reserved for onboarding game rest timers (9001 is used by
+// gamification.js starter reminder, so we stay well clear of that range).
+async function sendGameAlarm(id, label, delaySecs) {
+  if (!IS_NATIVE) return;
+  try {
+    const LN = window.Capacitor.Plugins.LocalNotifications;
+    await LN.cancel({ notifications: [{ id }] }).catch(() => {});
+    await LN.schedule({ notifications: [{
+      id,
+      title: '🍞 Pancito',
+      body: label,
+      schedule: { at: new Date(Date.now() + delaySecs * 1000), allowWhileIdle: true },
+      channelId: 'bake-alarms-v3',
+      sound: 'default',
+      smallIcon: 'ic_stat_icon_config_sample',
+      actionTypeId: '',
+      extra: null
+    }] });
+  } catch(e) { console.warn('sendGameAlarm', e); }
+}
+async function cancelGameAlarm(id) {
+  if (!IS_NATIVE) return;
+  try { await window.Capacitor.Plugins.LocalNotifications.cancel({ notifications: [{ id }] }); } catch(e) {}
+}
+
+// ── Notification channel init (runs once on page load) ────────────────────
+async function _initGameNotifications() {
+  if (!IS_NATIVE) return;
+  try {
+    const LN = window.Capacitor.Plugins.LocalNotifications;
+    await LN.requestPermissions();
+    try {
+      const exactSetting = await LN.checkExactNotificationSetting?.();
+      if (exactSetting?.result === 'denied') await LN.requestExactNotificationSetting?.();
+    } catch(_) {}
+    await LN.createChannel({
+      id: 'bake-alarms-v3', name: 'Bake Alarms',
+      importance: 5, visibility: 1, sound: 'default', vibration: true
+    });
+    LN.addListener('localNotificationActionPerformed', function() {
+      // Notification tapped — navigate to bake log if this is a game alarm
+    });
+  } catch(e) { console.warn('_initGameNotifications', e); }
+}
+document.addEventListener('DOMContentLoaded', function() { _initGameNotifications(); });
+
 const SCREENS_ORDER = [
   'c0s1','c0s2','c1s1','c1s2','c1s3','c2s1','c1game',
   'c5game','c6game','c2quiz',
@@ -2300,6 +2350,7 @@ function mixTapIngredient(type) {
 function mixActionTap() {
   if (_mixStep !== 'rest') return;
   playSound('success');
+  cancelGameAlarm(8001);
   document.getElementById('mixActionWrap').style.display = 'none';
   _mxSetStep('mix-step-rest', 'done'); _mxSetStep('mix-step-salt', 'active');
   document.getElementById('mixSaltBtn').style.opacity = '1';
@@ -2327,6 +2378,7 @@ function mixBowlTap() {
     _mixStep = 'rest';
     document.getElementById('mixActionWrap').style.display = 'block';
     _mxUpdateActiveLabel();
+    sendGameAlarm(8001, 'Autolyse rest done — time to fold in salt! 🧂', 3600);
   }
 }
 
@@ -2406,6 +2458,7 @@ function foldTap() {
       document.getElementById('foldCountText').textContent = '4 folds done — rest the dough';
       document.getElementById('foldInstText').textContent = 'Set 1 complete! Cover and rest 30 min before Set 2';
       document.getElementById('foldRestWrap').style.display = 'block';
+      sendGameAlarm(8002, 'Fold rest done — time for Set 2! 💪', 1800);
     } else {
       _flSetStep('fold-step-s2', 'done'); _flSetStep('fold-step-done', 'done');
       _foldStep = 'done';
@@ -2421,6 +2474,7 @@ function foldTap() {
 
 function foldRestTap() {
   playSound('success');
+  cancelGameAlarm(8002);
   document.getElementById('foldRestWrap').style.display = 'none';
   _flSetStep('fold-step-rest', 'done'); _flSetStep('fold-step-s2', 'active');
   _foldStep = 's2';
@@ -2554,12 +2608,13 @@ function preshapeTap() {
     _psSetStep('ps-step-rest', 'done'); _psSetStep('ps-step-done', 'done');
     _preshapeStep = 'done';
     document.getElementById('preshapeInstText').textContent = '✓ Bench resting! 20–30 min lets gluten relax for easier final shaping 🎉';
+    sendGameAlarm(8003, 'Bench rest done — time to final shape! 🍞', 1200);
     document.getElementById('preshapeFactCard').style.display = 'block';
     setTimeout(() => { playSound('success'); document.getElementById('preshapeContinueBtn').disabled = false; }, 500);
   }
 }
 
-function afterPreshapeGame() { goTo('c9game'); initShapeGame(); }
+function afterPreshapeGame() { cancelGameAlarm(8003); goTo('c9game'); initShapeGame(); }
 
 // ══════════════════════════════════════════════════════════════════════════
 // MINI-GAME: Final Shaping (c9game)
