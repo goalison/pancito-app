@@ -164,6 +164,132 @@
   /* Activity pills */
   .activity-pill { transition:all 0.18s; cursor:pointer; }
   .activity-pill.selected { background:#875305; color:#fff; border-color:#875305; }
+
+  /* ══ GPGP Cozy Bakery Style ══════════════════════════════════════════════
+     Warm parchment backgrounds, speech-bubble instructions,
+     cute thick-border step pills, press-down ingredient cards.            */
+
+  /* Warm game screen backgrounds */
+  #c5game > div:first-child,
+  #c6game > div:first-child,
+  #c2game > div:first-child,
+  #c7game > div:first-child,
+  #c8game > div:first-child,
+  #c9game > div:first-child,
+  #c10game > div:first-child,
+  #c11game > div:first-child,
+  #c4game > div:first-child {
+    background: linear-gradient(160deg, #fffcf0 0%, #fef6e0 55%, #fdeecb 100%) !important;
+  }
+
+  /* Speech-bubble instruction text */
+  #mixInstText, #bulkInstText, #preshapeInstText,
+  #shapeInstText, #proofInstText, #bakeInstText,
+  #tempInstText, #gameInstText, #foldInstText {
+    background: #fff !important;
+    border: 2.5px solid #875305 !important;
+    border-radius: 18px !important;
+    padding: 10px 16px !important;
+    box-shadow: 3px 3px 0 #875305 !important;
+    line-height: 1.45 !important;
+    min-height: 0 !important;
+    margin-bottom: 10px !important;
+    font-weight: 600 !important;
+    color: #514538 !important;
+    position: relative;
+  }
+
+  /* Cute step pill base — applied via class gpgp-pill */
+  .gpgp-pill {
+    flex: 1;
+    padding: 6px 2px;
+    border-radius: 12px;
+    border: 2.5px solid #d6c3b3;
+    font-size: 8px;
+    font-weight: 800;
+    color: #c8b8a8;
+    text-align: center;
+    transition: all 0.25s;
+    background: #fffbf2;
+    box-shadow: 0 2px 0 #d6c3b3;
+  }
+  .gpgp-pill.active {
+    border-color: #875305;
+    color: #875305;
+    background: #fff8ee;
+    box-shadow: 0 2px 0 #875305;
+    transform: translateY(-1px);
+  }
+  .gpgp-pill.done {
+    border-color: #5a3a02;
+    color: #fff;
+    background: #875305;
+    box-shadow: 0 2px 0 #5a3a02;
+  }
+
+  /* Cute ingredient cards for Mix game */
+  .gpgp-ingr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    background: #fff;
+    border: 2.5px solid #d6c3b3;
+    border-radius: 14px;
+    padding: 8px 8px 6px;
+    box-shadow: 0 3px 0 #d6c3b3;
+    cursor: pointer;
+    transition: all 0.18s;
+    min-width: 50px;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .gpgp-ingr.live {
+    border-color: #875305;
+    box-shadow: 0 3px 0 #875305;
+    background: #fffbf2;
+    transform: translateY(-2px);
+  }
+  .gpgp-ingr.used {
+    opacity: 0.2;
+    box-shadow: none;
+    transform: none;
+    pointer-events: none;
+  }
+  .gpgp-ingr .gi-emoji { font-size: 26px; line-height: 1; }
+  .gpgp-ingr .gi-lbl  { font-size: 8.5px; font-weight: 800; color: #875305; text-transform: uppercase; letter-spacing: 0.04em; }
+
+  /* Wooden counter shelf shown above bowl/oven visuals */
+  .game-shelf {
+    width: 100%;
+    max-width: 260px;
+    height: 14px;
+    background: linear-gradient(180deg, #c8934a 0%, #b07a30 60%, #9a6820 100%);
+    border-radius: 7px 7px 0 0;
+    box-shadow: 0 3px 8px rgba(80,40,0,0.22);
+    margin: 0 auto -2px;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .game-shelf::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 12px; right: 12px;
+    height: 2px;
+    background: rgba(255,255,255,0.22);
+    border-radius: 1px;
+  }
+
+  /* Animated floating hearts / stars decoration */
+  @keyframes floatUp {
+    0%   { opacity: 0; transform: translateY(0) scale(0.7); }
+    30%  { opacity: 1; transform: translateY(-8px) scale(1.1); }
+    100% { opacity: 0; transform: translateY(-28px) scale(0.9); }
+  }
+  @keyframes gpgpBounce {
+    0%,100% { transform: translateY(0); }
+    50%     { transform: translateY(-4px); }
+  }
 </style>
 </head>
 <body class="bg-[#fef9ef] text-[#1d1c16]">
@@ -434,11 +560,11 @@
     <!-- Active step label -->
     <div id="mixActiveLabel" style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#875305;margin-bottom:4px;min-height:16px;text-align:center">↓ Tap to add flour</div>
     <!-- Ingredient icon row -->
-    <div style="display:flex;justify-content:space-around;margin-bottom:6px;width:208px;flex-shrink:0">
-      <button onclick="mixTapIngredient('flour')"   id="mixFlourBtn"   style="cursor:pointer;background:none;border:none;opacity:1;transition:opacity 0.3s;padding:4px;display:flex;flex-direction:column;align-items:center;gap:1px" title="Flour"><span style="font-size:26px">🌾</span><span style="font-size:8px;font-weight:800;color:#875305">Flour</span></button>
-      <button onclick="mixTapIngredient('water')"   id="mixWaterBtn"   style="cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px;display:flex;flex-direction:column;align-items:center;gap:1px" title="Water"><span style="font-size:26px">💧</span><span style="font-size:8px;font-weight:800;color:#875305">Water</span></button>
-      <button onclick="mixTapIngredient('starter')" id="mixStarterBtn" style="cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px;display:flex;flex-direction:column;align-items:center;gap:1px" title="Starter"><span style="font-size:26px">🫙</span><span style="font-size:8px;font-weight:800;color:#875305">Starter</span></button>
-      <button onclick="mixTapIngredient('salt')"    id="mixSaltBtn"    style="cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px;display:flex;flex-direction:column;align-items:center;gap:1px" title="Salt"><span style="font-size:26px">🧂</span><span style="font-size:8px;font-weight:800;color:#875305">Salt</span></button>
+    <div style="display:flex;justify-content:space-around;gap:6px;margin-bottom:8px;flex-shrink:0">
+      <button onclick="mixTapIngredient('flour')"   id="mixFlourBtn"   class="gpgp-ingr" title="Flour"><span class="gi-emoji">🌾</span><span class="gi-lbl">Flour</span></button>
+      <button onclick="mixTapIngredient('water')"   id="mixWaterBtn"   class="gpgp-ingr" style="opacity:0.35" title="Water"><span class="gi-emoji">💧</span><span class="gi-lbl">Water</span></button>
+      <button onclick="mixTapIngredient('starter')" id="mixStarterBtn" class="gpgp-ingr" style="opacity:0.35" title="Starter"><span class="gi-emoji">🫙</span><span class="gi-lbl">Starter</span></button>
+      <button onclick="mixTapIngredient('salt')"    id="mixSaltBtn"    class="gpgp-ingr" style="opacity:0.35" title="Salt"><span class="gi-emoji">🧂</span><span class="gi-lbl">Salt</span></button>
     </div>
 
     <!-- Bowl visual -->
@@ -455,12 +581,12 @@
 
     <!-- Step tracker -->
     <div style="display:flex;gap:4px;width:100%;max-width:300px;margin-bottom:10px">
-      <div id="mix-step-flour"   style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #875305;font-size:8px;font-weight:700;color:#875305;transition:all 0.3s;text-align:center">🌾 Flour</div>
-      <div id="mix-step-water"   style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">💧 Water</div>
-      <div id="mix-step-starter" style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">🫙 Start</div>
-      <div id="mix-step-mix"     style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">👐 Mix</div>
-      <div id="mix-step-rest"    style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">💤 Rest</div>
-      <div id="mix-step-salt"    style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">🧂 Salt</div>
+      <div id="mix-step-flour"   class="gpgp-pill active">🌾 Flour</div>
+      <div id="mix-step-water"   class="gpgp-pill">💧 Water</div>
+      <div id="mix-step-starter" class="gpgp-pill">🫙 Start</div>
+      <div id="mix-step-mix"     class="gpgp-pill">👐 Mix</div>
+      <div id="mix-step-rest"    class="gpgp-pill">💤 Rest</div>
+      <div id="mix-step-salt"    class="gpgp-pill">🧂 Salt</div>
     </div>
 
     <!-- Rest action button -->
@@ -514,10 +640,10 @@
 
     <!-- Step tracker -->
     <div style="display:flex;gap:5px;width:100%;max-width:300px;margin-top:2rem;margin-bottom:8px">
-      <div id="fold-step-s1"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #875305;font-size:9px;font-weight:700;color:#875305;transition:all 0.3s;text-align:center">Set 1</div>
-      <div id="fold-step-rest" style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:9px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">Rest</div>
-      <div id="fold-step-s2"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:9px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">Set 2</div>
-      <div id="fold-step-done" style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:9px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">Strong!</div>
+      <div id="fold-step-s1"   class="gpgp-pill active">💪 Set 1</div>
+      <div id="fold-step-rest" class="gpgp-pill">⏱️ Rest</div>
+      <div id="fold-step-s2"   class="gpgp-pill">💪 Set 2</div>
+      <div id="fold-step-done" class="gpgp-pill">⭐ Strong!</div>
     </div>
     <p id="foldCountText" style="font-size:11px;font-weight:700;color:#847466;margin-bottom:8px">0 of 4 folds — Set 1</p>
 
@@ -680,12 +806,12 @@
 
     <!-- ── Step tracker: Rest | Temp | Grow | Shake | Poke | Pane ─────── -->
     <div style="display:flex;gap:4px;width:100%;max-width:300px;margin-bottom:12px">
-      <div id="bulk-step-rest"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #875305;font-size:8px;font-weight:700;color:#875305;transition:all 0.3s;text-align:center">💤 Rest</div>
-      <div id="bulk-step-temp"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">🌡️ Temp</div>
-      <div id="bulk-step-grow"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">📈 Grow</div>
-      <div id="bulk-step-shake"  style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">🤝 Shake</div>
-      <div id="bulk-step-poke"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">👆 Poke</div>
-      <div id="bulk-step-pane"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.45;transition:all 0.3s;text-align:center">🔍 Pane</div>
+      <div id="bulk-step-rest"   class="gpgp-pill active">💤 Rest</div>
+      <div id="bulk-step-temp"   class="gpgp-pill">🌡️ Temp</div>
+      <div id="bulk-step-grow"   class="gpgp-pill">📈 Grow</div>
+      <div id="bulk-step-shake"  class="gpgp-pill">🤝 Shake</div>
+      <div id="bulk-step-poke"   class="gpgp-pill">👆 Poke</div>
+      <div id="bulk-step-pane"   class="gpgp-pill">🔍 Pane</div>
     </div>
 
     <!-- ── Action button (changes each step) ──────────────────────────── -->
@@ -808,10 +934,10 @@
 
     <!-- Step tracker -->
     <div style="display:flex;gap:5px;width:100%;max-width:300px;margin-bottom:10px">
-      <div id="ps-step-scrape" style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #875305;font-size:8px;font-weight:700;color:#875305;transition:all 0.3s;text-align:center">🔪 Release</div>
-      <div id="ps-step-shape"  style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">👐 Shape</div>
-      <div id="ps-step-rest"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">💤 Rest</div>
-      <div id="ps-step-done"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">✅ Ready</div>
+      <div id="ps-step-scrape" class="gpgp-pill active">🔪 Release</div>
+      <div id="ps-step-shape"  class="gpgp-pill">👐 Shape</div>
+      <div id="ps-step-rest"   class="gpgp-pill">💤 Rest</div>
+      <div id="ps-step-done"   class="gpgp-pill">✅ Ready</div>
     </div>
 
     <div id="preshapeFactCard" style="display:none;background:linear-gradient(135deg,#875305,#c4863a);border-radius:16px;padding:14px 18px;width:100%;max-width:300px;">
@@ -850,10 +976,10 @@
 
     <!-- Step tracker -->
     <div style="display:flex;gap:4px;width:100%;max-width:300px;margin-bottom:8px">
-      <div id="sh-step-stretch"  style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #875305;font-size:8px;font-weight:700;color:#875305;transition:all 0.3s;text-align:center">↔ Stretch</div>
-      <div id="sh-step-fold"     style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">🔼 Fold</div>
-      <div id="sh-step-tension"  style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">💪 Tension</div>
-      <div id="sh-step-banneton" style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">🧺 Banneton</div>
+      <div id="sh-step-stretch"  class="gpgp-pill active">↔ Stretch</div>
+      <div id="sh-step-fold"     class="gpgp-pill">🔼 Fold</div>
+      <div id="sh-step-tension"  class="gpgp-pill">💪 Tension</div>
+      <div id="sh-step-banneton" class="gpgp-pill">🧺 Banneton</div>
     </div>
     <p id="shapeTapText" style="font-size:11px;font-weight:700;color:#847466;margin-bottom:8px">Tap the dough to begin</p>
 
@@ -902,10 +1028,10 @@
 
     <!-- Step tracker -->
     <div style="display:flex;gap:5px;width:100%;max-width:300px;margin-bottom:10px">
-      <div id="pr-step-dust"   style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #875305;font-size:8px;font-weight:700;color:#875305;transition:all 0.3s;text-align:center">🌾 Dust</div>
-      <div id="pr-step-place"  style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">🍞 Place</div>
-      <div id="pr-step-cover"  style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">🎁 Cover</div>
-      <div id="pr-step-fridge" style="flex:1;padding:6px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">❄️ Fridge</div>
+      <div id="pr-step-dust"   class="gpgp-pill active">🌾 Dust</div>
+      <div id="pr-step-place"  class="gpgp-pill">🍞 Place</div>
+      <div id="pr-step-cover"  class="gpgp-pill">🎁 Cover</div>
+      <div id="pr-step-fridge" class="gpgp-pill">❄️ Fridge</div>
     </div>
 
     <div id="proofFactCard" style="display:none;background:linear-gradient(135deg,#875305,#c4863a);border-radius:16px;padding:14px 18px;width:100%;max-width:300px;">
@@ -947,10 +1073,10 @@
 
     <!-- Step tracker -->
     <div style="display:flex;gap:4px;width:100%;max-width:300px;margin-bottom:10px">
-      <div id="bk-step-preheat"  style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #875305;font-size:8px;font-weight:700;color:#875305;transition:all 0.3s;text-align:center">🔥 Preheat</div>
-      <div id="bk-step-score"    style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">🗡️ Score</div>
-      <div id="bk-step-bake"     style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">♨️ Steam</div>
-      <div id="bk-step-uncover"  style="flex:1;padding:5px 2px;border-radius:10px;border:2px solid #d6c3b3;font-size:8px;font-weight:700;color:#c8b8a8;opacity:0.4;transition:all 0.3s;text-align:center">✨ Crust</div>
+      <div id="bk-step-preheat"  class="gpgp-pill active">🔥 Preheat</div>
+      <div id="bk-step-score"    class="gpgp-pill">🗡️ Score</div>
+      <div id="bk-step-bake"     class="gpgp-pill">♨️ Steam</div>
+      <div id="bk-step-uncover"  class="gpgp-pill">✨ Crust</div>
     </div>
 
     <!-- Action button (transfer / remove lid) -->
@@ -1781,32 +1907,53 @@ function playSound(type) {
   } catch(e) { /* Audio blocked — silent fail */ }
 }
 
-const PENTATONIC = [261.63, 293.66, 329.63, 392.00, 440.00]; // C D E G A
-const AMB_SEQ    = [0,2,4,3,1,4,2,0,3,1,2,4,0,3,2,1,4,0,2,3];
+// Cozy café melody — C major pentatonic, two octaves, music-box feel
+const PENTATONIC  = [523.25, 587.33, 659.25, 783.99, 880.00]; // C5 D5 E5 G5 A5
+const PENTA_BASS  = [130.81, 164.81, 196.00, 261.63];          // C3 E3 G3 C4 (gentle bass)
+// Melodic phrase: gentle rising + falling pattern with rests (index -1 = rest)
+const AMB_SEQ     = [0,2,4,4,3,1,2,0,-1,1,3,4,2,4,3,-1,0,2,1,3,4,0,2,-1,3,1,2,4];
+const AMB_BASS_ON = new Set([0,4,8,14,20]); // beats where bass note plays
 
 function _schedAmbNote(idx, t) {
   try {
     const ctx = _ctx();
-    const freq = PENTATONIC[AMB_SEQ[idx % AMB_SEQ.length]];
-    // Warm low-pass on each note — rounds off the top like a muted piano key
+    const seqIdx = AMB_SEQ[idx % AMB_SEQ.length];
+    if (seqIdx === -1) return; // rest — silence this beat
+
+    const freq = PENTATONIC[seqIdx];
+
+    // Warm low-pass — rounds the top like a felt piano hammer
     const flt = ctx.createBiquadFilter();
-    flt.type = 'lowpass'; flt.frequency.value = 1200; flt.Q.value = 0.5;
+    flt.type = 'lowpass'; flt.frequency.value = 2200; flt.Q.value = 0.4;
     flt.connect(_ambientGainNode);
-    // Main note — sine for warmth instead of triangle
+
+    // Main melody note — triangle for music-box warmth
     const osc = ctx.createOscillator(), g = ctx.createGain();
-    osc.type = 'sine'; osc.frequency.value = freq;
+    osc.type = 'triangle'; osc.frequency.value = freq;
     g.gain.setValueAtTime(0, t);
-    g.gain.linearRampToValueAtTime(0.6, t + 0.06);
-    g.gain.setValueAtTime(0.6, t + 0.22);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 1.1);
-    osc.connect(g); g.connect(flt); osc.start(t); osc.stop(t + 1.15);
-    // Subtle octave above — gives the lofi shimmer
+    g.gain.linearRampToValueAtTime(0.55, t + 0.03);  // quick, crisp attack
+    g.gain.setValueAtTime(0.55, t + 0.08);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 1.6); // long, gentle decay
+    osc.connect(g); g.connect(flt); osc.start(t); osc.stop(t + 1.65);
+
+    // Soft octave shimmer
     const osc2 = ctx.createOscillator(), g2 = ctx.createGain();
     osc2.type = 'sine'; osc2.frequency.value = freq * 2;
     g2.gain.setValueAtTime(0, t);
-    g2.gain.linearRampToValueAtTime(0.12, t + 0.04);
-    g2.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
-    osc2.connect(g2); g2.connect(flt); osc2.start(t); osc2.stop(t + 0.55);
+    g2.gain.linearRampToValueAtTime(0.08, t + 0.04);
+    g2.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+    osc2.connect(g2); g2.connect(flt); osc2.start(t); osc2.stop(t + 0.45);
+
+    // Occasional gentle bass note for warmth
+    if (AMB_BASS_ON.has(idx % AMB_SEQ.length)) {
+      const bassFreq = PENTA_BASS[seqIdx % PENTA_BASS.length];
+      const ob = ctx.createOscillator(), gb = ctx.createGain();
+      ob.type = 'sine'; ob.frequency.value = bassFreq;
+      gb.gain.setValueAtTime(0, t);
+      gb.gain.linearRampToValueAtTime(0.18, t + 0.08);
+      gb.gain.exponentialRampToValueAtTime(0.001, t + 2.2);
+      ob.connect(gb); gb.connect(_ambientGainNode); ob.start(t); ob.stop(t + 2.3);
+    }
   } catch(_) {}
 }
 
@@ -1815,18 +1962,18 @@ function startAmbientMusic() {
   try {
     const ctx = _ctx();
     _ambientGainNode = ctx.createGain();
-    _ambientGainNode.gain.value = 0.048;  // a touch quieter — lofi sits under everything
+    _ambientGainNode.gain.value = 0.038; // soft — sits peacefully under gameplay
     _ambientGainNode.connect(ctx.destination);
-    _ambientNoteTime = ctx.currentTime + 1.0;
+    _ambientNoteTime = ctx.currentTime + 0.8;
     _ambientNoteIdx = 0;
     function tick() {
       if (_isMuted) return;
       const now = _ctx().currentTime;
-      while (_ambientNoteTime < now + 3.0) {
+      while (_ambientNoteTime < now + 3.5) {
         _schedAmbNote(_ambientNoteIdx++, _ambientNoteTime);
-        _ambientNoteTime += 1.1 + Math.random() * 0.55;  // slower, more breathing room
+        _ambientNoteTime += 0.72 + Math.random() * 0.18; // ~80 BPM café tempo
       }
-      _ambientTick = setTimeout(tick, 900);
+      _ambientTick = setTimeout(tick, 800);
     }
     tick();
   } catch(_) {}
@@ -1921,14 +2068,9 @@ function initBulkGame() {
 
 function _bulkSetStep(id, state) {
   const el = document.getElementById(id); if (!el) return;
-  if (state === 'done') {
-    el.style.cssText += ';border-color:#198754;background:#198754;color:#fff;opacity:1';
-  } else if (state === 'active') {
-    el.style.cssText += ';border-color:#875305;background:transparent;color:#875305;opacity:1';
-  } else {
-    el.style.borderColor = '#d6c3b3'; el.style.background = 'transparent';
-    el.style.color = '#c8b8a8'; el.style.opacity = '0.45';
-  }
+  el.classList.remove('active','done');
+  if (state === 'done')        el.classList.add('done');
+  else if (state === 'active') el.classList.add('active');
 }
 
 function _bulkShowBtn(emoji, label) {
@@ -2096,14 +2238,9 @@ function initMixGame() {
 
 function _mxSetStep(id, state) {
   const el = document.getElementById(id); if (!el) return;
-  if (state === 'done') {
-    el.style.cssText += ';border-color:#198754;background:#198754;color:#fff;opacity:1';
-  } else if (state === 'active') {
-    el.style.cssText += ';border-color:#875305;background:transparent;color:#875305;opacity:1';
-  } else {
-    el.style.borderColor = '#d6c3b3'; el.style.background = 'transparent';
-    el.style.color = '#c8b8a8'; el.style.opacity = '0.4';
-  }
+  el.classList.remove('active','done');
+  if (state === 'done')        el.classList.add('done');
+  else if (state === 'active') el.classList.add('active');
 }
 
 function _mixAnimDrop(emoji) {
@@ -2230,14 +2367,9 @@ function initFoldGame() {
 
 function _flSetStep(id, state) {
   const el = document.getElementById(id); if (!el) return;
-  if (state === 'done') {
-    el.style.cssText += ';border-color:#198754;background:#198754;color:#fff;opacity:1';
-  } else if (state === 'active') {
-    el.style.cssText += ';border-color:#875305;background:transparent;color:#875305;opacity:1';
-  } else {
-    el.style.borderColor = '#d6c3b3'; el.style.background = 'transparent';
-    el.style.color = '#c8b8a8'; el.style.opacity = '0.4';
-  }
+  el.classList.remove('active','done');
+  if (state === 'done')        el.classList.add('done');
+  else if (state === 'active') el.classList.add('active');
 }
 
 function foldTap() {
@@ -2384,14 +2516,9 @@ function initPreshapeGame() {
 
 function _psSetStep(id, state) {
   const el = document.getElementById(id); if (!el) return;
-  if (state === 'done') {
-    el.style.cssText += ';border-color:#198754;background:#198754;color:#fff;opacity:1';
-  } else if (state === 'active') {
-    el.style.cssText += ';border-color:#875305;background:transparent;color:#875305;opacity:1';
-  } else {
-    el.style.borderColor = '#d6c3b3'; el.style.background = 'transparent';
-    el.style.color = '#c8b8a8'; el.style.opacity = '0.4';
-  }
+  el.classList.remove('active','done');
+  if (state === 'done')        el.classList.add('done');
+  else if (state === 'active') el.classList.add('active');
 }
 
 function preshapeTap() {
@@ -2465,14 +2592,9 @@ function initShapeGame() {
 
 function _shSetStep(id, state) {
   const el = document.getElementById(id); if (!el) return;
-  if (state === 'done') {
-    el.style.cssText += ';border-color:#198754;background:#198754;color:#fff;opacity:1';
-  } else if (state === 'active') {
-    el.style.cssText += ';border-color:#875305;background:transparent;color:#875305;opacity:1';
-  } else {
-    el.style.borderColor = '#d6c3b3'; el.style.background = 'transparent';
-    el.style.color = '#c8b8a8'; el.style.opacity = '0.4';
-  }
+  el.classList.remove('active','done');
+  if (state === 'done')        el.classList.add('done');
+  else if (state === 'active') el.classList.add('active');
 }
 
 function shapeTap() {
@@ -2552,14 +2674,9 @@ function initProofGame() {
 
 function _prSetStep(id, state) {
   const el = document.getElementById(id); if (!el) return;
-  if (state === 'done') {
-    el.style.cssText += ';border-color:#198754;background:#198754;color:#fff;opacity:1';
-  } else if (state === 'active') {
-    el.style.cssText += ';border-color:#875305;background:transparent;color:#875305;opacity:1';
-  } else {
-    el.style.borderColor = '#d6c3b3'; el.style.background = 'transparent';
-    el.style.color = '#c8b8a8'; el.style.opacity = '0.4';
-  }
+  el.classList.remove('active','done');
+  if (state === 'done')        el.classList.add('done');
+  else if (state === 'active') el.classList.add('active');
 }
 
 function proofBannetonTap() {
@@ -2636,14 +2753,9 @@ function initBakeGame() {
 
 function _bkSetStep(id, state) {
   const el = document.getElementById(id); if (!el) return;
-  if (state === 'done') {
-    el.style.cssText += ';border-color:#198754;background:#198754;color:#fff;opacity:1';
-  } else if (state === 'active') {
-    el.style.cssText += ';border-color:#875305;background:transparent;color:#875305;opacity:1';
-  } else {
-    el.style.borderColor = '#d6c3b3'; el.style.background = 'transparent';
-    el.style.color = '#c8b8a8'; el.style.opacity = '0.4';
-  }
+  el.classList.remove('active','done');
+  if (state === 'done')        el.classList.add('done');
+  else if (state === 'active') el.classList.add('active');
 }
 
 function bakePotTap() {
