@@ -411,13 +411,14 @@
     <div id="c1gFeedback" style="display:none;border-radius:14px;padding:14px 16px;margin-bottom:6px">
       <p id="c1gFeedbackText" class="text-[13px] font-bold leading-relaxed text-center"></p>
     </div>
-  </div>
-  <div class="px-6 pb-10 pt-3">
-    <button id="c1gContinue" onclick="quizNext('c1')"
-      class="w-full py-4 text-white rounded-2xl font-bold text-base active:scale-95 transition-transform"
-      style="display:none;background:#875305;border:none;cursor:pointer;font-family:inherit">
-      Continue →
-    </button>
+    <!-- Continue button inside scroll area so it's always reachable -->
+    <div class="pt-2 pb-10">
+      <button id="c1gContinue" onclick="quizNext('c1')"
+        class="w-full py-4 text-white rounded-2xl font-bold text-base active:scale-95 transition-transform"
+        style="display:none;background:#875305;border:none;cursor:pointer;font-family:inherit">
+        Continue →
+      </button>
+    </div>
   </div>
 </div>
 
@@ -428,16 +429,16 @@
   <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
     <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Mixing</p>
     <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Mix &amp; Autolyse 🥣</h2>
-    <p id="mixInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-3 min-h-[2.5rem]">Tap the flour bag to add flour to your bowl</p>
+    <p id="mixInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-3 min-h-[2.5rem]">Tap Flour to add it to your bowl</p>
 
     <!-- Active step label -->
     <div id="mixActiveLabel" style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#875305;margin-bottom:4px;min-height:16px;text-align:center">↓ Tap to add flour</div>
     <!-- Ingredient icon row -->
     <div style="display:flex;justify-content:space-around;margin-bottom:6px;width:208px;flex-shrink:0">
-      <button onclick="mixTapIngredient('flour')"   id="mixFlourBtn"   style="font-size:28px;cursor:pointer;background:none;border:none;opacity:1;transition:opacity 0.3s;padding:4px" title="Flour">🌾</button>
-      <button onclick="mixTapIngredient('water')"   id="mixWaterBtn"   style="font-size:28px;cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px" title="Water">💧</button>
-      <button onclick="mixTapIngredient('starter')" id="mixStarterBtn" style="font-size:28px;cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px" title="Starter">🫙</button>
-      <button onclick="mixTapIngredient('salt')"    id="mixSaltBtn"    style="font-size:28px;cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px" title="Salt">🧂</button>
+      <button onclick="mixTapIngredient('flour')"   id="mixFlourBtn"   style="cursor:pointer;background:none;border:none;opacity:1;transition:opacity 0.3s;padding:4px;display:flex;flex-direction:column;align-items:center;gap:1px" title="Flour"><span style="font-size:26px">🌾</span><span style="font-size:8px;font-weight:800;color:#875305">Flour</span></button>
+      <button onclick="mixTapIngredient('water')"   id="mixWaterBtn"   style="cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px;display:flex;flex-direction:column;align-items:center;gap:1px" title="Water"><span style="font-size:26px">💧</span><span style="font-size:8px;font-weight:800;color:#875305">Water</span></button>
+      <button onclick="mixTapIngredient('starter')" id="mixStarterBtn" style="cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px;display:flex;flex-direction:column;align-items:center;gap:1px" title="Starter"><span style="font-size:26px">🫙</span><span style="font-size:8px;font-weight:800;color:#875305">Starter</span></button>
+      <button onclick="mixTapIngredient('salt')"    id="mixSaltBtn"    style="cursor:pointer;background:none;border:none;opacity:0.35;transition:opacity 0.3s;padding:4px;display:flex;flex-direction:column;align-items:center;gap:1px" title="Salt"><span style="font-size:26px">🧂</span><span style="font-size:8px;font-weight:800;color:#875305">Salt</span></button>
     </div>
 
     <!-- Bowl visual -->
@@ -603,13 +604,14 @@
     <div id="c2gFeedback" style="display:none;border-radius:14px;padding:14px 16px;margin-bottom:6px">
       <p id="c2gFeedbackText" class="text-[13px] font-bold leading-relaxed text-center"></p>
     </div>
-  </div>
-  <div class="px-6 pb-10 pt-3">
-    <button id="c2gContinue" onclick="quizNext('c2')"
-      class="w-full py-4 text-white rounded-2xl font-bold text-base active:scale-95 transition-transform"
-      style="display:none;background:#875305;border:none;cursor:pointer;font-family:inherit">
-      Continue →
-    </button>
+    <!-- Continue button inside scroll area so it's always reachable -->
+    <div class="pt-2 pb-10">
+      <button id="c2gContinue" onclick="quizNext('c2')"
+        class="w-full py-4 text-white rounded-2xl font-bold text-base active:scale-95 transition-transform"
+        style="display:none;background:#875305;border:none;cursor:pointer;font-family:inherit">
+        Continue →
+      </button>
+    </div>
   </div>
 </div>
 
@@ -1018,13 +1020,14 @@
     <div id="c3gFeedback" style="display:none;border-radius:14px;padding:14px 16px;margin-bottom:6px">
       <p id="c3gFeedbackText" class="text-[13px] font-bold leading-relaxed text-center"></p>
     </div>
-  </div>
-  <div class="px-6 pb-10 pt-3">
-    <button id="c3gContinue" onclick="quizNext('c3')"
-      class="w-full py-4 text-white rounded-2xl font-bold text-base active:scale-95 transition-transform"
-      style="display:none;background:#875305;border:none;cursor:pointer;font-family:inherit">
-      Continue →
-    </button>
+    <!-- Continue button inside scroll area so it's always reachable -->
+    <div class="pt-2 pb-10">
+      <button id="c3gContinue" onclick="quizNext('c3')"
+        class="w-full py-4 text-white rounded-2xl font-bold text-base active:scale-95 transition-transform"
+        style="display:none;background:#875305;border:none;cursor:pointer;font-family:inherit">
+        Continue →
+      </button>
+    </div>
   </div>
 </div>
 
@@ -2084,7 +2087,7 @@ function initMixGame() {
   document.getElementById('mixActionWrap').style.display = 'none';
   document.getElementById('mixFactCard').style.display   = 'none';
   document.getElementById('mixContinueBtn').disabled     = true;
-  document.getElementById('mixInstText').textContent = 'Tap the flour bag to add flour to your bowl';
+  document.getElementById('mixInstText').textContent = 'Tap Flour to add it to your bowl';
   _mxSetStep('mix-step-flour', 'active');
   ['mix-step-water','mix-step-starter','mix-step-mix','mix-step-rest','mix-step-salt'].forEach(id => _mxSetStep(id, 'idle'));
   _mxUpdateActiveLabel();
@@ -3073,7 +3076,6 @@ function quizAnswer(id, choiceIdx) {
     fb.style.display = 'block';
     fb.style.background = isCorrect ? '#d4edda' : '#f8d7da';
     fbTxt.style.color = isCorrect ? '#155724' : '#842029';
-    setTimeout(() => { fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
     const chosenWhy = q.choices[choiceIdx].why || '';
     const correctChoice = q.choices.find(c => c.ok);
     if (isCorrect) {
@@ -3099,6 +3101,7 @@ function quizAnswer(id, choiceIdx) {
       cont.textContent = 'Continue →';
       cont.style.background = '#875305';
     }
+    setTimeout(() => { cont.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 120);
   }
 }
 
@@ -3124,7 +3127,8 @@ function _quizShowComplete(id) {
 
   if (!_isMuted) _quizPlayChime(wrong === 0);
 
-  const screen = document.getElementById(id + 'game');
+  const screenId = id === 'c2' ? 'c2quiz' : id + 'game';
+  const screen = document.getElementById(screenId);
   if (!screen) return;
 
   const overlay = document.createElement('div');
