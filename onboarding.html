@@ -1375,7 +1375,7 @@
     <button onclick="finishOnboarding()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform shadow-lg">
       Start My First Bake →
     </button>
-    <button onclick="finishOnboarding('index.html')" class="w-full py-3 mt-3 text-[#847466] text-sm font-bold">
+    <button onclick="finishOnboarding('app.html')" class="w-full py-3 mt-3 text-[#847466] text-sm font-bold">
       Go to Dashboard first
     </button>
   </div>
@@ -1893,7 +1893,7 @@ function finishOnboarding(dest) {
   if (window.PymGamification) {
     PymGamification.unlockAchievement('tutorial_completed');
   }
-  window.location.href = dest || 'bake-log.html';
+  window.location.href = dest || 'app.html';
 }
 
 // ══════════════════════════════════════════════════════════════════════════
@@ -3442,7 +3442,7 @@ function launchParticles() {
 (function init() {
   const ob = JSON.parse(storage.getItem('pym_onboarding')||'null');
   if (ob && ob.complete) {
-    window.location.href = 'index.html';
+    window.location.href = 'app.html';
     return;
   }
   // Restore starter name if they left mid-onboarding
