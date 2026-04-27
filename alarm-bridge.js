@@ -9,9 +9,11 @@
 
   function _handleAlarmTap() {
     try { localStorage.setItem('pym_pending_alarm', '1'); } catch (e) {}
-    // Already on bake-log — nothing to redirect; bake-log's own listener handles it
-    if (window.location.pathname.replace(/\\/g, '/').endsWith('bake-log.html')) return;
-    window.location.href = 'bake-log.html';
+    if (typeof showView === 'function') {
+      showView('view-bake');
+    } else {
+      window.location.href = 'app.html';
+    }
   }
 
   // Register as early as possible — Capacitor bridge is available before DOMContentLoaded

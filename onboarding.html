@@ -1893,7 +1893,7 @@ function finishOnboarding(dest) {
   if (window.PymGamification) {
     PymGamification.unlockAchievement('tutorial_completed');
   }
-  window.location.href = dest || 'bake-log.html';
+  window.location.href = dest || 'app.html';
 }
 
 // ══════════════════════════════════════════════════════════════════════════
@@ -3442,7 +3442,7 @@ function launchParticles() {
 (function init() {
   const ob = JSON.parse(storage.getItem('pym_onboarding')||'null');
   if (ob && ob.complete) {
-    window.location.href = 'index.html';
+    window.location.href = 'app.html';
     return;
   }
   // Restore starter name if they left mid-onboarding
