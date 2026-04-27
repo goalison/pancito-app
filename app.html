@@ -90,6 +90,31 @@
   /* SPA view switching */
   .app-view.hidden { display: none; }
 
+  /* Archive */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .modal-overlay { background-color: rgba(44, 24, 16, 0.4); backdrop-filter: blur(4px); }
+
+  /* Badge tooltip */
+  .badge-tooltip {
+    position: fixed; z-index: 9999; max-width: 220px;
+    background: #1d1c16; color: #fef9ef; border-radius: 12px;
+    padding: 10px 14px; font-size: 12px; line-height: 1.5;
+    pointer-events: none; opacity: 0; transform: translateY(6px);
+    transition: opacity 0.18s, transform 0.18s;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  }
+  .badge-tooltip.show { opacity: 1; transform: translateY(0); }
+  .badge-unlocked .badge-icon-ring {
+    box-shadow: 0 0 0 3px #ffb96755, 0 8px 20px rgba(135,83,5,0.3);
+  }
+  .badge-locked { opacity: 0.45; filter: grayscale(1); }
+  .progress-ring-circle {
+    transition: stroke-dashoffset 0.7s ease;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+  }
+
   /* ── Starter Companion jar ─────────────────────── */
   .pym-jar {
     width: 72px; height: 88px;
@@ -836,9 +861,336 @@
 </div>
 </div>
 </div>
-<div id="view-archive"   class="app-view hidden"></div>
-<div id="view-library"   class="app-view hidden"></div>
-<div id="view-achievements" class="app-view hidden"></div>
+<div id="view-archive" class="app-view hidden">
+<main class="max-w-7xl mx-auto px-6 py-8">
+<!-- Archive Header -->
+<section class="mb-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 items-start">
+<div>
+<span class="font-body text-[10px] uppercase tracking-[0.2em] font-bold text-secondary mb-2 block">Curation</span>
+<h2 class="font-headline font-bold text-6xl text-on-surface tracking-tight">Archive</h2>
+<div class="mt-2 flex items-center gap-2" id="storageUsageContainer">
+<span class="material-symbols-outlined text-xs text-outline">storage</span>
+<span class="text-[10px] font-bold uppercase tracking-wider text-outline-variant" id="storageIndicator">Calculating storage...</span>
+</div>
+<div class="mt-1 flex items-center gap-2" id="autoBackupRow">
+<span class="material-symbols-outlined text-xs text-outline">cloud_done</span>
+<span class="text-[10px] text-outline-variant" id="autoBackupLabel">Auto-backup active</span>
+</div>
+</div>
+<button id="driveBtn" onclick="saveToGoogleDrive()" class="bg-white border border-outline-variant/30 text-on-surface px-6 py-4 rounded-xl flex items-center gap-3 hover:bg-surface-container transition-all shadow-sm active:scale-95">
+<svg class="w-5 h-5 shrink-0" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg"><path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8H0c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/><path d="M43.65 25L29.9 1.2C28.55 2 27.4 3.1 26.6 4.5L1.2 48.5C.4 49.9 0 51.45 0 53h27.5z" fill="#00ac47"/><path d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5H59.8l5.85 11.5z" fill="#ea4335"/><path d="M43.65 25L57.4 1.2C56.05.4 54.5 0 52.95 0H34.35c-1.55 0-3.1.45-4.45 1.2z" fill="#00832d"/><path d="M59.8 53H27.5L13.75 76.8c1.35.8 2.9 1.2 4.45 1.2h50.9c1.55 0 3.1-.45 4.45-1.2z" fill="#2684fc"/><path d="M73.4 26.5l-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3L43.65 25 59.8 53h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/></svg>
+<span class="font-headline font-bold">Save to Google Drive</span>
+</button>
+</div>
+</section>
+<!-- Filters Bar -->
+<section class="flex flex-wrap items-center gap-4 mb-10 pb-6 border-b border-outline-variant/15 overflow-x-auto no-scrollbar">
+<button class="flex items-center gap-2 bg-[#C4863A] px-5 py-2.5 rounded-full text-sm font-bold text-white whitespace-nowrap" id="filterAll">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+<span>Type: All</span>
+</button>
+<button class="flex items-center gap-2 bg-surface-container-high px-5 py-2.5 rounded-full text-sm font-bold text-on-surface border border-outline-variant/20 whitespace-nowrap" id="filterRating">
+<span class="material-symbols-outlined text-sm text-primary" style='font-variation-settings: "FILL" 1;'>grade</span>
+<span>Rating: 4.0+</span>
+</button>
+<div class="ml-auto flex items-center gap-4">
+<span class="text-[10px] font-bold uppercase tracking-widest text-outline whitespace-nowrap">Sorted by Date</span>
+<span class="material-symbols-outlined text-primary cursor-pointer">sort</span>
+</div>
+</section>
+<!-- Dynamic Logs Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12" id="logsGrid"></div>
+<!-- Add New Log Callout -->
+<div class="mt-16 text-center">
+<button class="inline-flex items-center gap-3 text-primary font-bold hover:underline group" onclick="showView('view-bake')">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">add_circle</span>
+Record a New Bake
+</button>
+</div>
+<!-- Data Management -->
+<section class="mt-20 border-t border-outline-variant/20 pt-10 space-y-4 pb-4">
+  <p class="text-[10px] font-bold uppercase tracking-widest text-outline mb-6">Data Management</p>
+  <div class="bg-surface-container-low p-5 rounded-2xl border border-outline-variant/15 border-dashed">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="bg-secondary/10 p-3 rounded-xl shrink-0"><span class="material-symbols-outlined text-secondary text-2xl">upload_file</span></div>
+      <div class="flex-1 min-w-0">
+        <h3 class="font-bold text-base text-on-surface">Restore Backup</h3>
+        <p class="text-xs text-on-surface-variant">Restore your bake archive from a saved backup file.</p>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <button id="driveImportBtn" onclick="importFromGoogleDrive()" class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2.5 rounded-xl hover:bg-outline-variant/30 transition-colors font-bold text-xs uppercase tracking-wider">
+        <svg class="w-4 h-4 shrink-0" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg"><path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8H0c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/><path d="M43.65 25L29.9 1.2C28.55 2 27.4 3.1 26.6 4.5L1.2 48.5C.4 49.9 0 51.45 0 53h27.5z" fill="#00ac47"/><path d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5H59.8l5.85 11.5z" fill="#ea4335"/><path d="M43.65 25L57.4 1.2C56.05.4 54.5 0 52.95 0H34.35c-1.55 0-3.1.45-4.45 1.2z" fill="#00832d"/><path d="M59.8 53H27.5L13.75 76.8c1.35.8 2.9 1.2 4.45 1.2h50.9c1.55 0 3.1-.45 4.45-1.2z" fill="#2684fc"/><path d="M73.4 26.5l-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3L43.65 25 59.8 53h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/></svg>
+        Restore from Drive
+      </button>
+      <label class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2.5 rounded-xl cursor-pointer hover:bg-outline-variant/30 transition-colors font-bold text-xs uppercase tracking-wider">
+        <span class="material-symbols-outlined text-sm">attach_file</span>
+        Choose File
+        <input accept=".json" class="hidden" id="importInput" type="file"/>
+      </label>
+    </div>
+  </div>
+  <div class="bg-error/5 p-5 rounded-2xl border border-error/15 flex items-center gap-4">
+    <div class="bg-error/10 p-3 rounded-xl shrink-0"><span class="material-symbols-outlined text-error text-2xl">delete_sweep</span></div>
+    <div class="flex-1 min-w-0">
+      <h3 class="font-bold text-base text-on-surface">Clear Local Data</h3>
+      <p class="text-xs text-on-surface-variant">Permanently wipe all bake records from this device. Export to Google Drive first!</p>
+    </div>
+    <button id="clearDataBtn" class="text-error font-bold text-xs uppercase tracking-widest flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-error/30 hover:bg-error/10 transition-colors shrink-0">
+      <span class="material-symbols-outlined text-sm">warning</span>
+      Clear
+    </button>
+  </div>
+</section>
+</main>
+</div>
+<div id="view-library" class="app-view hidden">
+<main class="max-w-7xl mx-auto px-6 py-12 pb-32">
+<!-- Hero Section -->
+<section class="mb-20">
+<div class="flex flex-col md:flex-row items-end gap-8">
+<div class="w-full md:w-2/3">
+<span class="font-label text-xs uppercase tracking-[0.2em] text-primary font-bold block mb-4">Knowledge &amp; Technique</span>
+<h1 class="font-headline text-5xl md:text-7xl text-on-surface leading-tight mb-6">Pancito y Más Library</h1>
+<p class="text-on-surface-variant text-lg max-w-xl">A curated collection of wisdom for the modern baker, from foundational techniques to the science of fermentation.</p>
+</div>
+<div class="w-full md:w-1/3 flex justify-end">
+<div class="relative w-full aspect-square max-w-[300px] rounded-xl overflow-hidden shadow-2xl rotate-3">
+<img alt="Close up of dusted flour on wooden table" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-science-steam.jpg"/>
+<div class="absolute inset-0 bg-primary/10"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Searchable Glossary Section -->
+<section class="mb-24">
+<div class="bg-surface-container-low rounded-xl p-8 md:p-12 relative overflow-hidden">
+<div class="relative z-10 flex flex-col md:flex-row gap-12 items-start">
+<div class="w-full md:w-1/3">
+<h2 class="font-headline text-3xl mb-4">The Glossary</h2>
+<p class="text-on-surface-variant mb-8">De-coding the language of the sourdough alchemist. Search for techniques, terms, and tools.</p>
+<div class="relative group">
+<input class="w-full bg-surface-container-lowest border-none rounded-lg px-12 py-4 text-on-surface focus:ring-1 focus:ring-primary/40 transition-all placeholder:text-outline shadow-sm" id="glossarySearch" placeholder="Search terms (e.g. Autolyse)" type="text"/>
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary">search</span>
+</div>
+</div>
+<div class="w-full md:w-2/3 flex flex-col">
+<div class="grid grid-cols-1 gap-y-10" id="glossaryGrid">
+<div class="glossary-item"><span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">TECHNIQUE</span><h3 class="font-headline text-xl mb-2">Autolyse</h3><p class="text-sm text-on-surface-variant leading-relaxed">A rest period where flour and water are mixed before adding salt and starter. Encourages enzymatic activity and gluten development.</p></div>
+<div class="glossary-item"><span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">SCIENCE</span><h3 class="font-headline text-xl mb-2">Hooch</h3><p class="text-sm text-on-surface-variant leading-relaxed">The liquid layer that forms on top of an unfed starter. High in alcohol — it means your starter is hungry and needs feeding.</p></div>
+<div class="glossary-item"><span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">CRAFT</span><h3 class="font-headline text-xl mb-2">Banneton</h3><p class="text-sm text-on-surface-variant leading-relaxed">A proofing basket, often rattan or linen-lined, that holds shaped dough and imprints a beautiful spiral pattern on the crust.</p></div>
+<div class="glossary-item"><span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">TEXTURE</span><h3 class="font-headline text-xl mb-2">Open Crumb</h3><p class="text-sm text-on-surface-variant leading-relaxed">The aesthetic goal of many bakers: a light, airy internal structure with large, irregular air pockets throughout the loaf.</p></div>
+<div class="glossary-item"><span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">TECHNIQUE</span><h3 class="font-headline text-xl mb-2">Stretch &amp; Fold</h3><p class="text-sm text-on-surface-variant leading-relaxed">Gentle dough strengthening during bulk fermentation. Stretch the dough up and fold over itself, rotating the bowl each time — no kneading needed.</p></div>
+<div class="glossary-item"><span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">PROCESS</span><h3 class="font-headline text-xl mb-2">Bulk Fermentation</h3><p class="text-sm text-on-surface-variant leading-relaxed">The first rise after mixing. Wild yeast and bacteria ferment the dough at room temperature, building flavor and structure over several hours.</p></div>
+<div class="glossary-item"><span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">BAKING</span><h3 class="font-headline text-xl mb-2">Lame</h3><p class="text-sm text-on-surface-variant leading-relaxed">A razor-sharp blade on a handle used to score bread before baking. The score controls where the loaf opens during oven spring.</p></div>
+<div class="glossary-item"><span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">SCIENCE</span><h3 class="font-headline text-xl mb-2">Oven Spring</h3><p class="text-sm text-on-surface-variant leading-relaxed">The rapid rise that happens in the first 10–15 minutes of baking as trapped gases expand. A dramatic spring means well-fermented dough.</p></div>
+<div class="glossary-item"><span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">STARTER</span><h3 class="font-headline text-xl mb-2">Levain</h3><p class="text-sm text-on-surface-variant leading-relaxed">A pre-ferment built from your starter that is added to the dough. Using a levain gives more control over fermentation rate and flavor profile.</p></div>
+<div class="glossary-item"><span class="font-label text-[10px] text-primary font-extrabold tracking-widest block mb-2">SHAPING</span><h3 class="font-headline text-xl mb-2">Boule &amp; Bâtard</h3><p class="text-sm text-on-surface-variant leading-relaxed">The two classic sourdough shapes. A boule is round; a bâtard is oval. Each requires a different shaping technique and scoring pattern.</p></div>
+</div>
+<div id="siteResults" class="flex flex-col gap-4 mt-8 border-t border-outline-variant/30 pt-6 empty:hidden"></div>
+<div id="glossaryNoResults" class="py-8 text-center hidden">
+<span class="material-symbols-outlined text-3xl text-outline mb-3 block">search_off</span>
+<p class="text-on-surface-variant text-sm">No matching terms. Try a different word.</p>
+</div>
+</div>
+</div>
+<div class="absolute -bottom-12 -right-12 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+</div>
+</section>
+<!-- Featured Card -->
+<section class="mb-24">
+  <a href="https://pancitoymas.com/science-of-steam" target="_blank" class="group relative overflow-hidden rounded-3xl h-[320px] flex items-end shadow-lg">
+    <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Science of Steam" src="https://pancitoymas.com/app/images/featured-science-steam.jpg"/>
+    <div class="absolute inset-0 bg-gradient-to-t from-on-surface/85 via-on-surface/30 to-transparent"></div>
+    <div class="relative p-8 w-full flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+      <div>
+        <span class="font-label text-[10px] text-primary-fixed font-bold uppercase tracking-widest block mb-2">Bake Lab · Featured</span>
+        <h2 class="font-headline text-4xl text-white font-bold mb-2">The Secret of Steam</h2>
+        <p class="text-white/80 text-sm max-w-md">Why the first 10 minutes in the oven make or break your loaf — and how to get it right every single time.</p>
+      </div>
+      <span class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white font-bold px-5 py-2.5 rounded-xl text-sm shrink-0 group-hover:bg-white/30 transition-colors">
+        Read Article <span class="material-symbols-outlined text-sm">arrow_forward</span>
+      </span>
+    </div>
+  </a>
+</section>
+<!-- Video Tutorials -->
+<section class="mb-24">
+<div class="flex justify-between items-end mb-12">
+<h2 class="font-headline text-4xl">Artisan Tutorials</h2>
+<a class="font-label text-sm text-primary font-bold border-b border-primary/20 pb-1 hover:border-primary transition-all flex items-center gap-1.5" href="https://www.tiktok.com/@pancitoymas" target="_blank" rel="noopener">
+  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.95a8.16 8.16 0 0 0 4.77 1.52V7.01a4.85 4.85 0 0 1-1-.32z"/></svg>
+  Watch on TikTok
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<a class="group block" href="https://pancitoymas.com/stretch-and-fold" target="_blank">
+<div class="relative mb-6 overflow-hidden rounded-xl bg-surface-container-high aspect-[4/5] shadow-sm transition-transform duration-500 group-hover:-translate-y-2">
+<img alt="Hands stretching and folding raw dough on counter" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-stretch-fold.jpg" onerror="this.onerror=null;this.src='https://pancitoymas.com/app/images/featured-rise.jpg';"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><div class="w-16 h-16 rounded-full bg-surface/90 flex items-center justify-center text-primary scale-90 group-hover:scale-100 transition-transform duration-300"><span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">menu_book</span></div></div>
+<div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-full"><span class="font-label text-[10px] font-bold tracking-tighter">04:12</span></div>
+</div>
+<span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Foundations</span>
+<h3 class="font-headline text-2xl mb-2 group-hover:text-primary transition-colors">The Stretch &amp; Fold</h3>
+<p class="text-on-surface-variant text-sm">Mastering hydration without the heavy kneading. The core of sourdough structure.</p>
+</a>
+<a class="group block" href="https://pancitoymas.com/scoring-aesthetics" target="_blank">
+<div class="relative mb-6 overflow-hidden rounded-xl bg-surface-container-high aspect-[4/5] shadow-sm transition-transform duration-500 group-hover:-translate-y-2">
+<img alt="Scoring a loaf of bread with a sharp blade" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-scoring.jpg" onerror="this.onerror=null;this.src='https://pancitoymas.com/app/images/featured-rise.jpg';"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><div class="w-16 h-16 rounded-full bg-surface/90 flex items-center justify-center text-primary scale-90 group-hover:scale-100 transition-transform duration-300"><span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">menu_book</span></div></div>
+<div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-full"><span class="font-label text-[10px] font-bold tracking-tighter">08:45</span></div>
+</div>
+<span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Finishing</span>
+<h3 class="font-headline text-2xl mb-2 group-hover:text-primary transition-colors">Scoring Aesthetics</h3>
+<p class="text-on-surface-variant text-sm">A guide to the decorative 'Lame' work that creates beautiful, controlled expansion.</p>
+</a>
+<a class="group block" href="https://pancitoymas.com/starter-revival" target="_blank">
+<div class="relative mb-6 overflow-hidden rounded-xl bg-surface-container-high aspect-[4/5] shadow-sm transition-transform duration-500 group-hover:-translate-y-2">
+<img alt="A jar of active bubbling sourdough starter" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-starter.jpg" onerror="this.onerror=null;this.src='https://pancitoymas.com/app/images/featured-rise.jpg';"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><div class="w-16 h-16 rounded-full bg-surface/90 flex items-center justify-center text-primary scale-90 group-hover:scale-100 transition-transform duration-300"><span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">menu_book</span></div></div>
+<div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-full"><span class="font-label text-[10px] font-bold tracking-tighter">12:30</span></div>
+</div>
+<span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Maintenance</span>
+<h3 class="font-headline text-2xl mb-2 group-hover:text-primary transition-colors">The Starter Revival</h3>
+<p class="text-on-surface-variant text-sm">How to bring a neglected starter back from the brink of dormancy.</p>
+</a>
+</div>
+</section>
+<!-- Troubleshooting Grid -->
+<section class="mb-24">
+<h2 class="font-headline text-4xl mb-12">The Troubleshooting Guide</h2>
+<div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-6 h-full md:h-[600px]">
+<a href="https://pancitoymas.com/troubleshoot-rise" target="_blank" class="md:col-span-2 md:row-span-2 bg-surface-container-highest rounded-xl p-8 flex flex-col justify-between group hover:bg-surface-container-high transition-colors">
+<div><span class="material-symbols-outlined text-4xl text-primary mb-6">trending_down</span><h3 class="font-headline text-3xl mb-4 leading-tight">"Why didn't my bread rise?"</h3><p class="text-on-surface-variant mb-8">Investigating the three most common culprits: weak starter, improper proofing temperature, or over-fermentation.</p></div>
+<span class="flex items-center gap-3 font-label text-sm font-bold text-primary self-start group-hover:gap-4 transition-all">Read Guide <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
+</a>
+<a href="https://pancitoymas.com/troubleshoot-sticky" target="_blank" class="md:col-span-2 bg-secondary-container rounded-xl p-8 flex items-center gap-6 group hover:opacity-90 transition-opacity">
+<div class="flex-1"><h3 class="font-headline text-xl mb-2">Dough is too sticky?</h3><p class="text-xs text-on-secondary-container leading-relaxed">It's likely a hydration mismatch with your specific brand of flour. Try the 'Rubaud' method.</p></div>
+<div class="w-20 h-20 bg-surface/30 rounded-full flex items-center justify-center text-secondary group-hover:scale-110 transition-transform"><span class="material-symbols-outlined text-3xl">water_drop</span></div>
+</a>
+<a href="https://pancitoymas.com/troubleshoot-crust" target="_blank" class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-center text-center group hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-2xl text-primary mb-3 group-hover:scale-110 transition-transform">oven_gen</span><h4 class="font-headline text-lg mb-1">Tough Crust</h4><p class="text-[10px] uppercase tracking-widest opacity-60">Lack of Steam</p></a>
+<a href="https://pancitoymas.com/troubleshoot-gummy" target="_blank" class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-center text-center group hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-2xl text-primary mb-3 group-hover:scale-110 transition-transform">texture</span><h4 class="font-headline text-lg mb-1">Gummy Texture</h4><p class="text-[10px] uppercase tracking-widest opacity-60">Internal Temp</p></a>
+</div>
+</section>
+<!-- Free eBook -->
+<section class="mb-12">
+  <div class="relative overflow-hidden rounded-3xl bg-on-surface">
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 20% 50%, #c4863a 0%, transparent 50%), radial-gradient(circle at 80% 20%, #875305 0%, transparent 40%);"></div>
+    <div class="relative flex flex-col md:flex-row items-center gap-0">
+      <div class="w-full md:w-2/5 flex items-center justify-center p-8 md:p-12">
+        <div class="relative">
+          <div class="absolute inset-0 bg-primary/30 rounded-2xl blur-2xl scale-95 translate-y-4"></div>
+          <img src="https://pancitoymas.com/wp-content/uploads/2025/11/Brown-Minimalist-Social-Media-E-book-Facebook-Post-1024x858.png" alt="Pancito y Más Free eBook" class="relative w-full max-w-[260px] rounded-2xl shadow-2xl mx-auto"/>
+        </div>
+      </div>
+      <div class="w-full md:w-3/5 p-8 md:p-12 md:pl-0 flex flex-col items-start">
+        <span class="font-label text-[10px] uppercase tracking-[0.2em] text-primary-fixed font-extrabold mb-4 block">Free eBook</span>
+        <h2 class="font-headline text-4xl text-white font-bold mb-3 leading-tight">A Sourdough Starter Journey</h2>
+        <p class="font-label text-sm text-primary-fixed font-bold mb-4">Learn how to create your first loaf in 10 days!</p>
+        <p class="text-white/70 text-base leading-relaxed mb-8">Sign in with Google, LinkedIn, Microsoft, or Email to get instant access to your free guide.</p>
+        <a href="https://pancitoymas.com/thank-you-ebook-download/" target="_blank" class="inline-flex items-center gap-3 bg-white text-on-surface font-bold px-7 py-4 rounded-xl shadow-lg active:scale-95 transition-transform text-sm">
+          <span class="material-symbols-outlined text-primary text-xl">download</span>
+          Download Your Copy Now
+        </a>
+        <p class="text-white/40 text-xs mt-4">Free · Instant access · Sign in with Google, LinkedIn or Email</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Equipment Guides -->
+<section class="space-y-5">
+  <div class="flex justify-between items-center">
+    <div>
+      <span class="font-label text-[10px] uppercase tracking-widest text-primary font-bold block mb-1">Baker's Tools</span>
+      <h2 class="font-headline text-3xl text-on-surface">Equipment Guides</h2>
+    </div>
+    <a href="https://www.amazon.com/dp/B0FZWXPXF6?maas=maas_adg_9469FAF870BAA9D072E90EE503019C38_afap_abs&ref_=aa_maas&tag=maas" target="_blank" class="inline-flex items-center gap-1.5 bg-gradient-to-br from-[#875305] to-[#c4863a] text-white px-4 py-2.5 rounded-xl font-bold text-sm shadow-lg active:scale-95 transition-transform">
+      <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">shopping_bag</span>
+      Get the Kit
+    </a>
+  </div>
+  <a href="https://pancitoymas.com/banneton" target="_blank" class="group relative overflow-hidden rounded-2xl h-[220px] flex items-end block">
+    <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="The Banneton" src="https://pancitoymas.com/wp-content/uploads/2026/03/%E9%9D%A2%E5%8C%85%E7%AF%AE.jpg"/>
+    <div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 via-on-surface/20 to-transparent"></div>
+    <div class="relative p-6 w-full"><h3 class="font-headline text-2xl text-white font-bold mb-1">The Banneton</h3><p class="text-white/80 text-sm">Shape your dough and achieve that beautiful characteristic spiral crust.</p><span class="inline-flex items-center gap-1 mt-2 text-primary-fixed font-bold uppercase text-[10px] tracking-widest">Read Guide <span class="material-symbols-outlined text-sm">arrow_forward</span></span></div>
+  </a>
+  <div class="grid grid-cols-2 gap-4">
+    <a href="https://pancitoymas.com/lame" target="_blank" class="group relative overflow-hidden rounded-2xl h-[180px]">
+      <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="The Lame" src="https://pancitoymas.com/wp-content/uploads/2026/03/%E5%89%B2%E5%88%80%E7%BB%86%E8%8A%82.jpg"/>
+      <div class="absolute inset-0 bg-gradient-to-t from-on-tertiary-container/90 via-transparent to-transparent"></div>
+      <div class="absolute bottom-0 p-4"><h3 class="font-headline text-lg text-white font-bold mb-0.5">The Lame</h3><p class="text-white/70 text-xs">Master sourdough scoring.</p></div>
+    </a>
+    <a href="https://pancitoymas.com/bench-scraper" target="_blank" class="group relative overflow-hidden rounded-2xl h-[180px]">
+      <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Bench Scraper" src="https://pancitoymas.com/wp-content/uploads/2026/03/%E5%8D%8A%E5%9C%86%E5%89%B2%E5%88%80.jpg"/>
+      <div class="absolute inset-0 bg-gradient-to-t from-secondary/90 via-transparent to-transparent"></div>
+      <div class="absolute bottom-0 p-4"><h3 class="font-headline text-lg text-white font-bold mb-0.5">Bench Scraper</h3><p class="text-white/70 text-xs">Shape high-hydration dough.</p></div>
+    </a>
+  </div>
+  <a href="https://pancitoymas.com/bread-sling" target="_blank" class="group relative overflow-hidden rounded-2xl h-[200px] flex items-end block">
+    <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Bread Sling" src="https://pancitoymas.com/wp-content/uploads/2026/03/%E7%A1%85%E8%83%B6%E5%90%8A%E5%B8%A6-1140x1140.jpg"/>
+    <div class="absolute inset-0 bg-gradient-to-t from-on-primary-container/80 via-transparent to-transparent"></div>
+    <div class="relative p-6 w-full flex justify-between items-end">
+      <div><h3 class="font-headline text-2xl text-white font-bold mb-1">Bread Sling</h3><p class="text-white/80 text-sm">Transfer your loaf to the blazing Dutch oven with ease and safety.</p></div>
+      <span class="material-symbols-outlined text-white text-3xl opacity-50">oven_gen</span>
+    </div>
+  </a>
+</section>
+</main>
+</div>
+<div id="view-achievements" class="app-view hidden">
+<main class="max-w-7xl mx-auto px-6 pt-10 pb-36 space-y-8">
+  <section>
+    <p class="font-label text-primary font-bold uppercase tracking-widest text-xs mb-2">Your Journey</p>
+    <h2 class="font-headline text-4xl text-on-surface font-bold leading-tight">Trophy Case</h2>
+    <p class="mt-2 text-sm text-on-surface-variant max-w-sm">Every badge is earned, never purchased. Tap a locked badge to see how to unlock it.</p>
+  </section>
+  <!-- Level + Progress Card -->
+  <section class="bg-gradient-to-br from-[#875305] to-[#c4863a] rounded-2xl p-6 text-white relative overflow-hidden">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-[10px] font-bold uppercase tracking-widest text-white/60 mb-1">Baker Level</p>
+        <p class="font-headline text-3xl font-bold italic" id="level-title">Flour Dabbler</p>
+        <p class="text-xs text-white/70 mt-1 max-w-[220px]" id="level-hint">Start your first bake to level up.</p>
+      </div>
+      <div class="relative w-16 h-16 flex-shrink-0">
+        <svg class="w-16 h-16" viewBox="0 0 64 64">
+          <circle cx="32" cy="32" r="28" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="4"/>
+          <circle class="progress-ring-circle" cx="32" cy="32" r="28" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-dasharray="176" id="level-ring" stroke-dashoffset="176"/>
+        </svg>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <span class="font-headline text-xl font-bold" id="level-num">1</span>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-base text-white/70" style="font-variation-settings:'FILL' 1;">workspace_premium</span>
+      <span class="text-sm font-bold" id="badge-count-label">0 of 17 badges unlocked</span>
+    </div>
+    <div class="absolute -right-8 -bottom-8 w-40 h-40 rounded-full bg-white/5"></div>
+    <div class="absolute -right-2 -bottom-14 w-28 h-28 rounded-full bg-white/5"></div>
+  </section>
+  <!-- Badge Grid -->
+  <section>
+    <p class="font-label text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-4">All Badges</p>
+    <div class="grid grid-cols-3 gap-3" id="badge-grid"></div>
+  </section>
+  <div class="text-center text-xs text-on-surface-variant opacity-60 pb-2">Tap any badge to see its story</div>
+</main>
+</div>
+
+<!-- Archive detail modal (fixed, lives outside views so display:none on view doesn't hide it) -->
+<div class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 modal-overlay" id="logModal">
+<div class="bg-background rounded-[2rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl relative">
+<button class="absolute top-6 right-6 z-10 bg-white/80 backdrop-blur rounded-full p-2 hover:bg-white transition-colors shadow-sm" onclick="closeModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div id="modalContent"></div>
+</div>
+</div>
+
+<!-- Badge tooltip (fixed, lives outside views) -->
+<div class="badge-tooltip" id="badge-tooltip"></div>
 
 <!-- BottomNavBar (persistent, outside views) -->
 <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]">
@@ -2017,6 +2369,408 @@
     restoreRestTimer();
     restoreRoundTimers();
     restoreStaticTimer();
+  }
+</script>
+
+<script>
+  // ════════════════════════════════════════════════════════
+  // Archive view
+  // ════════════════════════════════════════════════════════
+  var _archiveInited = false;
+  var filterActive = false;
+  var currentLogs  = [];
+
+  const GDRIVE_CLIENT_ID   = '';
+  const BACKUP_FOLDER_NAME = 'Pancito y Más Backups';
+  const DRIVE_API  = 'https://www.googleapis.com/drive/v3';
+  const UPLOAD_API = 'https://www.googleapis.com/upload/drive/v3';
+  let _driveToken = null, _driveTokenExp = 0;
+
+  var _memoryStore = {};
+  const storage = (function() {
+    try { localStorage.getItem('__pym_test__'); return localStorage; }
+    catch(e) { return { getItem: k => _memoryStore[k]||null, setItem: (k,v) => { _memoryStore[k]=v; }, removeItem: k => { delete _memoryStore[k]; } }; }
+  })();
+
+  function getLogs() {
+    try { const raw = localStorage.getItem('pym_logs'); if (!raw) return []; const p = JSON.parse(raw); return Array.isArray(p) ? p : []; } catch(e) { return []; }
+  }
+
+  function saveLogs(logs) {
+    try { localStorage.setItem('pym_logs', JSON.stringify(logs)); } catch(e) {}
+    autoBackup(logs); updateStorageIndicator(); renderLogs();
+  }
+
+  function updateStorageIndicator() {
+    const logs = getLogs(), count = logs.length;
+    const sizeInBytes = new Blob([JSON.stringify(logs)]).size;
+    const sizeInKb = (sizeInBytes / 1024).toFixed(1);
+    const indicator = document.getElementById('storageIndicator');
+    if (!indicator) return;
+    const percent = Math.min(100, (sizeInBytes / (5*1024*1024)) * 100).toFixed(1);
+    const rawCheck = (() => { try { const d = localStorage.getItem('pym_logs'); if (d===null) return 'key missing'; const arr = JSON.parse(d); return Array.isArray(arr) ? `${arr.length} entries` : 'not-an-array'; } catch(_) { return 'parse-error'; } })();
+    indicator.innerText = `${count} bakes stored · ${sizeInKb} KB · raw check: ${rawCheck}`;
+    if (percent > 80) { indicator.classList.remove('text-outline-variant'); indicator.classList.add('text-error'); }
+    else { indicator.classList.add('text-outline-variant'); indicator.classList.remove('text-error'); }
+  }
+
+  function renderStars(rating) {
+    const r = parseFloat(rating)||0; let stars = '';
+    for (let i=1; i<=5; i++) { const f = i<=Math.round(r); stars += `<span class="material-symbols-outlined text-xs ${f?'text-primary':'text-outline-variant'}" style="font-variation-settings: 'FILL' ${f?1:0}">star</span>`; }
+    return stars;
+  }
+
+  function renderLogs() {
+    const grid = document.getElementById('logsGrid'); if (!grid) return;
+    let logs; try { logs = getLogs(); } catch(e) { logs = []; }
+    if (!Array.isArray(logs)) logs = [];
+    if (filterActive) logs = logs.filter(l => parseFloat(l.rating) >= 4.0);
+    currentLogs = [...logs].sort((a,b) => new Date(b.date)-new Date(a.date));
+
+    if (currentLogs.length === 0) {
+      if (filterActive) {
+        grid.innerHTML = `<div class="col-span-full py-20 flex flex-col items-center text-center"><span class="text-7xl mb-4">⭐</span><h3 class="font-headline text-3xl text-on-surface mb-3">No bakes match this filter</h3><p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-6">The <strong>Rating 4.0+</strong> filter is active. Tap <strong>Type: All</strong> above to see everything.</p><button onclick="_setRatingFilter(false)" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">Show All Bakes</button></div>`;
+      } else {
+        const _diagRaw = (() => { try { const d=localStorage.getItem('pym_logs'); if (d===null) return '(key not found)'; const arr=JSON.parse(d); return Array.isArray(arr)?`${arr.length} bake(s) in storage`:'(not an array)'; } catch(e) { return '(parse error: '+e.message+')'; } })();
+        grid.innerHTML = `<div class="col-span-full py-20 flex flex-col items-center text-center"><span class="text-7xl mb-4">🍞</span><h3 class="font-headline text-3xl text-on-surface mb-3">Your first loaf is waiting!</h3><p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-2">Every great baker started exactly where you are right now. This is where all your bakes will live.</p><p class="text-on-surface-variant/70 text-sm max-w-xs mx-auto mb-8">Complete your first bake and hit <strong>Save to Archive</strong> at the end to see it appear here.</p><button onclick="showView('view-bake')" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">Start My First Bake →</button><p style="margin-top:24px;font-size:11px;color:#c9b8a8;font-family:monospace">diag: ${_diagRaw}</p></div>`;
+      }
+      return;
+    }
+
+    grid.innerHTML = currentLogs.map((log, index) => {
+      const displayDate = log.date ? new Date(log.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}).toUpperCase() : 'UNKNOWN DATE';
+      const recipeTitle = log.recipe||'Untitled Bake', ratingValue = log.rating||'0', commentsText = log.comments||'No comments recorded.';
+      const photoContent = log.photo
+        ? `<img alt="${recipeTitle}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="${log.photo}"/>`
+        : `<div class="w-full h-full flex flex-col items-center justify-center" style="background:linear-gradient(145deg,#f5e8c8 0%,#e8d2a0 50%,#c8a96b 100%)"><span class="material-symbols-outlined" style="font-size:56px;color:rgba(135,83,5,0.3);font-variation-settings:'FILL' 1">bakery_dining</span><p style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(135,83,5,0.35);margin-top:8px">No photo</p></div>`;
+      return `<div class="group cursor-pointer" style="animation-delay:${index*50}ms" onclick="openDetails('${log.id||index}')">
+        <div class="relative mb-6"><div class="aspect-square overflow-hidden rounded-[2.5rem] bg-surface-container-low shadow-sm group-hover:shadow-2xl transition-all duration-500">${photoContent}</div>
+        <div class="absolute top-6 right-6 bg-white/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-1 shadow-sm border border-black/5"><span class="text-xs font-bold text-on-surface">${ratingValue}</span><span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings:'FILL' 1;">grade</span></div></div>
+        <div class="space-y-3 px-2"><div class="flex justify-between items-start"><div class="flex-1 min-w-0"><span class="text-[10px] font-bold uppercase tracking-widest text-primary/60">${displayDate}</span><h3 class="font-headline text-3xl font-bold text-on-surface group-hover:text-primary transition-colors truncate" title="${recipeTitle}">${recipeTitle}</h3></div>
+        <button onclick="event.stopPropagation();deleteLog('${log.id||index}')" class="text-outline/40 hover:text-error transition-colors p-2" title="Remove Entry"><span class="material-symbols-outlined text-lg">delete</span></button></div>
+        <div class="flex items-center gap-0.5">${renderStars(ratingValue)}</div>
+        <p class="text-sm text-on-surface-variant line-clamp-2 italic font-headline leading-relaxed">"${commentsText}"</p>
+        <div class="flex flex-wrap gap-2 pt-1">${log.hydration?`<span class="bg-surface-container-high px-3 py-1 rounded-lg text-[10px] font-bold uppercase text-on-surface-variant">${log.hydration}% Hydration</span>`:''} ${log.flourType?`<span class="bg-surface-container-high px-3 py-1 rounded-lg text-[10px] font-bold uppercase text-on-surface-variant">${log.flourType}</span>`:''}</div></div></div>`;
+    }).join('');
+  }
+
+  window.openDetails = function(id) {
+    const log = currentLogs.find((l,idx) => (l.id===id||idx.toString()===id)); if (!log) return;
+    const modal = document.getElementById('logModal'), content = document.getElementById('modalContent');
+    const photo = log.photo||null;
+    const displayDate = new Date(log.date).toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    const hydrationVal=log.hydration||'--', bulkVal=log.bulkTime||log.total_bulk_time||'--', tempVal=log.temp||log.initial_temp||'--';
+    const coldProofVal=log.coldProofTime?parseFloat(log.coldProofTime).toFixed(1):'--';
+    const bakeTimeVal=log.bakeTime?(parseFloat(log.bakeTime)*60).toFixed(0):'--';
+    const bakeTempVal=log.bakeTemp?`${log.bakeTemp}°F`:'--';
+    const ingr=log.ingredients;
+    const ingrHtml = ingr
+      ? `<div class="grid grid-cols-2 gap-3"><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Flour</p><p class="font-bold text-primary">${ingr.flour||'--'}</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Water</p><p class="font-bold text-primary">${ingr.water||'--'}</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Starter</p><p class="font-bold text-primary">${ingr.starter||'--'}</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Salt</p><p class="font-bold text-primary">${ingr.salt||'--'}</p></div></div>`
+      : `<div class="flex flex-wrap gap-2"><span class="bg-[#f2ede3] px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider">Flour: ${log.flourType||'Artisan Bread'}</span><span class="bg-[#f2ede3] px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider">Hydration: ${hydrationVal}%</span><span class="bg-[#f2ede3] px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider">Salt: ${log.salt||'2'}%</span></div>`;
+    content.innerHTML = `<div class="w-full overflow-hidden" style="max-height:320px">${photo?`<img src="${photo}" alt="${log.recipe}" class="w-full h-full object-cover" style="max-height:320px">`:`<div style="height:220px;background:linear-gradient(145deg,#f5e8c8,#e8d2a0,#c8a96b);display:flex;flex-direction:column;align-items:center;justify-content:center"><span class="material-symbols-outlined" style="font-size:64px;color:rgba(135,83,5,0.28);font-variation-settings:'FILL' 1">bakery_dining</span><p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(135,83,5,0.35);margin-top:10px">No photo recorded</p></div>`}</div>
+    <div class="p-8"><span class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary block mb-1">${displayDate}</span><h2 class="font-headline text-3xl font-bold text-on-surface leading-tight mb-6">${log.recipe||'Untitled Bake'}</h2>
+    <div class="grid grid-cols-2 gap-4 mb-4"><div class="bg-primary/5 border border-primary/15 rounded-2xl p-5 flex flex-col items-center justify-center text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-2">Score</p><div class="flex items-center gap-1 mb-1">${renderStars(log.rating)}</div><span class="text-3xl font-bold text-primary">${parseFloat(log.rating||0).toFixed(1)}</span></div>
+    <div class="bg-primary/5 border border-primary/15 rounded-2xl p-5 flex flex-col items-center justify-center text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-2">Bulk Fermentation</p><span class="material-symbols-outlined text-primary text-3xl mb-1">schedule</span><span class="text-2xl font-bold text-primary">${bulkVal} hrs</span></div></div>
+    <div class="grid grid-cols-3 gap-3 mb-8"><div class="bg-secondary-container/20 border border-secondary-container/30 p-4 rounded-2xl flex flex-col items-center justify-center text-center"><span class="material-symbols-outlined text-secondary text-xl mb-1">ac_unit</span><p class="text-[8px] font-bold uppercase tracking-widest text-outline mb-1">Cold Proof</p><span class="text-lg font-bold text-secondary">${coldProofVal} hrs</span></div><div class="bg-secondary-container/20 border border-secondary-container/30 p-4 rounded-2xl flex flex-col items-center justify-center text-center"><span class="material-symbols-outlined text-secondary text-xl mb-1">local_fire_department</span><p class="text-[8px] font-bold uppercase tracking-widest text-outline mb-1">Bake Time</p><span class="text-lg font-bold text-secondary">${bakeTimeVal} min</span></div><div class="bg-secondary-container/20 border border-secondary-container/30 p-4 rounded-2xl flex flex-col items-center justify-center text-center"><span class="material-symbols-outlined text-secondary text-xl mb-1">device_thermostat</span><p class="text-[8px] font-bold uppercase tracking-widest text-outline mb-1">Oven Temp</p><span class="text-lg font-bold text-secondary">${bakeTempVal}</span></div></div>
+    <div class="mb-8"><h4 class="text-[10px] font-bold uppercase tracking-widest text-secondary mb-4 border-b border-outline-variant/10 pb-2">Ingredients Used</h4>${ingrHtml}</div>
+    <div class="grid grid-cols-3 gap-3 mb-8"><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Hydration</p><p class="font-bold text-primary">${hydrationVal}%</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Dough Temp</p><p class="font-bold text-primary">${tempVal}°F</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Flour Type</p><p class="font-bold text-primary text-xs">${log.flourType||'Bread Flour'}</p></div></div>
+    <div class="mb-8"><h4 class="text-[10px] font-bold uppercase tracking-widest text-secondary mb-4 border-b border-outline-variant/10 pb-2">Baker's Notes</h4><div class="bg-surface-container-high/30 p-6 rounded-[1.5rem] border-l-4 border-primary italic text-on-surface-variant font-headline text-base leading-relaxed">"${log.comments||'No notes were recorded for this bake.'}"</div></div>
+    <button class="w-full bg-primary text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-xl shadow-primary/20" onclick="closeModal()"><span class="material-symbols-outlined">check</span>Close Entry</button></div>`;
+    modal.classList.remove('hidden'); document.body.style.overflow = 'hidden';
+  };
+
+  window.closeModal = function() { document.getElementById('logModal').classList.add('hidden'); document.body.style.overflow = ''; };
+
+  function autoBackup(logs) { try { const json=JSON.stringify(logs); storage.setItem('pym_auto_backup',json); storage.setItem('pym_auto_backup_time',Date.now()); updateBackupLabel(); } catch(e) {} }
+
+  function updateBackupLabel() {
+    const ts = parseInt(storage.getItem('pym_auto_backup_time')||'0'), label = document.getElementById('autoBackupLabel'); if (!label) return;
+    if (!ts) { label.textContent='Auto-backup active'; return; }
+    const mins = Math.round((Date.now()-ts)/60000);
+    if (mins<2) label.textContent='Auto-backed up just now';
+    else if (mins<60) label.textContent=`Auto-backed up ${mins}m ago`;
+    else label.textContent=`Auto-backed up ${Math.floor(mins/60)}h ago`;
+  }
+
+  if (GDRIVE_CLIENT_ID) { const _gis=document.createElement('script'); _gis.src='https://accounts.google.com/gsi/client'; document.head.appendChild(_gis); }
+
+  function _getDriveToken() {
+    if (_driveToken && Date.now()<_driveTokenExp) return Promise.resolve(_driveToken);
+    if (!GDRIVE_CLIENT_ID||!window.google?.accounts?.oauth2) return Promise.reject(new Error('no_client'));
+    return new Promise((resolve,reject) => { google.accounts.oauth2.initTokenClient({ client_id:GDRIVE_CLIENT_ID, scope:'https://www.googleapis.com/auth/drive.file', callback: r => { if(r.error){reject(new Error(r.error));return;} _driveToken=r.access_token; _driveTokenExp=Date.now()+((r.expires_in||3600)-60)*1000; resolve(_driveToken); } }).requestAccessToken(); });
+  }
+  async function _driveReq(method,path,body,ctype,useUpload) {
+    const base=useUpload?UPLOAD_API:DRIVE_API, opts={method,headers:{Authorization:`Bearer ${_driveToken}`}};
+    if(body){opts.body=body;opts.headers['Content-Type']=ctype;}
+    const r=await fetch(base+path,opts);
+    if(r.status===401){_driveToken=null;await _getDriveToken();opts.headers.Authorization=`Bearer ${_driveToken}`;return fetch(base+path,opts);}
+    return r;
+  }
+  async function _getOrCreateFolder() {
+    const q=`name='${BACKUP_FOLDER_NAME.replace(/'/g,"\\'")}' and mimeType='application/vnd.google-apps.folder' and trashed=false`;
+    const r=await _driveReq('GET',`/files?q=${encodeURIComponent(q)}&fields=files(id)`), {files}=await r.json();
+    if(files?.length) return files[0].id;
+    const cr=await _driveReq('POST','/files',JSON.stringify({name:BACKUP_FOLDER_NAME,mimeType:'application/vnd.google-apps.folder'}),'application/json');
+    return (await cr.json()).id;
+  }
+  async function _uploadToDrive(name,content,folderId) {
+    const boundary='pym_bkp', meta=JSON.stringify({name,parents:[folderId]});
+    const body=`--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n--${boundary}\r\nContent-Type: application/json\r\n\r\n${content}\r\n--${boundary}--`;
+    const r=await _driveReq('POST','/files?uploadType=multipart&fields=id,name',body,`multipart/related; boundary="${boundary}"`,true);
+    if(!r.ok) throw new Error('upload_failed'); return r.json();
+  }
+  async function _listDriveBackups() {
+    const fid=await _getOrCreateFolder(), q=`'${fid}' in parents and trashed=false`;
+    const r=await _driveReq('GET',`/files?q=${encodeURIComponent(q)}&fields=files(id,name,modifiedTime,size)&orderBy=modifiedTime desc`);
+    return (await r.json()).files||[];
+  }
+  async function _downloadDriveFile(fileId) { const r=await _driveReq('GET',`/files/${fileId}?alt=media`); if(!r.ok) throw new Error('download_failed'); return r.text(); }
+
+  function _showInfoSheet(icon,title,bodyHtml,btnLabel) {
+    const el=document.createElement('div'); el.className='fixed inset-0 z-[200] flex items-end justify-center'; el.style.background='rgba(44,24,16,0.5)';
+    el.innerHTML=`<div class="bg-background rounded-t-[2rem] w-full max-w-lg p-7 shadow-2xl"><div class="flex items-start gap-4 mb-6"><div class="bg-primary/10 p-3 rounded-xl shrink-0"><span class="material-symbols-outlined text-primary text-2xl">${icon}</span></div><div><h3 class="font-headline font-bold text-lg text-on-surface">${title}</h3><div class="text-sm text-on-surface-variant mt-2 leading-relaxed">${bodyHtml}</div></div></div><button class="w-full py-3.5 bg-primary text-white rounded-2xl font-bold text-sm active:scale-95 transition-transform" onclick="this.closest('.fixed').remove()">${btnLabel}</button></div>`;
+    el.addEventListener('click',e=>{if(e.target===el)el.remove();}); document.body.appendChild(el);
+  }
+
+  async function saveToGoogleDrive() {
+    const logs=getLogs(); if(!logs.length){_pymToast('No bakes to back up yet — record your first bake first!');return;}
+    const filename=`pancito-backup-${new Date().toISOString().split('T')[0]}.json`, content=JSON.stringify(logs,null,2);
+    const btn=document.getElementById('driveBtn'), origHTML=btn.innerHTML;
+    const setBtn=(icon,text,busy)=>{btn.disabled=busy;btn.innerHTML=`<span class="material-symbols-outlined${busy?' animate-spin':''}">${icon}</span><span class="font-headline font-bold">${text}</span>`;};
+    if(GDRIVE_CLIENT_ID){setBtn('sync','Signing in to Drive…',true);try{await _getDriveToken();setBtn('cloud_upload','Uploading…',true);const fid=await _getOrCreateFolder();await _uploadToDrive(filename,content,fid);storage.setItem('pym_auto_backup_time',Date.now());updateBackupLabel();setBtn('check_circle','Saved to Drive!',false);setTimeout(()=>{btn.innerHTML=origHTML;btn.disabled=false;},3000);return;}catch(e){btn.innerHTML=origHTML;btn.disabled=false;if(e.name==='AbortError')return;}}
+    const blob=new Blob([content],{type:'application/json'}), file=new File([blob],filename,{type:'application/json'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'Pancito y Más Backup',text:`${logs.length} bake entries`});storage.setItem('pym_auto_backup_time',Date.now());updateBackupLabel();setBtn('check_circle','Backup shared!',false);setTimeout(()=>{btn.innerHTML=origHTML;btn.disabled=false;},2000);setTimeout(()=>_showInfoSheet('drive_folder','Backup saved to Google Drive',`Your file is in <strong>Google Drive → My Drive</strong>.<br><br>File name: <code style="font-size:11px">${filename}</code><br><br><strong>To restore:</strong> tap <em>Restore from Drive</em> below, or tap <em>Choose File</em> → Google Drive → My Drive.`,'Got it'),800);return;}catch(e){if(e.name==='AbortError')return;}}
+    const url=URL.createObjectURL(blob), a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    setBtn('download','Downloaded!',false); setTimeout(()=>{btn.innerHTML=origHTML;btn.disabled=false;},3000);
+    _showInfoSheet('folder_open','Backup saved to Downloads folder',`File: <code style="font-size:11px">${filename}</code><br><br>Your backup is on this device's <strong>Downloads folder</strong>.<br><br><strong>To upload to Google Drive:</strong> Open your <em>Files</em> app → Downloads → long-press → Share → Google Drive.`,'Got it');
+  }
+
+  async function importFromGoogleDrive() {
+    if(!GDRIVE_CLIENT_ID){_showInfoSheet('help','How to restore from Google Drive',`Tap <strong>Choose File</strong> below.<br><br>In the file picker, browse to <em>Google Drive → My Drive</em> and select your backup file (named <em>pancito-backup-YYYY-MM-DD.json</em>).`,'Got it');return;}
+    const btn=document.getElementById('driveImportBtn'), origHTML=btn?btn.innerHTML:'';
+    if(btn){btn.disabled=true;btn.innerHTML='<span class="material-symbols-outlined animate-spin" style="font-size:14px">sync</span> Loading…';}
+    try{await _getDriveToken();const files=await _listDriveBackups();if(!files.length){_showInfoSheet('search_off','No backups found in Drive',`No backup files were found in your <em>Pancito y Más Backups</em> folder.`,'OK');return;}_showDriveFilePicker(files);}
+    catch(e){if(e.name!=='AbortError'){_showInfoSheet('error','Could not connect to Google Drive','Check your internet connection and try again, or use <em>Choose File</em> to restore from your device.','OK');}}
+    finally{if(btn){btn.disabled=false;btn.innerHTML=origHTML;}}
+  }
+
+  function _showDriveFilePicker(files) {
+    const fmt=iso=>new Date(iso).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
+    const fmtB=b=>+b>1048576?`${(+b/1048576).toFixed(1)} MB`:`${Math.round(+b/1024)} KB`;
+    const el=document.createElement('div'); el.id='drivePickerModal'; el.className='fixed inset-0 z-[200] flex items-end justify-center'; el.style.background='rgba(44,24,16,0.5)';
+    el.innerHTML=`<div class="bg-background rounded-t-[2rem] w-full max-w-lg shadow-2xl" style="max-height:80vh;display:flex;flex-direction:column"><div class="p-6 border-b border-outline-variant/20 shrink-0"><div class="w-10 h-1 bg-outline-variant rounded-full mx-auto mb-4"></div><h3 class="font-headline font-bold text-lg">Restore from Drive</h3><p class="text-xs text-on-surface-variant mt-1">Choose a backup to restore</p></div><div class="overflow-y-auto flex-1 p-4 space-y-2">${files.map(f=>`<button onclick="_selectDriveFile('${f.id}','${f.name.replace(/'/g,"\\'")}');document.getElementById('drivePickerModal').remove();" class="w-full text-left flex items-center gap-4 p-4 rounded-2xl hover:bg-surface-container-high active:scale-95 transition-all border border-outline-variant/20"><span class="material-symbols-outlined text-primary text-2xl shrink-0">backup</span><div class="flex-1 min-w-0"><div class="font-bold text-sm truncate">${f.name}</div><div class="text-xs text-on-surface-variant">${fmt(f.modifiedTime)}${f.size?' · '+fmtB(f.size):''}</div></div><span class="material-symbols-outlined text-outline text-base">chevron_right</span></button>`).join('')}</div><div class="p-4 border-t border-outline-variant/10 shrink-0"><button class="w-full py-3 text-sm font-bold text-on-surface-variant" onclick="document.getElementById('drivePickerModal').remove()">Cancel</button></div></div>`;
+    el.addEventListener('click',e=>{if(e.target===el)el.remove();}); document.body.appendChild(el);
+  }
+
+  window._selectDriveFile = async function(fileId,name) {
+    try { const text=await _downloadDriveFile(fileId), imported=JSON.parse(text); if(!Array.isArray(imported)) throw new Error('invalid');
+      if(confirm(`Found ${imported.length} bake entries in "${name}".\nMerge with existing archive?`)){const merged=[...getLogs(),...imported].map((item,i)=>({...item,id:item.id||`log-${Date.now()}-${i}`}));const unique=[...new Map(merged.map(m=>[m.id||(m.date+m.recipe),m])).values()];saveLogs(unique);alert(`Restored ${imported.length} entries!`);}
+    } catch(e) { alert('Could not read the backup file. It may be corrupted or in the wrong format.'); }
+  };
+
+  function _pymConfirm(html,okLabel,okColor,onOk) {
+    const ov=document.createElement('div'); ov.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(44,24,16,0.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1.5rem';
+    ov.innerHTML=`<div style="background:#fef9ef;border-radius:1.5rem;padding:1.75rem 1.5rem;max-width:320px;width:100%;box-shadow:0 25px 60px rgba(0,0,0,0.22);font-family:'Plus Jakarta Sans',sans-serif"><p style="font-size:14px;color:#514538;line-height:1.65;margin-bottom:1.25rem">${html}</p><div style="display:flex;gap:10px"><button onclick="this.closest('[style]').remove()" style="flex:1;padding:13px;border-radius:12px;border:2px solid #d6c3b3;background:transparent;font-weight:700;font-size:13px;color:#847466;cursor:pointer;font-family:inherit">Cancel</button><button id="_pymOkBtn" style="flex:1;padding:13px;border-radius:12px;background:${okColor||'#B3261E'};color:#fff;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">${okLabel||'OK'}</button></div></div>`;
+    document.body.appendChild(ov); document.getElementById('_pymOkBtn').onclick=()=>{ov.remove();onOk();}; ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
+  }
+
+  function _pymToast(msg) {
+    let t=document.getElementById('_pym_toast');
+    if(!t){t=document.createElement('div');t.id='_pym_toast';t.style.cssText='position:fixed;bottom:9rem;left:50%;transform:translateX(-50%);z-index:9998;background:#1d1c16;color:#fef9ef;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:10px 22px;border-radius:100px;box-shadow:0 4px 20px rgba(0,0,0,0.3);pointer-events:none;font-family:"Plus Jakarta Sans",sans-serif';document.body.appendChild(t);}
+    t.textContent=msg; t.style.opacity='1'; clearTimeout(t._timer); t._timer=setTimeout(()=>t.style.opacity='0',2200);
+  }
+
+  window.deleteLog = function(id) {
+    let logs=getLogs(), index=logs.findIndex(log=>log.id!=null&&String(log.id)===String(id));
+    if(index===-1) index=logs.findIndex((log,idx)=>String(idx)===String(id));
+    if(index!==-1){logs.splice(index,1);saveLogs(logs);let toast=document.getElementById('delete-toast');if(!toast){toast=document.createElement('div');toast.id='delete-toast';toast.className='fixed bottom-32 left-1/2 -translate-x-1/2 z-[200] bg-on-surface text-background text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-full shadow-xl transition-opacity duration-300';document.body.appendChild(toast);}toast.textContent='Entry removed';toast.style.opacity='1';setTimeout(()=>{toast.style.opacity='0';},2000);}
+  };
+
+  function _setRatingFilter(on) {
+    filterActive=on; const rb=document.getElementById('filterRating'), ab=document.getElementById('filterAll');
+    if(on){rb.style.cssText='background:#875305;color:#fff;border-color:#875305';rb.querySelector('.material-symbols-outlined').style.color='#fff';ab.style.cssText='';}
+    else{rb.style.cssText='';rb.querySelector('.material-symbols-outlined').style.color='';ab.style.cssText='background:#C4863A;color:#fff';}
+    renderLogs();
+  }
+
+  function renderArchive() {
+    if (!_archiveInited) {
+      _archiveInited = true;
+      var _frBtn = document.getElementById('filterRating'), _faBtn = document.getElementById('filterAll');
+      if (_frBtn) _frBtn.addEventListener('click', function() { _setRatingFilter(!filterActive); });
+      if (_faBtn) _faBtn.addEventListener('click', function() { _setRatingFilter(false); });
+      var importInput = document.getElementById('importInput');
+      if (importInput) importInput.addEventListener('change', function(e) {
+        const file=e.target.files[0]; if(!file) return;
+        const reader=new FileReader(); reader.onload=function(ev){try{const importedLogs=JSON.parse(ev.target.result);if(!Array.isArray(importedLogs))throw new Error('Invalid format');if(confirm(`Found ${importedLogs.length} entries. Merge with existing archive?`)){const current=getLogs();const merged=[...current,...importedLogs].map((item,idx)=>({...item,id:item.id||`log-${Date.now()}-${idx}`}));const unique=Array.from(new Map(merged.map(item=>[item.id||(item.date+item.recipe),item])).values());saveLogs(unique);alert('Logs successfully imported!');}}catch(err){alert('Error reading backup file. Please ensure it is a valid JSON export.');}e.target.value='';};
+        reader.readAsText(file);
+      });
+      var clearDataBtn = document.getElementById('clearDataBtn');
+      if (clearDataBtn) clearDataBtn.addEventListener('click', function() {
+        _pymConfirm('This will permanently delete <strong>ALL bake entries</strong> from this device.<br><br>Export your archive to Google Drive first — this cannot be undone.','Yes, delete all','#B3261E',()=>{_pymConfirm('Are you absolutely sure? Every bake record will be lost forever.','Delete everything','#B3261E',()=>{localStorage.removeItem('pym_logs');localStorage.removeItem('pym_auto_backup');localStorage.removeItem('pym_auto_backup_time');saveLogs([]);_pymToast('Local data cleared');});});
+      });
+      var logModal = document.getElementById('logModal');
+      if (logModal) logModal.addEventListener('click', function(e) { if(e.target.id==='logModal') closeModal(); });
+    }
+    if (window.PymCelebration) setTimeout(function(){try{PymCelebration.checkUnseen();}catch(_){}},800);
+    try { updateBackupLabel(); } catch(_) {}
+    updateStorageIndicator();
+    renderLogs();
+  }
+</script>
+
+<script>
+  // ════════════════════════════════════════════════════════
+  // Library view
+  // ════════════════════════════════════════════════════════
+  var _libraryInited = false;
+
+  function renderLibrary() {
+    if (_libraryInited) return;
+    _libraryInited = true;
+
+    var input   = document.getElementById('glossarySearch');
+    var grid    = document.getElementById('glossaryGrid');
+    var noRes   = document.getElementById('glossaryNoResults');
+    var siteRes = document.getElementById('siteResults');
+    if (!input || !grid) return;
+
+    var debounceTimer;
+    input.addEventListener('input', function() {
+      var query = this.value.trim(), lower = query.toLowerCase();
+      var items = grid.querySelectorAll('.glossary-item'), visibleCount = 0;
+      items.forEach(function(item) {
+        if (!query || item.textContent.toLowerCase().includes(lower)) { item.classList.remove('hidden'); visibleCount++; }
+        else item.classList.add('hidden');
+      });
+      if (noRes) noRes.classList.toggle('hidden', visibleCount > 0);
+      if (siteRes) {
+        if (!query || query.length < 2) { siteRes.innerHTML = ''; return; }
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function() {
+          siteRes.innerHTML = '<p class="text-xs text-outline col-span-2 py-2">Searching pancitoymas.com…</p>';
+          fetch('https://pancitoymas.com/wp-json/wp/v2/search?search=' + encodeURIComponent(query) + '&per_page=5&_embed')
+            .then(function(r){return r.json();})
+            .then(function(results){
+              if(!results||results.length===0){siteRes.innerHTML='<p class="text-xs text-outline col-span-2 py-2">No results found on pancitoymas.com.</p>';return;}
+              var html='<p class="text-[10px] uppercase tracking-widest text-primary font-extrabold col-span-2 pt-4 pb-2 border-t border-outline-variant">From pancitoymas.com</p>';
+              results.forEach(function(item){html+=`<a href="${item.url}" target="_blank" rel="noopener" class="col-span-1 group block py-3 border-b border-outline-variant/30 hover:text-primary transition-colors"><h4 class="font-headline text-base mb-1 group-hover:text-primary">${item.title}</h4><span class="text-[10px] uppercase tracking-widest text-outline">${item.subtype||item.type}</span></a>`;});
+              siteRes.innerHTML=html;
+            })
+            .catch(function(){siteRes.innerHTML='<p class="text-xs text-outline col-span-2 py-2">Could not reach pancitoymas.com. Check your connection.</p>';});
+        }, 400);
+      }
+    });
+  }
+</script>
+
+<script>
+  // ════════════════════════════════════════════════════════
+  // Achievements view
+  // ════════════════════════════════════════════════════════
+  function renderAchievements() {
+    if (!window.PymGamification) return;
+    var G = window.PymGamification;
+    var logs = (function(){ try { return JSON.parse(localStorage.getItem('pym_logs')||'[]'); } catch(_){ return []; }})();
+    var allDefs    = G.getBadgeDefs();
+    var unlocked   = G.getUnlockedBadges();
+    var unlockedIds = new Set(unlocked.map(function(b){ return b.id; }));
+
+    // Level card
+    var lvl = G.calculateLevel(logs);
+    var levelTitle = document.getElementById('level-title');
+    var levelHint  = document.getElementById('level-hint');
+    var levelNum   = document.getElementById('level-num');
+    if (levelTitle) levelTitle.textContent = lvl.title;
+    if (levelHint)  levelHint.textContent  = lvl.hint;
+    if (levelNum)   levelNum.textContent   = lvl.level;
+
+    var ring = document.getElementById('level-ring');
+    if (ring) {
+      var pct  = (lvl.level - 1) / 4;
+      var circ = 2 * Math.PI * 28;
+      ring.setAttribute('stroke-dasharray', circ.toFixed(1));
+      setTimeout(function(){ ring.style.strokeDashoffset = (circ * (1 - pct)).toFixed(1); }, 100);
+    }
+
+    var badgeCountLabel = document.getElementById('badge-count-label');
+    if (badgeCountLabel) badgeCountLabel.textContent = unlockedIds.size + ' of ' + allDefs.length + ' badges unlocked';
+
+    // Badge grid — clear then re-populate
+    var grid = document.getElementById('badge-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    var LOCK_HINTS = {
+      named_starter:'Name your starter in onboarding', first_checkin:'Complete your first starter check-in',
+      first_loaf:'Save your first bake to Archive', photo_baker:'Save a bake with a photo attached',
+      five_star:'Give a bake a 5-star rating', three_in_a_row:'Log 3 bakes within 7 days',
+      streak_7:'Keep a 7-day check-in streak', streak_30:'Keep a 30-day check-in streak',
+      bake_10:'Log 10 bakes', bake_25:'Log 25 bakes', bake_50:'Log 50 bakes',
+      cold_proof:'Save a bake with cold proof time > 0', high_hydration:'Save a bake with hydration ≥ 75%',
+      diff_flours:'Use 3 different flour types across bakes', comeback:'Bake again after a 14+ day gap',
+      consistent:'Rate 5 consecutive bakes ≥ 4 stars', sage:'Reach Level 5 (Sourdough Sage)',
+    };
+
+    var tooltip = document.getElementById('badge-tooltip');
+    var tooltipTimer = null;
+
+    function showTooltip(e, def, isUnlocked) {
+      clearTimeout(tooltipTimer);
+      if (isUnlocked) { tooltip.innerHTML = `<strong style="font-size:11px;display:block;margin-bottom:4px;">${def.name}</strong>${def.story}`; }
+      else { tooltip.innerHTML = `<strong style="font-size:11px;display:block;margin-bottom:4px;">🔒 Locked</strong>${LOCK_HINTS[def.id]||'Keep baking to unlock this badge'}`; }
+      var rect = e.currentTarget.getBoundingClientRect(), tW = 220;
+      var left = Math.max(8, Math.min(rect.left + (rect.width/2) - (tW/2), window.innerWidth - tW - 8));
+      tooltip.style.left  = left + 'px';
+      tooltip.style.top   = (rect.top - 108) + 'px';
+      tooltip.style.width = tW + 'px';
+      tooltip.classList.add('show');
+      tooltipTimer = setTimeout(function(){ tooltip.classList.remove('show'); }, 3000);
+    }
+
+    allDefs.forEach(function(def) {
+      var isUnlocked = unlockedIds.has(def.id);
+      var data = unlocked.find(function(b){ return b.id === def.id; });
+      var card = document.createElement('div');
+      card.className = ['relative flex flex-col items-center gap-2 p-3 rounded-2xl cursor-pointer select-none', 'bg-surface-container-low border border-transparent transition-all active:scale-95', isUnlocked ? 'badge-unlocked' : 'badge-locked'].join(' ');
+      card.dataset.id = def.id;
+
+      var iconRing = document.createElement('div');
+      iconRing.className = 'badge-icon-ring w-14 h-14 rounded-full flex items-center justify-center';
+      iconRing.style.background = isUnlocked ? 'linear-gradient(135deg, #875305, #C4863A)' : '#d6c3b3';
+
+      var icon = document.createElement('span');
+      icon.className = 'material-symbols-outlined';
+      icon.style.fontSize = '26px';
+      icon.style.color = isUnlocked ? '#fef9ef' : '#847466';
+      icon.style.fontVariationSettings = "'FILL' 1, 'wght' 400";
+      icon.textContent = isUnlocked ? def.icon : 'lock';
+      iconRing.appendChild(icon); card.appendChild(iconRing);
+
+      var name = document.createElement('p');
+      name.className = 'font-label text-[10px] font-bold uppercase tracking-wider text-center leading-tight';
+      name.style.color = isUnlocked ? '#875305' : '#847466';
+      name.textContent = isUnlocked ? def.name : '???';
+      card.appendChild(name);
+
+      if (isUnlocked && data && data.unlockedAt) {
+        var dt = document.createElement('p'); dt.className = 'text-[9px] text-on-surface-variant opacity-60 text-center';
+        var d = new Date(data.unlockedAt); dt.textContent = d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+        card.appendChild(dt);
+      }
+
+      card.addEventListener('click', function(e){ showTooltip(e, def, isUnlocked); });
+      grid.appendChild(card);
+    });
+
+    document.addEventListener('click', function(e){ if (!e.target.closest('[data-id]') && tooltip) tooltip.classList.remove('show'); });
+
+    // Scroll-in animation
+    var cards = grid.querySelectorAll('div[data-id]');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if(en.isIntersecting){en.target.style.opacity='1';en.target.style.transform='translateY(0)';io.unobserve(en.target);} }); }, {threshold:0.1});
+      cards.forEach(function(c,i){ c.style.opacity='0'; c.style.transform='translateY(16px)'; c.style.transition=`opacity 0.35s ${i*35}ms, transform 0.35s ${i*35}ms`; io.observe(c); });
+    }
   }
 </script>
 </body>
