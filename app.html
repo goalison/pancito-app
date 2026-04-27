@@ -509,7 +509,17 @@
   </p>
 </section>
 </main></div>
-<div id="view-bake" class="app-view hidden"><main class="max-w-4xl mx-auto px-6 py-12 pb-32">
+<div id="view-bake" class="app-view hidden">
+<div class="hidden sticky top-[72px] z-40 w-full bg-primary/10 backdrop-blur-md border-b border-primary/20 py-3 px-6 shadow-sm" id="persistent-bulk-timer">
+<div class="max-w-4xl mx-auto flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">schedule</span>
+<span class="font-label text-[10px] uppercase tracking-[0.2em] font-bold text-secondary">Total Bulk Fermentation</span>
+</div>
+<div class="font-headline text-2xl text-primary" id="header-bulk-total-timer">00:00:00</div>
+</div>
+</div>
+<main class="max-w-4xl mx-auto px-6 py-12 pb-32">
 <!-- Stepper Navigation -->
 <nav class="mb-16">
 <div class="flex justify-between items-center relative">
@@ -2165,10 +2175,12 @@ let currentStep = 1;
             
             const persistentTimer = document.getElementById('persistent-bulk-timer');
             // Bulk fermentation header only shown while bulk is actually running (Steps 2-3)
+            if (persistentTimer) {
             if (stepNumber >= 2 && stepNumber <= 3 && !localStorage.getItem(BULK_END_KEY)) {
                 persistentTimer.classList.remove('hidden');
             } else {
                 persistentTimer.classList.add('hidden');
+            }}
             }
 
             // Record bake-end timestamp when reaching the Result stage
@@ -3874,8 +3886,8 @@ const STORAGE_KEY = 'pym_logs';
 
 // ===== FROM achievements.html =====
 
-document.addEventListener('DOMContentLoaded', function () {
-  if (!window.PymGamification) { console.warn('PymGamification not loaded'); return; }
+function renderAchievements() {
+  if (!window.PymGamification) { return; }
 
   const G = window.PymGamification;
   const logs = (() => { try { return JSON.parse(localStorage.getItem('pym_logs') || '[]'); } catch(_){ return []; }})();
@@ -3904,6 +3916,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ── Badge grid ──────────────────────────────────────────────────────────────
   const grid = document.getElementById('badge-grid');
+  grid.innerHTML = ''; // clear before re-render
 
   allDefs.forEach(def => {
     const isUnlocked = unlockedIds.has(def.id);
@@ -4033,7 +4046,9 @@ document.addEventListener('DOMContentLoaded', function () {
       io.observe(c);
     });
   }
-});
+}
+
+document.addEventListener('DOMContentLoaded', renderAchievements);
 
 </script>
 </body>
