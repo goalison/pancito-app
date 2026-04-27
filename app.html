@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pancito y Más</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="gamification.js"></script>
+<script src="celebration.js"></script>
+<script src="alarm-bridge.js"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-error": "#ffffff",
+          "tertiary-container": "#ac8c80",
+          "surface-container-low": "#f8f3e9",
+          "surface-dim": "#dedad0",
+          "on-tertiary": "#ffffff",
+          "primary-fixed": "#ffddba",
+          "tertiary-fixed-dim": "#e3bfb2",
+          "on-surface-variant": "#514538",
+          "surface": "#fef9ef",
+          "secondary": "#835334",
+          "inverse-primary": "#ffb967",
+          "tertiary": "#74584e",
+          "outline-variant": "#d6c3b3",
+          "inverse-on-surface": "#f5f0e6",
+          "primary-fixed-dim": "#ffb967",
+          "primary-container": "#c4863a",
+          "on-primary-fixed": "#2b1700",
+          "tertiary-fixed": "#ffdbce",
+          "secondary-fixed-dim": "#f8b993",
+          "on-background": "#1d1c16",
+          "on-secondary-container": "#794b2d",
+          "on-primary": "#ffffff",
+          "surface-bright": "#fef9ef",
+          "on-secondary": "#ffffff",
+          "on-error-container": "#93000a",
+          "surface-tint": "#875305",
+          "on-tertiary-fixed-variant": "#5a4137",
+          "surface-variant": "#e7e2d8",
+          "background": "#fef9ef",
+          "surface-container-highest": "#e7e2d8",
+          "surface-container-high": "#ece8de",
+          "outline": "#847466",
+          "on-secondary-fixed": "#321300",
+          "error": "#ba1a1a",
+          "secondary-fixed": "#ffdbc8",
+          "secondary-container": "#febe98",
+          "inverse-surface": "#32302a",
+          "on-tertiary-fixed": "#2a170f",
+          "surface-container": "#f2ede3",
+          "on-tertiary-container": "#3d261e",
+          "on-primary-fixed-variant": "#673d00",
+          "primary": "#875305",
+          "on-surface": "#1d1c16",
+          "on-primary-container": "#422500",
+          "on-secondary-fixed-variant": "#673c1f",
+          "surface-container-lowest": "#ffffff",
+          "error-container": "#ffdad6"
+        },
+        fontFamily: {
+          "headline": ["Noto Serif"],
+          "body": ["Plus Jakarta Sans"],
+          "label": ["Plus Jakarta Sans"]
+        },
+        borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  .glass-panel {
+    background: rgba(254, 249, 239, 0.7);
+    backdrop-filter: blur(12px);
+  }
+  body {
+    min-height: max(884px, 100dvh);
+  }
+  [v-cloak] { display: none; }
+
+  /* SPA view switching */
+  .app-view.hidden { display: none; }
+</style>
+</head>
+<body class="bg-[#fef9ef] text-on-surface font-body">
+
+<script>
+  // Onboarding gate
+  (function() {
+    try {
+      const ob = JSON.parse(localStorage.getItem('pym_onboarding') || '{}');
+      if (!ob.complete) { window.location.replace('onboarding.html'); }
+    } catch(_) {}
+  })();
+</script>
+
+<!-- TopAppBar -->
+<header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/20">
+  <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+    <button class="flex items-center gap-3" onclick="showView('view-dashboard')">
+      <img alt="Pancito y Más Logo" class="w-12 h-12 object-contain" src="logo.png"/>
+      <span class="font-['Noto_Serif'] text-[#875305] italic font-bold text-2xl tracking-tight">Pancito y Más</span>
+    </button>
+    <div class="flex items-center gap-6">
+      <nav class="hidden md:flex gap-8 items-center font-['Plus_Jakarta_Sans'] text-xs uppercase tracking-widest">
+        <button id="nav-dashboard" class="text-[#875305] font-extrabold hover:text-[#c4863a] transition-colors duration-200" onclick="showView('view-dashboard')">Dashboard</button>
+        <button id="nav-bake" class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" onclick="showView('view-bake')">Bake</button>
+        <button id="nav-library" class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" onclick="showView('view-library')">Library</button>
+        <button id="nav-archive" class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" onclick="showView('view-archive')">Archive</button>
+      </nav>
+      <div class="flex items-center gap-3 text-[#875305]">
+        <button class="hover:opacity-70 transition-opacity" title="Active Bake Session" onclick="showView('view-bake')">
+          <span class="material-symbols-outlined">timer</span>
+        </button>
+        <a href="https://www.facebook.com/groups/1235548458006543" target="_blank" class="hover:opacity-70 transition-opacity" title="Join our Community Group">
+          <span class="material-symbols-outlined">account_circle</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- App Views -->
+<div id="view-dashboard" class="app-view"></div>
+<div id="view-bake"      class="app-view hidden"></div>
+<div id="view-archive"   class="app-view hidden"></div>
+<div id="view-library"   class="app-view hidden"></div>
+<div id="view-achievements" class="app-view hidden"></div>
+
+<!-- BottomNavBar (persistent, outside views) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]">
+  <button id="bn-dashboard" class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" onclick="showView('view-dashboard')">
+    <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">home_max</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Dash</span>
+  </button>
+  <button id="bn-bake" class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" onclick="showView('view-bake')">
+    <span class="material-symbols-outlined text-[20px]">timer</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Bake</span>
+  </button>
+  <button id="bn-library" class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" onclick="showView('view-library')">
+    <span class="material-symbols-outlined text-[20px]">book_5</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Library</span>
+  </button>
+  <button id="bn-archive" class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" onclick="showView('view-archive')">
+    <span class="material-symbols-outlined text-[20px]">inventory_2</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Archive</span>
+  </button>
+  <button id="bn-achievements" class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" onclick="showView('view-achievements')">
+    <span class="material-symbols-outlined text-[20px]">workspace_premium</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Badges</span>
+  </button>
+</nav>
+
+<script>
+  // ── SPA Router ──────────────────────────────────────────
+  var _currentView = null;
+
+  function showView(viewId) {
+    document.querySelectorAll('.app-view').forEach(function(v) {
+      v.classList.add('hidden');
+    });
+    var target = document.getElementById(viewId);
+    if (target) target.classList.remove('hidden');
+    _currentView = viewId;
+    _updateNav(viewId);
+
+    // Re-render data for each view
+    if (viewId === 'view-dashboard' && typeof renderDashboard === 'function') renderDashboard();
+    if (viewId === 'view-archive'   && typeof renderArchive   === 'function') renderArchive();
+    if (viewId === 'view-achievements' && typeof renderAchievements === 'function') renderAchievements();
+    if (viewId === 'view-library'   && typeof renderLibrary   === 'function') renderLibrary();
+  }
+
+  function _updateNav(viewId) {
+    var map = {
+      'view-dashboard':    ['bn-dashboard',    'nav-dashboard'],
+      'view-bake':         ['bn-bake',         'nav-bake'],
+      'view-library':      ['bn-library',      'nav-library'],
+      'view-archive':      ['bn-archive',      'nav-archive'],
+      'view-achievements': ['bn-achievements', null],
+    };
+    // Reset all bottom-nav buttons
+    ['bn-dashboard','bn-bake','bn-library','bn-archive','bn-achievements'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.className = 'flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all';
+    });
+    // Reset top-nav buttons
+    ['nav-dashboard','nav-bake','nav-library','nav-archive'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.className = 'text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200';
+    });
+    // Highlight active
+    var ids = map[viewId] || [];
+    var bn = ids[0] ? document.getElementById(ids[0]) : null;
+    if (bn) bn.className = 'flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2';
+    var tn = ids[1] ? document.getElementById(ids[1]) : null;
+    if (tn) tn.className = 'text-[#875305] font-extrabold hover:text-[#c4863a] transition-colors duration-200';
+  }
+
+  // Start on dashboard
+  document.addEventListener('DOMContentLoaded', function() {
+    showView('view-dashboard');
+  });
+</script>
+
+</body>
+</html>
