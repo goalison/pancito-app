@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pancito y Más</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -160,6 +161,101 @@
         .pym-pill-btn.selected {
           background: #875305; color: #fff; border-color: #875305;
         }
+    
+        /* from bake-log.html */
+
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-panel {
+        background: rgba(254, 249, 239, 0.7);
+        backdrop-filter: blur(12px);
+      }
+      .step-inactive { opacity: 0.5; filter: grayscale(1); }
+      .step-active { opacity: 1; filter: none; }
+      .hidden-step { display: none; }
+    
+        /* from archive.html */
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fef9ef;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .modal-overlay {
+            background-color: rgba(44, 24, 16, 0.4);
+            backdrop-filter: blur(4px);
+        }
+    
+        /* from library.html */
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(254, 249, 239, 0.7);
+            backdrop-filter: blur(12px);
+        }
+        .asymmetric-bleed {
+            margin-left: -2rem;
+            margin-right: 2rem;
+        }
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    
+        /* from achievements.html */
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  /* Badge tooltip */
+  .badge-tooltip {
+    position: fixed;
+    z-index: 9999;
+    max-width: 220px;
+    background: #1d1c16;
+    color: #fef9ef;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 12px;
+    line-height: 1.5;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.18s, transform 0.18s;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  }
+  .badge-tooltip.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Unlocked badge glow */
+  .badge-unlocked .badge-icon-ring {
+    box-shadow: 0 0 0 3px #ffb96755, 0 8px 20px rgba(135,83,5,0.3);
+  }
+  /* Locked badge */
+  .badge-locked {
+    opacity: 0.45;
+    filter: grayscale(1);
+  }
+  /* Progress ring SVG */
+  .progress-ring-circle {
+    transition: stroke-dashoffset 0.7s ease;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+  }
+  body { min-height: max(884px, 100dvh); }
+
     .app-view.hidden { display: none; }
     </style>
 </head>

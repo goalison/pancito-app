@@ -1,7 +1,7 @@
 // alarm-bridge.js
-// Included in every HTML page. When a bake alarm notification is tapped,
-// this script sets a localStorage flag and navigates to bake-log.html so
-// the alarm can play — regardless of which page was active at the time.
+// Included in app.html. When a bake alarm notification is tapped,
+// this script sets a localStorage flag and calls showView('view-bake')
+// so the bake view appears without a page reload.
 (function () {
   'use strict';
   const IS_NATIVE = !!(window.Capacitor?.isNativePlatform?.());
