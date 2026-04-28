@@ -24,7 +24,7 @@
         function (ev) {
           const ch = ev && ev.notification && ev.notification.channelId;
           if (!ch) return;
-          if (ch === 'bake-alarms-v3' || ch.startsWith('bake-alarm') || ch.startsWith('starter')) {
+          if (ch === 'bake-alarms-v3' || ch.startsWith('bake-alarm')) {
             _handleAlarmTap();
           }
         }

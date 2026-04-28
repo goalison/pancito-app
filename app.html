@@ -1272,8 +1272,11 @@ Record a New Bake
     if (typeof IS_NATIVE !== 'undefined' && IS_NATIVE) {
       try {
         var _lnp = window.Capacitor.Plugins.LocalNotifications;
-        _lnp.addListener('localNotificationActionPerformed', function() { setPendingAlarm(); });
-        _lnp.addListener('localNotificationReceived', function(n) { if (n.channelId === 'bake-alarms-v3') playAlarm(); });
+        _lnp.addListener('localNotificationActionPerformed', function(ev) {
+          var ch = ev && ev.notification && ev.notification.channelId;
+          if (ch === 'bake-alarms-v3') setPendingAlarm();
+        });
+        _lnp.addListener('localNotificationReceived', function(n) { if (n && n.channelId === 'bake-alarms-v3') playAlarm(); });
       } catch(e) {}
     }
     // Unlock AudioContext on any click/tap so alarms work after navigation
@@ -2195,8 +2198,11 @@ Record a New Bake
         try { await LocalNotifications.deleteChannel({ id: 'bake-alarms' }); } catch(_) {}
         try { await LocalNotifications.deleteChannel({ id: 'bake-alarms-v2' }); } catch(_) {}
         await LocalNotifications.createChannel({ id: 'bake-alarms-v3', name: 'Bake Alarms', description: 'Sourdough bake timer alerts — rings even on vibrate', importance: 5, visibility: 1, vibration: true, lights: true, lightColor: '#875305', sound: 'default' });
-        LocalNotifications.addListener('localNotificationActionPerformed', function() { setPendingAlarm(); });
-        LocalNotifications.addListener('localNotificationReceived', function(notification) { if (notification.channelId === 'bake-alarms-v3') playAlarm(); });
+        LocalNotifications.addListener('localNotificationActionPerformed', function(ev) {
+          var ch = ev && ev.notification && ev.notification.channelId;
+          if (ch === 'bake-alarms-v3') setPendingAlarm();
+        });
+        LocalNotifications.addListener('localNotificationReceived', function(notification) { if (notification && notification.channelId === 'bake-alarms-v3') playAlarm(); });
         const perm = await LocalNotifications.requestPermissions();
         if (perm.display !== 'granted') return false;
         try { const exactSetting = await LocalNotifications.checkExactNotificationSetting(); if (exactSetting.result === 'denied') await LocalNotifications.requestExactNotificationSetting(); } catch(_) {}
