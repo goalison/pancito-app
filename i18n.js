@@ -92,8 +92,15 @@
       return wrap;
     }
 
-    // Strategy 1: insert BEFORE the icon group (timer/account) in its parent flex container.
-    // This places the toggle as a new sibling item, left of the icons, without disturbing layout.
+    // Hide the logo wordmark on narrow screens so the toggle fits without overflow.
+    // The logo image alone identifies the app on mobile — this is standard mobile UX.
+    var styleEl = document.createElement('style');
+    styleEl.textContent = '@media(max-width:639px){header .pym-wordmark{display:none!important}}';
+    document.head.appendChild(styleEl);
+    var wordmark = document.querySelector('header span.whitespace-nowrap');
+    if (wordmark) wordmark.classList.add('pym-wordmark');
+
+    // Strategy 1: insert BEFORE the icon group (timer/account) as a flex sibling.
     var iconGroup = document.querySelector('header .flex.items-center.gap-3.text-\\[\\#875305\\]');
     if (iconGroup && iconGroup.parentElement) {
       iconGroup.parentElement.insertBefore(makeToggle(), iconGroup);
@@ -111,7 +118,7 @@
       return;
     }
 
-    // Strategy 3: educational pages — absolute position inside header, right of center logo
+    // Strategy 3: educational pages — absolute position inside header
     var header = document.querySelector('header');
     if (header) {
       header.appendChild(makeToggle('position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:10;'));
