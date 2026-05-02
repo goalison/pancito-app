@@ -84,18 +84,37 @@
       '<button class="pym-lang-btn" data-lang="es" style="' + BTN_STYLE + '" onclick="window.PymI18n.setLang(\'es\')">ES</button>';
     var WRAP_BASE = 'display:inline-flex;border:1.5px solid #d6c3b3;border-radius:999px;overflow:hidden;flex-shrink:0;';
 
-    // Inject toggle absolutely into header — never into the flex flow
-    var header = document.querySelector('header');
-    if (header) {
+    function makeToggle(extraCss) {
       var wrap = document.createElement('div');
       wrap.className = 'pym-lang-toggle';
-      wrap.style.cssText = WRAP_BASE + 'position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:20;';
+      wrap.style.cssText = WRAP_BASE + (extraCss || '');
       wrap.innerHTML = BTNS;
-      // header is position:sticky which acts as containing block for absolute children
-      header.appendChild(wrap);
-      // Push the header's inner flex content away from the toggle so it doesn't overlap
-      var innerFlex = header.querySelector('div.flex');
-      if (innerFlex) innerFlex.style.paddingRight = '72px';
+      return wrap;
+    }
+
+    // Strategy 1: insert BEFORE the icon group (timer/account) in its parent flex container.
+    // This places the toggle as a new sibling item, left of the icons, without disturbing layout.
+    var iconGroup = document.querySelector('header .flex.items-center.gap-3.text-\\[\\#875305\\]');
+    if (iconGroup && iconGroup.parentElement) {
+      iconGroup.parentElement.insertBefore(makeToggle(), iconGroup);
+      updateLangToggles();
+      applyTranslations();
+      return;
+    }
+
+    // Strategy 2: pages with a right-side flex group but no icon group (achievements, etc.)
+    var rightGroup = document.querySelector('header div.flex.items-center.gap-6, header div.flex.items-center.gap-4');
+    if (rightGroup) {
+      rightGroup.appendChild(makeToggle());
+      updateLangToggles();
+      applyTranslations();
+      return;
+    }
+
+    // Strategy 3: educational pages — absolute position inside header, right of center logo
+    var header = document.querySelector('header');
+    if (header) {
+      header.appendChild(makeToggle('position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:10;'));
     }
 
     updateLangToggles();
