@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="i18n.js"></script>
 <script src="gamification.js"></script>
 <script src="celebration.js"></script>
 <script src="alarm-bridge.js"></script>
@@ -224,10 +225,10 @@
     </button>
     <div class="flex items-center gap-6">
       <nav class="hidden md:flex gap-8 items-center font-['Plus_Jakarta_Sans'] text-xs uppercase tracking-widest">
-        <button id="nav-dashboard" class="text-[#875305] font-extrabold hover:text-[#c4863a] transition-colors duration-200" onclick="showView('view-dashboard')">Dashboard</button>
-        <button id="nav-bake" class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" onclick="showView('view-bake')">Bake</button>
-        <button id="nav-library" class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" onclick="showView('view-library')">Library</button>
-        <button id="nav-archive" class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" onclick="showView('view-archive')">Archive</button>
+        <button id="nav-dashboard" class="text-[#875305] font-extrabold hover:text-[#c4863a] transition-colors duration-200" onclick="showView('view-dashboard')" data-i18n="nav.dashboard">Dashboard</button>
+        <button id="nav-bake" class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" onclick="showView('view-bake')" data-i18n="nav.bake">Bake</button>
+        <button id="nav-library" class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" onclick="showView('view-library')" data-i18n="nav.library">Library</button>
+        <button id="nav-archive" class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" onclick="showView('view-archive')" data-i18n="nav.archive">Archive</button>
       </nav>
       <div class="flex items-center gap-3 text-[#875305]">
         <button class="hover:opacity-70 transition-opacity" title="Active Bake Session" onclick="showView('view-bake')">
@@ -261,7 +262,7 @@
 <!-- Dynamic CTA: Shown only if NO active bake -->
 <div id="cta-container">
 <button class="group w-full md:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-primary text-on-primary rounded-xl shadow-lg transition-all active:scale-95 duration-200" onclick="showView('view-bake')">
-<span class="font-label font-bold uppercase tracking-widest text-sm">Start New Bake</span>
+<span class="font-label font-bold uppercase tracking-widest text-sm" data-i18n="hero.cta">Start New Bake</span>
 <span class="material-symbols-outlined">add_circle</span>
 </button>
 </div>
@@ -269,32 +270,32 @@
 <!-- Stats Grid -->
 <section class="grid grid-cols-2 gap-4">
 <div class="bg-surface-container-low p-5 rounded-2xl flex flex-col justify-between">
-<p class="font-label text-[10px] uppercase font-bold text-on-surface-variant tracking-wider">Total Bakes</p>
+<p class="font-label text-[10px] uppercase font-bold text-on-surface-variant tracking-wider" data-i18n="stat.totalBakes">Total Bakes</p>
 <p class="font-headline text-3xl font-bold text-primary" id="stat-total-bakes">0</p>
 </div>
 <div class="bg-surface-container-low p-5 rounded-2xl flex flex-col justify-between">
-<p class="font-label text-[10px] uppercase font-bold text-on-surface-variant tracking-wider">Avg. Rating</p>
+<p class="font-label text-[10px] uppercase font-bold text-on-surface-variant tracking-wider" data-i18n="stat.avgRating">Avg. Rating</p>
 <p class="font-headline text-3xl font-bold text-primary" id="stat-avg-rating">0.0</p>
 </div>
 <!-- Streak card -->
 <div class="bg-surface-container-low p-5 rounded-2xl flex flex-col justify-between" id="streak-card">
-  <p class="font-label text-[10px] uppercase font-bold text-on-surface-variant tracking-wider">Daily Streak</p>
+  <p class="font-label text-[10px] uppercase font-bold text-on-surface-variant tracking-wider" data-i18n="stat.streak">Daily Streak</p>
   <div class="flex items-baseline gap-1">
     <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;font-size:22px;">local_fire_department</span>
     <p class="font-headline text-3xl font-bold text-primary" id="stat-streak">0</p>
-    <p class="text-xs text-on-surface-variant font-bold ml-1">days</p>
+    <p class="text-xs text-on-surface-variant font-bold ml-1" data-i18n="stat.days">days</p>
   </div>
-  <p class="text-[10px] text-on-surface-variant opacity-60 mt-1" id="stat-streak-hint">Start your streak today</p>
+  <p class="text-[10px] text-on-surface-variant opacity-60 mt-1" id="stat-streak-hint" data-i18n="stat.streakDefault">Start your streak today</p>
 </div>
 <!-- Longest streak -->
 <div class="bg-surface-container-low p-5 rounded-2xl flex flex-col justify-between" id="longest-card">
-  <p class="font-label text-[10px] uppercase font-bold text-on-surface-variant tracking-wider">Best Streak</p>
+  <p class="font-label text-[10px] uppercase font-bold text-on-surface-variant tracking-wider" data-i18n="stat.bestStreak">Best Streak</p>
   <div class="flex items-baseline gap-1">
     <span class="material-symbols-outlined text-[#c4863a]" style="font-variation-settings:'FILL' 1;font-size:22px;">whatshot</span>
     <p class="font-headline text-3xl font-bold text-[#c4863a]" id="stat-longest">0</p>
-    <p class="text-xs text-on-surface-variant font-bold ml-1">days</p>
+    <p class="text-xs text-on-surface-variant font-bold ml-1" data-i18n="stat.days">days</p>
   </div>
-  <p class="text-[10px] text-on-surface-variant opacity-60 mt-1">Personal record</p>
+  <p class="text-[10px] text-on-surface-variant opacity-60 mt-1" data-i18n="stat.personalRecord">Personal record</p>
 </div>
 <div class="bg-surface-container-low p-5 rounded-2xl col-span-2">
 <div class="flex justify-between items-center mb-4">
@@ -401,7 +402,7 @@
       <p class="text-[9px] text-on-surface-variant opacity-50 mt-0.5" id="starter-health-label">Health: 0%</p>
     </div>
   </div>
-  <button id="open-checkin-btn" class="mt-4 w-full py-3 bg-primary text-on-primary rounded-xl font-label font-bold text-sm uppercase tracking-widest transition-transform active:scale-95" onclick="openCheckinSheet()">
+  <button id="open-checkin-btn" class="mt-4 w-full py-3 bg-primary text-on-primary rounded-xl font-label font-bold text-sm uppercase tracking-widest transition-transform active:scale-95" onclick="openCheckinSheet()" data-i18n="starter.feedBtn">
     Feed &amp; Check In
   </button>
   <div class="mt-3 flex items-center justify-between gap-3">
@@ -1196,23 +1197,23 @@ Record a New Bake
 <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]">
   <button id="bn-dashboard" class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" onclick="showView('view-dashboard')">
     <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">home_max</span>
-    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Dash</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1" data-i18n="nav.dash">Dash</span>
   </button>
   <button id="bn-bake" class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" onclick="showView('view-bake')">
     <span class="material-symbols-outlined text-[20px]">timer</span>
-    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Bake</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1" data-i18n="nav.bake">Bake</span>
   </button>
   <button id="bn-library" class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" onclick="showView('view-library')">
     <span class="material-symbols-outlined text-[20px]">book_5</span>
-    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Library</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1" data-i18n="nav.library">Library</span>
   </button>
   <button id="bn-archive" class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" onclick="showView('view-archive')">
     <span class="material-symbols-outlined text-[20px]">inventory_2</span>
-    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Archive</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1" data-i18n="nav.archive">Archive</span>
   </button>
   <button id="bn-achievements" class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" onclick="showView('view-achievements')">
     <span class="material-symbols-outlined text-[20px]">workspace_premium</span>
-    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Badges</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1" data-i18n="nav.badges">Badges</span>
   </button>
 </nav>
 
@@ -1229,7 +1230,8 @@ Record a New Bake
     _currentView = viewId;
     _updateNav(viewId);
 
-    // Re-render data for each view
+    // Apply static translations then re-render dynamic content
+    if (window.PymI18n) window.PymI18n.applyTranslations();
     if (viewId === 'view-dashboard'    && typeof renderDashboard    === 'function') renderDashboard();
     if (viewId === 'view-bake'         && typeof initBakeView       === 'function') initBakeView();
     if (viewId === 'view-archive'      && typeof renderArchive      === 'function') renderArchive();
@@ -1300,27 +1302,28 @@ Record a New Bake
     sheet.id = 'pym-checkin-sheet';
     var starter = window.PymGamification && window.PymGamification.getStarterState();
     var name = (starter && starter.name) || 'your starter';
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){ return k; };
     sheet.innerHTML = '<div class="pym-sheet" style="font-family:\'Plus Jakarta Sans\',sans-serif;">' +
       '<div class="w-10 h-1 bg-outline-variant rounded-full mx-auto mb-4"></div>' +
-      '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#514538;margin-bottom:6px;">Feed &amp; Check In</p>' +
-      '<p style="font-family:\'Noto Serif\',serif;font-size:1.2rem;font-weight:700;color:#1d1c16;margin-bottom:1rem;">How is ' + name + ' doing?</p>' +
+      '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#514538;margin-bottom:6px;">' + _t('checkin.title') + '</p>' +
+      '<p style="font-family:\'Noto Serif\',serif;font-size:1.2rem;font-weight:700;color:#1d1c16;margin-bottom:1rem;">' + _t('checkin.question') + ' ' + name + ' ' + _t('checkin.questionEnd') + '</p>' +
       '<div style="display:flex;gap:8px;margin-bottom:1.2rem;">' +
-        '<button class="pym-pill-btn" data-activity="flat" onclick="selectActivity(\'flat\',this)">😴 Flat</button>' +
-        '<button class="pym-pill-btn" data-activity="bubbly" onclick="selectActivity(\'bubbly\',this)">🫧 Bubbly</button>' +
-        '<button class="pym-pill-btn" data-activity="doubling" onclick="selectActivity(\'doubling\',this)">🚀 Doubling</button>' +
+        '<button class="pym-pill-btn" data-activity="flat" onclick="selectActivity(\'flat\',this)">' + _t('checkin.flat') + '</button>' +
+        '<button class="pym-pill-btn" data-activity="bubbly" onclick="selectActivity(\'bubbly\',this)">' + _t('checkin.bubbly') + '</button>' +
+        '<button class="pym-pill-btn" data-activity="doubling" onclick="selectActivity(\'doubling\',this)">' + _t('checkin.doubling') + '</button>' +
       '</div>' +
-      '<label style="font-size:11px;font-weight:700;color:#514538;display:block;margin-bottom:4px;">Room Temp (°F) — optional</label>' +
-      '<input id="checkin-temp" type="number" placeholder="e.g. 72" style="width:100%;padding:10px 12px;border:2px solid #d6c3b3;border-radius:12px;font-size:14px;color:#1d1c16;background:#fef9ef;margin-bottom:1.2rem;"/>' +
-      '<button onclick="submitCheckin()" style="width:100%;padding:14px;background:#875305;color:#fff;border-radius:14px;font-weight:700;font-size:14px;border:none;cursor:pointer;font-family:\'Plus Jakarta Sans\',sans-serif;">Feed ' + name + ' 🌾</button>' +
+      '<label style="font-size:11px;font-weight:700;color:#514538;display:block;margin-bottom:4px;">' + _t('checkin.tempLabel') + '</label>' +
+      '<input id="checkin-temp" type="number" placeholder="' + _t('checkin.tempPlaceholder') + '" style="width:100%;padding:10px 12px;border:2px solid #d6c3b3;border-radius:12px;font-size:14px;color:#1d1c16;background:#fef9ef;margin-bottom:1.2rem;"/>' +
+      '<button onclick="submitCheckin()" style="width:100%;padding:14px;background:#875305;color:#fff;border-radius:14px;font-weight:700;font-size:14px;border:none;cursor:pointer;font-family:\'Plus Jakarta Sans\',sans-serif;">' + _t('checkin.feedBtn') + ' ' + name + ' ' + _t('checkin.feedIcon') + '</button>' +
       '<details style="margin-top:14px;background:#f8f3e9;border-radius:14px;overflow:hidden;">' +
-        '<summary style="padding:12px 14px;cursor:pointer;font-size:12px;font-weight:700;color:#875305;list-style:none;display:flex;align-items:center;gap:6px;">💡 How much should I feed?</summary>' +
+        '<summary style="padding:12px 14px;cursor:pointer;font-size:12px;font-weight:700;color:#875305;list-style:none;display:flex;align-items:center;gap:6px;">' + _t('checkin.howMuch') + '</summary>' +
         '<div style="padding:0 14px 14px;">' +
-          '<p style="font-size:11px;color:#514538;margin-bottom:10px;line-height:1.5;">Ratio = Starter : Flour : Water. All measured by weight (grams).</p>' +
+          '<p style="font-size:11px;color:#514538;margin-bottom:10px;line-height:1.5;">' + _t('checkin.ratioNote') + '</p>' +
           '<div style="display:grid;gap:6px;">' +
-            '<div style="display:flex;align-items:center;gap:10px;background:#fff;border-radius:10px;padding:8px 10px;"><span style="font-weight:800;color:#875305;font-size:13px;width:42px;text-align:center;flex-shrink:0;">1:1:1</span><div><div style="font-size:11px;font-weight:700;color:#1d1c16;">Twice a day</div><div style="font-size:10px;color:#514538;">Fast, very active starter</div></div></div>' +
-            '<div style="display:flex;align-items:center;gap:10px;background:#fff;border-radius:10px;padding:8px 10px;"><span style="font-weight:800;color:#875305;font-size:13px;width:42px;text-align:center;flex-shrink:0;">1:2:2</span><div><div style="font-size:11px;font-weight:700;color:#1d1c16;">Classic daily</div><div style="font-size:10px;color:#514538;">Reliable and predictable</div></div></div>' +
-            '<div style="display:flex;align-items:center;gap:10px;background:rgba(135,83,5,0.08);border-radius:10px;padding:8px 10px;border:1px solid rgba(135,83,5,0.2);"><span style="font-weight:800;color:#875305;font-size:13px;width:42px;text-align:center;flex-shrink:0;">1:3:3</span><div><div style="font-size:11px;font-weight:700;color:#875305;">Once-a-day ⭐</div><div style="font-size:10px;color:#514538;">Keeps starter going longer — recommended</div></div></div>' +
-            '<div style="display:flex;align-items:center;gap:10px;background:#fff;border-radius:10px;padding:8px 10px;"><span style="font-weight:800;color:#875305;font-size:13px;width:42px;text-align:center;flex-shrink:0;">1:5:5</span><div><div style="font-size:11px;font-weight:700;color:#1d1c16;">Fridge rest</div><div style="font-size:10px;color:#514538;">1–2 weeks without feeding</div></div></div>' +
+            '<div style="display:flex;align-items:center;gap:10px;background:#fff;border-radius:10px;padding:8px 10px;"><span style="font-weight:800;color:#875305;font-size:13px;width:42px;text-align:center;flex-shrink:0;">1:1:1</span><div><div style="font-size:11px;font-weight:700;color:#1d1c16;">' + _t('checkin.ratio.1_1_1_title') + '</div><div style="font-size:10px;color:#514538;">' + _t('checkin.ratio.1_1_1_sub') + '</div></div></div>' +
+            '<div style="display:flex;align-items:center;gap:10px;background:#fff;border-radius:10px;padding:8px 10px;"><span style="font-weight:800;color:#875305;font-size:13px;width:42px;text-align:center;flex-shrink:0;">1:2:2</span><div><div style="font-size:11px;font-weight:700;color:#1d1c16;">' + _t('checkin.ratio.1_2_2_title') + '</div><div style="font-size:10px;color:#514538;">' + _t('checkin.ratio.1_2_2_sub') + '</div></div></div>' +
+            '<div style="display:flex;align-items:center;gap:10px;background:rgba(135,83,5,0.08);border-radius:10px;padding:8px 10px;border:1px solid rgba(135,83,5,0.2);"><span style="font-weight:800;color:#875305;font-size:13px;width:42px;text-align:center;flex-shrink:0;">1:3:3</span><div><div style="font-size:11px;font-weight:700;color:#875305;">' + _t('checkin.ratio.1_3_3_title') + '</div><div style="font-size:10px;color:#514538;">' + _t('checkin.ratio.1_3_3_sub') + '</div></div></div>' +
+            '<div style="display:flex;align-items:center;gap:10px;background:#fff;border-radius:10px;padding:8px 10px;"><span style="font-weight:800;color:#875305;font-size:13px;width:42px;text-align:center;flex-shrink:0;">1:5:5</span><div><div style="font-size:11px;font-weight:700;color:#1d1c16;">' + _t('checkin.ratio.1_5_5_title') + '</div><div style="font-size:10px;color:#514538;">' + _t('checkin.ratio.1_5_5_sub') + '</div></div></div>' +
           '</div>' +
         '</div>' +
       '</details>' +
@@ -1341,7 +1344,8 @@ Record a New Bake
   }
 
   function submitCheckin() {
-    if (!_checkinActivity) { alert('Please select how your starter is doing first!'); return; }
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){ return k; };
+    if (!_checkinActivity) { alert(_t('checkin.noActivity')); return; }
     var temp = parseFloat(document.getElementById('checkin-temp') && document.getElementById('checkin-temp').value) || null;
     var G = window.PymGamification;
     if (!G) { closeCheckinSheet(); return; }
@@ -1380,10 +1384,11 @@ Record a New Bake
     var pad   = function(n) { return String(n).padStart(2, '0'); };
     var hDisp = hour % 12 || 12;
     var ampm  = hour < 12 ? 'AM' : 'PM';
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){ return k; };
     var msg;
-    if (failed)        msg = '⚠️ Reminder permission denied — check app settings';
-    else if (!enabled) msg = '🔕 Reminder turned off';
-    else               msg = '✓ Reminder set for ' + hDisp + ':' + pad(minute) + ' ' + ampm + ' daily';
+    if (failed)        msg = _t('reminder.denied');
+    else if (!enabled) msg = _t('reminder.off');
+    else               msg = _t('reminder.set') + ' ' + hDisp + ':' + pad(minute) + ' ' + ampm + ' ' + _t('reminder.daily');
     t.style.cssText = 'position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:#875305;color:#fff;padding:12px 22px;border-radius:100px;font-weight:700;font-size:13px;z-index:9999;white-space:nowrap;box-shadow:0 4px 16px rgba(135,83,5,0.3);transition:opacity 0.3s';
     t.textContent = msg;
     document.body.appendChild(t);
@@ -1399,12 +1404,13 @@ Record a New Bake
     var s = G.getStarterState();
     if (!s) return;
 
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){ return k; };
     var STAGE_CONFIG = {
-      dormant:  { bubbles: 0, text: 'is resting… feed soon',    color: '#847466', glow: false },
-      hungry:   { bubbles: 1, text: 'is getting hungry!',        color: '#c4863a', glow: false },
-      active:   { bubbles: 3, text: 'is fed and happy 😊',        color: '#875305', glow: false },
-      thriving: { bubbles: 5, text: 'is thriving!',              color: '#875305', glow: true  },
-      peak:     { bubbles: 7, text: 'is at peak — bake now! 🚀', color: '#875305', glow: true  },
+      dormant:  { bubbles: 0, text: _t('starter.dormant'),  color: '#847466', glow: false },
+      hungry:   { bubbles: 1, text: _t('starter.hungry'),   color: '#c4863a', glow: false },
+      active:   { bubbles: 3, text: _t('starter.active'),   color: '#875305', glow: false },
+      thriving: { bubbles: 5, text: _t('starter.thriving'), color: '#875305', glow: true  },
+      peak:     { bubbles: 7, text: _t('starter.peak'),     color: '#875305', glow: true  },
     };
     var cfg = STAGE_CONFIG[s.stage] || STAGE_CONFIG.active;
 
@@ -1412,7 +1418,7 @@ Record a New Bake
     document.getElementById('starter-stage-label').textContent  = s.stage.charAt(0).toUpperCase() + s.stage.slice(1);
     document.getElementById('starter-state-text').textContent   = s.name + ' ' + cfg.text;
     document.getElementById('starter-health-bar').style.width   = s.health + '%';
-    document.getElementById('starter-health-label').textContent = 'Health: ' + s.health + '%';
+    document.getElementById('starter-health-label').textContent = _t('starter.health') + ' ' + s.health + '%';
 
     var jarBody = document.getElementById('starter-jar-body');
     jarBody.innerHTML = '';
@@ -1453,8 +1459,9 @@ Record a New Bake
   function renderDashboard() {
     // Date label
     var now = new Date();
-    var days    = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    var periods = ['Morning','Afternoon','Evening','Night'];
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){ return k; };
+    var days    = [_t('day.sunday'),_t('day.monday'),_t('day.tuesday'),_t('day.wednesday'),_t('day.thursday'),_t('day.friday'),_t('day.saturday')];
+    var periods = [_t('period.morning'),_t('period.afternoon'),_t('period.evening'),_t('period.night')];
     var hour = now.getHours();
     var period = periods[3];
     if (hour >= 5  && hour < 12) period = periods[0];
@@ -1480,7 +1487,7 @@ Record a New Bake
       var statHint    = document.getElementById('stat-streak-hint');
       if (statStreak)  statStreak.textContent  = streak.current;
       if (statLongest) statLongest.textContent = streak.longest;
-      if (statHint && streak.current > 1) statHint.textContent = streak.current + ' days and counting!';
+      if (statHint && streak.current > 1) statHint.textContent = streak.current + ' ' + _t('stat.streakCounting');
 
       // Baker level
       var lvl = G.calculateLevel(logs);
@@ -2099,14 +2106,18 @@ Record a New Bake
   function hideGlobalTimer() { const g = document.getElementById('global-timer-container'); if (g) g.classList.add('hidden'); }
 
   // ── Step navigation ──────────────────────────────────────
-  const STEP_LABELS = {
-    1: { stage: 'Initial Mix',       instruction: 'Mix flour, water, starter and salt until no dry flour remains.' },
-    2: { stage: 'Bulk Fermentation', instruction: 'Fold every 30 minutes. Watch for 50-75% rise.' },
-    3: { stage: 'Shaping',           instruction: 'Pre-shape, rest 30 min, then final shape into banneton.' },
-    4: { stage: 'Cold Proof',        instruction: 'Place in fridge for 12-16 hours. Bake any time after.' },
-    5: { stage: 'Baking',            instruction: 'Preheat Dutch oven to 500°F. Score and bake covered 25 min.' },
-    6: { stage: 'Result & Log',      instruction: 'Rate your bake and save it to your archive.' }
-  };
+  function _getStepLabels() {
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){ return k; };
+    return {
+      1: { stage: _t('stepLabel.1.stage'), instruction: _t('stepLabel.1.instruction') },
+      2: { stage: _t('stepLabel.2.stage'), instruction: _t('stepLabel.2.instruction') },
+      3: { stage: _t('stepLabel.3.stage'), instruction: _t('stepLabel.3.instruction') },
+      4: { stage: _t('stepLabel.4.stage'), instruction: _t('stepLabel.4.instruction') },
+      5: { stage: _t('stepLabel.5.stage'), instruction: _t('stepLabel.5.instruction') },
+      6: { stage: _t('stepLabel.6.stage'), instruction: _t('stepLabel.6.instruction') },
+    };
+  }
+  var STEP_LABELS = _getStepLabels();
 
   function goToStep(stepNumber) {
     document.querySelectorAll('section[id^="step-content-"]').forEach(s => s.classList.add('hidden-step'));
@@ -2444,7 +2455,8 @@ Record a New Bake
     }
 
     grid.innerHTML = currentLogs.map((log, index) => {
-      const displayDate = log.date ? new Date(log.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}).toUpperCase() : 'UNKNOWN DATE';
+      const _locale = (window.PymI18n && window.PymI18n.getCurrentLang() === 'es') ? 'es-MX' : 'en-US';
+      const displayDate = log.date ? new Date(log.date).toLocaleDateString(_locale,{month:'short',day:'numeric',year:'numeric'}).toUpperCase() : 'UNKNOWN DATE';
       const recipeTitle = log.recipe||'Untitled Bake', ratingValue = log.rating||'0', commentsText = log.comments||'No comments recorded.';
       const photoContent = log.photo
         ? `<img alt="${recipeTitle}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="${log.photo}"/>`
@@ -2464,7 +2476,8 @@ Record a New Bake
     const log = currentLogs.find((l,idx) => (l.id===id||idx.toString()===id)); if (!log) return;
     const modal = document.getElementById('logModal'), content = document.getElementById('modalContent');
     const photo = log.photo||null;
-    const displayDate = new Date(log.date).toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    const _locale2 = (window.PymI18n && window.PymI18n.getCurrentLang() === 'es') ? 'es-MX' : 'en-US';
+    const displayDate = new Date(log.date).toLocaleDateString(_locale2,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
     const hydrationVal=log.hydration||'--', bulkVal=log.bulkTime||log.total_bulk_time||'--', tempVal=log.temp||log.initial_temp||'--';
     const coldProofVal=log.coldProofTime?parseFloat(log.coldProofTime).toFixed(1):'--';
     const bakeTimeVal=log.bakeTime?(parseFloat(log.bakeTime)*60).toFixed(0):'--';
@@ -2700,22 +2713,32 @@ Record a New Bake
     }
 
     var badgeCountLabel = document.getElementById('badge-count-label');
-    if (badgeCountLabel) badgeCountLabel.textContent = unlockedIds.size + ' of ' + allDefs.length + ' badges unlocked';
+    if (badgeCountLabel) badgeCountLabel.textContent = unlockedIds.size + ' ' + _t('achievements.badgeCount') + ' ' + allDefs.length + ' ' + _t('achievements.badgesLabel');
 
     // Badge grid — clear then re-populate
     var grid = document.getElementById('badge-grid');
     if (!grid) return;
     grid.innerHTML = '';
 
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){ return k; };
     var LOCK_HINTS = {
-      named_starter:'Name your starter in onboarding', first_checkin:'Complete your first starter check-in',
-      first_loaf:'Save your first bake to Archive', photo_baker:'Save a bake with a photo attached',
-      five_star:'Give a bake a 5-star rating', three_in_a_row:'Log 3 bakes within 7 days',
-      streak_7:'Keep a 7-day check-in streak', streak_30:'Keep a 30-day check-in streak',
-      bake_10:'Log 10 bakes', bake_25:'Log 25 bakes', bake_50:'Log 50 bakes',
-      cold_proof:'Save a bake with cold proof time > 0', high_hydration:'Save a bake with hydration ≥ 75%',
-      diff_flours:'Use 3 different flour types across bakes', comeback:'Bake again after a 14+ day gap',
-      consistent:'Rate 5 consecutive bakes ≥ 4 stars', sage:'Reach Level 5 (Sourdough Sage)',
+      named_starter:  _t('lock.named_starter'),
+      first_checkin:  _t('lock.first_checkin'),
+      first_loaf:     _t('lock.first_loaf'),
+      photo_baker:    _t('lock.photo_baker'),
+      five_star:      _t('lock.five_star'),
+      three_in_a_row: _t('lock.three_in_a_row'),
+      streak_7:       _t('lock.streak_7'),
+      streak_30:      _t('lock.streak_30'),
+      bake_10:        _t('lock.bake_10'),
+      bake_25:        _t('lock.bake_25'),
+      bake_50:        _t('lock.bake_50'),
+      cold_proof:     _t('lock.cold_proof'),
+      high_hydration: _t('lock.high_hydration'),
+      diff_flours:    _t('lock.diff_flours'),
+      comeback:       _t('lock.comeback'),
+      consistent:     _t('lock.consistent'),
+      sage:           _t('lock.sage'),
     };
 
     var tooltip = document.getElementById('badge-tooltip');

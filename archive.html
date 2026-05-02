@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Pancito y Más Sourdough Companion App - Archive</title>
+<title>Pancito y MÃ¡s Sourdough Companion App - Archive</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="i18n.js"></script>
 <script src="gamification.js"></script>
 <script src="celebration.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
@@ -64,8 +65,8 @@
 <header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/20">
 <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
 <a class="flex items-center gap-3" href="index.html">
-<img alt="Pancito y Más Logo" class="w-12 h-12 object-contain" src="logo.png"/>
-<span class="font-['Noto_Serif'] text-[#875305] italic font-bold text-2xl tracking-tight">Pancito y Más</span>
+<img alt="Pancito y MÃ¡s Logo" class="w-12 h-12 object-contain" src="logo.png"/>
+<span class="font-['Noto_Serif'] text-[#875305] italic font-bold text-2xl tracking-tight">Pancito y MÃ¡s</span>
 </a>
 <div class="flex items-center gap-6">
 <nav class="hidden md:flex gap-8 items-center font-['Plus_Jakarta_Sans'] text-xs uppercase tracking-widest">
@@ -134,7 +135,7 @@
             </a>
 </div>
 
-<!-- ── Data Management (bottom) ─────────────────────────────────────────── -->
+<!-- â”€â”€ Data Management (bottom) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
 <section class="mt-20 border-t border-outline-variant/20 pt-10 space-y-4 pb-4">
   <p class="text-[10px] font-bold uppercase tracking-widest text-outline mb-6">Data Management</p>
 
@@ -211,27 +212,27 @@
         let filterActive = false;
         let currentLogs = [];
 
-        // ── Google Drive config ───────────────────────────────────────────────
+        // â”€â”€ Google Drive config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         // To enable full Drive integration (saves directly to a named folder):
-        //   1. https://console.cloud.google.com → new project
+        //   1. https://console.cloud.google.com â†’ new project
         //   2. Enable "Google Drive API"
-        //   3. APIs & Services → Credentials → Create OAuth 2.0 Client (Web App)
+        //   3. APIs & Services â†’ Credentials â†’ Create OAuth 2.0 Client (Web App)
         //   4. Add https://localhost to "Authorized JavaScript origins"
         //   5. Paste the Client ID below
-        const GDRIVE_CLIENT_ID = ''; // ← add your Client ID here
-        const BACKUP_FOLDER_NAME = 'Pancito y Más Backups';
+        const GDRIVE_CLIENT_ID = ''; // â† add your Client ID here
+        const BACKUP_FOLDER_NAME = 'Pancito y MÃ¡s Backups';
         const DRIVE_API  = 'https://www.googleapis.com/drive/v3';
         const UPLOAD_API = 'https://www.googleapis.com/upload/drive/v3';
         let _driveToken = null, _driveTokenExp = 0;
 
-        // Safe storage wrapper — handles Safari iframe blocks gracefully
+        // Safe storage wrapper â€” handles Safari iframe blocks gracefully
         // IMPORTANT: test with getItem (never throws), NOT setItem (throws when storage is full).
         // Using setItem for the test caused archive to fall back to empty in-memory store
         // whenever localStorage was near-full from accumulated photos.
         let _memoryStore = {};
         const storage = (function() {
             try {
-                localStorage.getItem('__pym_test__'); // read-only test — works even when full
+                localStorage.getItem('__pym_test__'); // read-only test â€” works even when full
                 return localStorage;
             } catch(e) {
                 // Only reaches here if localStorage itself is inaccessible (strict Safari private mode)
@@ -243,7 +244,7 @@
             }
         })();
 
-        // Read directly from localStorage — same as index.html.
+        // Read directly from localStorage â€” same as index.html.
         // The old storage-wrapper approach fell back to an empty in-memory
         // store whenever the IIFE threw in Capacitor's WebView, making every
         // read return null even though bake-log.html wrote the data correctly.
@@ -261,7 +262,7 @@
         function saveLogs(logs) {
             try {
                 localStorage.setItem('pym_logs', JSON.stringify(logs));
-            } catch(e) { /* quota — handled upstream */ }
+            } catch(e) { /* quota â€” handled upstream */ }
             autoBackup(logs);
             updateStorageIndicator();
             renderLogs();
@@ -277,7 +278,7 @@
             // Assuming a rough limit of 5MB for LocalStorage
             const percent = Math.min(100, (sizeInBytes / (5 * 1024 * 1024)) * 100).toFixed(1);
 
-            // Raw check — reads localStorage completely independently of getLogs()
+            // Raw check â€” reads localStorage completely independently of getLogs()
             const rawCheck = (() => {
                 try {
                     const d = localStorage.getItem('pym_logs');
@@ -287,7 +288,7 @@
                 } catch(_) { return 'parse-error'; }
             })();
 
-            indicator.innerText = `${count} bakes stored · ${sizeInKb} KB · raw check: ${rawCheck}`;
+            indicator.innerText = `${count} bakes stored Â· ${sizeInKb} KB Â· raw check: ${rawCheck}`;
 
             if (percent > 80) {
                 indicator.classList.remove('text-outline-variant');
@@ -324,12 +325,12 @@
 
             if (currentLogs.length === 0) {
                 if (filterActive) {
-                    // Filter is on — bakes exist but none match the rating threshold
+                    // Filter is on â€” bakes exist but none match the rating threshold
                     grid.innerHTML = `
                         <div class="col-span-full py-20 flex flex-col items-center text-center">
-                            <span class="text-7xl mb-4">⭐</span>
+                            <span class="text-7xl mb-4">â­</span>
                             <h3 class="font-headline text-3xl text-on-surface mb-3">No bakes match this filter</h3>
-                            <p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-6">The <strong>Rating 4.0+</strong> filter is active. Your bakes are here — tap <strong>Type: All</strong> above to see everything.</p>
+                            <p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-6">The <strong>Rating 4.0+</strong> filter is active. Your bakes are here â€” tap <strong>Type: All</strong> above to see everything.</p>
                             <button onclick="_setRatingFilter(false)" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">Show All Bakes</button>
                         </div>
                     `;
@@ -345,11 +346,11 @@
                     })();
                     grid.innerHTML = `
                         <div class="col-span-full py-20 flex flex-col items-center text-center">
-                            <span class="text-7xl mb-4">🍞</span>
+                            <span class="text-7xl mb-4">ðŸž</span>
                             <h3 class="font-headline text-3xl text-on-surface mb-3">Your first loaf is waiting!</h3>
-                            <p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-2">Every great baker started exactly where you are right now. This is where all your bakes will live — dates, notes, ratings, and everything you learn along the way.</p>
+                            <p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-2">Every great baker started exactly where you are right now. This is where all your bakes will live â€” dates, notes, ratings, and everything you learn along the way.</p>
                             <p class="text-on-surface-variant/70 text-sm max-w-xs mx-auto mb-8">Complete your first bake and hit <strong>Save to Archive</strong> at the end to see it appear here.</p>
-                            <a href="bake-log.html" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">Start My First Bake →</a>
+                            <a href="bake-log.html" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">Start My First Bake â†’</a>
                             <p style="margin-top:24px;font-size:11px;color:#c9b8a8;font-family:monospace">diag: ${_diagRaw}</p>
                         </div>
                     `;
@@ -422,7 +423,7 @@
             const tempVal         = log.temp || log.initial_temp || '--';
             const coldProofVal    = log.coldProofTime ? parseFloat(log.coldProofTime).toFixed(1) : '--';
             const bakeTimeVal     = log.bakeTime ? (parseFloat(log.bakeTime) * 60).toFixed(0) : '--';
-            const bakeTempVal     = log.bakeTemp ? `${log.bakeTemp}°F` : (log.proofTemp ? '--' : '--');
+            const bakeTempVal     = log.bakeTemp ? `${log.bakeTemp}Â°F` : (log.proofTemp ? '--' : '--');
             const ingr = log.ingredients;
             const ingrHtml = ingr
                 ? `<div class="grid grid-cols-2 gap-3">
@@ -450,7 +451,7 @@
                    </div>`;
 
             content.innerHTML = `
-                <!-- Photo — full width at top -->
+                <!-- Photo â€” full width at top -->
                 <div class="w-full overflow-hidden" style="max-height:320px">
                     ${photo
                         ? `<img src="${photo}" alt="${log.recipe}" class="w-full h-full object-cover" style="max-height:320px">`
@@ -465,7 +466,7 @@
                     <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary block mb-1">${displayDate}</span>
                     <h2 class="font-headline text-3xl font-bold text-on-surface leading-tight mb-6">${log.recipe || 'Untitled Bake'}</h2>
 
-                    <!-- Score + Bulk Fermentation — hero stats -->
+                    <!-- Score + Bulk Fermentation â€” hero stats -->
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div class="bg-primary/5 border border-primary/15 rounded-2xl p-5 flex flex-col items-center justify-center text-center">
                             <p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-2">Score</p>
@@ -479,7 +480,7 @@
                         </div>
                     </div>
 
-                    <!-- Phase timings row: Cold Proof · Bake Time · Bake Temp -->
+                    <!-- Phase timings row: Cold Proof Â· Bake Time Â· Bake Temp -->
                     <div class="grid grid-cols-3 gap-3 mb-8">
                         <div class="bg-secondary-container/20 border border-secondary-container/30 p-4 rounded-2xl flex flex-col items-center justify-center text-center">
                             <span class="material-symbols-outlined text-secondary text-xl mb-1">ac_unit</span>
@@ -512,7 +513,7 @@
                         </div>
                         <div class="bg-surface-container-low p-3 rounded-xl text-center">
                             <p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Dough Temp</p>
-                            <p class="font-bold text-primary">${tempVal}°F</p>
+                            <p class="font-bold text-primary">${tempVal}Â°F</p>
                         </div>
                         <div class="bg-surface-container-low p-3 rounded-xl text-center">
                             <p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Flour Type</p>
@@ -547,8 +548,8 @@
             if (e.target.id === 'logModal') closeModal();
         });
 
-        // ── Auto-backup ───────────────────────────────────────────────────────
-        // Called every time logs are saved — silently keeps a backup copy and
+        // â”€â”€ Auto-backup â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // Called every time logs are saved â€” silently keeps a backup copy and
         // records the timestamp so the user always has a recent local snapshot.
         function autoBackup(logs) {
             try {
@@ -573,7 +574,7 @@
             }
         }
 
-        // ── Google Drive API helpers ──────────────────────────────────────────
+        // â”€â”€ Google Drive API helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         // Pre-load Google Identity Services when Client ID is configured so
         // requestAccessToken() can fire synchronously within the user gesture.
         if (GDRIVE_CLIENT_ID) {
@@ -647,7 +648,7 @@
             return r.text();
         }
 
-        // ── Info bottom-sheet helper ──────────────────────────────────────────
+        // â”€â”€ Info bottom-sheet helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function _showInfoSheet(icon, title, bodyHtml, btnLabel) {
             const el = document.createElement('div');
             el.className = 'fixed inset-0 z-[200] flex items-end justify-center';
@@ -670,11 +671,11 @@
             document.body.appendChild(el);
         }
 
-        // ── Save backup to Google Drive ───────────────────────────────────────
+        // â”€â”€ Save backup to Google Drive â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         async function saveToGoogleDrive() {
             const logs = getLogs();
             if (!logs.length) {
-                _pymToast('No bakes to back up yet — record your first bake first!');
+                _pymToast('No bakes to back up yet â€” record your first bake first!');
                 return;
             }
             const filename = `pancito-backup-${new Date().toISOString().split('T')[0]}.json`;
@@ -687,12 +688,12 @@
                 btn.innerHTML = `<span class="material-symbols-outlined${busy ? ' animate-spin' : ''}">${icon}</span><span class="font-headline font-bold">${text}</span>`;
             };
 
-            // ── Path A: full Drive API (Client ID configured) ─────────────────
+            // â”€â”€ Path A: full Drive API (Client ID configured) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             if (GDRIVE_CLIENT_ID) {
-                setBtn('sync', 'Signing in to Drive…', true);
+                setBtn('sync', 'Signing in to Driveâ€¦', true);
                 try {
                     await _getDriveToken();
-                    setBtn('cloud_upload', 'Uploading…', true);
+                    setBtn('cloud_upload', 'Uploadingâ€¦', true);
                     const fid = await _getOrCreateFolder();
                     await _uploadToDrive(filename, content, fid);
                     storage.setItem('pym_auto_backup_time', Date.now());
@@ -707,26 +708,26 @@
                 }
             }
 
-            // ── Path B: Android native share sheet → user picks Google Drive ──
+            // â”€â”€ Path B: Android native share sheet â†’ user picks Google Drive â”€â”€
             const blob = new Blob([content], { type: 'application/json' });
             const file = new File([blob], filename, { type: 'application/json' });
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
-                    await navigator.share({ files: [file], title: 'Pancito y Más Backup', text: `${logs.length} bake entries` });
+                    await navigator.share({ files: [file], title: 'Pancito y MÃ¡s Backup', text: `${logs.length} bake entries` });
                     storage.setItem('pym_auto_backup_time', Date.now());
                     updateBackupLabel();
                     setBtn('check_circle', 'Backup shared!', false);
                     setTimeout(() => { btn.innerHTML = origHTML; btn.disabled = false; }, 2000);
                     setTimeout(() => _showInfoSheet('drive_folder', 'Backup saved to Google Drive',
-                        `Your file is in <strong>Google Drive → My Drive</strong>.<br><br>
+                        `Your file is in <strong>Google Drive â†’ My Drive</strong>.<br><br>
                         File name: <code style="font-size:11px">${filename}</code><br><br>
                         <strong>To restore this backup:</strong> tap <em>Restore from Drive</em> below,
-                        or tap <em>Choose File</em> → Google Drive → My Drive.`, 'Got it'), 800);
+                        or tap <em>Choose File</em> â†’ Google Drive â†’ My Drive.`, 'Got it'), 800);
                     return;
                 } catch(e) { if (e.name === 'AbortError') return; }
             }
 
-            // ── Path C: browser download fallback ─────────────────────────────
+            // â”€â”€ Path C: browser download fallback â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url; a.download = filename;
@@ -737,32 +738,32 @@
             setTimeout(() => { btn.innerHTML = origHTML; btn.disabled = false; }, 3000);
             _showInfoSheet('folder_open', 'Backup saved to Downloads folder',
                 `File: <code style="font-size:11px">${filename}</code><br><br>
-                Your backup is on this device's <strong>Downloads folder</strong> — not yet in Google Drive.<br><br>
+                Your backup is on this device's <strong>Downloads folder</strong> â€” not yet in Google Drive.<br><br>
                 <strong>To upload to Google Drive</strong> (recommended for cross-device restore):<br>
-                Open your <em>Files</em> app → Downloads → long-press the file → Share → Google Drive.<br><br>
-                <strong>To restore on this device:</strong> tap <em>Choose File</em> below → Downloads.`,
+                Open your <em>Files</em> app â†’ Downloads â†’ long-press the file â†’ Share â†’ Google Drive.<br><br>
+                <strong>To restore on this device:</strong> tap <em>Choose File</em> below â†’ Downloads.`,
                 'Got it');
         }
 
-        // ── Restore from Google Drive ─────────────────────────────────────────
+        // â”€â”€ Restore from Google Drive â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         async function importFromGoogleDrive() {
             if (!GDRIVE_CLIENT_ID) {
                 _showInfoSheet('help', 'How to restore from Google Drive',
                     `Tap <strong>Choose File</strong> below.<br><br>
-                    In the file picker, browse to <em>Google Drive → My Drive</em> and select your backup file
+                    In the file picker, browse to <em>Google Drive â†’ My Drive</em> and select your backup file
                     (named <em>pancito-backup-YYYY-MM-DD.json</em>).<br><br>
                     If you saved via the share sheet, it will be in <strong>My Drive</strong> (the root folder).`, 'Got it');
                 return;
             }
             const btn = document.getElementById('driveImportBtn');
             const origHTML = btn ? btn.innerHTML : '';
-            if (btn) { btn.disabled = true; btn.innerHTML = '<span class="material-symbols-outlined animate-spin" style="font-size:14px">sync</span> Loading…'; }
+            if (btn) { btn.disabled = true; btn.innerHTML = '<span class="material-symbols-outlined animate-spin" style="font-size:14px">sync</span> Loadingâ€¦'; }
             try {
                 await _getDriveToken();
                 const files = await _listDriveBackups();
                 if (!files.length) {
                     _showInfoSheet('search_off', 'No backups found in Drive',
-                        `No backup files were found in your <em>Pancito y Más Backups</em> folder.<br><br>
+                        `No backup files were found in your <em>Pancito y MÃ¡s Backups</em> folder.<br><br>
                         Save a backup first by tapping <strong>Save to Google Drive</strong> above.`, 'OK');
                     return;
                 }
@@ -798,7 +799,7 @@
                                 <span class="material-symbols-outlined text-primary text-2xl shrink-0">backup</span>
                                 <div class="flex-1 min-w-0">
                                     <div class="font-bold text-sm truncate">${f.name}</div>
-                                    <div class="text-xs text-on-surface-variant">${fmt(f.modifiedTime)}${f.size ? ' · ' + fmtB(f.size) : ''}</div>
+                                    <div class="text-xs text-on-surface-variant">${fmt(f.modifiedTime)}${f.size ? ' Â· ' + fmtB(f.size) : ''}</div>
                                 </div>
                                 <span class="material-symbols-outlined text-outline text-base">chevron_right</span>
                             </button>`).join('')}
@@ -854,7 +855,7 @@
             reader.readAsText(file);
         });
 
-        // Custom confirm dialog — native confirm() is blocked on Capacitor Android WebViews
+        // Custom confirm dialog â€” native confirm() is blocked on Capacitor Android WebViews
         function _pymConfirm(html, okLabel, okColor, onOk) {
             const ov = document.createElement('div');
             ov.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(44,24,16,0.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1.5rem';
@@ -877,7 +878,7 @@
         }
 
         document.getElementById('clearDataBtn').addEventListener('click', () => {
-            _pymConfirm('This will permanently delete <strong>ALL bake entries</strong> from this device.<br><br>Export your archive to Google Drive first — this cannot be undone.', 'Yes, delete all', '#B3261E', () => {
+            _pymConfirm('This will permanently delete <strong>ALL bake entries</strong> from this device.<br><br>Export your archive to Google Drive first â€” this cannot be undone.', 'Yes, delete all', '#B3261E', () => {
                 _pymConfirm('Are you absolutely sure? Every bake record will be lost forever.', 'Delete everything', '#B3261E', () => {
                     localStorage.removeItem('pym_logs');
                     localStorage.removeItem('pym_auto_backup');
@@ -888,7 +889,7 @@
             });
         });
 
-        // ── Swipe right / Android back button → go back to Dashboard ─────────
+        // â”€â”€ Swipe right / Android back button â†’ go back to Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€
         (function() {
             // Capacitor hardware back button + Android gesture navigation
             if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
@@ -949,14 +950,14 @@
             renderLogs();
         }
 
-        // Guard addEventListener calls — a null-deref here would silently abort the
+        // Guard addEventListener calls â€” a null-deref here would silently abort the
         // entire script block including _initArchivePage(), leaving the grid empty.
         const _frBtn = document.getElementById('filterRating');
         const _faBtn = document.getElementById('filterAll');
         if (_frBtn) _frBtn.addEventListener('click', function() { _setRatingFilter(!filterActive); });
         if (_faBtn) _faBtn.addEventListener('click', function() { _setRatingFilter(false); });
 
-        // ── Page init ─────────────────────────────────────────────────────────
+        // â”€â”€ Page init â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function _initArchivePage() {
             try {
                 if (window.PymCelebration) {

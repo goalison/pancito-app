@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -6,6 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="i18n.js"></script>
 <script src="gamification.js"></script>
 <script id="tailwind-config">
   tailwind.config = {
@@ -120,8 +121,8 @@
 <header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/20">
   <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
     <a class="flex items-center gap-3" href="index.html">
-      <img alt="Pancito y Más Logo" class="w-12 h-12 object-contain" src="logo.png"/>
-      <span class="font-['Noto_Serif'] text-[#875305] italic font-bold text-2xl tracking-tight">Pancito y Más</span>
+      <img alt="Pancito y MÃ¡s Logo" class="w-12 h-12 object-contain" src="logo.png"/>
+      <span class="font-['Noto_Serif'] text-[#875305] italic font-bold text-2xl tracking-tight">Pancito y MÃ¡s</span>
     </a>
     <div class="flex items-center gap-6">
       <nav class="hidden md:flex gap-8 items-center font-['Plus_Jakarta_Sans'] text-xs uppercase tracking-widest">
@@ -226,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const unlocked   = G.getUnlockedBadges();
   const unlockedIds = new Set(unlocked.map(b => b.id));
 
-  // ── Level card ──────────────────────────────────────────────────────────────
+  // â”€â”€ Level card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const lvl = G.calculateLevel(logs);
   document.getElementById('level-title').textContent = lvl.title;
   document.getElementById('level-hint').textContent  = lvl.hint;
@@ -235,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Progress ring: 5 levels, fill the ring per level
   const pct = ((lvl.level - 1) / 4); // 0 to 1
   const ring = document.getElementById('level-ring');
-  const circ = 2 * Math.PI * 28; // ≈ 175.9
+  const circ = 2 * Math.PI * 28; // â‰ˆ 175.9
   ring.setAttribute('stroke-dasharray', circ.toFixed(1));
   setTimeout(() => {
     ring.style.strokeDashoffset = (circ * (1 - pct)).toFixed(1);
@@ -245,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('badge-count-label').textContent =
     `${unlockedIds.size} of ${allDefs.length} badges unlocked`;
 
-  // ── Badge grid ──────────────────────────────────────────────────────────────
+  // â”€â”€ Badge grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const grid = document.getElementById('badge-grid');
 
   allDefs.forEach(def => {
@@ -276,7 +277,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (isUnlocked) {
       icon.textContent = def.icon;
     } else {
-      icon.textContent = 'lock'; // mystery — locked badges hide icon
+      icon.textContent = 'lock'; // mystery â€” locked badges hide icon
     }
     ring.appendChild(icon);
     card.appendChild(ring);
@@ -303,7 +304,7 @@ document.addEventListener('DOMContentLoaded', function () {
     grid.appendChild(card);
   });
 
-  // ── Tooltip ─────────────────────────────────────────────────────────────────
+  // â”€â”€ Tooltip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const tooltip = document.getElementById('badge-tooltip');
   let tooltipTimer = null;
 
@@ -323,17 +324,17 @@ document.addEventListener('DOMContentLoaded', function () {
       bake_25:        'Log 25 bakes',
       bake_50:        'Log 50 bakes',
       cold_proof:     'Save a bake with cold proof time > 0',
-      high_hydration: 'Save a bake with hydration ≥ 75%',
+      high_hydration: 'Save a bake with hydration â‰¥ 75%',
       diff_flours:    'Use 3 different flour types across bakes',
       comeback:       'Bake again after a 14+ day gap',
-      consistent:     'Rate 5 consecutive bakes ≥ 4 stars',
+      consistent:     'Rate 5 consecutive bakes â‰¥ 4 stars',
       sage:           'Reach Level 5 (Sourdough Sage)',
     };
 
     if (isUnlocked) {
       tooltip.innerHTML = `<strong style="font-size:11px;display:block;margin-bottom:4px;">${def.name}</strong>${def.story}`;
     } else {
-      tooltip.innerHTML = `<strong style="font-size:11px;display:block;margin-bottom:4px;">🔒 Locked</strong>${LOCK_HINTS[def.id] || 'Keep baking to unlock this badge'}`;
+      tooltip.innerHTML = `<strong style="font-size:11px;display:block;margin-bottom:4px;">ðŸ”’ Locked</strong>${LOCK_HINTS[def.id] || 'Keep baking to unlock this badge'}`;
     }
 
     // Position near tap
@@ -357,7 +358,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // ── Scroll-in animation for grid cards ──────────────────────────────────────
+  // â”€â”€ Scroll-in animation for grid cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const cards = grid.querySelectorAll('div[data-id]');
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(entries => {
@@ -381,3 +382,4 @@ document.addEventListener('DOMContentLoaded', function () {
 <script src="alarm-bridge.js"></script>
 </body>
 </html>
+
