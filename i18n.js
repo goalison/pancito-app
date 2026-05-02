@@ -75,44 +75,27 @@
 
   // ── Auto-inject toggle on DOMContentLoaded ────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
+    // Prevent any toggle overflow from causing horizontal page scroll
+    document.documentElement.style.overflowX = 'hidden';
+
+    var BTN_STYLE = 'padding:3px 9px;font-size:10px;font-weight:800;letter-spacing:.08em;border:none;cursor:pointer;font-family:\'Plus Jakarta Sans\',sans-serif;transition:all .15s;';
     var BTNS =
-      '<button class="pym-lang-btn" data-lang="en" style="padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:.08em;border:none;cursor:pointer;font-family:\'Plus Jakarta Sans\',sans-serif;transition:all .15s;" onclick="window.PymI18n.setLang(\'en\')">EN</button>' +
-      '<button class="pym-lang-btn" data-lang="es" style="padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:.08em;border:none;cursor:pointer;font-family:\'Plus Jakarta Sans\',sans-serif;transition:all .15s;" onclick="window.PymI18n.setLang(\'es\')">ES</button>';
+      '<button class="pym-lang-btn" data-lang="en" style="' + BTN_STYLE + '" onclick="window.PymI18n.setLang(\'en\')">EN</button>' +
+      '<button class="pym-lang-btn" data-lang="es" style="' + BTN_STYLE + '" onclick="window.PymI18n.setLang(\'es\')">ES</button>';
+    var WRAP_BASE = 'display:inline-flex;border:1.5px solid #d6c3b3;border-radius:999px;overflow:hidden;flex-shrink:0;';
 
-    // Primary: icon group used in app.html, bake-log.html, archive.html, library.html
-    var iconGroup = document.querySelector('header .flex.items-center.gap-3.text-\\[\\#875305\\]');
-    if (iconGroup) {
-      var w1 = document.createElement('div');
-      w1.className = 'pym-lang-toggle';
-      w1.style.cssText = 'display:inline-flex;border:1.5px solid #d6c3b3;border-radius:999px;overflow:hidden;margin-right:4px;';
-      w1.innerHTML = BTNS;
-      iconGroup.insertBefore(w1, iconGroup.firstChild);
-      updateLangToggles();
-      applyTranslations();
-      return;
-    }
-
-    // Secondary: right-side flex group (achievements.html, etc.)
-    var rightGroup = document.querySelector('header div.flex.items-center.gap-6, header div.flex.items-center.gap-4');
-    if (rightGroup) {
-      var w2 = document.createElement('div');
-      w2.className = 'pym-lang-toggle';
-      w2.style.cssText = 'display:inline-flex;border:1.5px solid #d6c3b3;border-radius:999px;overflow:hidden;';
-      w2.innerHTML = BTNS;
-      rightGroup.appendChild(w2);
-      updateLangToggles();
-      applyTranslations();
-      return;
-    }
-
-    // Fallback: absolute-position pill in top-right of header (educational pages)
+    // Inject toggle absolutely into header — never into the flex flow
     var header = document.querySelector('header');
     if (header) {
-      var w3 = document.createElement('div');
-      w3.className = 'pym-lang-toggle';
-      w3.style.cssText = 'display:inline-flex;border:1.5px solid #d6c3b3;border-radius:999px;overflow:hidden;position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:10;';
-      w3.innerHTML = BTNS;
-      header.appendChild(w3);
+      var wrap = document.createElement('div');
+      wrap.className = 'pym-lang-toggle';
+      wrap.style.cssText = WRAP_BASE + 'position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:20;';
+      wrap.innerHTML = BTNS;
+      // header is position:sticky which acts as containing block for absolute children
+      header.appendChild(wrap);
+      // Push the header's inner flex content away from the toggle so it doesn't overlap
+      var innerFlex = header.querySelector('div.flex');
+      if (innerFlex) innerFlex.style.paddingRight = '72px';
     }
 
     updateLangToggles();
