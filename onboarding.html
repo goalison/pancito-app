@@ -305,8 +305,9 @@
     <div class="dot"       id="dot3"></div>
     <div class="dot"       id="dot4"></div>
   </div>
-  <div class="flex items-center gap-1.5">
+  <div class="flex items-center gap-2">
     <div class="text-[10px] font-bold uppercase tracking-widest text-[#847466]" id="chapterLabel">Chapter 1</div>
+    <button onclick="skipOnboarding()" class="text-[10px] font-bold uppercase tracking-widest text-[#847466] hover:text-[#875305] transition-colors px-2 py-1 rounded-lg hover:bg-[#875305]/8" data-i18n="onboarding.skip">Skip</button>
     <button id="muteBtn" onclick="toggleMute()" class="text-[#847466] hover:text-[#875305] transition-colors p-1" title="Toggle sound">
       <span class="material-symbols-outlined" style="font-size:18px">volume_up</span>
     </button>
@@ -1881,6 +1882,10 @@ function completeCheckin() {
 
   goTo('c4s3');
   launchParticles();
+}
+
+function skipOnboarding() {
+  finishOnboarding('app.html');
 }
 
 function finishOnboarding(dest) {

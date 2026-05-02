@@ -639,6 +639,7 @@
 
       // ── Onboarding ────────────────────────────────────────────────────────
       'onboarding.pageTitle': 'Pancito y Más — Your Journey Begins',
+      'onboarding.skip':      'Skip',
     },
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -1172,6 +1173,7 @@
 
       // ── Onboarding ────────────────────────────────────────────────────────
       'onboarding.pageTitle': 'Pancito y Más — Tu Camino Comienza',
+      'onboarding.skip':      'Omitir',
     },
   };
 
