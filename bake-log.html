@@ -6,6 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="i18n.js"></script>
 <script src="gamification.js"></script>
 <script src="celebration.js"></script>
 <script id="tailwind-config">
@@ -95,10 +96,10 @@
 </a>
 <div class="flex items-center gap-6">
 <nav class="hidden md:flex gap-8 items-center font-['Plus_Jakarta_Sans'] text-xs uppercase tracking-widest">
-<a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="index.html">Dashboard</a>
-      <a class="text-[#875305] font-extrabold hover:text-[#c4863a] transition-colors duration-200" href="bake-log.html">Bake</a>
-      <a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="library.html">Library</a>
-      <a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="archive.html">Archive</a>
+<a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="index.html" data-i18n="nav.dashboard">Dashboard</a>
+      <a class="text-[#875305] font-extrabold hover:text-[#c4863a] transition-colors duration-200" href="bake-log.html" data-i18n="nav.bake">Bake</a>
+      <a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="library.html" data-i18n="nav.library">Library</a>
+      <a class="text-stone-400 font-bold hover:text-[#c4863a] transition-colors duration-200" href="archive.html" data-i18n="nav.archive">Archive</a>
 </nav>
 <div class="flex items-center gap-3 text-[#875305]">
 <a href="bake-log.html" class="hover:opacity-70 transition-opacity" title="Active Bake Session">
@@ -128,27 +129,27 @@
 <div class="absolute top-1/2 left-0 w-full h-[1px] bg-outline-variant/30 -z-10"></div>
 <button class="flex flex-col items-center gap-3 group transition-all" id="step-nav-1" onclick="goToStep(1)">
 <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-headline text-lg step-circle shadow-md">1</div>
-<span class="font-label text-[10px] uppercase tracking-widest font-bold text-primary step-label">Mix</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold text-primary step-label" data-i18n="step.mix">Mix</span>
 </button>
 <button class="flex flex-col items-center gap-3 group transition-all step-inactive" id="step-nav-2" onclick="goToStep(2)">
 <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle">2</div>
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label">Bulk</span>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label" data-i18n="step.bulk">Bulk</span>
 </button>
 <button class="flex flex-col items-center gap-3 group transition-all step-inactive" id="step-nav-3" onclick="goToStep(3)">
 <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle">3</div>
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label">Shape</span>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label" data-i18n="step.shape">Shape</span>
 </button>
 <button class="flex flex-col items-center gap-3 group transition-all step-inactive" id="step-nav-4" onclick="goToStep(4)">
 <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle">4</div>
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label">Proof</span>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label" data-i18n="step.proof">Proof</span>
 </button>
 <button class="flex flex-col items-center gap-3 group transition-all step-inactive" id="step-nav-5" onclick="goToStep(5)">
 <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle">5</div>
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label">Bake</span>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label" data-i18n="step.bake">Bake</span>
 </button>
 <button class="flex flex-col items-center gap-3 group transition-all step-inactive" id="step-nav-6" onclick="goToStep(6)">
 <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle">6</div>
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label">Result</span>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label" data-i18n="step.result">Result</span>
 </button>
 </div>
 </nav>
@@ -976,14 +977,18 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        const STEP_LABELS = {
-            1: { stage: 'Initial Mix', instruction: 'Mix flour, water, starter and salt until no dry flour remains.' },
-            2: { stage: 'Bulk Fermentation', instruction: 'Fold every 30 minutes. Watch for 50-75% rise.' },
-            3: { stage: 'Shaping', instruction: 'Pre-shape, rest 30 min, then final shape into banneton.' },
-            4: { stage: 'Cold Proof', instruction: 'Place in fridge for 12-16 hours. Bake any time after.' },
-            5: { stage: 'Baking', instruction: 'Preheat Dutch oven to 500°F. Score and bake covered 25 min.' },
-            6: { stage: 'Result & Log', instruction: 'Rate your bake and save it to your archive.' }
-        };
+        function _getStepLabels() {
+            var _t = (window.PymI18n && window.PymI18n.t) || function(k){ return k; };
+            return {
+                1: { stage: _t('stepLabel.1.stage'), instruction: _t('stepLabel.1.instruction') },
+                2: { stage: _t('stepLabel.2.stage'), instruction: _t('stepLabel.2.instruction') },
+                3: { stage: _t('stepLabel.3.stage'), instruction: _t('stepLabel.3.instruction') },
+                4: { stage: _t('stepLabel.4.stage'), instruction: _t('stepLabel.4.instruction') },
+                5: { stage: _t('stepLabel.5.stage'), instruction: _t('stepLabel.5.instruction') },
+                6: { stage: _t('stepLabel.6.stage'), instruction: _t('stepLabel.6.instruction') },
+            };
+        }
+        const STEP_LABELS = _getStepLabels();
 
         function saveActiveBake(stepNumber) {
             const recipeName = document.getElementById('input-recipe-name')?.value?.trim() ||
