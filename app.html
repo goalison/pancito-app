@@ -1276,17 +1276,55 @@ Record a New Bake
         var _lnp = window.Capacitor.Plugins.LocalNotifications;
         _lnp.addListener('localNotificationActionPerformed', function(ev) {
           var ch = ev && ev.notification && ev.notification.channelId;
-          if (ch === 'bake-alarms-v3') setPendingAlarm();
+          if (ch === 'bake-alarms-v3') { setPendingAlarm(); showView('view-bake'); }
         });
         _lnp.addListener('localNotificationReceived', function(n) { if (n && n.channelId === 'bake-alarms-v3') playAlarm(); });
+      } catch(e) {}
+      // When app comes to foreground after a background timer fires, check immediately
+      try {
+        window.Capacitor.Plugins.App.addListener('resume', function() {
+          checkPendingAlarmOnStart();
+        });
       } catch(e) {}
     }
     // Unlock AudioContext on any click/tap so alarms work after navigation
     document.addEventListener('click', function() {
       try { var ctx = getAudioCtx(); if (ctx.state === 'suspended') ctx.resume(); } catch(e) {}
     });
-    showView('view-dashboard');
+    // Web: check for pending alarms when tab becomes visible again
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden) checkPendingAlarmOnStart();
+    });
+    // On startup, navigate straight to bake view if there is a pending alarm or expired timer
+    if (!checkPendingAlarmOnStart()) showView('view-dashboard');
   });
+
+  function checkPendingAlarmOnStart() {
+    // Check both alarm-pending keys (alarm-bridge.js writes pym_pending_alarm; app.html writes pym_alarm_pending)
+    var hasPendingFlag = localStorage.getItem('pym_alarm_pending') === '1' ||
+                         localStorage.getItem('pym_pending_alarm') === '1';
+    if (!hasPendingFlag && !hasAnyExpiredTimer()) return false;
+    // Normalise to the single key the audio machinery reads
+    localStorage.setItem('pym_alarm_pending', '1');
+    localStorage.removeItem('pym_pending_alarm');
+    showView('view-bake');
+    // Give initBakeView() a moment to run, then try to play alarm audio
+    setTimeout(function() { if (typeof tryPlayPendingAlarm === 'function') tryPlayPendingAlarm(); }, 800);
+    return true;
+  }
+
+  function hasAnyExpiredTimer() {
+    var now = Date.now();
+    try {
+      var r = JSON.parse(localStorage.getItem('pym_round_active') || 'null');
+      if (r && r.startTs && r.baseRemaining && (now - r.startTs) / 1000 >= r.baseRemaining) return true;
+    } catch(e) {}
+    try {
+      var s = JSON.parse(localStorage.getItem('pym_static_timer') || 'null');
+      if (s && s.startTs && s.baseRemaining && (now - s.startTs) / 1000 >= s.baseRemaining) return true;
+    } catch(e) {}
+    return false;
+  }
 </script>
 
 <script>
@@ -2237,6 +2275,18 @@ Record a New Bake
         const nid = timerIdToInt(id);
         await LocalNotifications.cancel({ notifications: [{ id: nid }] }).catch(() => {});
         await LocalNotifications.schedule({ notifications: [{ id: nid, title: '🍞 Pancito y Más', body: `${label} — time is up!`, schedule: { at: new Date(Date.now() + delaySecs * 1000), allowWhileIdle: true }, channelId: 'bake-alarms-v3', sound: 'default', extra: { timerId: id } }] });
+      } catch(e) {}
+      // Also create a native phone timer — fires like a clock alarm, bypasses vibrate/DND mode
+      try {
+        const intentUrl = [
+          'intent:#Intent',
+          'action=android.intent.action.SET_TIMER',
+          'S.android.intent.extra.alarm.MESSAGE=' + encodeURIComponent('🍞 ' + label),
+          'I.android.intent.extra.alarm.LENGTH=' + Math.round(delaySecs),
+          'B.android.intent.extra.alarm.SKIP_UI=true',
+          'end'
+        ].join(';');
+        window.open(intentUrl, '_system');
       } catch(e) {}
     } else {
       const sw = swReg?.active || navigator.serviceWorker?.controller;
