@@ -75,16 +75,47 @@
 
   // ── Auto-inject toggle on DOMContentLoaded ────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
-    // Find the icon group in the header (right side before timer/community icons)
-    var headerIconGroup = document.querySelector('header .flex.items-center.gap-3.text-\\[\\#875305\\]');
-    if (headerIconGroup) {
-      var toggleWrap = document.createElement('div');
-      toggleWrap.style.cssText = 'display:inline-flex;border:1.5px solid #d6c3b3;border-radius:999px;overflow:hidden;margin-right:4px;';
-      toggleWrap.innerHTML =
-        '<button class="pym-lang-btn" data-lang="en" style="padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:.08em;border:none;cursor:pointer;font-family:\'Plus Jakarta Sans\',sans-serif;transition:all .15s;" onclick="window.PymI18n.setLang(\'en\')">EN</button>' +
-        '<button class="pym-lang-btn" data-lang="es" style="padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:.08em;border:none;cursor:pointer;font-family:\'Plus Jakarta Sans\',sans-serif;transition:all .15s;" onclick="window.PymI18n.setLang(\'es\')">ES</button>';
-      headerIconGroup.insertBefore(toggleWrap, headerIconGroup.firstChild);
+    var BTNS =
+      '<button class="pym-lang-btn" data-lang="en" style="padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:.08em;border:none;cursor:pointer;font-family:\'Plus Jakarta Sans\',sans-serif;transition:all .15s;" onclick="window.PymI18n.setLang(\'en\')">EN</button>' +
+      '<button class="pym-lang-btn" data-lang="es" style="padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:.08em;border:none;cursor:pointer;font-family:\'Plus Jakarta Sans\',sans-serif;transition:all .15s;" onclick="window.PymI18n.setLang(\'es\')">ES</button>';
+
+    // Primary: icon group used in app.html, bake-log.html, archive.html, library.html
+    var iconGroup = document.querySelector('header .flex.items-center.gap-3.text-\\[\\#875305\\]');
+    if (iconGroup) {
+      var w1 = document.createElement('div');
+      w1.className = 'pym-lang-toggle';
+      w1.style.cssText = 'display:inline-flex;border:1.5px solid #d6c3b3;border-radius:999px;overflow:hidden;margin-right:4px;';
+      w1.innerHTML = BTNS;
+      iconGroup.insertBefore(w1, iconGroup.firstChild);
+      updateLangToggles();
+      applyTranslations();
+      return;
     }
+
+    // Secondary: right-side flex group (achievements.html, etc.)
+    var rightGroup = document.querySelector('header div.flex.items-center.gap-6, header div.flex.items-center.gap-4');
+    if (rightGroup) {
+      var w2 = document.createElement('div');
+      w2.className = 'pym-lang-toggle';
+      w2.style.cssText = 'display:inline-flex;border:1.5px solid #d6c3b3;border-radius:999px;overflow:hidden;';
+      w2.innerHTML = BTNS;
+      rightGroup.appendChild(w2);
+      updateLangToggles();
+      applyTranslations();
+      return;
+    }
+
+    // Fallback: absolute-position pill in top-right of header (educational pages)
+    var header = document.querySelector('header');
+    if (header) {
+      var w3 = document.createElement('div');
+      w3.className = 'pym-lang-toggle';
+      w3.style.cssText = 'display:inline-flex;border:1.5px solid #d6c3b3;border-radius:999px;overflow:hidden;position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:10;';
+      w3.innerHTML = BTNS;
+      header.appendChild(w3);
+    }
+
+    updateLangToggles();
     applyTranslations();
   });
 
