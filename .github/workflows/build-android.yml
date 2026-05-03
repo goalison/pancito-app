@@ -59,22 +59,39 @@ jobs:
       # exactly like the built-in Clock/Alarm app does.
       - name: Patch LocalNotifications to use alarm audio stream
         run: |
-          # Patch the copy inside the generated android/ project (authoritative after sync)
+          # Robust patcher: handles both USAGE_NOTIFICATION and USAGE_NOTIFICATION_RINGTONE.
+          # MUST replace _RINGTONE first to avoid creating an invalid USAGE_ALARM_RINGTONE token
+          # (which would break the build).
+          patch_file() {
+            local f="$1"
+            echo "── BEFORE patch ($f):"
+            grep -n "USAGE_" "$f" || echo "  (no USAGE_ matches)"
+            # 1) USAGE_NOTIFICATION_RINGTONE → USAGE_ALARM
+            sed -i 's/AudioAttributes\.USAGE_NOTIFICATION_RINGTONE/AudioAttributes.USAGE_ALARM/g' "$f"
+            # 2) USAGE_NOTIFICATION (followed by non-identifier char or EOL) → USAGE_ALARM
+            sed -i 's/AudioAttributes\.USAGE_NOTIFICATION\([^A-Za-z0-9_]\)/AudioAttributes.USAGE_ALARM\1/g' "$f"
+            sed -i 's/AudioAttributes\.USAGE_NOTIFICATION$/AudioAttributes.USAGE_ALARM/g' "$f"
+            echo "── AFTER patch ($f):"
+            grep -n "USAGE_" "$f" || echo "  (no USAGE_ matches)"
+            # Fail loudly if any USAGE_ALARM_RINGTONE slipped through (would be invalid Java)
+            if grep -q "USAGE_ALARM_RINGTONE" "$f"; then
+              echo "ERROR: invalid USAGE_ALARM_RINGTONE in $f"
+              exit 1
+            fi
+          }
+
           ANDROID_FILE=$(find android -name "ChannelManager.java" 2>/dev/null | head -1)
           if [ -n "$ANDROID_FILE" ]; then
             echo "Found android copy: $ANDROID_FILE"
-            sed -i 's/AudioAttributes\.USAGE_NOTIFICATION/AudioAttributes.USAGE_ALARM/g' "$ANDROID_FILE"
-            echo "✓ Patched android/ copy: USAGE_NOTIFICATION → USAGE_ALARM"
-            grep -n "USAGE_" "$ANDROID_FILE" || true
+            patch_file "$ANDROID_FILE"
           else
-            echo "WARNING: ChannelManager.java not found in android/ — listing java files:"
+            echo "ERROR: ChannelManager.java not found in android/"
             find android -name "*.java" | grep -i notification | head -20
+            exit 1
           fi
-          # Also patch node_modules copy as a fallback
           NM_FILE=$(find node_modules/@capacitor/local-notifications -name "ChannelManager.java" 2>/dev/null | head -1)
           if [ -n "$NM_FILE" ]; then
-            sed -i 's/AudioAttributes\.USAGE_NOTIFICATION/AudioAttributes.USAGE_ALARM/g' "$NM_FILE"
-            echo "✓ Also patched node_modules copy"
+            patch_file "$NM_FILE"
           fi
 
       # ── 6b. Add exact-alarm & battery-exemption permissions to AndroidManifest ─

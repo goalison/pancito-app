@@ -1276,9 +1276,9 @@ Record a New Bake
         var _lnp = window.Capacitor.Plugins.LocalNotifications;
         _lnp.addListener('localNotificationActionPerformed', function(ev) {
           var ch = ev && ev.notification && ev.notification.channelId;
-          if (ch === 'bake-alarms-v3') { setPendingAlarm(); showView('view-bake'); }
+          if (ch === 'bake-alarms-v4') { setPendingAlarm(); showView('view-bake'); }
         });
-        _lnp.addListener('localNotificationReceived', function(n) { if (n && n.channelId === 'bake-alarms-v3') playAlarm(); });
+        _lnp.addListener('localNotificationReceived', function(n) { if (n && n.channelId === 'bake-alarms-v4') playAlarm(); });
       } catch(e) {}
       // When app comes to foreground after a background timer fires, check immediately
       try {
@@ -2248,12 +2248,13 @@ Record a New Bake
         try { await LocalNotifications.deleteChannel({ id: 'bake-timers' }); } catch(_) {}
         try { await LocalNotifications.deleteChannel({ id: 'bake-alarms' }); } catch(_) {}
         try { await LocalNotifications.deleteChannel({ id: 'bake-alarms-v2' }); } catch(_) {}
-        await LocalNotifications.createChannel({ id: 'bake-alarms-v3', name: 'Bake Alarms', description: 'Sourdough bake timer alerts — rings even on vibrate', importance: 5, visibility: 1, vibration: true, lights: true, lightColor: '#875305', sound: 'default' });
+        try { await LocalNotifications.deleteChannel({ id: 'bake-alarms-v3' }); } catch(_) {}
+        await LocalNotifications.createChannel({ id: 'bake-alarms-v4', name: 'Bake Alarms', description: 'Sourdough bake timer alerts — rings even on vibrate', importance: 5, visibility: 1, vibration: true, lights: true, lightColor: '#875305', sound: 'default' });
         LocalNotifications.addListener('localNotificationActionPerformed', function(ev) {
           var ch = ev && ev.notification && ev.notification.channelId;
-          if (ch === 'bake-alarms-v3') setPendingAlarm();
+          if (ch === 'bake-alarms-v4') setPendingAlarm();
         });
-        LocalNotifications.addListener('localNotificationReceived', function(notification) { if (notification && notification.channelId === 'bake-alarms-v3') playAlarm(); });
+        LocalNotifications.addListener('localNotificationReceived', function(notification) { if (notification && notification.channelId === 'bake-alarms-v4') playAlarm(); });
         const perm = await LocalNotifications.requestPermissions();
         if (perm.display !== 'granted') return false;
         try { const exactSetting = await LocalNotifications.checkExactNotificationSetting(); if (exactSetting.result === 'denied') await LocalNotifications.requestExactNotificationSetting(); } catch(_) {}
@@ -2276,26 +2277,7 @@ Record a New Bake
         const { LocalNotifications } = window.Capacitor.Plugins;
         const nid = timerIdToInt(id);
         await LocalNotifications.cancel({ notifications: [{ id: nid }] }).catch(() => {});
-        await LocalNotifications.schedule({ notifications: [{ id: nid, title: '🍞 Pancito y Más', body: `${label} — time is up!`, schedule: { at: new Date(Date.now() + delaySecs * 1000), allowWhileIdle: true }, channelId: 'bake-alarms-v3', sound: 'default', extra: { timerId: id } }] });
-      } catch(e) {}
-      // Also create a native phone timer — fires on alarm stream, bypasses vibrate/DND mode.
-      // Uses intent:// URL format so Capacitor's WebView intercepts via shouldOverrideUrlLoading
-      // and calls startActivity() directly — no browser needed.
-      try {
-        const msg = encodeURIComponent('🍞 ' + label);
-        const len = Math.round(delaySecs);
-        const intentUrl = 'intent://set#Intent' +
-          ';action=android.intent.action.SET_TIMER' +
-          ';S.android.intent.extra.alarm.MESSAGE=' + msg +
-          ';I.android.intent.extra.alarm.LENGTH=' + len +
-          ';B.android.intent.extra.alarm.SKIP_UI=true' +
-          ';end';
-        // Trigger via hidden iframe so main page is unaffected if the intent fails
-        var ifr = document.createElement('iframe');
-        ifr.style.cssText = 'display:none;width:0;height:0;border:none;position:absolute;';
-        document.body.appendChild(ifr);
-        ifr.src = intentUrl;
-        setTimeout(function() { try { document.body.removeChild(ifr); } catch(_) {} }, 2000);
+        await LocalNotifications.schedule({ notifications: [{ id: nid, title: '🍞 Pancito y Más', body: `${label} — time is up!`, schedule: { at: new Date(Date.now() + delaySecs * 1000), allowWhileIdle: true }, channelId: 'bake-alarms-v4', sound: 'default', extra: { timerId: id } }] });
       } catch(e) {}
     } else {
       const sw = swReg?.active || navigator.serviceWorker?.controller;
