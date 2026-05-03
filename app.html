@@ -1283,6 +1283,8 @@ Record a New Bake
       // When app comes to foreground after a background timer fires, check immediately
       try {
         window.Capacitor.Plugins.App.addListener('resume', function() {
+          // Resume AudioContext proactively — native WebView allows this without user gesture
+          try { var ctx = getAudioCtx(); if (ctx.state === 'suspended') ctx.resume(); } catch(e) {}
           checkPendingAlarmOnStart();
         });
       } catch(e) {}
@@ -2276,17 +2278,24 @@ Record a New Bake
         await LocalNotifications.cancel({ notifications: [{ id: nid }] }).catch(() => {});
         await LocalNotifications.schedule({ notifications: [{ id: nid, title: '🍞 Pancito y Más', body: `${label} — time is up!`, schedule: { at: new Date(Date.now() + delaySecs * 1000), allowWhileIdle: true }, channelId: 'bake-alarms-v3', sound: 'default', extra: { timerId: id } }] });
       } catch(e) {}
-      // Also create a native phone timer — fires like a clock alarm, bypasses vibrate/DND mode
+      // Also create a native phone timer — fires on alarm stream, bypasses vibrate/DND mode.
+      // Uses intent:// URL format so Capacitor's WebView intercepts via shouldOverrideUrlLoading
+      // and calls startActivity() directly — no browser needed.
       try {
-        const intentUrl = [
-          'intent:#Intent',
-          'action=android.intent.action.SET_TIMER',
-          'S.android.intent.extra.alarm.MESSAGE=' + encodeURIComponent('🍞 ' + label),
-          'I.android.intent.extra.alarm.LENGTH=' + Math.round(delaySecs),
-          'B.android.intent.extra.alarm.SKIP_UI=true',
-          'end'
-        ].join(';');
-        window.open(intentUrl, '_system');
+        const msg = encodeURIComponent('🍞 ' + label);
+        const len = Math.round(delaySecs);
+        const intentUrl = 'intent://set#Intent' +
+          ';action=android.intent.action.SET_TIMER' +
+          ';S.android.intent.extra.alarm.MESSAGE=' + msg +
+          ';I.android.intent.extra.alarm.LENGTH=' + len +
+          ';B.android.intent.extra.alarm.SKIP_UI=true' +
+          ';end';
+        // Trigger via hidden iframe so main page is unaffected if the intent fails
+        var ifr = document.createElement('iframe');
+        ifr.style.cssText = 'display:none;width:0;height:0;border:none;position:absolute;';
+        document.body.appendChild(ifr);
+        ifr.src = intentUrl;
+        setTimeout(function() { try { document.body.removeChild(ifr); } catch(_) {} }, 2000);
       } catch(e) {}
     } else {
       const sw = swReg?.active || navigator.serviceWorker?.controller;
