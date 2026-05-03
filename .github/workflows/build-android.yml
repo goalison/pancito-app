@@ -80,18 +80,34 @@ jobs:
             fi
           }
 
+          PATCHED=0
           ANDROID_FILE=$(find android -name "ChannelManager.java" 2>/dev/null | head -1)
           if [ -n "$ANDROID_FILE" ]; then
             echo "Found android copy: $ANDROID_FILE"
             patch_file "$ANDROID_FILE"
+            PATCHED=1
           else
-            echo "ERROR: ChannelManager.java not found in android/"
-            find android -name "*.java" | grep -i notification | head -20
-            exit 1
+            echo "ChannelManager.java not in android/ (expected — Capacitor plugins live in node_modules)"
           fi
           NM_FILE=$(find node_modules/@capacitor/local-notifications -name "ChannelManager.java" 2>/dev/null | head -1)
           if [ -n "$NM_FILE" ]; then
+            echo "Found node_modules copy: $NM_FILE"
             patch_file "$NM_FILE"
+            PATCHED=1
+            # cap sync after patching node_modules so the patched copy reaches the build
+            echo "Re-syncing android with patched plugin source..."
+            npx cap sync android
+            # Re-check the android copy in case sync materialized it
+            ANDROID_FILE2=$(find android -name "ChannelManager.java" 2>/dev/null | head -1)
+            if [ -n "$ANDROID_FILE2" ] && [ "$ANDROID_FILE2" != "$ANDROID_FILE" ]; then
+              echo "After re-sync, android copy now exists: $ANDROID_FILE2"
+              patch_file "$ANDROID_FILE2"
+            fi
+          fi
+          if [ "$PATCHED" = "0" ]; then
+            echo "ERROR: ChannelManager.java not found in either android/ or node_modules/"
+            find . -name "ChannelManager.java" 2>/dev/null | head -10
+            exit 1
           fi
 
       # ── 6b. Add exact-alarm & battery-exemption permissions to AndroidManifest ─
