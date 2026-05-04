@@ -307,6 +307,11 @@
   </div>
   <div class="flex items-center gap-2">
     <div class="text-[10px] font-bold uppercase tracking-widest text-[#847466]" id="chapterLabel">Chapter 1</div>
+    <div class="flex items-center gap-1 mr-1">
+      <button class="pym-lang-btn text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded transition-colors" data-lang="en" onclick="window.PymI18n && window.PymI18n.setLang('en')">EN</button>
+      <span class="text-[10px] text-[#847466]">/</span>
+      <button class="pym-lang-btn text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded transition-colors" data-lang="es" onclick="window.PymI18n && window.PymI18n.setLang('es')">ES</button>
+    </div>
     <button onclick="skipOnboarding()" class="text-[10px] font-bold uppercase tracking-widest text-[#847466] hover:text-[#875305] transition-colors px-2 py-1 rounded-lg hover:bg-[#875305]/8" data-i18n="onboarding.skip">Skip</button>
     <button id="muteBtn" onclick="toggleMute()" class="text-[#847466] hover:text-[#875305] transition-colors p-1" title="Toggle sound">
       <span class="material-symbols-outlined" style="font-size:18px">volume_up</span>
@@ -320,14 +325,14 @@
 <div class="screen" id="c0s1">
   <div class="flex-1 flex flex-col items-center px-8 text-center pt-20 pb-6">
     <span class="material-symbols-outlined text-6xl text-[#C4863A] mb-6" style="font-variation-settings:'FILL' 1;">science</span>
-    <h2 class="font-headline font-bold text-3xl leading-tight mb-4">Do you already have a sourdough starter?</h2>
-    <p class="text-[#514538] leading-relaxed max-w-xs">A sourdough starter is a mixture of flour and water that captures wild yeast from the air. If you already have one, great! If not, we'll walk you through creating yours from scratch — it only takes 10 minutes of hands-on time.</p>
+    <h2 class="font-headline font-bold text-3xl leading-tight mb-4" data-i18n="onboarding.c0s1.heading">Do you already have a sourdough starter?</h2>
+    <p class="text-[#514538] leading-relaxed max-w-xs" data-i18n="onboarding.c0s1.body">A sourdough starter is a mixture of flour and water that captures wild yeast from the air. If you already have one, great! If not, we'll walk you through creating yours from scratch — it only takes 10 minutes of hands-on time.</p>
   </div>
   <div class="px-6 pb-10 space-y-3">
-    <button onclick="hasStarter()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
+    <button onclick="hasStarter()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform" data-i18n="onboarding.c0s1.btnHasStarter">
       Yes, I have a starter →
     </button>
-    <button onclick="goTo('c0s2')" class="w-full py-3 bg-[#f2ede3] text-[#875305] rounded-2xl font-bold text-base active:scale-95 transition-transform border border-[#d6c3b3]">
+    <button onclick="goTo('c0s2')" class="w-full py-3 bg-[#f2ede3] text-[#875305] rounded-2xl font-bold text-base active:scale-95 transition-transform border border-[#d6c3b3]" data-i18n="onboarding.c0s1.btnMakeStarter">
       Help me make one from scratch 🌾
     </button>
   </div>
@@ -337,9 +342,9 @@
 <div class="screen hidden" id="c0s2">
   <div class="flex-1 flex flex-col px-6 pt-20 pb-6 overflow-y-auto">
     <div class="text-center mb-6">
-      <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1">Creating Your Starter</p>
-      <h2 class="font-headline font-bold text-2xl">Alison's starter recipe</h2>
-      <p class="text-[#514538] text-xs mt-2 leading-relaxed">This process takes 7–10 days. You'll spend about 5 minutes per day. The app will remind you each day.</p>
+      <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1" data-i18n="onboarding.c0s2.eyebrow">Creating Your Starter</p>
+      <h2 class="font-headline font-bold text-2xl" data-i18n="onboarding.c0s2.heading">Alison's starter recipe</h2>
+      <p class="text-[#514538] text-xs mt-2 leading-relaxed" data-i18n="onboarding.c0s2.subtitle">This process takes 7–10 days. You'll spend about 5 minutes per day. The app will remind you each day.</p>
     </div>
 
     <!-- Day 1 -->
@@ -349,25 +354,25 @@
           <span class="text-white font-bold text-sm">1</span>
         </div>
         <div>
-          <p class="font-bold text-sm">Day 1 — Mix &amp; Rest</p>
-          <p class="text-[10px] text-[#847466]">~5 minutes hands-on</p>
+          <p class="font-bold text-sm" data-i18n="onboarding.c0s2.day1.title">Day 1 — Mix &amp; Rest</p>
+          <p class="text-[10px] text-[#847466]" data-i18n="onboarding.c0s2.day1.sub">~5 minutes hands-on</p>
         </div>
       </div>
       <div class="space-y-2 mb-3">
         <div class="flex items-center gap-2 text-sm text-[#514538]">
           <span class="material-symbols-outlined text-[#C4863A] text-base">grain</span>
-          <span>50g all-purpose flour</span>
+          <span data-i18n="onboarding.c0s2.day1.flour">50g all-purpose flour</span>
         </div>
         <div class="flex items-center gap-2 text-sm text-[#514538]">
           <span class="material-symbols-outlined text-[#C4863A] text-base">eco</span>
-          <span>50g whole wheat flour</span>
+          <span data-i18n="onboarding.c0s2.day1.wheat">50g whole wheat flour</span>
         </div>
         <div class="flex items-center gap-2 text-sm text-[#514538]">
           <span class="material-symbols-outlined text-[#C4863A] text-base">water_drop</span>
-          <span>100g water (room temperature)</span>
+          <span data-i18n="onboarding.c0s2.day1.water">100g water (room temperature)</span>
         </div>
       </div>
-      <p class="text-xs text-[#514538] bg-[#f8f3e9] rounded-xl p-3 leading-relaxed">Mix everything in a clean jar until no dry flour remains. Cover loosely with a cloth or loosely-placed lid. Leave at room temperature (68–78°F). <strong>That's it for today.</strong></p>
+      <p class="text-xs text-[#514538] bg-[#f8f3e9] rounded-xl p-3 leading-relaxed" data-i18n-html="onboarding.c0s2.day1.inst">Mix everything in a clean jar until no dry flour remains. Cover loosely with a cloth or loosely-placed lid. Leave at room temperature (68–78°F). <strong>That's it for today.</strong></p>
     </div>
 
     <!-- Day 2 -->
@@ -377,11 +382,11 @@
           <span class="text-[#847466] font-bold text-sm">2</span>
         </div>
         <div>
-          <p class="font-bold text-sm">Day 2 — Leave it alone</p>
-          <p class="text-[10px] text-[#847466]">No action required</p>
+          <p class="font-bold text-sm" data-i18n="onboarding.c0s2.day2.title">Day 2 — Leave it alone</p>
+          <p class="text-[10px] text-[#847466]" data-i18n="onboarding.c0s2.day2.sub">No action required</p>
         </div>
       </div>
-      <p class="text-xs text-[#514538] leading-relaxed">Don't feed it. Don't stir it. The wild yeast is just beginning to wake up. You might not see much activity yet — that's completely normal.</p>
+      <p class="text-xs text-[#514538] leading-relaxed" data-i18n="onboarding.c0s2.day2.body">Don't feed it. Don't stir it. The wild yeast is just beginning to wake up. You might not see much activity yet — that's completely normal.</p>
     </div>
 
     <!-- Day 3–10 -->
@@ -391,37 +396,37 @@
           <span class="text-white font-bold text-sm">3+</span>
         </div>
         <div>
-          <p class="font-bold text-sm">Days 3–10 — Daily feeding</p>
-          <p class="text-[10px] text-[#847466]">Repeat every day until ready</p>
+          <p class="font-bold text-sm" data-i18n="onboarding.c0s2.day3.title">Days 3–10 — Daily feeding</p>
+          <p class="text-[10px] text-[#847466]" data-i18n="onboarding.c0s2.day3.sub">Repeat every day until ready</p>
         </div>
       </div>
       <div class="space-y-1.5 mb-3">
         <div class="flex items-center gap-2 text-sm text-[#514538]">
           <span class="material-symbols-outlined text-[#C4863A] text-base">remove</span>
-          <span>Discard half (pour out ~100g)</span>
+          <span data-i18n="onboarding.c0s2.day3.discard">Discard half (pour out ~100g)</span>
         </div>
         <div class="flex items-center gap-2 text-sm text-[#514538]">
           <span class="material-symbols-outlined text-[#C4863A] text-base">grain</span>
-          <span>Add 100g all-purpose flour</span>
+          <span data-i18n="onboarding.c0s2.day3.flour">Add 100g all-purpose flour</span>
         </div>
         <div class="flex items-center gap-2 text-sm text-[#514538]">
           <span class="material-symbols-outlined text-[#C4863A] text-base">water_drop</span>
-          <span>Add 100g water</span>
+          <span data-i18n="onboarding.c0s2.day3.water">Add 100g water</span>
         </div>
       </div>
-      <p class="text-xs text-[#514538] bg-[#f8f3e9] rounded-xl p-3 leading-relaxed">Stir well, cover loosely, leave at room temperature. <strong>Your starter is ready</strong> when it reliably doubles within 4–6 hours of feeding, smells pleasantly sour (like yogurt), and is full of bubbles throughout. This usually happens between Day 7–10 depending on your kitchen temperature.</p>
+      <p class="text-xs text-[#514538] bg-[#f8f3e9] rounded-xl p-3 leading-relaxed" data-i18n-html="onboarding.c0s2.day3.inst">Stir well, cover loosely, leave at room temperature. <strong>Your starter is ready</strong> when it reliably doubles within 4–6 hours of feeding, smells pleasantly sour (like yogurt), and is full of bubbles throughout. This usually happens between Day 7–10 depending on your kitchen temperature.</p>
     </div>
 
     <div class="bg-[#875305]/8 rounded-2xl p-4 mb-4 border border-[#875305]/15">
-      <p class="text-xs text-[#514538] leading-relaxed"><strong class="text-[#875305]">Tip:</strong> Warmer kitchens (75°F+) move faster. Cooler kitchens (65°F) take longer. Both produce great starters — patience is the only ingredient you can't measure.</p>
+      <p class="text-xs text-[#514538] leading-relaxed" data-i18n-html="onboarding.c0s2.tip"><strong class="text-[#875305]">Tip:</strong> Warmer kitchens (75°F+) move faster. Cooler kitchens (65°F) take longer. Both produce great starters — patience is the only ingredient you can't measure.</p>
     </div>
   </div>
 
   <div class="px-6 pb-10 border-t border-[#d6c3b3]/20 pt-4">
-    <button onclick="beginStarterCreation()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform shadow-lg">
+    <button onclick="beginStarterCreation()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform shadow-lg" data-i18n="onboarding.c0s2.btnReady">
       I'm ready — start Day 1 →
     </button>
-    <p class="text-center text-[10px] text-[#847466] mt-3">The app will remind you daily to check in on your starter</p>
+    <p class="text-center text-[10px] text-[#847466] mt-3" data-i18n="onboarding.c0s2.footerNote">The app will remind you daily to check in on your starter</p>
   </div>
 </div>
 
@@ -444,13 +449,13 @@
         <div class="jar-label">Starter</div>
       </div>
     </div>
-    <p class="text-xs font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3">Chapter 1 · Meet Your Starter</p>
-    <h1 class="font-headline font-bold text-4xl leading-tight text-[#1d1c16] mb-5">Something magical<br/>is about to begin.</h1>
-    <p class="text-[#514538] leading-relaxed max-w-xs">You've been given a living thing to care for — wild yeast and bacteria, woven together over time. Together, you'll turn flour and water into something extraordinary.</p>
-    <p class="text-[#514538] leading-relaxed max-w-xs mt-3">This is your sourdough journey. Let's begin.</p>
+    <p class="text-xs font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3" data-i18n="onboarding.c1s1.eyebrow">Chapter 1 · Meet Your Starter</p>
+    <h1 class="font-headline font-bold text-4xl leading-tight text-[#1d1c16] mb-5" data-i18n-html="onboarding.c1s1.heading">Something magical<br/>is about to begin.</h1>
+    <p class="text-[#514538] leading-relaxed max-w-xs" data-i18n="onboarding.c1s1.body1">You've been given a living thing to care for — wild yeast and bacteria, woven together over time. Together, you'll turn flour and water into something extraordinary.</p>
+    <p class="text-[#514538] leading-relaxed max-w-xs mt-3" data-i18n="onboarding.c1s1.body2">This is your sourdough journey. Let's begin.</p>
   </div>
   <div class="px-6 pb-10">
-    <button onclick="goTo('c1s2')" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-lg active:scale-95 transition-transform">
+    <button onclick="goTo('c1s2')" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-lg active:scale-95 transition-transform" data-i18n="onboarding.c1s1.btn">
       Begin my journey →
     </button>
   </div>
@@ -460,18 +465,18 @@
 <div class="screen hidden" id="c1s2">
   <div class="flex-1 flex flex-col items-center px-8 text-center pt-20 pb-6">
     <span class="material-symbols-outlined text-5xl text-[#C4863A] mb-6" style="font-variation-settings:'FILL' 1">favorite</span>
-    <p class="text-xs font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3">Name Your Starter</p>
-    <h2 class="font-headline font-bold text-3xl leading-tight mb-4">What will you call<br/>your starter?</h2>
-    <p class="text-[#514538] leading-relaxed max-w-xs mb-8">You'll be feeding this living culture every day. Give it a name that feels right — bakers name their starters the way sailors name their ships.</p>
+    <p class="text-xs font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3" data-i18n="onboarding.c1s2.eyebrow">Name Your Starter</p>
+    <h2 class="font-headline font-bold text-3xl leading-tight mb-4" data-i18n-html="onboarding.c1s2.heading">What will you call<br/>your starter?</h2>
+    <p class="text-[#514538] leading-relaxed max-w-xs mb-8" data-i18n="onboarding.c1s2.body">You'll be feeding this living culture every day. Give it a name that feels right — bakers name their starters the way sailors name their ships.</p>
     <div class="w-full max-w-xs">
       <input id="starterNameInput" type="text" maxlength="20" placeholder="e.g. Bubbles, Scout, Dough-Remi…"
         class="w-full text-center text-xl font-headline font-bold bg-transparent border-b-2 border-[#d6c3b3] focus:border-[#875305] outline-none py-3 text-[#1d1c16] placeholder-[#d6c3b3] transition-colors"
-        oninput="updateNameBtn()"/>
-      <p class="text-xs text-[#847466] mt-2">No inspiration? "Bubbles" is always a classic.</p>
+        oninput="updateNameBtn()" data-i18n-placeholder="onboarding.c1s2.placeholder"/>
+      <p class="text-xs text-[#847466] mt-2" data-i18n="onboarding.c1s2.tip">No inspiration? "Bubbles" is always a classic.</p>
     </div>
   </div>
   <div class="px-6 pb-10">
-    <button id="nameBtn" onclick="confirmName()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-lg active:scale-95 transition-transform" disabled>
+    <button id="nameBtn" onclick="confirmName()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-lg active:scale-95 transition-transform" disabled data-i18n="onboarding.c1s2.btn">
       Meet my starter →
     </button>
   </div>
@@ -495,17 +500,17 @@
     <!-- Health bar -->
     <div class="w-40 mb-6">
       <div class="flex justify-between text-[10px] font-bold uppercase tracking-wider text-[#847466] mb-1">
-        <span>Health</span><span>60%</span>
+        <span data-i18n="onboarding.c1s3.health">Health</span><span>60%</span>
       </div>
       <div class="h-2 bg-[#d6c3b3] rounded-full overflow-hidden">
         <div class="h-full bg-[#875305] rounded-full" style="width:60%;transition:width 1s ease"></div>
       </div>
     </div>
     <h2 class="font-headline font-bold text-3xl leading-tight mb-4" id="c1s3Headline">Bubbles is alive!</h2>
-    <p class="text-[#514538] leading-relaxed max-w-xs">A healthy starter doubles in size after feeding and smells pleasantly tangy — almost like yogurt. Let's learn how to keep yours thriving.</p>
+    <p class="text-[#514538] leading-relaxed max-w-xs" data-i18n="onboarding.c1s3.body">A healthy starter doubles in size after feeding and smells pleasantly tangy — almost like yogurt. Let's learn how to keep yours thriving.</p>
   </div>
   <div class="px-6 pb-10">
-    <button onclick="completeChapter1()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
+    <button onclick="completeChapter1()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform" data-i18n="onboarding.c1s3.btn">
       Let's learn the basics →
     </button>
   </div>
@@ -516,8 +521,8 @@
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c1game" style="position:relative">
   <div class="flex-1 flex flex-col px-6 pt-16" style="overflow-y:auto;-webkit-overflow-scrolling:touch">
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1">Chapter 1 · Quiz Time!</p>
-    <h2 class="font-headline font-bold text-2xl mb-5">Starter IQ Check 🫧</h2>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1" data-i18n="onboarding.c1game.eyebrow">Chapter 1 · Quiz Time!</p>
+    <h2 class="font-headline font-bold text-2xl mb-5" data-i18n="onboarding.c1game.heading">Starter IQ Check 🫧</h2>
     <!-- Hearts + progress bar -->
     <div class="flex items-center gap-3 mb-7">
       <div class="flex gap-0.5 shrink-0" style="font-size:22px">
@@ -554,8 +559,8 @@
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c5game">
   <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Mixing</p>
-    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Mix &amp; Autolyse 🥣</h2>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2" data-i18n="onboarding.c5game.eyebrow">Interactive · Mixing</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2" data-i18n="onboarding.c5game.heading">Mix &amp; Autolyse 🥣</h2>
     <p id="mixInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-3 min-h-[2.5rem]">Tap Flour to add it to your bowl</p>
 
     <!-- Active step label -->
@@ -600,7 +605,7 @@
 
     <!-- Fact card -->
     <div id="mixFactCard" style="display:none;background:linear-gradient(135deg,#875305,#c4863a);border-radius:16px;padding:14px 18px;width:100%;max-width:300px;">
-      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
+      <p data-i18n="onboarding.c5game.bakerInsight" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
       <p id="mixFactText" style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left"></p>
     </div>
   </div>
@@ -616,8 +621,8 @@
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c6game">
   <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Stretch &amp; Fold</p>
-    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Build Strength 💪</h2>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2" data-i18n="onboarding.c6game.eyebrow">Interactive · Stretch &amp; Fold</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2" data-i18n="onboarding.c6game.title">Build Strength 💪</h2>
     <p id="foldInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-3 min-h-[2.5rem]">Tap the dough to start your first coil fold — grab, lift, and fold it over</p>
 
     <!-- Dough container (bird's-eye view) -->
@@ -658,7 +663,7 @@
 
     <!-- Fact card -->
     <div id="foldFactCard" style="display:none;background:linear-gradient(135deg,#875305,#c4863a);border-radius:16px;padding:14px 18px;width:100%;max-width:300px;">
-      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
+      <p data-i18n="onboarding.c6game.bakerInsight" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
       <p id="foldFactText" style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left"></p>
     </div>
   </div>
@@ -676,8 +681,8 @@
   <div class="flex-1 flex flex-col px-6 pt-20 pb-6 overflow-hidden">
     <!-- Chapter header -->
     <div class="text-center mb-6">
-      <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1">Chapter 1 · What is Sourdough</p>
-      <h2 class="font-headline font-bold text-2xl">What you need to know</h2>
+      <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1" data-i18n="onboarding.c2s1.eyebrow">Chapter 1 · What is Sourdough</p>
+      <h2 class="font-headline font-bold text-2xl" data-i18n="onboarding.c2s1.heading">What you need to know</h2>
     </div>
     <!-- Lesson card -->
     <div class="flex-1 flex flex-col" id="lessonCardWrap">
@@ -709,8 +714,8 @@
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c2quiz" style="position:relative">
   <div class="flex-1 flex flex-col px-6 pt-16" style="overflow-y:auto;-webkit-overflow-scrolling:touch">
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1">Chapter 2 · Quiz Time!</p>
-    <h2 class="font-headline font-bold text-2xl mb-5">Mix &amp; Autolyse Check 🥣</h2>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1" data-i18n="onboarding.c2quiz.eyebrow">Chapter 2 · Quiz Time!</p>
+    <h2 class="font-headline font-bold text-2xl mb-5" data-i18n="onboarding.c2quiz.heading">Mix &amp; Autolyse Check 🥣</h2>
     <!-- Hearts + progress bar -->
     <div class="flex items-center gap-3 mb-7">
       <div class="flex gap-0.5 shrink-0" style="font-size:22px">
@@ -747,8 +752,8 @@
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c2game">
   <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Bulk Fermentation</p>
-    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Watch It Rise 🔍</h2>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2" data-i18n="onboarding.c2game.eyebrow">Interactive · Bulk Fermentation</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2" data-i18n="onboarding.c2game.title">Watch It Rise 🔍</h2>
     <p id="bulkInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-4 min-h-[2.5rem]">Your dough is mixed and ready! Tap below to start the bulk fermentation rest.</p>
 
     <!-- ── Proofing bowl visual ─────────────────────────────────────────── -->
@@ -834,7 +839,7 @@
       border-radius:16px;padding:14px 18px;margin-top:10px;width:100%;max-width:300px;
       animation:fadeIn 0.4s ease;
     ">
-      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
+      <p data-i18n="onboarding.c2game.bakerInsight" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
       <p id="bulkFactText" style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left"></p>
     </div>
   </div>
@@ -853,8 +858,8 @@
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c7game">
   <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3 overflow-y-auto">
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Bulk Timing</p>
-    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Find Your Bulk Window 🌡️</h2>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2" data-i18n="onboarding.c7game.eyebrow">Interactive · Bulk Timing</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2" data-i18n="onboarding.c7game.title">Find Your Bulk Window 🌡️</h2>
     <p id="tempInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-4 min-h-[2.5rem]">Tap each kitchen to discover how temperature changes your bulk time</p>
 
     <!-- 3 temperature cards -->
@@ -919,8 +924,8 @@
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c8game">
   <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Pre-shaping</p>
-    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Pre-shape the Dough 🔪</h2>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2" data-i18n="onboarding.c8game.eyebrow">Interactive · Pre-shaping</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2" data-i18n="onboarding.c8game.title">Pre-shape the Dough 🔪</h2>
     <p id="preshapeInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-4 min-h-[2.5rem]">Tap to flip the dough onto your surface — bench scraper slides under and flips it out</p>
 
     <!-- Counter + dough visual -->
@@ -929,7 +934,7 @@
         <div style="position:absolute;top:7px;left:14px;right:14px;height:2px;background:rgba(255,255,255,0.65);border-radius:99px;filter:blur(1px)"></div>
         <div id="preshapeDough" onclick="preshapeTap()" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:110px;height:80px;background:radial-gradient(ellipse at 40% 30%,#f0dda8 0%,#d4a860 45%,#b08038 80%,#7a5520 100%);border-radius:48% 52% 55% 45% / 52% 48% 54% 48%;cursor:pointer;transition:all 0.45s cubic-bezier(.34,1.56,.64,1);box-shadow:0 6px 20px rgba(135,83,5,0.25);user-select:none;-webkit-user-select:none;"></div>
         <div id="preshapeScraper" style="position:absolute;top:10px;right:10px;font-size:22px;transition:opacity 0.4s;pointer-events:none">🔪</div>
-        <div id="preshapeRestPill" style="display:none;position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:#875305;color:#fff;border-radius:99px;padding:4px 14px;font-size:11px;font-weight:700;white-space:nowrap">⏱️ Bench resting 20–30 min…</div>
+        <div id="preshapeRestPill" data-i18n="onboarding.preshape.restPill" style="display:none;position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:#875305;color:#fff;border-radius:99px;padding:4px 14px;font-size:11px;font-weight:700;white-space:nowrap">⏱️ Bench resting 20–30 min…</div>
       </div>
     </div>
 
@@ -942,8 +947,8 @@
     </div>
 
     <div id="preshapeFactCard" style="display:none;background:linear-gradient(135deg,#875305,#c4863a);border-radius:16px;padding:14px 18px;width:100%;max-width:300px;">
-      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
-      <p style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left">The bench rest (20–30 min) lets gluten relax after pre-shaping. This makes final shaping much smoother — the dough will stretch without tearing and hold its shape beautifully.</p>
+      <p data-i18n="onboarding.c8game.bakerInsight" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
+      <p data-i18n="onboarding.c8game.insight" style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left">The bench rest (20–30 min) lets gluten relax after pre-shaping. This makes final shaping much smoother — the dough will stretch without tearing and hold its shape beautifully.</p>
     </div>
   </div>
   <div class="px-6 pb-10">
@@ -958,8 +963,8 @@
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c9game">
   <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Final Shaping</p>
-    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Shape Your Loaf 🍞</h2>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2" data-i18n="onboarding.c9game.eyebrow">Interactive · Final Shaping</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2" data-i18n="onboarding.c9game.title">Shape Your Loaf 🍞</h2>
     <p id="shapeInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-4 min-h-[2.5rem]">Tap the dough to gently stretch the top outward</p>
 
     <!-- Dough + banneton -->
@@ -985,8 +990,8 @@
     <p id="shapeTapText" style="font-size:11px;font-weight:700;color:#847466;margin-bottom:8px">Tap the dough to begin</p>
 
     <div id="shapeFactCard" style="display:none;background:linear-gradient(135deg,#875305,#c4863a);border-radius:16px;padding:14px 18px;width:100%;max-width:300px;">
-      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
-      <p style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left">Surface tension is everything. A tight, smooth outer skin traps gases and helps the loaf rise upward — not outward. Shaping with confidence leads to better oven spring.</p>
+      <p data-i18n="onboarding.c9game.bakerInsight" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
+      <p data-i18n="onboarding.c9game.insight" style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left">Surface tension is everything. A tight, smooth outer skin traps gases and helps the loaf rise upward — not outward. Shaping with confidence leads to better oven spring.</p>
     </div>
   </div>
   <div class="px-6 pb-10">
@@ -1001,8 +1006,8 @@
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c10game">
   <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Cold Proof</p>
-    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Into the Fridge ❄️</h2>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2" data-i18n="onboarding.c10game.eyebrow">Interactive · Cold Proof</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2" data-i18n="onboarding.c10game.title">Into the Fridge ❄️</h2>
     <p id="proofInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-4 min-h-[2.5rem]">Tap the banneton to dust it with rice flour</p>
 
     <!-- Banneton + fridge -->
@@ -1036,8 +1041,8 @@
     </div>
 
     <div id="proofFactCard" style="display:none;background:linear-gradient(135deg,#875305,#c4863a);border-radius:16px;padding:14px 18px;width:100%;max-width:300px;">
-      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
-      <p style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left">Cold proofing 8–16 hours develops complex flavor through slow fermentation. The cold also firms up the dough, making it easier to score a beautiful pattern before baking.</p>
+      <p data-i18n="onboarding.c10game.bakerInsight" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
+      <p data-i18n="onboarding.c10game.insight" style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left">Cold proofing 8–16 hours develops complex flavor through slow fermentation. The cold also firms up the dough, making it easier to score a beautiful pattern before baking.</p>
     </div>
   </div>
   <div class="px-6 pb-10">
@@ -1052,8 +1057,8 @@
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c11game">
   <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-3">
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Interactive · Baking</p>
-    <h2 class="font-headline font-bold text-2xl leading-tight mb-2">Bake Day! 🔥</h2>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2" data-i18n="onboarding.c11game.eyebrow">Interactive · Baking</p>
+    <h2 class="font-headline font-bold text-2xl leading-tight mb-2" data-i18n="onboarding.c11game.title">Bake Day! 🔥</h2>
     <p id="bakeInstText" class="text-[#514538] text-sm leading-relaxed max-w-[17rem] mb-3 min-h-[2.5rem]">Tap the Dutch oven to preheat at 500°F (260°C) — needs 1 hour to get screaming hot!</p>
 
     <!-- Dutch oven -->
@@ -1089,8 +1094,8 @@
     </div>
 
     <div id="bakeFactCard" style="display:none;background:linear-gradient(135deg,#875305,#c4863a);border-radius:16px;padding:14px 18px;width:100%;max-width:300px;">
-      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
-      <p style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left">The Dutch oven creates steam in the first 20 minutes — keeping the crust soft so the loaf expands fully (oven spring). Removing the lid after 20 min lets the Maillard reaction work its magic: that gorgeous golden crunch.</p>
+      <p data-i18n="onboarding.c11game.bakerInsight" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#ffb967;margin-bottom:5px;">Baker's Insight</p>
+      <p data-i18n="onboarding.c11game.insight" style="font-size:13px;font-weight:600;color:#fff;line-height:1.55;text-align:left">The Dutch oven creates steam in the first 20 minutes — keeping the crust soft so the loaf expands fully (oven spring). Removing the lid after 20 min lets the Maillard reaction work its magic: that gorgeous golden crunch.</p>
     </div>
   </div>
   <div class="px-6 pb-10">
@@ -1106,14 +1111,14 @@
 <div class="screen hidden" id="c3s1">
   <div class="flex flex-col h-full pt-16 pb-6">
     <div class="px-6 text-center mb-5">
-      <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1">Chapter 3 · Your Gear</p>
-      <h2 class="font-headline font-bold text-2xl mb-2">Baker's equipment check</h2>
-      <p class="text-[#514538] text-xs leading-relaxed">Mark what you already have. Don't panic if you're missing something — we'll show you where to learn more.</p>
+      <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1" data-i18n="onboarding.c3s1.eyebrow">Chapter 3 · Your Gear</p>
+      <h2 class="font-headline font-bold text-2xl mb-2" data-i18n="onboarding.c3s1.heading">Baker's equipment check</h2>
+      <p class="text-[#514538] text-xs leading-relaxed" data-i18n="onboarding.c3s1.body">Mark what you already have. Don't panic if you're missing something — we'll show you where to learn more.</p>
     </div>
     <div class="flex-1 overflow-y-auto px-6 space-y-3" id="equipList"></div>
     <div class="px-6 pt-4 border-t border-[#d6c3b3]/20">
-      <p class="text-[10px] text-[#847466] italic mb-3 text-center">You don't need everything to start — a Dutch oven and a digital scale will get you through your first 10 bakes.</p>
-      <button onclick="completeChapter3()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
+      <p class="text-[10px] text-[#847466] italic mb-3 text-center" data-i18n="onboarding.c3s1.footerNote">You don't need everything to start — a Dutch oven and a digital scale will get you through your first 10 bakes.</p>
+      <button onclick="completeChapter3()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform" data-i18n="onboarding.c3s1.btn">
         Continue to quiz →
       </button>
     </div>
@@ -1125,8 +1130,8 @@
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <div class="screen hidden" id="c3game" style="position:relative">
   <div class="flex-1 flex flex-col px-6 pt-16" style="overflow-y:auto;-webkit-overflow-scrolling:touch">
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1">Chapter 3 · Quiz Time!</p>
-    <h2 class="font-headline font-bold text-2xl mb-5">Baker's Toolkit 🔧</h2>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-1" data-i18n="onboarding.c3game.eyebrow">Chapter 3 · Quiz Time!</p>
+    <h2 class="font-headline font-bold text-2xl mb-5" data-i18n="onboarding.c3game.heading">Baker's Toolkit 🔧</h2>
     <!-- Hearts + progress bar -->
     <div class="flex items-center gap-3 mb-7">
       <div class="flex gap-0.5 shrink-0" style="font-size:22px">
@@ -1166,12 +1171,12 @@
 <div class="screen hidden" id="c4s1">
   <div class="flex-1 flex flex-col items-center px-8 text-center pt-20 pb-6">
     <span class="material-symbols-outlined text-5xl text-[#C4863A] mb-6" style="font-variation-settings:'FILL' 1">restaurant</span>
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3">Chapter 4 · Your First Feeding</p>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-3" data-i18n="onboarding.c4s1.eyebrow">Chapter 4 · Your First Feeding</p>
     <h2 class="font-headline font-bold text-3xl leading-tight mb-5">Let's check in on<br/><span id="c4StarterName" class="text-[#875305] italic">your starter</span> together.</h2>
-    <p class="text-[#514538] leading-relaxed max-w-xs">A daily starter check-in takes 30 seconds. You note how active it looks — bubbly, doubling, or flat — and log the temperature. This tiny habit is what separates consistent bakers from frustrated ones.</p>
+    <p class="text-[#514538] leading-relaxed max-w-xs" data-i18n="onboarding.c4s1.body">A daily starter check-in takes 30 seconds. You note how active it looks — bubbly, doubling, or flat — and log the temperature. This tiny habit is what separates consistent bakers from frustrated ones.</p>
   </div>
   <div class="px-6 pb-10">
-    <button onclick="goTo('c4game');initFeedingGame();" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform">
+    <button onclick="goTo('c4game');initFeedingGame();" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform" data-i18n="onboarding.c4s1.btn">
       Do my first check-in →
     </button>
   </div>
@@ -1180,8 +1185,8 @@
 <!-- C4-GAME: Feeding Ritual Mini-Game -->
 <div class="screen hidden" id="c4game">
   <div class="flex-1 flex flex-col items-center justify-start px-6 text-center pt-20 pb-4">
-    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2">Feeding Ritual</p>
-    <h2 class="font-headline font-bold text-2xl mb-1">Feed <span id="gameJarName">your starter</span>!</h2>
+    <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C4863A] mb-2" data-i18n="onboarding.c4game.eyebrow">Feeding Ritual</p>
+    <h2 class="font-headline font-bold text-2xl mb-1"><span data-i18n="onboarding.c4game.heading">Feed </span><span id="gameJarName">your starter</span>!</h2>
     <p id="gameInstText" class="text-[#514538] text-sm mb-5 max-w-xs min-h-[2.5rem] leading-relaxed">Tap the flour bag to add flour to the jar</p>
 
     <!-- Jar -->
@@ -1266,8 +1271,8 @@
           <span class="material-symbols-outlined text-[#847466]">water</span>
         </div>
         <div>
-          <div class="font-bold text-sm">Flat</div>
-          <div class="text-xs text-[#514538]">Not much activity. Hungry or cold.</div>
+          <div class="font-bold text-sm" data-i18n="onboarding.c4s2.flatLabel">Flat</div>
+          <div class="text-xs text-[#514538]" data-i18n="onboarding.c4s2.flatDesc">Not much activity. Hungry or cold.</div>
         </div>
       </button>
       <button class="activity-pill w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#d6c3b3] text-left" onclick="selectActivity('bubbly',this)">
@@ -1275,8 +1280,8 @@
           <span class="material-symbols-outlined text-[#C4863A]">bubble_chart</span>
         </div>
         <div>
-          <div class="font-bold text-sm">Bubbly</div>
-          <div class="text-xs text-[#514538]">Lots of bubbles — active and alive.</div>
+          <div class="font-bold text-sm" data-i18n="onboarding.c4s2.bubblyLabel">Bubbly</div>
+          <div class="text-xs text-[#514538]" data-i18n="onboarding.c4s2.bubblyDesc">Lots of bubbles — active and alive.</div>
         </div>
       </button>
       <button class="activity-pill w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#d6c3b3] text-left" onclick="selectActivity('doubling',this)">
@@ -1284,8 +1289,8 @@
           <span class="material-symbols-outlined text-[#875305]">trending_up</span>
         </div>
         <div>
-          <div class="font-bold text-sm">Doubling</div>
-          <div class="text-xs text-[#514538]">Doubled in size — at peak! Bake now.</div>
+          <div class="font-bold text-sm" data-i18n="onboarding.c4s2.doublingLabel">Doubling</div>
+          <div class="text-xs text-[#514538]" data-i18n="onboarding.c4s2.doublingDesc">Doubled in size — at peak! Bake now.</div>
         </div>
       </button>
     </div>
@@ -1293,7 +1298,7 @@
     <div class="flex items-center gap-3 mb-5 bg-[#f2ede3] rounded-2xl p-4">
       <span class="material-symbols-outlined text-[#847466]">thermostat</span>
       <div class="flex-1">
-        <label class="text-xs font-bold uppercase tracking-wider text-[#847466]">Room temp (optional)</label>
+        <label class="text-xs font-bold uppercase tracking-wider text-[#847466]" data-i18n="onboarding.c4s2.tempLabel">Room temp (optional)</label>
         <input id="tempInput" type="number" min="50" max="100" placeholder="e.g. 72" class="block w-full bg-transparent text-base font-bold text-[#1d1c16] outline-none placeholder-[#d6c3b3] mt-0.5"/>
       </div>
       <span class="text-sm text-[#847466]">°F</span>
@@ -1355,10 +1360,10 @@
     </div>
     <div class="bg-[#875305]/8 rounded-2xl px-6 py-4 mb-6 inline-flex items-center gap-3">
       <span class="material-symbols-outlined text-[#875305]" style="font-variation-settings:'FILL' 1">local_fire_department</span>
-      <span class="font-bold text-[#875305]">Day 1 streak started!</span>
+      <span class="font-bold text-[#875305]" data-i18n="onboarding.c4s3.streakBadge">Day 1 streak started!</span>
     </div>
     <h2 class="font-headline font-bold text-3xl leading-tight mb-4"><span id="c4CelebName">Bubbles</span> has been fed!</h2>
-    <p class="text-[#514538] text-sm leading-relaxed max-w-xs mb-2">You've officially started your sourdough journey. Your first bake is unlocked — whenever you're ready.</p>
+    <p class="text-[#514538] text-sm leading-relaxed max-w-xs mb-2" data-i18n="onboarding.c4s3.body1">You've officially started your sourdough journey. Your first bake is unlocked — whenever you're ready.</p>
     <p class="text-[#514538] text-xs text-[#847466] max-w-xs mb-5">Return every day to check in on <span id="c4CelebName2" class="font-bold">your starter</span> and keep your streak alive.</p>
     <!-- Facebook community CTA -->
     <a href="https://www.facebook.com/groups/1235548458006543" target="_blank"
@@ -1367,16 +1372,16 @@
         <span class="material-symbols-outlined text-white" style="font-size:18px;font-variation-settings:'FILL' 1;">group</span>
       </div>
       <div class="text-left">
-        <p class="text-[10px] font-bold uppercase tracking-wider text-[#C4863A]">Baker's Community</p>
-        <p class="text-xs text-[#514538] font-bold">Ask Alison anything in our FB group</p>
+        <p class="text-[10px] font-bold uppercase tracking-wider text-[#C4863A]" data-i18n="onboarding.c4s3.communityEyebrow">Baker's Community</p>
+        <p class="text-xs text-[#514538] font-bold" data-i18n="onboarding.c4s3.communityBody">Ask Alison anything in our FB group</p>
       </div>
     </a>
   </div>
   <div class="px-6 pb-10">
-    <button onclick="finishOnboarding()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform shadow-lg">
+    <button onclick="finishOnboarding()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform shadow-lg" data-i18n="onboarding.c4s3.btnBake">
       Start My First Bake →
     </button>
-    <button onclick="finishOnboarding('app.html')" class="w-full py-3 mt-3 text-[#847466] text-sm font-bold">
+    <button onclick="finishOnboarding('app.html')" class="w-full py-3 mt-3 text-[#847466] text-sm font-bold" data-i18n="onboarding.c4s3.btnDash">
       Go to Dashboard first
     </button>
   </div>
@@ -1386,6 +1391,7 @@
 <script src="i18n.js"></script>
 <script src="gamification.js"></script>
 <script>
+const t = k => (window.PymI18n && window.PymI18n.t(k)) || k;
 // ── State ─────────────────────────────────────────────────────────────────
 let currentScreen = 'c0s1';
 let starterName   = 'Bubbles';
@@ -1485,6 +1491,7 @@ function goTo(id, exitCurrent=true) {
     next.classList.remove('hidden');
     currentScreen = id;
     updateNav();
+    window.PymI18n && window.PymI18n.applyTranslations();
     // Save progress
     const ob = JSON.parse(storage.getItem('pym_onboarding')||'{}');
     storage.setItem('pym_onboarding', JSON.stringify({ ...ob, currentScreen: id }));
@@ -1562,13 +1569,13 @@ function updateNav() {
   const label = document.getElementById('chapterLabel');
   const _interactiveLabs = ['c2game','c4game','c5game','c6game','c7game','c8game','c9game','c10game','c11game'];
   if (_interactiveLabs.includes(currentScreen)) {
-    label.textContent = 'Interactive Lab 🧪';
+    label.textContent = t('onboarding.topBar.interactiveLab');
   } else if (currentScreen === 'c1game' || currentScreen === 'c2quiz' || currentScreen === 'c3game') {
-    label.textContent = 'Quiz Time! 🎮';
+    label.textContent = t('onboarding.topBar.quizTime');
   } else if (currentScreen === 'c0s1' || currentScreen === 'c0s2') {
-    label.textContent = 'Getting Started';
+    label.textContent = t('onboarding.topBar.gettingStarted');
   } else {
-    label.textContent = 'Chapter ' + ch;
+    label.textContent = t('onboarding.topBar.chapter') + ' ' + ch;
   }
   // Back button — hide on first screen
   const backBtn = document.getElementById('backBtn');
@@ -1579,14 +1586,14 @@ function updateNav() {
 function updateNameBtn() {
   const v = document.getElementById('starterNameInput').value.trim();
   document.getElementById('nameBtn').disabled = v.length === 0;
-  document.getElementById('nameBtn').textContent = v ? `Meet ${v} →` : 'Meet my starter →';
+  document.getElementById('nameBtn').textContent = v ? t('onboarding.c1s2.meetName').replace('{name}', v) : t('onboarding.c1s2.btn');
 }
 
 function confirmName() {
   const v = document.getElementById('starterNameInput').value.trim();
   starterName = v || 'Bubbles';
   document.getElementById('starterJarLabel').textContent = starterName;
-  document.getElementById('c1s3Headline').textContent    = `${starterName} is alive!`;
+  document.getElementById('c1s3Headline').textContent    = starterName + t('onboarding.c1s3.isAlive');
   // Populate other name references
   document.querySelectorAll('#c4StarterName,#c4StarterName2').forEach(el => el.textContent = starterName);
   document.querySelectorAll('#feedBtnName,#c4JarLabel,#c4CelebName,#c4CelebName2').forEach(el => el.textContent = starterName);
@@ -1606,31 +1613,11 @@ function completeChapter1() {
 
 // ── Chapter 2 (Lessons) ───────────────────────────────────────────────────
 const LESSONS = [
-  {
-    icon: 'grain',
-    headline: 'What is sourdough?',
-    body: 'Unlike commercial yeast bread, sourdough is leavened by wild yeast and beneficial bacteria naturally present in flour and your environment. This living culture — your starter — is what makes sourdough unique. The process is slower, but the flavor, texture, and nutrition are in a completely different league.',
-  },
-  {
-    icon: 'science',
-    headline: 'Your starter is alive',
-    body: 'A healthy starter should roughly double in size within 4–8 hours of feeding and smell pleasantly tangy — like yogurt or beer. If you see a greyish liquid on top (called "hooch"), that\'s just your starter saying it\'s hungry. Pour it off, feed it, and it\'ll bounce right back.',
-  },
-  {
-    icon: 'list_alt',
-    headline: 'The 5 stages of a bake',
-    body: 'Every sourdough bake follows the same rhythm: Mix → Bulk Fermentation → Shaping → Cold Proof → Bake. Your app guides you through each stage with timers and instructions. The first time feels complex. By your third bake, it feels like a familiar ritual.',
-  },
-  {
-    icon: 'touch_app',
-    headline: 'Reading your dough',
-    body: 'The windowpane test tells you when gluten is developed: stretch a small piece of dough thin — if it forms a translucent sheet without tearing, you\'re ready to shape. For fermentation, look for 50–75% volume increase, bubbles on the sides of your container, and a dough that jiggles when you shake it.',
-  },
-  {
-    icon: 'favorite',
-    headline: 'Your first loaf will be ugly — and that\'s perfect',
-    body: 'Every incredible baker started with flat, dense, or pale loaves. That\'s not failure — that\'s data. Did it spring in the oven? How\'s the crumb? What was your bulk time? Write it in your bake notes. Sourdough baking is a practice, not a performance. Be patient with yourself.',
-  },
+  { icon: 'grain',     hKey: 'onboarding.lesson1.h', bKey: 'onboarding.lesson1.b' },
+  { icon: 'science',   hKey: 'onboarding.lesson2.h', bKey: 'onboarding.lesson2.b' },
+  { icon: 'list_alt',  hKey: 'onboarding.lesson3.h', bKey: 'onboarding.lesson3.b' },
+  { icon: 'touch_app', hKey: 'onboarding.lesson4.h', bKey: 'onboarding.lesson4.b' },
+  { icon: 'favorite',  hKey: 'onboarding.lesson5.h', bKey: 'onboarding.lesson5.b' },
 ];
 
 function initLessons() {
@@ -1661,8 +1648,8 @@ function initLessons() {
 function renderLesson() {
   const lesson = LESSONS[lessonIndex];
   document.getElementById('lessonIcon').textContent     = lesson.icon;
-  document.getElementById('lessonHeadline').textContent = lesson.headline;
-  document.getElementById('lessonBody').textContent     = lesson.body;
+  document.getElementById('lessonHeadline').textContent = t(lesson.hKey);
+  document.getElementById('lessonBody').textContent     = t(lesson.bKey);
   document.getElementById('lessonNum').textContent      = `${lessonIndex+1} of ${LESSONS.length}`;
   // Dots
   const dotsEl = document.getElementById('lessonDots');
@@ -1670,7 +1657,7 @@ function renderLesson() {
     `<div style="width:6px;height:6px;border-radius:50%;background:${i<=lessonIndex?'#875305':'#d6c3b3'};transition:background 0.3s"></div>`
   ).join('');
   document.getElementById('lessonNextBtn').textContent =
-    lessonIndex === LESSONS.length-1 ? 'Continue →' : 'Got it →';
+    lessonIndex === LESSONS.length-1 ? t('onboarding.c2s1.btnContinue') : t('onboarding.c2s1.btnGotIt');
 }
 
 function nextLesson() {
@@ -2126,8 +2113,8 @@ function initBulkGame() {
   _bulkSetStep('bulk-step-rest', 'active');
   ['bulk-step-temp','bulk-step-grow','bulk-step-shake','bulk-step-poke','bulk-step-pane'].forEach(id => _bulkSetStep(id, 'idle'));
   // Reset instruction + button + cards
-  document.getElementById('bulkInstText').textContent = 'Your dough is mixed and ready! Tap below to start the bulk fermentation rest.';
-  _bulkShowBtn('💤', 'Start Resting');
+  document.getElementById('bulkInstText').textContent = t('onboarding.bulk.initInst');
+  _bulkShowBtn('💤', t('onboarding.c2game.btn.startResting'));
   document.getElementById('bulkFactCard').style.display = 'none';
   document.getElementById('bulkContinueBtn').disabled = true;
   startAmbientMusic();
@@ -2169,7 +2156,7 @@ function _bulkStartRest() {
   _bulkSetStep('bulk-step-rest', 'done');
   _bulkSetStep('bulk-step-temp', 'active');
   _bulkStep = 'temp';
-  document.getElementById('bulkInstText').textContent = 'Resting… dough is warming up. Tap below to check the temperature 🌡️';
+  document.getElementById('bulkInstText').textContent = t('onboarding.bulk.restStart');
   document.getElementById('bulkWarmth').style.background =
     'radial-gradient(ellipse at 50% 110%,rgba(255,185,103,0.18) 0%,rgba(255,185,103,0.0) 68%)';
   setTimeout(() => { _bulkShowBtn('🌡️', 'Check Temperature'); }, 800);
@@ -2184,7 +2171,7 @@ function _bulkCheckTemp() {
   _bulkStep = 'grow';
   document.getElementById('bulkWarmth').style.background =
     'radial-gradient(ellipse at 50% 110%,rgba(255,185,103,0.28) 0%,rgba(255,185,103,0.0) 68%)';
-  document.getElementById('bulkInstText').textContent = '74–78°F is the sweet spot! Now tap the bowl to watch your dough grow 📈';
+  document.getElementById('bulkInstText').textContent = t('onboarding.bulk.checkTemp');
 }
 
 // ── Step 3: Growth Tracking ───────────────────────────────────────────────
@@ -2195,7 +2182,7 @@ function _bulkCheckGrowth() {
   _bulkStep = 'shake';
   // Dough rises to 65%
   document.getElementById('bulkDough').style.height = '65%';
-  document.getElementById('bulkInstText').textContent = 'Dough is growing! Now shake the bowl — tap below to do the jiggle test 🤝';
+  document.getElementById('bulkInstText').textContent = t('onboarding.bulk.grow');
   setTimeout(() => { _bulkShowBtn('🤝', 'Shake Test'); }, 600);
 }
 
@@ -2213,7 +2200,7 @@ function _bulkShake() {
   setTimeout(() => {
     document.getElementById('bulkDough').style.height = '72%';
     ['blkBub1','blkBub2','blkBub3'].forEach(id => { document.getElementById(id).style.opacity = '1'; });
-    document.getElementById('bulkInstText').textContent = 'It jiggles like a marshmallow! Bubbles visible on sides. Tap the bowl for the poke test 👆';
+    document.getElementById('bulkInstText').textContent = t('onboarding.bulk.shake');
     document.getElementById('bulkPokeHint').style.opacity = '1';
   }, 400);
 }
@@ -2228,7 +2215,7 @@ function _bulkPoke() {
   _bulkSetStep('bulk-step-poke', 'done');
   _bulkSetStep('bulk-step-pane', 'active');
   _bulkStep = 'pane';
-  document.getElementById('bulkInstText').textContent = 'Slowly springs back — perfect! One last test: the windowpane. Tap below 🔍';
+  document.getElementById('bulkInstText').textContent = t('onboarding.bulk.poke');
   setTimeout(() => { _bulkShowBtn('🔍', 'Windowpane Test'); }, 500);
 }
 
@@ -2242,8 +2229,7 @@ function _bulkWindowpane() {
   document.getElementById('bulkDough').style.height = '78%';
   document.getElementById('bulkWarmth').style.background =
     'radial-gradient(ellipse at 50% 110%,rgba(255,185,103,0.42) 0%,rgba(255,185,103,0.0) 68%)';
-  document.getElementById('bulkInstText').textContent =
-    '✓ Stretches thin without tearing — bulk fermentation complete! Time to shape. 🎉';
+  document.getElementById('bulkInstText').textContent = t('onboarding.bulk.done');
   const insight = BULK_INSIGHTS[Math.floor(Math.random() * BULK_INSIGHTS.length)];
   document.getElementById('bulkFactText').textContent  = insight;
   document.getElementById('bulkFactCard').style.display = 'block';
@@ -2271,12 +2257,12 @@ function _mxUpdateActiveLabel() {
   const lbl = document.getElementById('mixActiveLabel');
   if (!lbl) return;
   const hints = {
-    flour:   '↓ Tap to add flour',
-    water:   '↓ Tap to add water',
-    starter: '↓ Tap to add starter',
-    mix:     '↓ Tap the bowl to mix',
+    flour:   t('onboarding.c5game.initLabel'),
+    water:   t('onboarding.mix.hintWater'),
+    starter: t('onboarding.mix.hintStarter'),
+    mix:     t('onboarding.mix.hintMix'),
     rest:    '',
-    salt:    '↓ Tap to add salt',
+    salt:    t('onboarding.mix.hintSalt'),
     done:    ''
   };
   lbl.textContent = hints[_mixStep] || '';
@@ -2296,7 +2282,7 @@ function initMixGame() {
   document.getElementById('mixActionWrap').style.display = 'none';
   document.getElementById('mixFactCard').style.display   = 'none';
   document.getElementById('mixContinueBtn').disabled     = true;
-  document.getElementById('mixInstText').textContent = 'Tap Flour to add it to your bowl';
+  document.getElementById('mixInstText').textContent = t('onboarding.c5game.initInst');
   _mxSetStep('mix-step-flour', 'active');
   ['mix-step-water','mix-step-starter','mix-step-mix','mix-step-rest','mix-step-salt'].forEach(id => _mxSetStep(id, 'idle'));
   _mxUpdateActiveLabel();
@@ -2326,7 +2312,7 @@ function mixTapIngredient(type) {
     d.style.height = '46%'; d.style.background = 'rgba(240,230,200,0.72)';
     _mxSetStep('mix-step-flour', 'done'); _mxSetStep('mix-step-water', 'active');
     _mixStep = 'water';
-    document.getElementById('mixInstText').textContent = 'Flour is in! Now add water';
+    document.getElementById('mixInstText').textContent = t('onboarding.mix.addedFlour');
     _mxUpdateActiveLabel();
 
   } else if (type === 'water' && _mixStep === 'water') {
@@ -2337,7 +2323,7 @@ function mixTapIngredient(type) {
     d.style.height = '52%'; d.style.background = 'rgba(210,185,140,0.88)';
     _mxSetStep('mix-step-water', 'done'); _mxSetStep('mix-step-starter', 'active');
     _mixStep = 'starter';
-    document.getElementById('mixInstText').textContent = 'Water added! Now add your active starter 🫙';
+    document.getElementById('mixInstText').textContent = t('onboarding.mix.addedWater');
     _mxUpdateActiveLabel();
 
   } else if (type === 'starter' && _mixStep === 'starter') {
@@ -2348,7 +2334,7 @@ function mixTapIngredient(type) {
     _mxSetStep('mix-step-starter', 'done'); _mxSetStep('mix-step-mix', 'active');
     _mixStep = 'mix';
     _mixBowlTaps = 0;
-    document.getElementById('mixInstText').textContent = 'Starter is in! Tap the bowl 3 times to mix everything together 👐';
+    document.getElementById('mixInstText').textContent = t('onboarding.mix.addedStarter');
     _mxUpdateActiveLabel();
 
   } else if (type === 'salt' && _mixStep === 'salt') {
@@ -2356,7 +2342,7 @@ function mixTapIngredient(type) {
     document.getElementById('mixSaltBtn').style.opacity = '0.2';
     _mxSetStep('mix-step-salt', 'done');
     _mixStep = 'done';
-    document.getElementById('mixInstText').textContent = '✓ Salt folded in! Your dough is ready for bulk fermentation 🎉';
+    document.getElementById('mixInstText').textContent = t('onboarding.mix.saltDone');
     document.getElementById('mixFactText').textContent = MIX_INSIGHTS[Math.floor(Math.random() * MIX_INSIGHTS.length)];
     document.getElementById('mixFactCard').style.display = 'block';
     _mxUpdateActiveLabel();
@@ -2372,7 +2358,7 @@ function mixActionTap() {
   _mxSetStep('mix-step-rest', 'done'); _mxSetStep('mix-step-salt', 'active');
   document.getElementById('mixSaltBtn').style.opacity = '1';
   _mixStep = 'salt';
-  document.getElementById('mixInstText').textContent = 'Rest complete! Now fold in the salt 🧂';
+  document.getElementById('mixInstText').textContent = t('onboarding.mix.restDone');
   _mxUpdateActiveLabel();
 }
 
@@ -2386,9 +2372,9 @@ function mixBowlTap() {
   const swirl = document.getElementById('mixSwirl');
   swirl.style.display = 'flex'; setTimeout(() => { swirl.style.display = 'none'; }, 480);
   if (_mixBowlTaps < 3) {
-    document.getElementById('mixInstText').textContent = `Mix ${_mixBowlTaps} of 3 — keep going!`;
+    document.getElementById('mixInstText').textContent = t('onboarding.mix.mixCount').replace('{n}', _mixBowlTaps);
   } else {
-    document.getElementById('mixInstText').textContent = 'Mixed! Now rest 1 hour so gluten develops before adding salt 💤';
+    document.getElementById('mixInstText').textContent = t('onboarding.mix.mixDone');
     const d = document.getElementById('mixDough');
     d.style.height = '60%'; d.style.background = 'radial-gradient(ellipse at 50% 0%,#f5e8c8 0%,#e0c89a 35%,#c8a86b 75%,#a07845 100%)';
     _mxSetStep('mix-step-mix', 'done'); _mxSetStep('mix-step-rest', 'active');
@@ -2420,15 +2406,15 @@ function initFoldGame() {
   d.style.width = '142px'; d.style.height = '92px';
   d.style.borderRadius = '45% 55% 50% 50% / 55% 45% 60% 40%';
   d.style.transform = 'translate(-50%,-50%)';
-  document.getElementById('foldCountBadge').textContent = 'Tap to fold';
+  document.getElementById('foldCountBadge').textContent = t('onboarding.c6game.tapToFold');
   document.getElementById('foldStrengthBar').style.width = '0%';
   const pct = document.getElementById('foldStrengthPct');
   if (pct) pct.textContent = '0%';
   document.getElementById('foldRestWrap').style.display = 'none';
   document.getElementById('foldFactCard').style.display = 'none';
   document.getElementById('foldContinueBtn').disabled = true;
-  document.getElementById('foldCountText').textContent = '0 of 4 folds — Set 1';
-  document.getElementById('foldInstText').textContent = 'Tap the dough to start your first coil fold — grab, lift, fold';
+  document.getElementById('foldCountText').textContent = t('onboarding.c6game.foldInit');
+  document.getElementById('foldInstText').textContent = t('onboarding.c6game.initInst');
   _flSetStep('fold-step-s1', 'active');
   ['fold-step-rest','fold-step-s2','fold-step-done'].forEach(id => _flSetStep(id, 'idle'));
   startAmbientMusic();
@@ -2462,26 +2448,26 @@ function foldTap() {
   const pctEl = document.getElementById('foldStrengthPct');
   if (pctEl) pctEl.textContent = pct + '%';
   const inSetCount = inSet + 1; // 1-based
-  document.getElementById('foldCountBadge').textContent = `Fold ${inSetCount}/4`;
+  document.getElementById('foldCountBadge').textContent = t('onboarding.fold.foldN').replace('{n}', inSetCount);
   if (inSetCount < 4) {
     const setNum = _foldStep === 's1' ? 1 : 2;
-    document.getElementById('foldCountText').textContent = `${_foldTotalTaps} fold${_foldTotalTaps !== 1 ? 's' : ''} total — Set ${setNum}`;
-    document.getElementById('foldInstText').textContent = `Fold ${inSetCount} of 4 ✓ — each fold builds strength!`;
+    document.getElementById('foldCountText').textContent = t('onboarding.fold.foldNTotal').replace('{n}', _foldTotalTaps).replace('{s}', _foldTotalTaps !== 1 ? 's' : '').replace('{set}', setNum);
+    document.getElementById('foldInstText').textContent = t('onboarding.fold.eachFold').replace('{n}', inSetCount);
   } else {
     if (_foldStep === 's1') {
       _flSetStep('fold-step-s1', 'done'); _flSetStep('fold-step-rest', 'active');
       _foldStep = 'rest';
-      document.getElementById('foldCountBadge').textContent = 'Set 1 ✓';
-      document.getElementById('foldCountText').textContent = '4 folds done — rest the dough';
-      document.getElementById('foldInstText').textContent = 'Set 1 complete! Cover and rest 30 min before Set 2';
+      document.getElementById('foldCountBadge').textContent = t('onboarding.fold.set1Badge');
+      document.getElementById('foldCountText').textContent = t('onboarding.fold.set1Done');
+      document.getElementById('foldInstText').textContent = t('onboarding.fold.set1Inst');
       document.getElementById('foldRestWrap').style.display = 'block';
       sendGameAlarm(8002, 'Fold rest done — time for Set 2! 💪', 1800);
     } else {
       _flSetStep('fold-step-s2', 'done'); _flSetStep('fold-step-done', 'done');
       _foldStep = 'done';
-      document.getElementById('foldCountBadge').textContent = '💪 Strong!';
-      document.getElementById('foldCountText').textContent = '8 folds total — gluten is built!';
-      document.getElementById('foldInstText').textContent = '✓ 2 sets complete — your dough is strong and ready for bulk fermentation! 🎉';
+      document.getElementById('foldCountBadge').textContent = t('onboarding.fold.allBadge');
+      document.getElementById('foldCountText').textContent = t('onboarding.fold.allDone');
+      document.getElementById('foldInstText').textContent = t('onboarding.fold.allInst');
       document.getElementById('foldFactText').textContent = FOLD_INSIGHTS[Math.floor(Math.random() * FOLD_INSIGHTS.length)];
       document.getElementById('foldFactCard').style.display = 'block';
       setTimeout(() => { playSound('success'); document.getElementById('foldContinueBtn').disabled = false; }, 420);
@@ -2495,9 +2481,9 @@ function foldRestTap() {
   document.getElementById('foldRestWrap').style.display = 'none';
   _flSetStep('fold-step-rest', 'done'); _flSetStep('fold-step-s2', 'active');
   _foldStep = 's2';
-  document.getElementById('foldCountBadge').textContent = 'Tap to fold';
-  document.getElementById('foldCountText').textContent = '4 folds done — Set 2 starting';
-  document.getElementById('foldInstText').textContent = 'Rested! Dough relaxed. Start Set 2 — 4 more coil folds';
+  document.getElementById('foldCountBadge').textContent = t('onboarding.fold.restBadge');
+  document.getElementById('foldCountText').textContent = t('onboarding.fold.restCount');
+  document.getElementById('foldInstText').textContent = t('onboarding.fold.restDone');
 }
 
 function afterFoldGame() { goTo('c2quiz'); initQuiz('c2'); }
@@ -2515,12 +2501,12 @@ const TEMP_DATA = {
 
 function initTempGame() {
   _tempRevealed = new Set();
-  [65, 76, 80].forEach(t => {
-    const card = document.getElementById('tempCard' + t);
+  [65, 76, 80].forEach(temp => {
+    const card = document.getElementById('tempCard' + temp);
     if (card) { card.style.borderColor = '#d6c3b3'; card.style.background = '#f2ede3'; }
-    const r = document.getElementById('tempReveal' + t);
+    const r = document.getElementById('tempReveal' + temp);
     if (r) r.style.opacity = '0';
-    const bar = document.getElementById('tempBar' + t);
+    const bar = document.getElementById('tempBar' + temp);
     if (bar) {
       bar.style.display = 'none';
       const fill = bar.querySelector('div');
@@ -2529,7 +2515,7 @@ function initTempGame() {
   });
   document.getElementById('tempSummary').style.display = 'none';
   document.getElementById('tempContinueBtn').disabled = true;
-  document.getElementById('tempInstText').textContent = 'Tap each kitchen to discover how temperature changes your bulk time';
+  document.getElementById('tempInstText').textContent = t('onboarding.c7game.initInst');
   startAmbientMusic();
 }
 
@@ -2552,11 +2538,12 @@ function tempReveal(temp) {
   }, 30);
   if (_tempRevealed.size === 3) {
     playSound('success');
-    document.getElementById('tempInstText').textContent = '✓ Temperature is your most powerful tool — warmer is faster, cooler builds more flavor time';
+    document.getElementById('tempInstText').textContent = t('onboarding.temp.allDone');
     document.getElementById('tempSummary').style.display = 'block';
     setTimeout(() => { document.getElementById('tempContinueBtn').disabled = false; }, 600);
   } else {
-    document.getElementById('tempInstText').textContent = `${3 - _tempRevealed.size} more kitchen${3 - _tempRevealed.size !== 1 ? 's' : ''} to reveal!`;
+    const n = 3 - _tempRevealed.size;
+    document.getElementById('tempInstText').textContent = t('onboarding.temp.more').replace('{n}', n).replace('{s}', n !== 1 ? 's' : '');
   }
 }
 
@@ -2579,7 +2566,7 @@ function initPreshapeGame() {
   document.getElementById('preshapeRestPill').style.display = 'none';
   document.getElementById('preshapeFactCard').style.display = 'none';
   document.getElementById('preshapeContinueBtn').disabled = true;
-  document.getElementById('preshapeInstText').textContent = 'Tap to flip the dough onto your surface — bench scraper slides under and flips it out';
+  document.getElementById('preshapeInstText').textContent = t('onboarding.c8game.initInst');
   _psSetStep('ps-step-scrape', 'active');
   ['ps-step-shape','ps-step-rest','ps-step-done'].forEach(id => _psSetStep(id, 'idle'));
   startAmbientMusic();
@@ -2601,7 +2588,7 @@ function preshapeTap() {
     d.style.borderRadius = '50% 50% 52% 48% / 48% 50% 52% 50%';
     _psSetStep('ps-step-scrape', 'done'); _psSetStep('ps-step-shape', 'active');
     _preshapeStep = 'shape'; _preshapeTaps = 0;
-    document.getElementById('preshapeInstText').textContent = 'Dough is out! Tap 4× — slide scraper under dough, push toward you to round it up';
+    document.getElementById('preshapeInstText').textContent = t('onboarding.preshape.scraped');
 
   } else if (_preshapeStep === 'shape') {
     _preshapeTaps++;
@@ -2611,12 +2598,12 @@ function preshapeTap() {
     d.style.width  = Math.round(102 - pct * 22) + 'px';
     d.style.height = Math.round(76  - pct * 10) + 'px';
     d.style.borderRadius = Math.round(40 + pct * 10) + '%';
-    document.getElementById('preshapeInstText').textContent = `Push ${_preshapeTaps} of 4 — scraper under, push toward you, dough rounds up!`;
+    document.getElementById('preshapeInstText').textContent = t('onboarding.preshape.pushN').replace('{n}', _preshapeTaps);
     if (_preshapeTaps >= 4) {
       d.style.width = '80px'; d.style.height = '80px'; d.style.borderRadius = '50%';
       _psSetStep('ps-step-shape', 'done'); _psSetStep('ps-step-rest', 'active');
       _preshapeStep = 'rest';
-      document.getElementById('preshapeInstText').textContent = 'Pre-shaped! Tap to cover and start the bench rest 💤';
+      document.getElementById('preshapeInstText').textContent = t('onboarding.preshape.resting');
     }
 
   } else if (_preshapeStep === 'rest') {
@@ -2624,7 +2611,7 @@ function preshapeTap() {
     document.getElementById('preshapeRestPill').style.display = 'block';
     _psSetStep('ps-step-rest', 'done'); _psSetStep('ps-step-done', 'done');
     _preshapeStep = 'done';
-    document.getElementById('preshapeInstText').textContent = '✓ Bench resting! 20–30 min lets gluten relax for easier final shaping 🎉';
+    document.getElementById('preshapeInstText').textContent = t('onboarding.preshape.done');
     sendGameAlarm(8003, 'Bench rest done — time to final shape! 🍞', 1200);
     document.getElementById('preshapeFactCard').style.display = 'block';
     setTimeout(() => { playSound('success'); document.getElementById('preshapeContinueBtn').disabled = false; }, 500);
@@ -2655,8 +2642,8 @@ function initShapeGame() {
   b.style.opacity = '0.35'; b.style.fontSize = '32px'; b.textContent = '🧺';
   document.getElementById('shapeFactCard').style.display = 'none';
   document.getElementById('shapeContinueBtn').disabled = true;
-  document.getElementById('shapeTapText').textContent = 'Tap the dough to begin';
-  document.getElementById('shapeInstText').textContent = 'Tap the dough to gently stretch the top outward';
+  document.getElementById('shapeTapText').textContent = t('onboarding.c9game.tapBegin');
+  document.getElementById('shapeInstText').textContent = t('onboarding.c9game.initInst');
   _shSetStep('sh-step-stretch', 'active');
   ['sh-step-fold','sh-step-tension','sh-step-banneton'].forEach(id => _shSetStep(id, 'idle'));
   startAmbientMusic();
@@ -2677,21 +2664,21 @@ function shapeTap() {
     document.getElementById('shapeLine1').style.opacity = '1';
     setTimeout(() => { _shSetStep('sh-step-stretch','done'); _shSetStep('sh-step-fold','active'); }, 280);
     _shapeStep = 'fold'; _shapeTaps = 0;
-    document.getElementById('shapeTapText').textContent = 'Tap 3× to fold corners in';
-    document.getElementById('shapeInstText').textContent = 'Now fold the sides in like an envelope — tap 3 times';
+    document.getElementById('shapeTapText').textContent = t('onboarding.shape.tapFold');
+    document.getElementById('shapeInstText').textContent = t('onboarding.shape.foldInst');
 
   } else if (_shapeStep === 'fold') {
     _shapeTaps++;
     playSound('pop');
     const lines = ['shapeLine1','shapeLine2','shapeLine3','shapeLine4'];
     if (_shapeTaps <= 4) document.getElementById(lines[_shapeTaps - 1]).style.opacity = '0.85';
-    document.getElementById('shapeTapText').textContent = `Fold ${_shapeTaps} of 3`;
+    document.getElementById('shapeTapText').textContent = t('onboarding.shape.foldN').replace('{n}', _shapeTaps);
     if (_shapeTaps >= 3) {
       d.style.borderRadius = '50% 50% 46% 54% / 46% 48% 52% 54%';
       _shSetStep('sh-step-fold', 'done'); _shSetStep('sh-step-tension', 'active');
       _shapeStep = 'tension';
-      document.getElementById('shapeTapText').textContent = 'Tap to build tension';
-      document.getElementById('shapeInstText').textContent = 'Almost there! Tap to drag toward you and build surface tension';
+      document.getElementById('shapeTapText').textContent = t('onboarding.shape.tapTension');
+      document.getElementById('shapeInstText').textContent = t('onboarding.shape.tensionInst');
     }
 
   } else if (_shapeStep === 'tension') {
@@ -2701,8 +2688,8 @@ function shapeTap() {
     _shSetStep('sh-step-tension', 'done'); _shSetStep('sh-step-banneton', 'active');
     _shapeStep = 'banneton';
     document.getElementById('shapeBanneton').style.opacity = '1';
-    document.getElementById('shapeTapText').textContent = 'Tap to place in banneton';
-    document.getElementById('shapeInstText').textContent = 'Beautiful tension! Tap to flip seam-side up into the banneton 🧺';
+    document.getElementById('shapeTapText').textContent = t('onboarding.shape.tapBanneton');
+    document.getElementById('shapeInstText').textContent = t('onboarding.shape.bannetonInst');
 
   } else if (_shapeStep === 'banneton') {
     playSound('success');
@@ -2710,8 +2697,8 @@ function shapeTap() {
     setTimeout(() => { document.getElementById('shapeBanneton').style.fontSize = '52px'; }, 350);
     _shSetStep('sh-step-banneton', 'done');
     _shapeStep = 'done';
-    document.getElementById('shapeTapText').textContent = 'Shaped! ✓';
-    document.getElementById('shapeInstText').textContent = '✓ In the banneton! Seam side up — the rings hold your loaf shape perfectly 🎉';
+    document.getElementById('shapeTapText').textContent = t('onboarding.shape.shaped');
+    document.getElementById('shapeInstText').textContent = t('onboarding.shape.doneBadge');
     document.getElementById('shapeFactCard').style.display = 'block';
     setTimeout(() => { playSound('success'); document.getElementById('shapeContinueBtn').disabled = false; }, 620);
   }
@@ -2738,7 +2725,7 @@ function initProofGame() {
   b.style.transform = 'scale(1)'; b.style.opacity = '1';
   document.getElementById('proofFactCard').style.display     = 'none';
   document.getElementById('proofContinueBtn').disabled       = true;
-  document.getElementById('proofInstText').textContent = 'Tap the banneton to dust it with rice flour';
+  document.getElementById('proofInstText').textContent = t('onboarding.c10game.initInst');
   _prSetStep('pr-step-dust', 'active');
   ['pr-step-place','pr-step-cover','pr-step-fridge'].forEach(id => _prSetStep(id, 'idle'));
   startAmbientMusic();
@@ -2758,14 +2745,14 @@ function proofBannetonTap() {
     document.getElementById('proofFlourBtn').style.opacity = '0.15';
     _prSetStep('pr-step-dust', 'done'); _prSetStep('pr-step-place', 'active');
     _proofStep = 'place';
-    document.getElementById('proofInstText').textContent = 'Dusted! Tap to place your shaped dough inside, seam side up';
+    document.getElementById('proofInstText').textContent = t('onboarding.proof.dusted');
 
   } else if (_proofStep === 'place') {
     playSound('pop');
     document.getElementById('proofDoughInside').style.opacity = '1';
     _prSetStep('pr-step-place', 'done'); _prSetStep('pr-step-cover', 'active');
     _proofStep = 'cover';
-    document.getElementById('proofInstText').textContent = 'Dough is in! Tap to cover with plastic wrap or a damp cloth';
+    document.getElementById('proofInstText').textContent = t('onboarding.proof.placed');
 
   } else if (_proofStep === 'cover') {
     playSound('stir');
@@ -2773,7 +2760,7 @@ function proofBannetonTap() {
     _prSetStep('pr-step-cover', 'done'); _prSetStep('pr-step-fridge', 'active');
     _proofStep = 'fridge';
     document.getElementById('proofFridge').style.opacity = '1';
-    document.getElementById('proofInstText').textContent = 'Covered! Now tap the fridge to start your cold proof ❄️';
+    document.getElementById('proofInstText').textContent = t('onboarding.proof.covered');
   }
 }
 
@@ -2788,7 +2775,7 @@ function proofFridgeTap() {
   b.style.opacity = '0.55'; b.style.transform = 'scale(0.66)';
   _prSetStep('pr-step-fridge', 'done');
   _proofStep = 'done';
-  document.getElementById('proofInstText').textContent = '✓ Into the fridge! 8–16 hours of slow fermentation builds incredible flavor 🎉';
+  document.getElementById('proofInstText').textContent = t('onboarding.proof.done');
   document.getElementById('proofFactCard').style.display = 'block';
   setTimeout(() => { playSound('success'); document.getElementById('proofContinueBtn').disabled = false; }, 650);
 }
@@ -2817,7 +2804,7 @@ function initBakeGame() {
   document.getElementById('bakeActionWrap').style.display= 'none';
   document.getElementById('bakeFactCard').style.display  = 'none';
   document.getElementById('bakeContinueBtn').disabled    = true;
-  document.getElementById('bakeInstText').textContent = 'Tap the Dutch oven to preheat at 500°F (260°C) — needs 1 hour to get screaming hot!';
+  document.getElementById('bakeInstText').textContent = t('onboarding.c11game.initInst');
   _bkSetStep('bk-step-preheat', 'active');
   ['bk-step-score','bk-step-bake','bk-step-uncover'].forEach(id => _bkSetStep(id, 'idle'));
   startAmbientMusic();
@@ -2836,7 +2823,7 @@ function bakePotTap() {
     if (_bakePotTaps === 1) {
       document.getElementById('bakeWaves').style.display = 'flex';
       document.getElementById('bakeHeatGlow').style.background = 'radial-gradient(ellipse at 50% 90%,rgba(255,140,0,0.28) 0%,transparent 60%)';
-      document.getElementById('bakeInstText').textContent = 'Preheating… it needs to be scorching hot for maximum oven spring! Tap again ♨️';
+      document.getElementById('bakeInstText').textContent = t('onboarding.bake.preheatInst');
     } else if (_bakePotTaps >= 2) {
       document.getElementById('bakeHeatGlow').style.background = 'radial-gradient(ellipse at 50% 90%,rgba(255,70,0,0.44) 0%,rgba(255,150,0,0.18) 55%,transparent 75%)';
       document.getElementById('bakePot').style.background = 'radial-gradient(ellipse at 40% 30%,#6a4040 0%,#4a2020 50%,#280808 100%)';
@@ -2844,7 +2831,7 @@ function bakePotTap() {
       _bakeStep = 'score'; _bakeScoreTaps = 0;
       document.getElementById('bakeKnifeHint').style.opacity = '1';
       document.getElementById('bakeDough').style.opacity = '0.65';
-      document.getElementById('bakeInstText').textContent = 'Scorching hot! 🔥 Place your cold dough on top and score it — tap twice for cuts';
+      document.getElementById('bakeInstText').textContent = t('onboarding.bake.scoreInst');
     }
 
   } else if (_bakeStep === 'score') {
@@ -2853,15 +2840,15 @@ function bakePotTap() {
     if (_bakeScoreTaps >= 1) document.getElementById('bakeScore1').style.opacity = '1';
     if (_bakeScoreTaps >= 2) document.getElementById('bakeScore2').style.opacity = '1';
     document.getElementById('bakeInstText').textContent = _bakeScoreTaps < 2
-      ? `Score ${_bakeScoreTaps} of 2 — confident, decisive cuts!`
-      : '✓ Scored! Now transfer to the Dutch oven';
+      ? t('onboarding.bake.scoreN').replace('{n}', _bakeScoreTaps)
+      : t('onboarding.bake.scored');
     if (_bakeScoreTaps >= 2) {
       document.getElementById('bakeKnifeHint').style.opacity = '0';
       _bkSetStep('bk-step-score', 'done'); _bkSetStep('bk-step-bake', 'active');
       _bakeStep = 'bake';
       document.getElementById('bakeActionWrap').style.display = 'block';
       document.getElementById('bakeActionEmoji').textContent = '🍞';
-      document.getElementById('bakeActionLabel').textContent = 'Transfer + Lid On (20 min)';
+      document.getElementById('bakeActionLabel').textContent = t('onboarding.bake.transferLabel');
     }
   }
 }
@@ -2871,14 +2858,14 @@ function bakeActionTap() {
     playSound('pop');
     document.getElementById('bakeActionWrap').style.display = 'none';
     document.getElementById('bakeDough').style.opacity = '1';
-    document.getElementById('bakeInstText').textContent = 'In the pot! Lid on — 20 min with steam keeps crust soft for oven spring 💨';
+    document.getElementById('bakeInstText').textContent = t('onboarding.bake.inPot');
     setTimeout(() => {
       _bkSetStep('bk-step-bake', 'done'); _bkSetStep('bk-step-uncover', 'active');
       _bakeStep = 'uncover';
       document.getElementById('bakeActionWrap').style.display = 'block';
       document.getElementById('bakeActionEmoji').textContent = '✋';
-      document.getElementById('bakeActionLabel').textContent = 'Remove Lid — Open Bake (20 min)';
-      document.getElementById('bakeInstText').textContent = '20 min steamed — loaf has sprung! Remove the lid to build that gorgeous crust 🟫';
+      document.getElementById('bakeActionLabel').textContent = t('onboarding.bake.removeLidLabel');
+      document.getElementById('bakeInstText').textContent = t('onboarding.bake.openBake');
     }, 1600);
 
   } else if (_bakeStep === 'uncover') {
@@ -2896,7 +2883,7 @@ function bakeActionTap() {
     _bkSetStep('bk-step-uncover', 'done');
     _bakeStep = 'done';
     setTimeout(() => {
-      document.getElementById('bakeInstText').textContent = '✓ Golden crust! The Maillard reaction created that perfect color and crunch 🎉';
+      document.getElementById('bakeInstText').textContent = t('onboarding.bake.done');
       document.getElementById('bakeFactCard').style.display = 'block';
       setTimeout(() => { playSound('success'); document.getElementById('bakeContinueBtn').disabled = false; }, 420);
     }, 2300);
@@ -2915,7 +2902,7 @@ function initFeedingGame() {
   const name = starterName || 'your starter';
   document.getElementById('gameJarName').textContent  = name;
   document.getElementById('gameJarLabel').textContent = name;
-  document.getElementById('gameInstText').textContent = 'Tap the flour bag to add flour to the jar';
+  document.getElementById('gameInstText').textContent = t('onboarding.feed.initInst');
   // Reset jar fill
   const fill = document.getElementById('gameJarFill');
   fill.style.height = '20%';
@@ -2954,7 +2941,7 @@ function gameAddFlour() {
   document.getElementById('gameJarFill').style.height = '42%';
   _activateStep('step-flour');
   _feedGameStep = 'water';
-  document.getElementById('gameInstText').textContent = 'Great! Now tap the water to add 100g 💧';
+  document.getElementById('gameInstText').textContent = t('onboarding.feed.addedFlour');
   document.getElementById('flourBtn').disabled = true; document.getElementById('flourBtn').style.opacity = '0.4';
   document.getElementById('waterBtn').disabled = false; document.getElementById('waterBtn').style.opacity = '1';
   document.getElementById('step-water').style.opacity = '1'; document.getElementById('step-water').style.color = '#875305';
@@ -2970,7 +2957,7 @@ function gameAddWater() {
   fill.style.background = 'linear-gradient(180deg,rgba(100,160,220,0.18),rgba(135,83,5,0.28))';
   _activateStep('step-water');
   _feedGameStep = 'mix';
-  document.getElementById('gameInstText').textContent = 'Perfect! Now tap Mix to stir it all together 🥄';
+  document.getElementById('gameInstText').textContent = t('onboarding.feed.addedWater');
   document.getElementById('waterBtn').disabled = true; document.getElementById('waterBtn').style.opacity = '0.4';
   document.getElementById('mixBtn').disabled = false;  document.getElementById('mixBtn').style.opacity = '1';
   document.getElementById('step-mix').style.opacity = '1'; document.getElementById('step-mix').style.color = '#875305';
@@ -2986,7 +2973,7 @@ function gameMix() {
   fill.style.background = 'linear-gradient(180deg,rgba(196,134,58,0.22),rgba(135,83,5,0.36))';
   _activateStep('step-mix');
   _feedGameStep = 'done';
-  document.getElementById('gameInstText').textContent = `${starterName} has been fed! 🎉 Now let's do the real check-in.`;
+  document.getElementById('gameInstText').textContent = t('onboarding.feed.mixed').replace('{name}', starterName);
   document.getElementById('mixBtn').disabled = true; document.getElementById('mixBtn').style.opacity = '0.4';
   setTimeout(() => {
     document.getElementById('gameBubble1').style.opacity = '1';
@@ -3004,44 +2991,32 @@ const QUIZ_DATA = {
     questions: [
       {
         emoji: '🌾',
-        q: 'What makes sourdough bread different from regular bread?',
+        qKey: 'onboarding.q.c1_1.q',
         choices: [
-          { e:'🦠', t:'Wild yeast and bacteria captured from your environment', ok:true,
-            why:'That\'s right! Sourdough is leavened by wild yeast and beneficial bacteria — not commercial yeast. This living culture is what gives sourdough its complex flavor, chewy texture, and longer fermentation.' },
-          { e:'🧪', t:'More commercial yeast added', ok:false,
-            why:'Commercial yeast gives you fast, predictable rise — but sourdough uses no commercial yeast at all. The wild yeast in your starter does all the leavening work, and it takes much longer.' },
-          { e:'🌊', t:'Higher water content only', ok:false,
-            why:'While sourdough hydration varies, water content alone doesn\'t define it. The wild yeast and bacteria from your living starter are what truly make sourdough unique.' },
-          { e:'⚙️', t:'A special kneading technique', ok:false,
-            why:'Sourdough doesn\'t even need kneading! You use stretch-and-fold instead. The real difference is the living starter culture — wild yeast and bacteria — not the technique.' },
+          { e:'🦠', tKey:'onboarding.q.c1_1.a0', ok:true,  wKey:'onboarding.q.c1_1.w0' },
+          { e:'🧪', tKey:'onboarding.q.c1_1.a1', ok:false, wKey:'onboarding.q.c1_1.w1' },
+          { e:'🌊', tKey:'onboarding.q.c1_1.a2', ok:false, wKey:'onboarding.q.c1_1.w2' },
+          { e:'⚙️', tKey:'onboarding.q.c1_1.a3', ok:false, wKey:'onboarding.q.c1_1.w3' },
         ]
       },
       {
         emoji: '🍞',
-        q: 'What is the correct order of the 5 sourdough baking stages?',
+        qKey: 'onboarding.q.c1_2.q',
         choices: [
-          { e:'✅', t:'Mix → Bulk Ferment → Shape → Cold Proof → Bake', ok:true,
-            why:'Perfect! That\'s the exact rhythm of every sourdough bake. This sequence ensures proper gluten development, full fermentation, good structure, and a beautiful crackly crust.' },
-          { e:'❌', t:'Bake → Shape → Mix → Proof → Bulk', ok:false,
-            why:'You can\'t bake first — the dough needs to be mixed, fermented, shaped, and cold-proofed before it ever sees the oven. The order is everything in sourdough!' },
-          { e:'🔄', t:'Bulk → Mix → Shape → Proof → Bake', ok:false,
-            why:'You can\'t bulk ferment before mixing! The dough must come together first so gluten can form and yeast has something to work with during bulk fermentation.' },
-          { e:'⏩', t:'Mix → Shape → Bulk → Bake → Proof', ok:false,
-            why:'Shaping comes AFTER bulk fermentation, not before. And cold proofing always happens right before baking — the oven is always the final step.' },
+          { e:'✅', tKey:'onboarding.q.c1_2.a0', ok:true,  wKey:'onboarding.q.c1_2.w0' },
+          { e:'❌', tKey:'onboarding.q.c1_2.a1', ok:false, wKey:'onboarding.q.c1_2.w1' },
+          { e:'🔄', tKey:'onboarding.q.c1_2.a2', ok:false, wKey:'onboarding.q.c1_2.w2' },
+          { e:'⏩', tKey:'onboarding.q.c1_2.a3', ok:false, wKey:'onboarding.q.c1_2.w3' },
         ]
       },
       {
         emoji: '🔍',
-        q: 'How do you know when your gluten is fully developed after mixing?',
+        qKey: 'onboarding.q.c1_3.q',
         choices: [
-          { e:'💡', t:'Dough stretches thin and translucent — the windowpane test', ok:true,
-            why:'Exactly! Stretch a small piece until you can almost see light through it without tearing — that\'s the windowpane test. It means your gluten network is strong enough to trap gas and give you a great rise.' },
-          { e:'⏰', t:'Wait exactly 30 minutes after mixing', ok:false,
-            why:'Time alone can\'t tell you when gluten is ready. Dough develops differently depending on flour type, hydration, and technique. The windowpane test gives you a physical check you can actually see.' },
-          { e:'📏', t:'The dough doubles in size', ok:false,
-            why:'Doubling in size shows fermentation activity (bulk proofing), not gluten development from mixing. Use the windowpane test right after mixing to check gluten strength — not size.' },
-          { e:'🎨', t:'Dough changes from white to yellow', ok:false,
-            why:'Color change isn\'t a reliable indicator of gluten development. The windowpane test — stretching a piece thin and checking for translucency without tearing — is the classic baker\'s check.' },
+          { e:'💡', tKey:'onboarding.q.c1_3.a0', ok:true,  wKey:'onboarding.q.c1_3.w0' },
+          { e:'⏰', tKey:'onboarding.q.c1_3.a1', ok:false, wKey:'onboarding.q.c1_3.w1' },
+          { e:'📏', tKey:'onboarding.q.c1_3.a2', ok:false, wKey:'onboarding.q.c1_3.w2' },
+          { e:'🎨', tKey:'onboarding.q.c1_3.a3', ok:false, wKey:'onboarding.q.c1_3.w3' },
         ]
       }
     ]
@@ -3050,44 +3025,32 @@ const QUIZ_DATA = {
     questions: [
       {
         emoji: '🥣',
-        q: 'In which order should you add ingredients during the Mix step?',
+        qKey: 'onboarding.q.c2_1.q',
         choices: [
-          { e:'✅', t:'Flour + water + starter → mix → rest → salt last', ok:true,
-            why:'Correct! Everything except salt goes in first, then you mix, then rest for 1 hour to develop gluten — and salt always goes in LAST. Adding salt too early slows your starter\'s yeast activity.' },
-          { e:'❌', t:'All ingredients at once', ok:false,
-            why:'Salt should never go in with everything else at the start. Salt inhibits yeast activity — adding it early weakens your starter before it even gets incorporated. Always add salt last.' },
-          { e:'🧂', t:'Salt first, then flour and water', ok:false,
-            why:'Salt first is the worst approach — it directly inhibits the yeast in your starter. Salt always goes in last, after everything else has had a chance to come together and mix.' },
-          { e:'💧', t:'Water only → rest → flour → starter → salt', ok:false,
-            why:'Water by itself doesn\'t start anything useful. The right order is flour + water + starter together first (everything except salt), mix, rest 1 hour, then fold in salt at the end.' },
+          { e:'✅', tKey:'onboarding.q.c2_1.a0', ok:true,  wKey:'onboarding.q.c2_1.w0' },
+          { e:'❌', tKey:'onboarding.q.c2_1.a1', ok:false, wKey:'onboarding.q.c2_1.w1' },
+          { e:'🧂', tKey:'onboarding.q.c2_1.a2', ok:false, wKey:'onboarding.q.c2_1.w2' },
+          { e:'💧', tKey:'onboarding.q.c2_1.a3', ok:false, wKey:'onboarding.q.c2_1.w3' },
         ]
       },
       {
         emoji: '💤',
-        q: 'Why do we rest the dough for 1 hour after mixing — before adding salt?',
+        qKey: 'onboarding.q.c2_2.q',
         choices: [
-          { e:'🦠', t:'To let gluten develop on its own, making the dough stronger', ok:true,
-            why:'Exactly! Letting flour, water, and starter rest together allows gluten bonds to form naturally without kneading. This creates a stronger, more extensible dough — and means less overall effort.' },
-          { e:'❄️', t:'To cool the dough down after mixing', ok:false,
-            why:'Resting isn\'t about temperature control. It\'s about gluten development — flour proteins absorb water and form gluten networks naturally during rest, with no physical effort required.' },
-          { e:'🧂', t:'So the salt dissolves more easily when added', ok:false,
-            why:'The rest happens BEFORE salt is even added! The purpose is purely gluten development — letting the dough become more extensible and structured before you fold in the salt.' },
-          { e:'⏩', t:'To speed up the fermentation process', ok:false,
-            why:'The 1-hour rest isn\'t primarily about fermentation speed — it\'s about gluten development. The dough rests so proteins can hydrate and bond, making it stronger and easier to shape later.' },
+          { e:'🦠', tKey:'onboarding.q.c2_2.a0', ok:true,  wKey:'onboarding.q.c2_2.w0' },
+          { e:'❄️', tKey:'onboarding.q.c2_2.a1', ok:false, wKey:'onboarding.q.c2_2.w1' },
+          { e:'🧂', tKey:'onboarding.q.c2_2.a2', ok:false, wKey:'onboarding.q.c2_2.w2' },
+          { e:'⏩', tKey:'onboarding.q.c2_2.a3', ok:false, wKey:'onboarding.q.c2_2.w3' },
         ]
       },
       {
         emoji: '💪',
-        q: 'What does the Stretch & Fold technique build in your dough?',
+        qKey: 'onboarding.q.c2_3.q',
         choices: [
-          { e:'💪', t:'Gluten strength without deflating gas bubbles', ok:true,
-            why:'Exactly right! Stretch and fold aligns gluten proteins and builds strength — but unlike kneading, it carefully preserves the gas bubbles fermentation creates. Structure without destroying the rise.' },
-          { e:'🌡️', t:'Heat to speed up fermentation', ok:false,
-            why:'Stretch and folds don\'t significantly change dough temperature. Their purpose is purely structural — building gluten strength while keeping gas bubbles intact inside the dough.' },
-          { e:'💧', t:'Extra moisture into the dough', ok:false,
-            why:'Stretch and folds don\'t add water. Your hydration is set when you mix. Folding builds gluten structure and surface tension — it has no effect on how wet or dry the dough is.' },
-          { e:'🥄', t:'A uniform texture by breaking up bubbles', ok:false,
-            why:'Breaking bubbles would be the WRONG goal! Stretch and folds build gluten structure while carefully preserving gas bubbles. Popping them would undo all your fermentation work.' },
+          { e:'💪', tKey:'onboarding.q.c2_3.a0', ok:true,  wKey:'onboarding.q.c2_3.w0' },
+          { e:'🌡️', tKey:'onboarding.q.c2_3.a1', ok:false, wKey:'onboarding.q.c2_3.w1' },
+          { e:'💧', tKey:'onboarding.q.c2_3.a2', ok:false, wKey:'onboarding.q.c2_3.w2' },
+          { e:'🥄', tKey:'onboarding.q.c2_3.a3', ok:false, wKey:'onboarding.q.c2_3.w3' },
         ]
       }
     ]
@@ -3096,58 +3059,42 @@ const QUIZ_DATA = {
     questions: [
       {
         emoji: '✂️',
-        q: 'Your dough is sticky during shaping. Which tool cuts, folds, and lifts it without sticking?',
+        qKey: 'onboarding.q.c3_1.q',
         choices: [
-          { e:'🔪', t:'Bench scraper', ok:true,
-            why:'Exactly! The bench scraper slides cleanly under sticky dough, folds it without tearing, and helps build surface tension for a tight round shape.' },
-          { e:'🏺', t:'Dutch oven', ok:false,
-            why:'The Dutch oven is your baking vessel — it goes inside a 500°F oven. It plays no role in shaping dough on the counter.' },
-          { e:'🧺', t:'Banneton basket', ok:false,
-            why:'The banneton comes AFTER shaping — you place the already-shaped loaf inside it for the cold proof. It can\'t help during the shaping itself.' },
-          { e:'⏱️', t:'Kitchen timer', ok:false,
-            why:'A timer is great for tracking fermentation stages, but it\'s a time-measuring device — it physically can\'t handle sticky dough!' },
+          { e:'🔪', tKey:'onboarding.q.c3_1.a0', ok:true,  wKey:'onboarding.q.c3_1.w0' },
+          { e:'🏺', tKey:'onboarding.q.c3_1.a1', ok:false, wKey:'onboarding.q.c3_1.w1' },
+          { e:'🧺', tKey:'onboarding.q.c3_1.a2', ok:false, wKey:'onboarding.q.c3_1.w2' },
+          { e:'⏱️', tKey:'onboarding.q.c3_1.a3', ok:false, wKey:'onboarding.q.c3_1.w3' },
         ]
       },
       {
         emoji: '🌙',
-        q: 'Your shaped loaf needs to hold its round form during a 12-hour cold proof. Where does it sleep?',
+        qKey: 'onboarding.q.c3_2.q',
         choices: [
-          { e:'🧺', t:'Banneton basket', ok:true,
-            why:'The banneton\'s coiled linen supports the dough\'s shape through the entire cold proof AND imprints that beautiful spiral pattern on your finished crust!' },
-          { e:'🏺', t:'Dutch oven', ok:false,
-            why:'The Dutch oven is for baking at high heat — its shape and material aren\'t suited for proofing dough in the fridge overnight.' },
-          { e:'🍳', t:'Regular baking tray', ok:false,
-            why:'A flat tray offers zero side support — your loaf would slowly spread sideways during the long proof instead of staying tall and round.' },
-          { e:'🥣', t:'Mixing bowl', ok:false,
-            why:'A bowl can work in a pinch with a well-floured cloth, but it doesn\'t support the shape as well and won\'t leave the beautiful spiral pattern.' },
+          { e:'🧺', tKey:'onboarding.q.c3_2.a0', ok:true,  wKey:'onboarding.q.c3_2.w0' },
+          { e:'🏺', tKey:'onboarding.q.c3_2.a1', ok:false, wKey:'onboarding.q.c3_2.w1' },
+          { e:'🍳', tKey:'onboarding.q.c3_2.a2', ok:false, wKey:'onboarding.q.c3_2.w2' },
+          { e:'🥣', tKey:'onboarding.q.c3_2.a3', ok:false, wKey:'onboarding.q.c3_2.w3' },
         ]
       },
       {
         emoji: '🔥',
-        q: 'What creates the crackly crust and dramatic oven spring in sourdough?',
+        qKey: 'onboarding.q.c3_3.q',
         choices: [
-          { e:'🏺', t:'Dutch oven, lid on first 20 min', ok:true,
-            why:'The lid traps steam rising from the dough itself, keeping the surface moist so the loaf can fully expand before the crust sets. That\'s what drives oven spring and the thick, crackly crust!' },
-          { e:'🍳', t:'Open baking tray at high heat', ok:false,
-            why:'Without enclosed steam, the crust sets too fast and the loaf can\'t fully expand. You\'ll get much less oven spring and a thinner, paler crust.' },
-          { e:'💦', t:'Spraying oven walls with water', ok:false,
-            why:'A quick spray helps some breads, but the steam disperses too fast. A Dutch oven traps steam right around the loaf for the full 20 minutes — far more effective.' },
-          { e:'🧈', t:'Brushing the loaf with butter', ok:false,
-            why:'Butter creates a soft, golden crust — the opposite of sourdough\'s thick crackle. The crust comes from sustained steam, not added fat.' },
+          { e:'🏺', tKey:'onboarding.q.c3_3.a0', ok:true,  wKey:'onboarding.q.c3_3.w0' },
+          { e:'🍳', tKey:'onboarding.q.c3_3.a1', ok:false, wKey:'onboarding.q.c3_3.w1' },
+          { e:'💦', tKey:'onboarding.q.c3_3.a2', ok:false, wKey:'onboarding.q.c3_3.w2' },
+          { e:'🧈', tKey:'onboarding.q.c3_3.a3', ok:false, wKey:'onboarding.q.c3_3.w3' },
         ]
       },
       {
         emoji: '⚖️',
-        q: 'Your recipe says 78% hydration. What\'s the most important tool to nail this?',
+        qKey: 'onboarding.q.c3_4.q',
         choices: [
-          { e:'⚖️', t:'Digital kitchen scale', ok:true,
-            why:'Sourdough is baking science. Even 5g off on flour changes the hydration and dough feel. Grams are the only unit precise enough for consistent results bake after bake.' },
-          { e:'📏', t:'Measuring cups', ok:false,
-            why:'A cup of flour varies by 20–30g depending on how it\'s scooped. That huge swing makes it impossible to reliably hit a specific hydration percentage.' },
-          { e:'🌡️', t:'Thermometer', ok:false,
-            why:'A thermometer measures temperature — crucial for dough temp and oven temp, but it can\'t weigh your flour and water. You still need a scale for hydration.' },
-          { e:'🤔', t:'Eyeballing it works fine', ok:false,
-            why:'Eyeballing gives you different results every single bake. Even 2g off on salt noticeably changes fermentation speed and flavor — precision is everything.' },
+          { e:'⚖️', tKey:'onboarding.q.c3_4.a0', ok:true,  wKey:'onboarding.q.c3_4.w0' },
+          { e:'📏', tKey:'onboarding.q.c3_4.a1', ok:false, wKey:'onboarding.q.c3_4.w1' },
+          { e:'🌡️', tKey:'onboarding.q.c3_4.a2', ok:false, wKey:'onboarding.q.c3_4.w2' },
+          { e:'🤔', tKey:'onboarding.q.c3_4.a3', ok:false, wKey:'onboarding.q.c3_4.w3' },
         ]
       }
     ]
@@ -3182,7 +3129,7 @@ function _renderQuizQ() {
   const em = document.getElementById(pfx + 'Emoji');
   const qt = document.getElementById(pfx + 'QText');
   if (em) { em.textContent = q.emoji; em.style.animation = 'xpPop 0.4s ease'; setTimeout(()=>{ if(em) em.style.animation=''; }, 400); }
-  if (qt) qt.textContent = q.q;
+  if (qt) qt.textContent = t(q.qKey);
 
   // Choices
   const grid = document.getElementById(pfx + 'Choices');
@@ -3195,7 +3142,7 @@ function _renderQuizQ() {
         font-family:inherit;width:100%;text-align:center;min-height:88px;
       " ontouchstart="this.style.transform='scale(0.94)'" ontouchend="this.style.transform=''">
         <span style="font-size:30px;line-height:1">${c.e}</span>
-        <span style="font-size:11px;font-weight:700;color:#1d1c16;line-height:1.35">${c.t}</span>
+        <span style="font-size:11px;font-weight:700;color:#1d1c16;line-height:1.35">${t(c.tKey)}</span>
       </button>
     `).join('');
   }
@@ -3260,13 +3207,13 @@ function quizAnswer(id, choiceIdx) {
     fb.style.display = 'block';
     fb.style.background = isCorrect ? '#d4edda' : '#f8d7da';
     fbTxt.style.color = isCorrect ? '#155724' : '#842029';
-    const chosenWhy = q.choices[choiceIdx].why || '';
+    const chosenWhy = t(q.choices[choiceIdx].wKey) || '';
     const correctChoice = q.choices.find(c => c.ok);
     if (isCorrect) {
       fbTxt.textContent = '✓ ' + chosenWhy;
     } else {
       fbTxt.textContent = '✗ ' + chosenWhy
-        + (correctChoice ? ' The right answer: "' + correctChoice.t + '" — ' + correctChoice.why : '');
+        + (correctChoice ? ' ' + t('onboarding.quiz.rightAnswer') + ' "' + t(correctChoice.tKey) + '" — ' + t(correctChoice.wKey) : '');
     }
   }
 
@@ -3279,10 +3226,10 @@ function quizAnswer(id, choiceIdx) {
   if (cont) {
     cont.style.display = 'block';
     if (isLast) {
-      cont.textContent = id === 'c1' ? 'Chapter 2 unlocked! 🔓' : id === 'c2' ? 'Chapter 3 unlocked! 🔓' : 'Chapter 4 unlocked! 🔓';
+      cont.textContent = id === 'c1' ? t('onboarding.quiz.c1Unlock') : id === 'c2' ? t('onboarding.quiz.c2Unlock') : t('onboarding.quiz.c3Unlock');
       cont.style.background = 'linear-gradient(135deg,#875305,#C4863A)';
     } else {
-      cont.textContent = 'Continue →';
+      cont.textContent = t('onboarding.quiz.continue');
       cont.style.background = '#875305';
     }
     setTimeout(() => { cont.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 120);
@@ -3302,11 +3249,11 @@ function _quizShowComplete(id) {
   const correct = total - wrong;
   const xp     = wrong === 0 ? 150 : wrong === 1 ? 100 : 75;
   const stars  = wrong === 0 ? '⭐⭐⭐' : wrong === 1 ? '⭐⭐' : '⭐';
-  const title  = wrong === 0 ? 'Perfect! 🎉' : wrong <= 1 ? 'Well done! 🙌' : 'Good effort! 💪';
+  const title  = wrong === 0 ? t('onboarding.quiz.perfect') : wrong <= 1 ? t('onboarding.quiz.wellDone') : t('onboarding.quiz.goodEffort');
   const msg    = wrong === 0
-    ? 'You nailed every question. You\'re already thinking like a baker!'
-    : `You got ${correct} of ${total} right. Every miss is a lesson that sticks!`;
-  const nextLabel = id === 'c1' ? 'Next: Mix the Dough →' : id === 'c2' ? 'Continue to Bulk Fermentation →' : 'Start Chapter 4 →';
+    ? t('onboarding.quiz.nailedIt')
+    : t('onboarding.quiz.gotN').replace('{correct}', correct).replace('{total}', total);
+  const nextLabel = id === 'c1' ? t('onboarding.quiz.c1Next') : id === 'c2' ? t('onboarding.quiz.c2Next') : t('onboarding.quiz.c3Next');
   const nextFn    = id === 'c1' ? "goTo('c5game');initMixGame()" : id === 'c2' ? "goTo('c2game');initBulkGame()" : "goTo('c4s1')";
 
   if (!_isMuted) _quizPlayChime(wrong === 0);
@@ -3319,11 +3266,11 @@ function _quizShowComplete(id) {
   overlay.style.cssText = 'position:absolute;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;background:#fef9ef;animation:fadeIn 0.4s ease';
   overlay.innerHTML = `
     <div style="font-size:52px;margin-bottom:.75rem;text-align:center;animation:xpPop 0.5s ease">${stars}</div>
-    <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:#C4863A;margin-bottom:.4rem">Quiz complete</p>
+    <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:#C4863A;margin-bottom:.4rem">${t('onboarding.quiz.complete')}</p>
     <h2 style="font-family:'Noto Serif',serif;font-weight:700;font-size:1.85rem;color:#1d1c16;margin-bottom:.5rem;text-align:center">${title}</h2>
     <p style="font-size:13px;color:#514538;text-align:center;max-width:260px;line-height:1.55;margin-bottom:1.25rem">${msg}</p>
     <div style="background:linear-gradient(135deg,#875305,#C4863A);border-radius:9999px;padding:.5rem 1.75rem;margin-bottom:1.75rem;animation:xpPop 0.6s 0.15s ease both">
-      <span style="font-size:1.2rem;font-weight:800;color:#fff">+${xp} XP earned</span>
+      <span style="font-size:1.2rem;font-weight:800;color:#fff">${t('onboarding.quiz.xpEarned').replace('{xp}', xp)}</span>
     </div>
     <button onclick="${nextFn}"
       style="width:100%;max-width:300px;padding:1rem 1.5rem;background:#875305;color:#fff;border-radius:1rem;font-weight:700;font-size:.9375rem;border:none;cursor:pointer;font-family:inherit"
@@ -3456,7 +3403,7 @@ function launchParticles() {
     starterName = ob.starterName;
     document.querySelectorAll('#c4StarterName,#c4StarterName2').forEach(el => el.textContent = starterName);
     document.querySelectorAll('#feedBtnName,#c4JarLabel,#c4CelebName,#c4CelebName2,#starterJarLabel').forEach(el => el.textContent = starterName);
-    document.getElementById('c1s3Headline').textContent = `${starterName} is alive!`;
+    document.getElementById('c1s3Headline').textContent = starterName + t('onboarding.c1s3.isAlive');
     // They already answered the starter question — skip c0s1
     currentScreen = 'c1s1';
     document.getElementById('c0s1').classList.add('hidden');
