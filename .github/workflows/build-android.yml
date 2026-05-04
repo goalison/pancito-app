@@ -3,7 +3,7 @@ name: Build Pancito y Más Android APK
 # Runs automatically on every push to main, or manually from the Actions tab
 on:
   push:
-    branches: [main]
+    branches: [main, 'claude/**']
   workflow_dispatch:
 
 jobs:
