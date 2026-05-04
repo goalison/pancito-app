@@ -124,6 +124,16 @@
     return true;
   }
 
+  function renameStarter(newName) {
+    var name = (newName || '').trim().slice(0, 20);
+    if (!name) return false;
+    var starter = _get('pym_starter');
+    if (!starter) return false;
+    starter.name = name;
+    _set('pym_starter', starter);
+    return starter;
+  }
+
   // ══════════════════════════════════════════════════════════════════════════
   // BAKER LEVEL
   // ══════════════════════════════════════════════════════════════════════════
@@ -732,6 +742,7 @@
     getStarterState,
     feedStarter,
     initStarterIfNew,
+    renameStarter,
     // Level
     calculateLevel,
     // Achievements
