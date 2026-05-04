@@ -714,10 +714,9 @@
       channelId: CHANNEL_ID,
       sound:     'default',
       schedule:  {
-        at:             fire,
-        repeats:        true,
-        every:          'day',
-        allowWhileIdle: true,
+        at:      fire,
+        repeats: true,
+        every:   'day',
       },
     }]}).catch(() => {});
   }
