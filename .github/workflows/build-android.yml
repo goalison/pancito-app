@@ -52,36 +52,64 @@ jobs:
       - name: Sync web assets to Android
         run: npx cap sync android
 
-      # ── 6a. Patch notification plugin to use STREAM_ALARM audio stream ───────
-      # Patching AFTER cap sync so we get the final copy of NotificationChannelManager.java
-      # that was written into the android/ project during sync.
-      # This makes timers ring even when the phone is set to vibrate-only,
-      # exactly like the built-in Clock/Alarm app does.
-      - name: Patch LocalNotifications to use alarm audio stream
+      # ── 6a. Force every notification channel to use the ALARM audio stream ───
+      # This is the actual fix for "alarms don't make sound on vibrate". We patch
+      # NotificationChannelManager.createChannel to ALWAYS call setSound() with
+      # the system default alarm ringtone + USAGE_ALARM audio attributes, right
+      # before the channel is registered with Android. USAGE_ALARM plays on the
+      # alarm audio stream which bypasses vibrate / DND just like a clock alarm.
+      #
+      # We do this by inserting a setSound call immediately before the existing
+      # `notificationManager.createNotificationChannel(notificationChannel);`
+      # line. The replacement is single-line so sed handles it cleanly.
+      - name: Patch LocalNotifications to ring on the ALARM audio stream
         run: |
-          # Replace the audio stream so the timer notification rings even on vibrate.
-          # MUST replace _RINGTONE first to avoid creating an invalid
-          # USAGE_ALARM_RINGTONE token (which would break the Java build).
-          ANDROID_FILE=$(find android -name "NotificationChannelManager.java" 2>/dev/null | head -1)
-          if [ -n "$ANDROID_FILE" ]; then
-            echo "Found android copy: $ANDROID_FILE"
-            echo "── BEFORE: $(grep -n 'USAGE_' "$ANDROID_FILE" || echo 'no USAGE_ matches')"
-            sed -i 's/AudioAttributes\.USAGE_NOTIFICATION_RINGTONE/AudioAttributes.USAGE_ALARM/g' "$ANDROID_FILE" || true
-            sed -i 's/AudioAttributes\.USAGE_NOTIFICATION\b/AudioAttributes.USAGE_ALARM/g' "$ANDROID_FILE" || true
-            echo "── AFTER:  $(grep -n 'USAGE_' "$ANDROID_FILE" || echo 'no USAGE_ matches')"
-          else
-            echo "WARNING: NotificationChannelManager.java not found in android/"
-          fi
+          # The single-line replacement that fronts createChannel with a setSound call.
+          REPLACEMENT='notificationChannel.setSound(android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_ALARM), new android.media.AudioAttributes.Builder().setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION).setUsage(android.media.AudioAttributes.USAGE_ALARM).build()); notificationManager.createNotificationChannel(notificationChannel);'
+
+          patch_file() {
+            local f="$1"
+            echo "── BEFORE ($f):"
+            grep -nE 'createNotificationChannel|setSound' "$f" || echo "  (no matches)"
+            # Idempotent: skip if already patched
+            if grep -q 'TYPE_ALARM' "$f"; then
+              echo "  (already patched, skipping)"
+              return
+            fi
+            sed -i "s|notificationManager\.createNotificationChannel(notificationChannel);|$REPLACEMENT|g" "$f"
+            echo "── AFTER ($f):"
+            grep -nE 'createNotificationChannel|setSound|TYPE_ALARM' "$f" || echo "  (no matches)"
+          }
+
+          PATCHED=0
           NM_FILE=$(find node_modules/@capacitor/local-notifications -name "NotificationChannelManager.java" 2>/dev/null | head -1)
           if [ -n "$NM_FILE" ]; then
             echo "Found node_modules copy: $NM_FILE"
-            echo "── BEFORE: $(grep -n 'USAGE_' "$NM_FILE" || echo 'no USAGE_ matches')"
-            sed -i 's/AudioAttributes\.USAGE_NOTIFICATION_RINGTONE/AudioAttributes.USAGE_ALARM/g' "$NM_FILE" || true
-            sed -i 's/AudioAttributes\.USAGE_NOTIFICATION\b/AudioAttributes.USAGE_ALARM/g' "$NM_FILE" || true
-            echo "── AFTER:  $(grep -n 'USAGE_' "$NM_FILE" || echo 'no USAGE_ matches')"
+            patch_file "$NM_FILE"
+            PATCHED=1
           fi
-          # Always exit 0 — even if no file found, build can proceed with the (cached) channel
-          exit 0
+          ANDROID_FILE=$(find android -name "NotificationChannelManager.java" 2>/dev/null | head -1)
+          if [ -n "$ANDROID_FILE" ]; then
+            echo "Found android copy: $ANDROID_FILE"
+            patch_file "$ANDROID_FILE"
+            PATCHED=1
+          fi
+
+          # Hard assertion — if we couldn't patch anything, fail loudly so we
+          # never ship another build the user thinks is fixed but isn't.
+          if [ "$PATCHED" = "0" ]; then
+            echo "ERROR: NotificationChannelManager.java not found anywhere — patch did not apply."
+            find . -name "NotificationChannelManager.java" 2>/dev/null | head -5
+            exit 1
+          fi
+          for f in "$NM_FILE" "$ANDROID_FILE"; do
+            [ -z "$f" ] && continue
+            if ! grep -q 'TYPE_ALARM' "$f"; then
+              echo "ERROR: $f does not contain TYPE_ALARM after patching"
+              exit 1
+            fi
+            echo "✓ $f: patched (TYPE_ALARM + USAGE_ALARM in createChannel)"
+          done
 
       # ── 6a-bis. Patch scheduling to use setAlarmClock() ──────────────────────
       # setExactAndAllowWhileIdle gets deferred by App Standby on idle apps —
