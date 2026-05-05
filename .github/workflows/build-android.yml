@@ -53,7 +53,7 @@ jobs:
         run: npx cap sync android
 
       # ── 6a. Patch notification plugin to use STREAM_ALARM audio stream ───────
-      # Patching AFTER cap sync so we get the final copy of ChannelManager.java
+      # Patching AFTER cap sync so we get the final copy of NotificationChannelManager.java
       # that was written into the android/ project during sync.
       # This makes timers ring even when the phone is set to vibrate-only,
       # exactly like the built-in Clock/Alarm app does.
@@ -62,7 +62,7 @@ jobs:
           # Replace the audio stream so the timer notification rings even on vibrate.
           # MUST replace _RINGTONE first to avoid creating an invalid
           # USAGE_ALARM_RINGTONE token (which would break the Java build).
-          ANDROID_FILE=$(find android -name "ChannelManager.java" 2>/dev/null | head -1)
+          ANDROID_FILE=$(find android -name "NotificationChannelManager.java" 2>/dev/null | head -1)
           if [ -n "$ANDROID_FILE" ]; then
             echo "Found android copy: $ANDROID_FILE"
             echo "── BEFORE: $(grep -n 'USAGE_' "$ANDROID_FILE" || echo 'no USAGE_ matches')"
@@ -70,9 +70,9 @@ jobs:
             sed -i 's/AudioAttributes\.USAGE_NOTIFICATION\b/AudioAttributes.USAGE_ALARM/g' "$ANDROID_FILE" || true
             echo "── AFTER:  $(grep -n 'USAGE_' "$ANDROID_FILE" || echo 'no USAGE_ matches')"
           else
-            echo "WARNING: ChannelManager.java not found in android/"
+            echo "WARNING: NotificationChannelManager.java not found in android/"
           fi
-          NM_FILE=$(find node_modules/@capacitor/local-notifications -name "ChannelManager.java" 2>/dev/null | head -1)
+          NM_FILE=$(find node_modules/@capacitor/local-notifications -name "NotificationChannelManager.java" 2>/dev/null | head -1)
           if [ -n "$NM_FILE" ]; then
             echo "Found node_modules copy: $NM_FILE"
             echo "── BEFORE: $(grep -n 'USAGE_' "$NM_FILE" || echo 'no USAGE_ matches')"

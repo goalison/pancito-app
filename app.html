@@ -1276,10 +1276,16 @@ Record a New Bake
         var _lnp = window.Capacitor.Plugins.LocalNotifications;
         _lnp.addListener('localNotificationActionPerformed', function(ev) {
           var ch = ev && ev.notification && ev.notification.channelId;
-          if (ch === 'bake-alarms-v4') { setPendingAlarm(); showView('view-bake'); }
+          if (ch === 'bake-alarms-v5') { setPendingAlarm(); showView('view-bake'); }
         });
-        _lnp.addListener('localNotificationReceived', function(n) { if (n && n.channelId === 'bake-alarms-v4') playAlarm(); });
+        _lnp.addListener('localNotificationReceived', function(n) { if (n && n.channelId === 'bake-alarms-v5') playAlarm(); });
       } catch(e) {}
+      // Initialise the notification channel + permissions ONCE at startup so it's
+      // ready whenever the user starts a timer — regardless of which Step they
+      // navigate to first. Previously this only ran inside completeStep1 (Step 1
+      // → Step 2 transition), so jumping to other steps left the channel/perms
+      // in an inconsistent state and alarms could fail to schedule.
+      try { initNotifications(); } catch(e) {}
       // When app comes to foreground after a background timer fires, check immediately
       try {
         window.Capacitor.Plugins.App.addListener('resume', function() {
@@ -2204,9 +2210,13 @@ Record a New Bake
     try { localStorage.setItem('pym_active_bake', JSON.stringify(activeBake)); } catch(e) {}
   }
 
-  function completeStep1() {
+  async function completeStep1() {
     try { getAudioCtx(); } catch(e) {}
-    initNotifications(); startBulkTotalTimer(); goToStep(2);
+    // Await — without this, the 60-min sendAlarm below could race ahead of
+    // channel/permission setup and silently fail to schedule the notification.
+    // (initNotifications is idempotent; safe to call again even if already done.)
+    await initNotifications();
+    startBulkTotalTimer(); goToStep(2);
     setTimeout(function() { toggleRestTimer(); }, 300);
   }
 
@@ -2241,7 +2251,12 @@ Record a New Bake
     } catch(e) {}
   }
 
-  async function initNotifications() {
+  // Idempotent — returns the cached promise so multiple callers wait on the same setup.
+  // Listeners are registered in DOMContentLoaded only (NOT here), to avoid duplicate handlers.
+  let _initNotificationsPromise = null;
+  function initNotifications() {
+    if (_initNotificationsPromise) return _initNotificationsPromise;
+    _initNotificationsPromise = (async function() {
     if (IS_NATIVE) {
       try {
         const { LocalNotifications } = window.Capacitor.Plugins;
@@ -2249,12 +2264,12 @@ Record a New Bake
         try { await LocalNotifications.deleteChannel({ id: 'bake-alarms' }); } catch(_) {}
         try { await LocalNotifications.deleteChannel({ id: 'bake-alarms-v2' }); } catch(_) {}
         try { await LocalNotifications.deleteChannel({ id: 'bake-alarms-v3' }); } catch(_) {}
-        await LocalNotifications.createChannel({ id: 'bake-alarms-v4', name: 'Bake Alarms', description: 'Sourdough bake timer alerts — rings even on vibrate', importance: 5, visibility: 1, vibration: true, lights: true, lightColor: '#875305', sound: 'default' });
-        LocalNotifications.addListener('localNotificationActionPerformed', function(ev) {
-          var ch = ev && ev.notification && ev.notification.channelId;
-          if (ch === 'bake-alarms-v4') setPendingAlarm();
-        });
-        LocalNotifications.addListener('localNotificationReceived', function(notification) { if (notification && notification.channelId === 'bake-alarms-v4') playAlarm(); });
+        try { await LocalNotifications.deleteChannel({ id: 'bake-alarms-v4' }); } catch(_) {}
+        // Note: do NOT pass sound: 'default' — Capacitor v6 treats it as a filename
+        // (R.raw.default) and sets the channel's sound URI to a non-existent resource,
+        // which can cause Android to silently drop notifications when they fire.
+        // Omitting `sound` makes the channel use the system default notification sound.
+        await LocalNotifications.createChannel({ id: 'bake-alarms-v5', name: 'Bake Alarms', description: 'Sourdough bake timer alerts', importance: 5, visibility: 1, vibration: true, lights: true, lightColor: '#875305' });
         const perm = await LocalNotifications.requestPermissions();
         if (perm.display !== 'granted') return false;
         try { const exactSetting = await LocalNotifications.checkExactNotificationSetting(); if (exactSetting.result === 'denied') await LocalNotifications.requestExactNotificationSetting(); } catch(_) {}
@@ -2267,6 +2282,8 @@ Record a New Bake
       const result = await Notification.requestPermission();
       return result === 'granted';
     }
+    })();
+    return _initNotificationsPromise;
   }
 
   function timerIdToInt(strId) { let h = 5381; for (let i = 0; i < strId.length; i++) h = ((h << 5) + h) ^ strId.charCodeAt(i); return Math.abs(h) % 2147483647; }
@@ -2277,7 +2294,9 @@ Record a New Bake
         const { LocalNotifications } = window.Capacitor.Plugins;
         const nid = timerIdToInt(id);
         await LocalNotifications.cancel({ notifications: [{ id: nid }] }).catch(() => {});
-        await LocalNotifications.schedule({ notifications: [{ id: nid, title: '🍞 Pancito y Más', body: `${label} — time is up!`, schedule: { at: new Date(Date.now() + delaySecs * 1000), allowWhileIdle: true }, channelId: 'bake-alarms-v4', sound: 'default', extra: { timerId: id } }] });
+        // Same here: do NOT pass sound: 'default' (it'd be parsed as a non-existent filename).
+        // The channel's default sound applies automatically.
+        await LocalNotifications.schedule({ notifications: [{ id: nid, title: '🍞 Pancito y Más', body: `${label} — time is up!`, schedule: { at: new Date(Date.now() + delaySecs * 1000), allowWhileIdle: true }, channelId: 'bake-alarms-v5', extra: { timerId: id } }] });
       } catch(e) {}
     } else {
       const sw = swReg?.active || navigator.serviceWorker?.controller;
