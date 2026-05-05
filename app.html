@@ -1276,7 +1276,7 @@ Record a New Bake
         var _lnp = window.Capacitor.Plugins.LocalNotifications;
         _lnp.addListener('localNotificationActionPerformed', function(ev) {
           var ch = ev && ev.notification && ev.notification.channelId;
-          if (ch === 'bake-alarms-v6') { if (!IS_NATIVE) setPendingAlarm(); showView('view-bake'); }
+          if (ch === 'bake-alarms-v6') { showView('view-bake'); }
         });
         _lnp.addListener('localNotificationReceived', function(n) { if (n && n.channelId === 'bake-alarms-v6') playAlarm(); });
       } catch(e) {}
@@ -1316,8 +1316,8 @@ Record a New Bake
     localStorage.setItem('pym_alarm_pending', '1');
     localStorage.removeItem('pym_pending_alarm');
     showView('view-bake');
-    // Give initBakeView() a moment to run, then try to play alarm audio (web/PWA only — native alarm already rang)
-    if (!IS_NATIVE) setTimeout(function() { if (typeof tryPlayPendingAlarm === 'function') tryPlayPendingAlarm(); }, 800);
+    // Give initBakeView() a moment to run, then play alarm audio
+    setTimeout(function() { if (typeof tryPlayPendingAlarm === 'function') tryPlayPendingAlarm(); }, 800);
     return true;
   }
 
@@ -1807,7 +1807,7 @@ Record a New Bake
 
   function setPendingAlarm() {
     localStorage.setItem(ALARM_PENDING_KEY, '1');
-    if (!IS_NATIVE) setTimeout(function() { tryPlayPendingAlarm(); }, 1000);
+    setTimeout(function() { tryPlayPendingAlarm(); }, 1000);
   }
 
   function tryPlayPendingAlarm() {
