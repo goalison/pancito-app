@@ -128,8 +128,12 @@
     var name = (newName || '').trim().slice(0, 20);
     if (!name) return false;
     var starter = _get('pym_starter');
-    if (!starter) return false;
-    starter.name = name;
+    if (!starter) {
+      // Starter was never created (user skipped tutorial) — create it now
+      starter = { name: name, health: 60, stage: 'active', lastFed: null, totalFeedings: 0, namedAt: new Date().toISOString() };
+    } else {
+      starter.name = name;
+    }
     _set('pym_starter', starter);
     return starter;
   }
