@@ -1281,9 +1281,9 @@ Record a New Bake
         var _lnp = window.Capacitor.Plugins.LocalNotifications;
         _lnp.addListener('localNotificationActionPerformed', function(ev) {
           var ch = ev && ev.notification && ev.notification.channelId;
-          if (ch === 'bake-alarms-v6') { showView('view-bake'); }
+          if (ch === 'bake-alarms-v7') { showView('view-bake'); }
         });
-        _lnp.addListener('localNotificationReceived', function(n) { if (n && n.channelId === 'bake-alarms-v6' && !IS_NATIVE) playAlarm(); });
+        _lnp.addListener('localNotificationReceived', function(n) { if (n && n.channelId === 'bake-alarms-v7' && !IS_NATIVE) playAlarm(); });
       } catch(e) {}
       // Initialise the notification channel + permissions ONCE at startup so it's
       // ready whenever the user starts a timer — regardless of which Step they
@@ -2305,11 +2305,12 @@ Record a New Bake
         try { await LocalNotifications.deleteChannel({ id: 'bake-alarms-v3' }); } catch(_) {}
         try { await LocalNotifications.deleteChannel({ id: 'bake-alarms-v4' }); } catch(_) {}
         try { await LocalNotifications.deleteChannel({ id: 'bake-alarms-v5' }); } catch(_) {}
-        // Note: do NOT pass sound: 'default' — Capacitor v6 treats it as a filename
-        // (R.raw.default) and sets the channel's sound URI to a non-existent resource,
-        // which can cause Android to silently drop notifications when they fire.
-        // Omitting `sound` makes the channel use the system default notification sound.
-        await LocalNotifications.createChannel({ id: 'bake-alarms-v6', name: 'Bake Alarms', description: 'Sourdough bake timer alerts', importance: 5, visibility: 1, vibration: true, lights: true, lightColor: '#875305' });
+        try { await LocalNotifications.deleteChannel({ id: 'bake-alarms-v6' }); } catch(_) {}
+        // Channel sound is set by the build-time patch in build-android.yml (TYPE_NOTIFICATION
+        // tone via USAGE_ALARM stream — gentle tone, still bypasses vibrate/DND).
+        // The channel ID must change whenever the patch's sound config changes, because
+        // Android caches channel sound settings immutably under the original ID.
+        await LocalNotifications.createChannel({ id: 'bake-alarms-v7', name: 'Bake Alarms', description: 'Sourdough bake timer alerts', importance: 5, visibility: 1, vibration: true, lights: true, lightColor: '#875305' });
         const perm = await LocalNotifications.requestPermissions();
         if (perm.display !== 'granted') return false;
         try { const exactSetting = await LocalNotifications.checkExactNotificationSetting(); if (exactSetting.result === 'denied') await LocalNotifications.requestExactNotificationSetting(); } catch(_) {}
@@ -2336,7 +2337,7 @@ Record a New Bake
         await LocalNotifications.cancel({ notifications: [{ id: nid }] }).catch(() => {});
         // Same here: do NOT pass sound: 'default' (it'd be parsed as a non-existent filename).
         // The channel's default sound applies automatically.
-        await LocalNotifications.schedule({ notifications: [{ id: nid, title: '🍞 Pancito y Más', body: `${label} — time is up!`, schedule: { at: new Date(Date.now() + delaySecs * 1000), allowWhileIdle: true }, channelId: 'bake-alarms-v6', extra: { timerId: id } }] });
+        await LocalNotifications.schedule({ notifications: [{ id: nid, title: '🍞 Pancito y Más', body: `${label} — time is up!`, schedule: { at: new Date(Date.now() + delaySecs * 1000), allowWhileIdle: true }, channelId: 'bake-alarms-v7', extra: { timerId: id } }] });
       } catch(e) {}
     } else {
       const sw = swReg?.active || navigator.serviceWorker?.controller;
