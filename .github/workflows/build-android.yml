@@ -96,7 +96,7 @@ jobs:
       - name: Add alarm permissions to AndroidManifest
         run: |
           python3 << 'PYEOF'
-          import sys
+          import sys, os
           path = 'android/app/src/main/AndroidManifest.xml'
           with open(path, 'r') as f:
             content = f.read()
@@ -111,7 +111,6 @@ jobs:
             '    <uses-permission android:name="android.permission.WAKE_LOCK" />\n'
           )
           content = content.replace('</manifest>', perms + '</manifest>')
-          import os
           vc = os.environ.get('GITHUB_RUN_NUMBER', '135')
           with open(path, 'w') as f:
             f.write(content.replace('targetSdkVersion 34', 'targetSdkVersion 35').replace('targetSdk 34', 'targetSdk 35').replace('compileSdkVersion 34', 'compileSdkVersion 35').replace('versionCode 1', 'versionCode ' + vc))
@@ -128,6 +127,7 @@ jobs:
       - name: Inject release signing config into build.gradle
         run: |
           python3 << 'PYEOF'
+          import os
           path = 'android/app/build.gradle'
           with open(path, 'r') as f:
             content = f.read()
@@ -143,11 +143,9 @@ jobs:
               }
           """
 
-          # Insert signingConfigs before buildTypes
           if 'signingConfigs' not in content:
               content = content.replace('    buildTypes {', signing_config + '    buildTypes {')
 
-          # Add signingConfig specifically inside buildTypes.release (not signingConfigs.release)
           if 'signingConfig signingConfigs.release' not in content:
               bt_pos = content.find('buildTypes {')
               if bt_pos != -1:
@@ -156,7 +154,6 @@ jobs:
                       insert_at = rel_pos + len('release {')
                       content = content[:insert_at] + '\n                signingConfig signingConfigs.release' + content[insert_at:]
 
-          import os
           vc = os.environ.get('GITHUB_RUN_NUMBER', '135')
           with open(path, 'w') as f:
               f.write(content.replace('targetSdkVersion 34', 'targetSdkVersion 35').replace('targetSdk 34', 'targetSdk 35').replace('compileSdkVersion 34', 'compileSdkVersion 35').replace('versionCode 1', 'versionCode ' + vc))
@@ -172,17 +169,33 @@ jobs:
             "build-tools;35.0.0" \
             "platform-tools"
 
-      # ── 10. Write local.properties so Gradle finds the Android SDK ──────────
-      - name: Create android/local.properties
+      # ── 10. Patch variables.gradle and local.properties ────────────────────
+      - name: Patch SDK versions in variables.gradle and create local.properties
         run: |
           echo "sdk.dir=$ANDROID_HOME" > android/local.properties
-          sed -i 's/targetSdkVersion = 34/targetSdkVersion = 35/g;s/compileSdkVersion = 34/compileSdkVersion = 35/g' android/variables.gradle 2>/dev/null || true
+          python3 << 'PYEOF'
+          import re, glob
+          targets = glob.glob('android/variables.gradle') + glob.glob('android/app/build.gradle')
+          for path in targets:
+            with open(path, 'r') as f:
+              content = f.read()
+            # Replace any = 34 SDK version assignments with = 35
+            content = re.sub(r'((?:targetSdkVersion|compileSdkVersion|targetSdk|compileSdk)\s*=\s*)34', r'\g<1>35', content)
+            # Also replace bare (no equals) patterns just in case
+            content = content.replace('targetSdkVersion 34', 'targetSdkVersion 35')
+            content = content.replace('compileSdkVersion 34', 'compileSdkVersion 35')
+            content = content.replace('targetSdk 34', 'targetSdk 35')
+            content = content.replace('compileSdk 34', 'compileSdk 35')
+            with open(path, 'w') as f:
+              f.write(content)
+            print(f'✓ Patched {path}')
+          PYEOF
 
-      # ── 11. Build the RELEASE APK ───────────────────────────────────────────
+      # ── 11. Build the RELEASE AAB ───────────────────────────────────────────
       - name: Make Gradle wrapper executable
         run: chmod +x android/gradlew
 
-      - name: Build release APK
+      - name: Build release AAB
         working-directory: android
         env:
           STORE_PASSWORD: ${{ secrets.KEY_PASSWORD }}
@@ -190,8 +203,8 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew bundleRelease --no-daemon --stacktrace
 
-      # ── 12. Save the release APK ────────────────────────────────────────────
-      - name: Upload release APK artifact
+      # ── 12. Save the release AAB ────────────────────────────────────────────
+      - name: Upload release AAB artifact
         uses: actions/upload-artifact@v4
         with:
           name: pancito-mas-android-v${{ github.run_number }}-release
