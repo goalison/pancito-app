@@ -43,11 +43,11 @@ jobs:
           cp *.png  www/ 2>/dev/null || true
           cp -r Images www/ 2>/dev/null || true
 
-      # ── 5. Generate the Android project ────────────────────────────────────────────────────────────
+      # ── 5. Generate the Android project ────────────────────────────────────
       - name: Add Android platform
         run: npx cap add android
 
-      # ── 6. Copy web assets into the Android project ────────────────────────────────────────────────
+      # ── 6. Copy web assets into the Android project ────────────────────────
       - name: Sync web assets to Android
         run: npx cap sync android
 
@@ -77,7 +77,7 @@ jobs:
             exit 1
           fi
 
-      # ── 6b. Patch LocalNotifications to use setAlarmClock ──────────────────────────────────────────
+      # ── 6b. Patch LocalNotifications to use setAlarmClock ──────────────────
       - name: Patch LocalNotifications to use setAlarmClock
         run: |
           patch_lnm() {
@@ -92,7 +92,7 @@ jobs:
           LNM_AND=$(find android -name "LocalNotificationManager.java" 2>/dev/null | head -1)
           if [ -n "$LNM_AND" ]; then patch_lnm "$LNM_AND"; fi
 
-      # ── 6c. Add alarm permissions to AndroidManifest ───────────────────────────────────────────────
+      # ── 6c. Add alarm permissions to AndroidManifest ───────────────────────
       - name: Add alarm permissions to AndroidManifest
         run: |
           python3 << 'PYEOF'
@@ -101,7 +101,7 @@ jobs:
           with open(path, 'r') as f:
             content = f.read()
           if 'USE_EXACT_ALARM' in content:
-            print('Permissions already present - skipping')
+            print('✓ Permissions already present — skipping')
             sys.exit(0)
           perms = (
             '    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />\n'
@@ -113,22 +113,23 @@ jobs:
           content = content.replace('</manifest>', perms + '</manifest>')
           with open(path, 'w') as f:
             f.write(content)
-          print('Permissions injected')
+          print('✓ Permissions injected')
           PYEOF
 
-      # ── 7. Decode release keystore from secret ──────────────────────────────────────────────────────
+      # ── 7. Decode release keystore from secret ──────────────────────────────
       - name: Decode release keystore
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/pancitoymas-release.keystore
-          echo "Keystore decoded $(wc -c < android/app/pancitoymas-release.keystore) bytes"
+          echo "✓ Keystore decoded ($(wc -c < android/app/pancitoymas-release.keystore) bytes)"
 
-      # ── 8. Inject release signing config into build.gradle ─────────────────────────────────────────
+      # ── 8. Inject release signing config into build.gradle ─────────────────
       - name: Inject release signing config into build.gradle
         run: |
           python3 << 'PYEOF'
           path = 'android/app/build.gradle'
           with open(path, 'r') as f:
             content = f.read()
+
           signing_config = """
               signingConfigs {
                   release {
@@ -139,16 +140,26 @@ jobs:
                   }
               }
           """
+
+          # Insert signingConfigs before buildTypes
           if 'signingConfigs' not in content:
               content = content.replace('    buildTypes {', signing_config + '    buildTypes {')
+
+          # Add signingConfig specifically inside buildTypes.release (not signingConfigs.release)
           if 'signingConfig signingConfigs.release' not in content:
-              content = content.replace('release {\n', 'release {\n                signingConfig signingConfigs.release\n', 1)
+              bt_pos = content.find('buildTypes {')
+              if bt_pos != -1:
+                  rel_pos = content.find('release {', bt_pos)
+                  if rel_pos != -1:
+                      insert_at = rel_pos + len('release {')
+                      content = content[:insert_at] + '\n                signingConfig signingConfigs.release' + content[insert_at:]
+
           with open(path, 'w') as f:
               f.write(content)
-          print('Signing config injected')
+          print('✓ Signing config injected into build.gradle')
           PYEOF
 
-      # ── 9. Install Android SDK components and accept licenses ───────────────────────────────────────
+      # ── 9. Install Android SDK components and accept licenses ───────────────
       - name: Install Android SDK components and accept licenses
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
@@ -157,11 +168,11 @@ jobs:
             "build-tools;34.0.0" \
             "platform-tools"
 
-      # ── 10. Write local.properties so Gradle finds the Android SDK ──────────────────────────────────
+      # ── 10. Write local.properties so Gradle finds the Android SDK ──────────
       - name: Create android/local.properties
         run: echo "sdk.dir=$ANDROID_HOME" > android/local.properties
 
-      # ── 11. Build the RELEASE APK ──────────────────────────────────────────────────────────────────
+      # ── 11. Build the RELEASE APK ───────────────────────────────────────────
       - name: Make Gradle wrapper executable
         run: chmod +x android/gradlew
 
@@ -173,7 +184,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew assembleRelease --no-daemon --stacktrace
 
-      # ── 12. Save the release APK ──────────────────────────────────────────────────────────────────
+      # ── 12. Save the release APK ────────────────────────────────────────────
       - name: Upload release APK artifact
         uses: actions/upload-artifact@v4
         with:
