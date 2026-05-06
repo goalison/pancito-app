@@ -394,7 +394,12 @@
     </div>
     <div class="flex-1 min-w-0">
       <p class="font-label text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-0.5" id="starter-stage-label">Starter</p>
-      <p class="font-headline text-xl font-bold text-on-surface leading-tight" id="starter-name-display">Your Starter</p>
+      <div class="flex items-center gap-1">
+        <p class="font-headline text-xl font-bold text-on-surface leading-tight" id="starter-name-display">Your Starter</p>
+        <button onclick="openRenameSheet()" class="text-on-surface-variant opacity-50 active:opacity-100 transition-opacity -mb-0.5" aria-label="Rename starter">
+          <span class="material-symbols-outlined" style="font-size:16px;">edit</span>
+        </button>
+      </div>
       <p class="text-xs text-on-surface-variant mt-1" id="starter-state-text">Loading…</p>
       <div class="mt-2 w-full h-1.5 bg-outline-variant/30 rounded-full overflow-hidden">
         <div class="h-full bg-primary rounded-full transition-all duration-700" id="starter-health-bar" style="width:0%"></div>
@@ -1340,6 +1345,40 @@ Record a New Bake
   // Dashboard — Check-in bottom sheet
   // ════════════════════════════════════════════════════════
   var _checkinActivity = null;
+
+  function openRenameSheet() {
+    var starter = window.PymGamification && window.PymGamification.getStarterState();
+    var currentName = (starter && starter.name) || '';
+    var sheet = document.createElement('div');
+    sheet.className = 'pym-sheet-overlay';
+    sheet.id = 'pym-rename-sheet';
+    sheet.innerHTML = '<div class="pym-sheet" style="font-family:\'Plus Jakarta Sans\',sans-serif;">' +
+      '<div class="w-10 h-1 bg-outline-variant rounded-full mx-auto mb-4"></div>' +
+      '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#514538;margin-bottom:6px;">Name Your Starter</p>' +
+      '<p style="font-family:\'Noto Serif\',serif;font-size:1.1rem;font-weight:700;color:#1d1c16;margin-bottom:1rem;">What would you like to call your starter?</p>' +
+      '<input id="rename-input" type="text" maxlength="20" value="' + currentName.replace(/"/g, '&quot;') + '" placeholder="e.g. Bubbles, Scout, Dough-Remi…" style="width:100%;padding:10px 12px;border:2px solid #d6c3b3;border-radius:12px;font-size:14px;color:#1d1c16;background:#fef9ef;margin-bottom:1.2rem;box-sizing:border-box;"/>' +
+      '<button onclick="submitRename()" style="width:100%;padding:14px;background:#875305;color:#fff;border-radius:14px;font-weight:700;font-size:14px;border:none;cursor:pointer;font-family:\'Plus Jakarta Sans\',sans-serif;">Save Name</button>' +
+    '</div>';
+    sheet.addEventListener('click', function(e) { if (e.target === sheet) closeRenameSheet(); });
+    document.body.appendChild(sheet);
+    setTimeout(function() { var inp = document.getElementById('rename-input'); if (inp) { inp.focus(); inp.select(); } }, 100);
+  }
+
+  function closeRenameSheet() {
+    var s = document.getElementById('pym-rename-sheet');
+    if (s) { s.style.animation = 'pym-fade-in 0.2s ease reverse forwards'; setTimeout(function() { s.remove(); }, 200); }
+  }
+
+  function submitRename() {
+    var inp = document.getElementById('rename-input');
+    var newName = inp ? inp.value.trim() : '';
+    if (!newName) { if (inp) inp.focus(); return; }
+    var G = window.PymGamification;
+    if (!G || !G.renameStarter) { closeRenameSheet(); return; }
+    G.renameStarter(newName);
+    closeRenameSheet();
+    renderStarterCompanion();
+  }
 
   function openCheckinSheet() {
     _checkinActivity = null;
