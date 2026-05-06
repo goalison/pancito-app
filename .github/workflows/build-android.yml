@@ -182,12 +182,12 @@ jobs:
           STORE_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew assembleRelease --no-daemon --stacktrace
+        run: ./gradlew bundleRelease --no-daemon --stacktrace
 
       # ── 12. Save the release APK ────────────────────────────────────────────
       - name: Upload release APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: pancito-mas-android-v${{ github.run_number }}-release
-          path: android/app/build/outputs/apk/release/app-release.apk
+          path: android/app/build/outputs/bundle/release/app-release.aab
           retention-days: 60
