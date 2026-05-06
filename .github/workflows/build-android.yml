@@ -111,8 +111,10 @@ jobs:
             '    <uses-permission android:name="android.permission.WAKE_LOCK" />\n'
           )
           content = content.replace('</manifest>', perms + '</manifest>')
+          import os
+          vc = os.environ.get('GITHUB_RUN_NUMBER', '135')
           with open(path, 'w') as f:
-            f.write(content.replace('targetSdkVersion 34', 'targetSdkVersion 35').replace('targetSdk 34', 'targetSdk 35').replace('compileSdkVersion 34', 'compileSdkVersion 35').replace('versionCode 1', 'versionCode 3'))
+            f.write(content.replace('targetSdkVersion 34', 'targetSdkVersion 35').replace('targetSdk 34', 'targetSdk 35').replace('compileSdkVersion 34', 'compileSdkVersion 35').replace('versionCode 1', 'versionCode ' + vc))
           print('✓ Permissions injected')
           PYEOF
 
@@ -154,8 +156,10 @@ jobs:
                       insert_at = rel_pos + len('release {')
                       content = content[:insert_at] + '\n                signingConfig signingConfigs.release' + content[insert_at:]
 
+          import os
+          vc = os.environ.get('GITHUB_RUN_NUMBER', '135')
           with open(path, 'w') as f:
-              f.write(content.replace('targetSdkVersion 34', 'targetSdkVersion 35').replace('targetSdk 34', 'targetSdk 35').replace('compileSdkVersion 34', 'compileSdkVersion 35').replace('versionCode 1', 'versionCode 3'))
+              f.write(content.replace('targetSdkVersion 34', 'targetSdkVersion 35').replace('targetSdk 34', 'targetSdk 35').replace('compileSdkVersion 34', 'compileSdkVersion 35').replace('versionCode 1', 'versionCode ' + vc))
           print('✓ Signing config injected into build.gradle')
           PYEOF
 
