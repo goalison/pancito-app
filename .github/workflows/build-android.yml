@@ -112,7 +112,7 @@ jobs:
           )
           content = content.replace('</manifest>', perms + '</manifest>')
           with open(path, 'w') as f:
-            f.write(content)
+            f.write(content.replace('targetSdkVersion 34', 'targetSdkVersion 35').replace('targetSdk 34', 'targetSdk 35').replace('compileSdkVersion 34', 'compileSdkVersion 35'))
           print('✓ Permissions injected')
           PYEOF
 
@@ -155,7 +155,7 @@ jobs:
                       content = content[:insert_at] + '\n                signingConfig signingConfigs.release' + content[insert_at:]
 
           with open(path, 'w') as f:
-              f.write(content)
+              f.write(content.replace('targetSdkVersion 34', 'targetSdkVersion 35').replace('targetSdk 34', 'targetSdk 35').replace('compileSdkVersion 34', 'compileSdkVersion 35'))
           print('✓ Signing config injected into build.gradle')
           PYEOF
 
@@ -164,8 +164,8 @@ jobs:
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
-            "platforms;android-34" \
-            "build-tools;34.0.0" \
+            "platforms;android-35" \
+            "build-tools;35.0.0" \
             "platform-tools"
 
       # ── 10. Write local.properties so Gradle finds the Android SDK ──────────
