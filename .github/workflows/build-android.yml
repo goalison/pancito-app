@@ -54,18 +54,18 @@ jobs:
       # ── 6a. Patch LocalNotifications to ring on the ALARM audio stream ─────
       - name: Patch LocalNotifications to ring on the ALARM audio stream
         run: |
-          REPLACEMENT='notificationChannel.setSound(android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_ALARM), new android.media.AudioAttributes.Builder().setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION).setUsage(android.media.AudioAttributes.USAGE_ALARM).build()); notificationManager.createNotificationChannel(notificationChannel);'
+          REPLACEMENT='notificationChannel.setSound(android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_NOTIFICATION), new android.media.AudioAttributes.Builder().setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION).setUsage(android.media.AudioAttributes.USAGE_ALARM).build()); notificationManager.createNotificationChannel(notificationChannel);'
           patch_file() {
             local f="$1"
             echo "── BEFORE ($f):"
             grep -nE 'createNotificationChannel|setSound' "$f" || echo " (no matches)"
-            if grep -q 'TYPE_ALARM' "$f"; then
+            if grep -q 'TYPE_NOTIFICATION' "$f" && grep -q 'USAGE_ALARM' "$f"; then
               echo " (already patched, skipping)"
               return
             fi
             sed -i "s|notificationManager\.createNotificationChannel(notificationChannel);|$REPLACEMENT|g" "$f"
             echo "── AFTER ($f):"
-            grep -nE 'createNotificationChannel|setSound|TYPE_ALARM' "$f" || echo " (no matches)"
+            grep -nE 'createNotificationChannel|setSound|TYPE_NOTIFICATION|USAGE_ALARM' "$f" || echo " (no matches)"
           }
           PATCHED=0
           NM_FILE=$(find node_modules/@capacitor/local-notifications -name "NotificationChannelManager.java" 2>/dev/null | head -1)
