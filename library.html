@@ -503,7 +503,18 @@
   });
 })();
 
-// â”€â”€ Swipe right / Android back button â†’ go back to Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Library translation hook ──────────────────────────────────────────────
+// Called by setLang() in i18n.js whenever the user switches language,
+// and also on window.load (after Tailwind CDN finishes) to ensure
+// translations stick even if the CDN script runs after DOMContentLoaded.
+window.renderLibrary = function() {
+  if (window.PymI18n) window.PymI18n.applyTranslations();
+};
+window.addEventListener(‘load’, function() {
+  if (window.PymI18n) window.PymI18n.applyTranslations();
+});
+
+// ── Swipe right / Android back button → go back to Dashboard ─────────────
 (function() {
   if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
     window.Capacitor.Plugins.App.addListener('backButton', function() {
