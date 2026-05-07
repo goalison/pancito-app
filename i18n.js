@@ -195,6 +195,20 @@
       'starter.active':   'is fed and happy 😊',
       'starter.thriving': 'is thriving!',
       'starter.peak':     'is at peak — bake now! 🚀',
+      // Short stage labels (shown above starter name)
+      'starter.stage.dormant':  'Dormant',
+      'starter.stage.hungry':   'Hungry',
+      'starter.stage.active':   'Active',
+      'starter.stage.thriving': 'Thriving',
+      'starter.stage.peak':     'Peak',
+      // Default name when starter has not been named yet
+      'starter.defaultName':    'Your Starter',
+      // Tip categories (rendered in the daily-tip card)
+      'tipCat.fermentation':    'Fermentation',
+      'tipCat.starter':         'Starter',
+      'tipCat.scoring':         'Scoring',
+      'tipCat.flour':           'Flour',
+      'tipCat.mindset':         'Mindset',
 
       // ── Dashboard — check-in sheet ───────────────────────────────────────
       'checkin.title':       'Feed & Check In',
@@ -1237,6 +1251,20 @@
       'starter.active':   'está alimentada y feliz 😊',
       'starter.thriving': '¡está prosperando!',
       'starter.peak':     '¡está en su punto — hornea ya! 🚀',
+      // Short stage labels (shown above starter name)
+      'starter.stage.dormant':  'Inactiva',
+      'starter.stage.hungry':   'Hambrienta',
+      'starter.stage.active':   'Activa',
+      'starter.stage.thriving': 'Próspera',
+      'starter.stage.peak':     'En su Punto',
+      // Default name when starter has not been named yet
+      'starter.defaultName':    'Tu Masa Madre',
+      // Tip categories (rendered in the daily-tip card)
+      'tipCat.fermentation':    'Fermentación',
+      'tipCat.starter':         'Masa Madre',
+      'tipCat.scoring':         'Cortes',
+      'tipCat.flour':           'Harina',
+      'tipCat.mindset':         'Mentalidad',
 
       // ── Dashboard — check-in sheet ───────────────────────────────────────
       'checkin.title':       'Alimentar y Checar',
@@ -1588,8 +1616,8 @@
       'achievements.unlockHint':   'Sigue horneando para desbloquear esta insignia',
 
       // ── Badge lock hints ──────────────────────────────────────────────────
-      'lock.named_starter':  'Ponle nombre a tu starter en el tutorial',
-      'lock.first_checkin':  'Completa tu primer check-in de starter',
+      'lock.named_starter':  'Ponle nombre a tu masa madre en el tutorial',
+      'lock.first_checkin':  'Completa tu primer check-in de masa madre',
       'lock.first_loaf':     'Guarda tu primera horneada en el Archivo',
       'lock.photo_baker':    'Guarda una horneada con foto',
       'lock.five_star':      'Dale 5 estrellas a una horneada',

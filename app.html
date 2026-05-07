@@ -393,9 +393,9 @@
       <div class="pym-jar-body" id="starter-jar-body"></div>
     </div>
     <div class="flex-1 min-w-0">
-      <p class="font-label text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-0.5" id="starter-stage-label">Starter</p>
+      <p class="font-label text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-0.5" id="starter-stage-label" data-i18n="starter.label">Starter</p>
       <div class="flex items-center gap-1">
-        <p class="font-headline text-xl font-bold text-on-surface leading-tight" id="starter-name-display">Your Starter</p>
+        <p class="font-headline text-xl font-bold text-on-surface leading-tight" id="starter-name-display" data-i18n="starter.defaultName">Your Starter</p>
         <button onclick="openRenameSheet()" class="text-on-surface-variant opacity-50 active:opacity-100 transition-opacity -mb-0.5" aria-label="Rename starter">
           <span class="material-symbols-outlined" style="font-size:16px;">edit</span>
         </button>
@@ -1506,8 +1506,8 @@
     };
     var cfg = STAGE_CONFIG[s.stage] || STAGE_CONFIG.active;
 
-    document.getElementById('starter-name-display').textContent = s.name || 'Your Starter';
-    document.getElementById('starter-stage-label').textContent  = s.stage.charAt(0).toUpperCase() + s.stage.slice(1);
+    document.getElementById('starter-name-display').textContent = s.name || _t('starter.defaultName');
+    document.getElementById('starter-stage-label').textContent  = _t('starter.stage.' + s.stage);
     document.getElementById('starter-state-text').textContent   = s.name + ' ' + cfg.text;
     document.getElementById('starter-health-bar').style.width   = s.health + '%';
     document.getElementById('starter-health-label').textContent = _t('starter.health') + ' ' + s.health + '%';
@@ -1595,7 +1595,7 @@
       var tip = G.getDailyTip();
       if (tip) {
         document.getElementById('tip-icon').textContent     = tip.icon;
-        document.getElementById('tip-cat').textContent      = tip.cat.charAt(0).toUpperCase() + tip.cat.slice(1);
+        document.getElementById('tip-cat').textContent      = _t('tipCat.' + tip.cat);
         document.getElementById('tip-headline').textContent = tip.headline;
         document.getElementById('tip-body').textContent     = tip.body;
       }
