@@ -1147,17 +1147,17 @@
 <div id="view-achievements" class="app-view hidden">
 <main class="max-w-7xl mx-auto px-6 pt-10 pb-36 space-y-8">
   <section>
-    <p class="font-label text-primary font-bold uppercase tracking-widest text-xs mb-2">Your Journey</p>
-    <h2 class="font-headline text-4xl text-on-surface font-bold leading-tight">Trophy Case</h2>
-    <p class="mt-2 text-sm text-on-surface-variant max-w-sm">Every badge is earned, never purchased. Tap a locked badge to see how to unlock it.</p>
+    <p class="font-label text-primary font-bold uppercase tracking-widest text-xs mb-2" data-i18n="achievements.journeyLabel">Your Journey</p>
+    <h2 class="font-headline text-4xl text-on-surface font-bold leading-tight" data-i18n="achievements.title">Trophy Case</h2>
+    <p class="mt-2 text-sm text-on-surface-variant max-w-sm" data-i18n="achievements.sub">Every badge is earned, never purchased. Tap a locked badge to see how to unlock it.</p>
   </section>
   <!-- Level + Progress Card -->
   <section class="bg-gradient-to-br from-[#875305] to-[#c4863a] rounded-2xl p-6 text-white relative overflow-hidden">
     <div class="flex items-center justify-between">
       <div>
-        <p class="text-[10px] font-bold uppercase tracking-widest text-white/60 mb-1">Baker Level</p>
+        <p class="text-[10px] font-bold uppercase tracking-widest text-white/60 mb-1" data-i18n="achievements.bakerLevel">Baker Level</p>
         <p class="font-headline text-3xl font-bold italic" id="level-title">Flour Dabbler</p>
-        <p class="text-xs text-white/70 mt-1 max-w-[220px]" id="level-hint">Start your first bake to level up.</p>
+        <p class="text-xs text-white/70 mt-1 max-w-[220px]" id="level-hint" data-i18n="achievements.levelHint">Start your first bake to level up.</p>
       </div>
       <div class="relative w-16 h-16 flex-shrink-0">
         <svg class="w-16 h-16" viewBox="0 0 64 64">
@@ -1178,10 +1178,10 @@
   </section>
   <!-- Badge Grid -->
   <section>
-    <p class="font-label text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-4">All Badges</p>
+    <p class="font-label text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-4" data-i18n="achievements.allBadges">All Badges</p>
     <div class="grid grid-cols-3 gap-3" id="badge-grid"></div>
   </section>
-  <div class="text-center text-xs text-on-surface-variant opacity-60 pb-2">Tap any badge to see its story</div>
+  <div class="text-center text-xs text-on-surface-variant opacity-60 pb-2" data-i18n="achievements.tapHint">Tap any badge to see its story</div>
 </main>
 </div>
 
@@ -2859,7 +2859,7 @@
     function showTooltip(e, def, isUnlocked) {
       clearTimeout(tooltipTimer);
       if (isUnlocked) { tooltip.innerHTML = `<strong style="font-size:11px;display:block;margin-bottom:4px;">${def.name}</strong>${def.story}`; }
-      else { tooltip.innerHTML = `<strong style="font-size:11px;display:block;margin-bottom:4px;">🔒 Locked</strong>${LOCK_HINTS[def.id]||'Keep baking to unlock this badge'}`; }
+      else { tooltip.innerHTML = `<strong style="font-size:11px;display:block;margin-bottom:4px;">${_t('achievements.locked')}</strong>${LOCK_HINTS[def.id]||_t('achievements.unlockHint')}`; }
       var rect = e.currentTarget.getBoundingClientRect(), tW = 220;
       var left = Math.max(8, Math.min(rect.left + (rect.width/2) - (tW/2), window.innerWidth - tW - 8));
       tooltip.style.left  = left + 'px';

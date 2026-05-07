@@ -542,6 +542,8 @@
       'achievements.levelHint':    'Start your first bake to level up.',
       'achievements.badgeCount':   'of',
       'achievements.badgesLabel':  'badges unlocked',
+      'achievements.locked':       '🔒 Locked',
+      'achievements.unlockHint':   'Keep baking to unlock this badge',
 
       // ── Badge lock hints ──────────────────────────────────────────────────
       'lock.named_starter':  'Name your starter in onboarding',
@@ -1582,6 +1584,8 @@
       'achievements.levelHint':    'Haz tu primera horneada para subir de nivel.',
       'achievements.badgeCount':   'de',
       'achievements.badgesLabel':  'insignias desbloqueadas',
+      'achievements.locked':       '🔒 Bloqueada',
+      'achievements.unlockHint':   'Sigue horneando para desbloquear esta insignia',
 
       // ── Badge lock hints ──────────────────────────────────────────────────
       'lock.named_starter':  'Ponle nombre a tu starter en el tutorial',
