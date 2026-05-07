@@ -123,6 +123,7 @@
   /* Card swipe (Chapter 2) */
   .lesson-card { transition:opacity 0.35s ease, transform 0.35s ease; }
   .lesson-card.leaving { opacity:0; transform:translateX(-60px) scale(0.95); }
+  .lesson-card.leaving-back { opacity:0; transform:translateX(60px) scale(0.95); }
 
   /* Equipment toggle */
   .equip-btn { transition:all 0.2s; }
@@ -692,6 +693,15 @@
             <span class="material-symbols-outlined text-[#875305] text-2xl" id="lessonIcon">grain</span>
           </div>
           <span class="text-[10px] font-bold uppercase tracking-widest text-[#C4863A]" id="lessonNum">1 of 5</span>
+          <!-- In-chapter back arrow: navigates between the 5 lessons (separate from the
+               top-left header back arrow, which moves between chapter-level screens). -->
+          <button id="lessonPrevBtn"
+                  onclick="event.stopPropagation(); prevLesson();"
+                  class="ml-auto -mr-1 -my-1 p-2 rounded-full text-[#847466] hover:text-[#875305] hover:bg-[#875305]/8 transition-colors active:scale-95"
+                  style="display:none"
+                  aria-label="Previous lesson">
+            <span class="material-symbols-outlined" style="font-size:20px">chevron_left</span>
+          </button>
         </div>
         <h3 class="font-headline font-bold text-xl leading-snug mb-3" id="lessonHeadline">What is sourdough?</h3>
         <p class="text-[#514538] text-sm leading-relaxed flex-1" id="lessonBody"></p>
@@ -1635,8 +1645,10 @@ function initLessons() {
     card.addEventListener('touchend', e => {
       const dx = _swipeStartX - e.changedTouches[0].clientX;
       const dy = Math.abs(_swipeStartY - e.changedTouches[0].clientY);
-      // Left swipe ≥ 40px and not a vertical scroll
+      // Left swipe ≥ 40px and not a vertical scroll → next lesson
       if (dx > 40 && dy < 60) nextLesson();
+      // Right swipe ≥ 40px and not a vertical scroll → previous lesson
+      else if (dx < -40 && dy < 60) prevLesson();
     }, { passive: true });
     // Tap anywhere on the card body (not the button) also advances
     card.addEventListener('click', e => {
@@ -1651,6 +1663,9 @@ function renderLesson() {
   document.getElementById('lessonHeadline').textContent = t(lesson.hKey);
   document.getElementById('lessonBody').textContent     = t(lesson.bKey);
   document.getElementById('lessonNum').textContent      = `${lessonIndex+1} of ${LESSONS.length}`;
+  // Show in-chapter back arrow only when there's a previous lesson to go back to
+  const prevBtn = document.getElementById('lessonPrevBtn');
+  if (prevBtn) prevBtn.style.display = lessonIndex > 0 ? '' : 'none';
   // Dots
   const dotsEl = document.getElementById('lessonDots');
   dotsEl.innerHTML = LESSONS.map((_,i) =>
@@ -1675,6 +1690,21 @@ function nextLesson() {
     storage.setItem('pym_onboarding', JSON.stringify({ ...ob, chapter1LessonsComplete: true }));
     showFacebookCard();
   }
+}
+
+// Mirror of nextLesson() — used by the back arrow + swipe-right inside the
+// lesson card so the user can revisit any of the 5 chapter-1 lessons.
+// Does nothing on lesson 1 (no previous lesson within the chapter).
+function prevLesson() {
+  if (lessonIndex <= 0) return;
+  const card = document.getElementById('lessonCard');
+  if (!card) { lessonIndex--; renderLesson(); return; }
+  card.classList.add('leaving-back');
+  setTimeout(() => {
+    lessonIndex--;
+    renderLesson();
+    card.classList.remove('leaving-back');
+  }, 300);
 }
 
 // ── Already has a starter ─────────────────────────────────────────────────
