@@ -491,6 +491,10 @@
       'library.ebook.sub':         'Sign in with Google, LinkedIn, Microsoft, or Email to get instant access to your free guide.',
       'library.ebook.cta':         'Download Your Copy Now',
       'library.ebook.note':        'Free · Instant access · Sign in with Google, LinkedIn or Email',
+      'library.search.loading':        'Searching pancitoymas.com…',
+      'library.search.noResults':      'No results found on pancitoymas.com.',
+      'library.search.resultsHeader':  'From pancitoymas.com',
+      'library.search.connectionError':'Could not reach pancitoymas.com. Check your connection.',
 
       // ── Achievements view ─────────────────────────────────────────────────
       'achievements.journeyLabel': 'Your Journey',
@@ -1492,6 +1496,10 @@
       'library.ebook.sub':         'Inicia sesión con Google, LinkedIn, Microsoft o Email para acceso instantáneo a tu guía gratis.',
       'library.ebook.cta':         'Descarga tu Copia Ahora',
       'library.ebook.note':        'Gratis · Acceso instantáneo · Inicia sesión con Google, LinkedIn o Email',
+      'library.search.loading':        'Buscando en pancitoymas.com…',
+      'library.search.noResults':      'No se encontraron resultados en pancitoymas.com.',
+      'library.search.resultsHeader':  'De pancitoymas.com',
+      'library.search.connectionError':'No se pudo conectar con pancitoymas.com. Revisa tu conexión.',
 
       // ── Achievements view ─────────────────────────────────────────────────
       'achievements.journeyLabel': 'Tu Camino',
