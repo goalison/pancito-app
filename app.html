@@ -873,20 +873,20 @@
 <section class="mb-12">
 <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 items-start">
 <div>
-<span class="font-body text-[10px] uppercase tracking-[0.2em] font-bold text-secondary mb-2 block">Curation</span>
-<h2 class="font-headline font-bold text-6xl text-on-surface tracking-tight">Archive</h2>
+<span class="font-body text-[10px] uppercase tracking-[0.2em] font-bold text-secondary mb-2 block" data-i18n="archive.curation">Curation</span>
+<h2 class="font-headline font-bold text-6xl text-on-surface tracking-tight" data-i18n="archive.title">Archive</h2>
 <div class="mt-2 flex items-center gap-2" id="storageUsageContainer">
 <span class="material-symbols-outlined text-xs text-outline">storage</span>
-<span class="text-[10px] font-bold uppercase tracking-wider text-outline-variant" id="storageIndicator">Calculating storage...</span>
+<span class="text-[10px] font-bold uppercase tracking-wider text-outline-variant" id="storageIndicator" data-i18n="archive.calcStorage">Calculating storage...</span>
 </div>
 <div class="mt-1 flex items-center gap-2" id="autoBackupRow">
 <span class="material-symbols-outlined text-xs text-outline">cloud_done</span>
-<span class="text-[10px] text-outline-variant" id="autoBackupLabel">Auto-backup active</span>
+<span class="text-[10px] text-outline-variant" id="autoBackupLabel" data-i18n="archive.autoBackup">Auto-backup active</span>
 </div>
 </div>
 <button id="driveBtn" onclick="saveToGoogleDrive()" class="bg-white border border-outline-variant/30 text-on-surface px-6 py-4 rounded-xl flex items-center gap-3 hover:bg-surface-container transition-all shadow-sm active:scale-95">
 <svg class="w-5 h-5 shrink-0" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg"><path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8H0c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/><path d="M43.65 25L29.9 1.2C28.55 2 27.4 3.1 26.6 4.5L1.2 48.5C.4 49.9 0 51.45 0 53h27.5z" fill="#00ac47"/><path d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5H59.8l5.85 11.5z" fill="#ea4335"/><path d="M43.65 25L57.4 1.2C56.05.4 54.5 0 52.95 0H34.35c-1.55 0-3.1.45-4.45 1.2z" fill="#00832d"/><path d="M59.8 53H27.5L13.75 76.8c1.35.8 2.9 1.2 4.45 1.2h50.9c1.55 0 3.1-.45 4.45-1.2z" fill="#2684fc"/><path d="M73.4 26.5l-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3L43.65 25 59.8 53h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/></svg>
-<span class="font-headline font-bold">Save to Google Drive</span>
+<span class="font-headline font-bold" data-i18n="archive.saveDrive">Save to Google Drive</span>
 </button>
 </div>
 </section>
@@ -894,14 +894,14 @@
 <section class="flex flex-wrap items-center gap-4 mb-10 pb-6 border-b border-outline-variant/15 overflow-x-auto no-scrollbar">
 <button class="flex items-center gap-2 bg-[#C4863A] px-5 py-2.5 rounded-full text-sm font-bold text-white whitespace-nowrap" id="filterAll">
 <span class="material-symbols-outlined text-sm">filter_list</span>
-<span>Type: All</span>
+<span data-i18n="archive.filterAll">Type: All</span>
 </button>
 <button class="flex items-center gap-2 bg-surface-container-high px-5 py-2.5 rounded-full text-sm font-bold text-on-surface border border-outline-variant/20 whitespace-nowrap" id="filterRating">
 <span class="material-symbols-outlined text-sm text-primary" style='font-variation-settings: "FILL" 1;'>grade</span>
-<span>Rating: 4.0+</span>
+<span data-i18n="archive.filterRating">Rating: 4.0+</span>
 </button>
 <div class="ml-auto flex items-center gap-4">
-<span class="text-[10px] font-bold uppercase tracking-widest text-outline whitespace-nowrap">Sorted by Date</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-outline whitespace-nowrap" data-i18n="archive.sortedDate">Sorted by Date</span>
 <span class="material-symbols-outlined text-primary cursor-pointer">sort</span>
 </div>
 </section>
@@ -911,28 +911,28 @@
 <div class="mt-16 text-center">
 <button class="inline-flex items-center gap-3 text-primary font-bold hover:underline group" onclick="showView('view-bake')">
 <span class="material-symbols-outlined group-hover:scale-110 transition-transform">add_circle</span>
-Record a New Bake
+<span data-i18n="archive.newBake">Record a New Bake</span>
 </button>
 </div>
 <!-- Data Management -->
 <section class="mt-20 border-t border-outline-variant/20 pt-10 space-y-4 pb-4">
-  <p class="text-[10px] font-bold uppercase tracking-widest text-outline mb-6">Data Management</p>
+  <p class="text-[10px] font-bold uppercase tracking-widest text-outline mb-6" data-i18n="archive.dataSection">Data Management</p>
   <div class="bg-surface-container-low p-5 rounded-2xl border border-outline-variant/15 border-dashed">
     <div class="flex items-center gap-4 mb-4">
       <div class="bg-secondary/10 p-3 rounded-xl shrink-0"><span class="material-symbols-outlined text-secondary text-2xl">upload_file</span></div>
       <div class="flex-1 min-w-0">
-        <h3 class="font-bold text-base text-on-surface">Restore Backup</h3>
-        <p class="text-xs text-on-surface-variant">Restore your bake archive from a saved backup file.</p>
+        <h3 class="font-bold text-base text-on-surface" data-i18n="archive.restore.title">Restore Backup</h3>
+        <p class="text-xs text-on-surface-variant" data-i18n="archive.restore.sub">Restore your bake archive from a saved backup file.</p>
       </div>
     </div>
     <div class="flex flex-wrap gap-3">
       <button id="driveImportBtn" onclick="importFromGoogleDrive()" class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2.5 rounded-xl hover:bg-outline-variant/30 transition-colors font-bold text-xs uppercase tracking-wider">
         <svg class="w-4 h-4 shrink-0" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg"><path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8H0c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/><path d="M43.65 25L29.9 1.2C28.55 2 27.4 3.1 26.6 4.5L1.2 48.5C.4 49.9 0 51.45 0 53h27.5z" fill="#00ac47"/><path d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5H59.8l5.85 11.5z" fill="#ea4335"/><path d="M43.65 25L57.4 1.2C56.05.4 54.5 0 52.95 0H34.35c-1.55 0-3.1.45-4.45 1.2z" fill="#00832d"/><path d="M59.8 53H27.5L13.75 76.8c1.35.8 2.9 1.2 4.45 1.2h50.9c1.55 0 3.1-.45 4.45-1.2z" fill="#2684fc"/><path d="M73.4 26.5l-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3L43.65 25 59.8 53h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/></svg>
-        Restore from Drive
+        <span data-i18n="archive.restoreDrive">Restore from Drive</span>
       </button>
       <label class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2.5 rounded-xl cursor-pointer hover:bg-outline-variant/30 transition-colors font-bold text-xs uppercase tracking-wider">
         <span class="material-symbols-outlined text-sm">attach_file</span>
-        Choose File
+        <span data-i18n="archive.chooseFile">Choose File</span>
         <input accept=".json" class="hidden" id="importInput" type="file"/>
       </label>
     </div>
@@ -940,12 +940,12 @@ Record a New Bake
   <div class="bg-error/5 p-5 rounded-2xl border border-error/15 flex items-center gap-4">
     <div class="bg-error/10 p-3 rounded-xl shrink-0"><span class="material-symbols-outlined text-error text-2xl">delete_sweep</span></div>
     <div class="flex-1 min-w-0">
-      <h3 class="font-bold text-base text-on-surface">Clear Local Data</h3>
-      <p class="text-xs text-on-surface-variant">Permanently wipe all bake records from this device. Export to Google Drive first!</p>
+      <h3 class="font-bold text-base text-on-surface" data-i18n="archive.clear.title">Clear Local Data</h3>
+      <p class="text-xs text-on-surface-variant" data-i18n="archive.clear.sub">Permanently wipe all bake records from this device. Export to Google Drive first!</p>
     </div>
     <button id="clearDataBtn" class="text-error font-bold text-xs uppercase tracking-widest flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-error/30 hover:bg-error/10 transition-colors shrink-0">
       <span class="material-symbols-outlined text-sm">warning</span>
-      Clear
+      <span data-i18n="archive.clearBtn">Clear</span>
     </button>
   </div>
 </section>
@@ -2533,8 +2533,8 @@ Record a New Bake
     const indicator = document.getElementById('storageIndicator');
     if (!indicator) return;
     const percent = Math.min(100, (sizeInBytes / (5*1024*1024)) * 100).toFixed(1);
-    const rawCheck = (() => { try { const d = localStorage.getItem('pym_logs'); if (d===null) return 'key missing'; const arr = JSON.parse(d); return Array.isArray(arr) ? `${arr.length} entries` : 'not-an-array'; } catch(_) { return 'parse-error'; } })();
-    indicator.innerText = `${count} bakes stored · ${sizeInKb} KB · raw check: ${rawCheck}`;
+    const _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
+    indicator.innerText = `${count} ${_t('archive.bakesStored')} · ${sizeInKb} KB`;
     if (percent > 80) { indicator.classList.remove('text-outline-variant'); indicator.classList.add('text-error'); }
     else { indicator.classList.add('text-outline-variant'); indicator.classList.remove('text-error'); }
   }
@@ -2553,11 +2553,11 @@ Record a New Bake
     currentLogs = [...logs].sort((a,b) => new Date(b.date)-new Date(a.date));
 
     if (currentLogs.length === 0) {
+      const _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
       if (filterActive) {
-        grid.innerHTML = `<div class="col-span-full py-20 flex flex-col items-center text-center"><span class="text-7xl mb-4">⭐</span><h3 class="font-headline text-3xl text-on-surface mb-3">No bakes match this filter</h3><p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-6">The <strong>Rating 4.0+</strong> filter is active. Tap <strong>Type: All</strong> above to see everything.</p><button onclick="_setRatingFilter(false)" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">Show All Bakes</button></div>`;
+        grid.innerHTML = `<div class="col-span-full py-20 flex flex-col items-center text-center"><span class="text-7xl mb-4">⭐</span><h3 class="font-headline text-3xl text-on-surface mb-3">${_t('archive.filterEmpty.title')}</h3><p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-6">${_t('archive.filterEmpty.body')}</p><button onclick="_setRatingFilter(false)" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">${_t('archive.filterEmpty.cta')}</button></div>`;
       } else {
-        const _diagRaw = (() => { try { const d=localStorage.getItem('pym_logs'); if (d===null) return '(key not found)'; const arr=JSON.parse(d); return Array.isArray(arr)?`${arr.length} bake(s) in storage`:'(not an array)'; } catch(e) { return '(parse error: '+e.message+')'; } })();
-        grid.innerHTML = `<div class="col-span-full py-20 flex flex-col items-center text-center"><span class="text-7xl mb-4">🍞</span><h3 class="font-headline text-3xl text-on-surface mb-3">Your first loaf is waiting!</h3><p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-2">Every great baker started exactly where you are right now. This is where all your bakes will live.</p><p class="text-on-surface-variant/70 text-sm max-w-xs mx-auto mb-8">Complete your first bake and hit <strong>Save to Archive</strong> at the end to see it appear here.</p><button onclick="showView('view-bake')" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">Start My First Bake →</button><p style="margin-top:24px;font-size:11px;color:#c9b8a8;font-family:monospace">diag: ${_diagRaw}</p></div>`;
+        grid.innerHTML = `<div class="col-span-full py-20 flex flex-col items-center text-center"><span class="text-7xl mb-4">🍞</span><h3 class="font-headline text-3xl text-on-surface mb-3">${_t('archive.empty.title')}</h3><p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-2">${_t('archive.empty.body')}</p><p class="text-on-surface-variant/70 text-sm max-w-xs mx-auto mb-8">${_t('archive.empty.tip')}</p><button onclick="showView('view-bake')" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">${_t('archive.empty.cta')}</button></div>`;
       }
       return;
     }
@@ -2590,19 +2590,20 @@ Record a New Bake
     const coldProofVal=log.coldProofTime?parseFloat(log.coldProofTime).toFixed(1):'--';
     const bakeTimeVal=log.bakeTime?(parseFloat(log.bakeTime)*60).toFixed(0):'--';
     const bakeTempVal=log.bakeTemp?`${log.bakeTemp}°F`:'--';
+    const _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
     const ingr=log.ingredients;
     const ingrHtml = ingr
-      ? `<div class="grid grid-cols-2 gap-3"><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Flour</p><p class="font-bold text-primary">${ingr.flour||'--'}</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Water</p><p class="font-bold text-primary">${ingr.water||'--'}</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Starter</p><p class="font-bold text-primary">${ingr.starter||'--'}</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Salt</p><p class="font-bold text-primary">${ingr.salt||'--'}</p></div></div>`
-      : `<div class="flex flex-wrap gap-2"><span class="bg-[#f2ede3] px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider">Flour: ${log.flourType||'Artisan Bread'}</span><span class="bg-[#f2ede3] px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider">Hydration: ${hydrationVal}%</span><span class="bg-[#f2ede3] px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider">Salt: ${log.salt||'2'}%</span></div>`;
-    content.innerHTML = `<div class="w-full overflow-hidden" style="max-height:320px">${photo?`<img src="${photo}" alt="${log.recipe}" class="w-full h-full object-cover" style="max-height:320px">`:`<div style="height:220px;background:linear-gradient(145deg,#f5e8c8,#e8d2a0,#c8a96b);display:flex;flex-direction:column;align-items:center;justify-content:center"><span class="material-symbols-outlined" style="font-size:64px;color:rgba(135,83,5,0.28);font-variation-settings:'FILL' 1">bakery_dining</span><p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(135,83,5,0.35);margin-top:10px">No photo recorded</p></div>`}</div>
-    <div class="p-8"><span class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary block mb-1">${displayDate}</span><h2 class="font-headline text-3xl font-bold text-on-surface leading-tight mb-6">${log.recipe||'Untitled Bake'}</h2>
-    <div class="grid grid-cols-2 gap-4 mb-4"><div class="bg-primary/5 border border-primary/15 rounded-2xl p-5 flex flex-col items-center justify-center text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-2">Score</p><div class="flex items-center gap-1 mb-1">${renderStars(log.rating)}</div><span class="text-3xl font-bold text-primary">${parseFloat(log.rating||0).toFixed(1)}</span></div>
-    <div class="bg-primary/5 border border-primary/15 rounded-2xl p-5 flex flex-col items-center justify-center text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-2">Bulk Fermentation</p><span class="material-symbols-outlined text-primary text-3xl mb-1">schedule</span><span class="text-2xl font-bold text-primary">${bulkVal} hrs</span></div></div>
-    <div class="grid grid-cols-3 gap-3 mb-8"><div class="bg-secondary-container/20 border border-secondary-container/30 p-4 rounded-2xl flex flex-col items-center justify-center text-center"><span class="material-symbols-outlined text-secondary text-xl mb-1">ac_unit</span><p class="text-[8px] font-bold uppercase tracking-widest text-outline mb-1">Cold Proof</p><span class="text-lg font-bold text-secondary">${coldProofVal} hrs</span></div><div class="bg-secondary-container/20 border border-secondary-container/30 p-4 rounded-2xl flex flex-col items-center justify-center text-center"><span class="material-symbols-outlined text-secondary text-xl mb-1">local_fire_department</span><p class="text-[8px] font-bold uppercase tracking-widest text-outline mb-1">Bake Time</p><span class="text-lg font-bold text-secondary">${bakeTimeVal} min</span></div><div class="bg-secondary-container/20 border border-secondary-container/30 p-4 rounded-2xl flex flex-col items-center justify-center text-center"><span class="material-symbols-outlined text-secondary text-xl mb-1">device_thermostat</span><p class="text-[8px] font-bold uppercase tracking-widest text-outline mb-1">Oven Temp</p><span class="text-lg font-bold text-secondary">${bakeTempVal}</span></div></div>
-    <div class="mb-8"><h4 class="text-[10px] font-bold uppercase tracking-widest text-secondary mb-4 border-b border-outline-variant/10 pb-2">Ingredients Used</h4>${ingrHtml}</div>
-    <div class="grid grid-cols-3 gap-3 mb-8"><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Hydration</p><p class="font-bold text-primary">${hydrationVal}%</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Dough Temp</p><p class="font-bold text-primary">${tempVal}°F</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">Flour Type</p><p class="font-bold text-primary text-xs">${log.flourType||'Bread Flour'}</p></div></div>
-    <div class="mb-8"><h4 class="text-[10px] font-bold uppercase tracking-widest text-secondary mb-4 border-b border-outline-variant/10 pb-2">Baker's Notes</h4><div class="bg-surface-container-high/30 p-6 rounded-[1.5rem] border-l-4 border-primary italic text-on-surface-variant font-headline text-base leading-relaxed">"${log.comments||'No notes were recorded for this bake.'}"</div></div>
-    <button class="w-full bg-primary text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-xl shadow-primary/20" onclick="closeModal()"><span class="material-symbols-outlined">check</span>Close Entry</button></div>`;
+      ? `<div class="grid grid-cols-2 gap-3"><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">${_t('archive.modal.flour')}</p><p class="font-bold text-primary">${ingr.flour||'--'}</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">${_t('archive.modal.water')}</p><p class="font-bold text-primary">${ingr.water||'--'}</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">${_t('archive.modal.starter')}</p><p class="font-bold text-primary">${ingr.starter||'--'}</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">${_t('archive.modal.salt')}</p><p class="font-bold text-primary">${ingr.salt||'--'}</p></div></div>`
+      : `<div class="flex flex-wrap gap-2"><span class="bg-[#f2ede3] px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider">${_t('archive.modal.flour')}: ${log.flourType||'Artisan Bread'}</span><span class="bg-[#f2ede3] px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider">${_t('archive.modal.hydration')}: ${hydrationVal}%</span><span class="bg-[#f2ede3] px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider">${_t('archive.modal.salt')}: ${log.salt||'2'}%</span></div>`;
+    content.innerHTML = `<div class="w-full overflow-hidden" style="max-height:320px">${photo?`<img src="${photo}" alt="${log.recipe}" class="w-full h-full object-cover" style="max-height:320px">`:`<div style="height:220px;background:linear-gradient(145deg,#f5e8c8,#e8d2a0,#c8a96b);display:flex;flex-direction:column;align-items:center;justify-content:center"><span class="material-symbols-outlined" style="font-size:64px;color:rgba(135,83,5,0.28);font-variation-settings:'FILL' 1">bakery_dining</span><p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(135,83,5,0.35);margin-top:10px">${_t('archive.modal.noPhoto')}</p></div>`}</div>
+    <div class="p-8"><span class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary block mb-1">${displayDate}</span><h2 class="font-headline text-3xl font-bold text-on-surface leading-tight mb-6">${log.recipe||_t('archive.modal.untitled')}</h2>
+    <div class="grid grid-cols-2 gap-4 mb-4"><div class="bg-primary/5 border border-primary/15 rounded-2xl p-5 flex flex-col items-center justify-center text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-2">${_t('archive.modal.score')}</p><div class="flex items-center gap-1 mb-1">${renderStars(log.rating)}</div><span class="text-3xl font-bold text-primary">${parseFloat(log.rating||0).toFixed(1)}</span></div>
+    <div class="bg-primary/5 border border-primary/15 rounded-2xl p-5 flex flex-col items-center justify-center text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-2">${_t('archive.modal.bulkFerm')}</p><span class="material-symbols-outlined text-primary text-3xl mb-1">schedule</span><span class="text-2xl font-bold text-primary">${bulkVal} ${_t('archive.modal.hrs')}</span></div></div>
+    <div class="grid grid-cols-3 gap-3 mb-8"><div class="bg-secondary-container/20 border border-secondary-container/30 p-4 rounded-2xl flex flex-col items-center justify-center text-center"><span class="material-symbols-outlined text-secondary text-xl mb-1">ac_unit</span><p class="text-[8px] font-bold uppercase tracking-widest text-outline mb-1">${_t('archive.modal.coldProof')}</p><span class="text-lg font-bold text-secondary">${coldProofVal} ${_t('archive.modal.hrs')}</span></div><div class="bg-secondary-container/20 border border-secondary-container/30 p-4 rounded-2xl flex flex-col items-center justify-center text-center"><span class="material-symbols-outlined text-secondary text-xl mb-1">local_fire_department</span><p class="text-[8px] font-bold uppercase tracking-widest text-outline mb-1">${_t('archive.modal.bakeTime')}</p><span class="text-lg font-bold text-secondary">${bakeTimeVal} ${_t('archive.modal.min')}</span></div><div class="bg-secondary-container/20 border border-secondary-container/30 p-4 rounded-2xl flex flex-col items-center justify-center text-center"><span class="material-symbols-outlined text-secondary text-xl mb-1">device_thermostat</span><p class="text-[8px] font-bold uppercase tracking-widest text-outline mb-1">${_t('archive.modal.ovenTemp')}</p><span class="text-lg font-bold text-secondary">${bakeTempVal}</span></div></div>
+    <div class="mb-8"><h4 class="text-[10px] font-bold uppercase tracking-widest text-secondary mb-4 border-b border-outline-variant/10 pb-2">${_t('archive.modal.ingredients')}</h4>${ingrHtml}</div>
+    <div class="grid grid-cols-3 gap-3 mb-8"><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">${_t('archive.modal.hydration')}</p><p class="font-bold text-primary">${hydrationVal}%</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">${_t('archive.modal.doughTemp')}</p><p class="font-bold text-primary">${tempVal}°F</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">${_t('archive.modal.flourType')}</p><p class="font-bold text-primary text-xs">${log.flourType||'Bread Flour'}</p></div></div>
+    <div class="mb-8"><h4 class="text-[10px] font-bold uppercase tracking-widest text-secondary mb-4 border-b border-outline-variant/10 pb-2">${_t('archive.modal.notes')}</h4><div class="bg-surface-container-high/30 p-6 rounded-[1.5rem] border-l-4 border-primary italic text-on-surface-variant font-headline text-base leading-relaxed">"${log.comments||_t('archive.modal.noNotes')}"</div></div>
+    <button class="w-full bg-primary text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-xl shadow-primary/20" onclick="closeModal()"><span class="material-symbols-outlined">check</span>${_t('archive.modal.close')}</button></div>`;
     modal.classList.remove('hidden'); document.body.style.overflow = 'hidden';
   };
 
@@ -2612,11 +2613,12 @@ Record a New Bake
 
   function updateBackupLabel() {
     const ts = parseInt(storage.getItem('pym_auto_backup_time')||'0'), label = document.getElementById('autoBackupLabel'); if (!label) return;
-    if (!ts) { label.textContent='Auto-backup active'; return; }
+    const _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
+    if (!ts) { label.textContent = _t('archive.autoBackup'); return; }
     const mins = Math.round((Date.now()-ts)/60000);
-    if (mins<2) label.textContent='Auto-backed up just now';
-    else if (mins<60) label.textContent=`Auto-backed up ${mins}m ago`;
-    else label.textContent=`Auto-backed up ${Math.floor(mins/60)}h ago`;
+    if (mins<2) label.textContent = _t('archive.backupJustNow');
+    else if (mins<60) label.textContent = _t('archive.backupMinAgo').replace('{n}', mins);
+    else label.textContent = _t('archive.backupHourAgo').replace('{n}', Math.floor(mins/60));
   }
 
   if (GDRIVE_CLIENT_ID) { const _gis=document.createElement('script'); _gis.src='https://accounts.google.com/gsi/client'; document.head.appendChild(_gis); }
@@ -2710,7 +2712,7 @@ Record a New Bake
   window.deleteLog = function(id) {
     let logs=getLogs(), index=logs.findIndex(log=>log.id!=null&&String(log.id)===String(id));
     if(index===-1) index=logs.findIndex((log,idx)=>String(idx)===String(id));
-    if(index!==-1){logs.splice(index,1);saveLogs(logs);let toast=document.getElementById('delete-toast');if(!toast){toast=document.createElement('div');toast.id='delete-toast';toast.className='fixed bottom-32 left-1/2 -translate-x-1/2 z-[200] bg-on-surface text-background text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-full shadow-xl transition-opacity duration-300';document.body.appendChild(toast);}toast.textContent='Entry removed';toast.style.opacity='1';setTimeout(()=>{toast.style.opacity='0';},2000);}
+    if(index!==-1){logs.splice(index,1);saveLogs(logs);let toast=document.getElementById('delete-toast');if(!toast){toast=document.createElement('div');toast.id='delete-toast';toast.className='fixed bottom-32 left-1/2 -translate-x-1/2 z-[200] bg-on-surface text-background text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-full shadow-xl transition-opacity duration-300';document.body.appendChild(toast);}var _dt=(window.PymI18n&&window.PymI18n.t)||function(k){return k;};toast.textContent=_dt('archive.entryRemoved');toast.style.opacity='1';setTimeout(()=>{toast.style.opacity='0';},2000);}
   };
 
   function _setRatingFilter(on) {
@@ -2734,7 +2736,8 @@ Record a New Bake
       });
       var clearDataBtn = document.getElementById('clearDataBtn');
       if (clearDataBtn) clearDataBtn.addEventListener('click', function() {
-        _pymConfirm('This will permanently delete <strong>ALL bake entries</strong> from this device.<br><br>Export your archive to Google Drive first — this cannot be undone.','Yes, delete all','#B3261E',()=>{_pymConfirm('Are you absolutely sure? Every bake record will be lost forever.','Delete everything','#B3261E',()=>{localStorage.removeItem('pym_logs');localStorage.removeItem('pym_auto_backup');localStorage.removeItem('pym_auto_backup_time');saveLogs([]);_pymToast('Local data cleared');});});
+        var _ct = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
+        _pymConfirm('This will permanently delete <strong>ALL bake entries</strong> from this device.<br><br>Export your archive to Google Drive first — this cannot be undone.','Yes, delete all','#B3261E',()=>{_pymConfirm('Are you absolutely sure? Every bake record will be lost forever.','Delete everything','#B3261E',()=>{localStorage.removeItem('pym_logs');localStorage.removeItem('pym_auto_backup');localStorage.removeItem('pym_auto_backup_time');saveLogs([]);_pymToast(_ct('archive.localCleared'));});});
       });
       var logModal = document.getElementById('logModal');
       if (logModal) logModal.addEventListener('click', function(e) { if(e.target.id==='logModal') closeModal(); });
