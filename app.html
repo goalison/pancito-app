@@ -476,7 +476,7 @@
 <div class="max-w-4xl mx-auto flex justify-between items-center">
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-primary text-xl">schedule</span>
-<span class="font-label text-[10px] uppercase tracking-[0.2em] font-bold text-secondary">Total Bulk Fermentation</span>
+<span class="font-label text-[10px] uppercase tracking-[0.2em] font-bold text-secondary" data-i18n="timer.totalBulk">Total Bulk Fermentation</span>
 </div>
 <div class="font-headline text-2xl text-primary" id="header-bulk-total-timer">00:00:00</div>
 </div>
@@ -488,94 +488,94 @@
 <div class="absolute top-1/2 left-0 w-full h-[1px] bg-outline-variant/30 -z-10"></div>
 <button class="flex flex-col items-center gap-3 group transition-all" id="step-nav-1" onclick="goToStep(1)">
 <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-headline text-lg step-circle shadow-md">1</div>
-<span class="font-label text-[10px] uppercase tracking-widest font-bold text-primary step-label">Mix</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold text-primary step-label" data-i18n="step.mix">Mix</span>
 </button>
 <button class="flex flex-col items-center gap-3 group transition-all step-inactive" id="step-nav-2" onclick="goToStep(2)">
 <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle">2</div>
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label">Bulk</span>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label" data-i18n="step.bulk">Bulk</span>
 </button>
 <button class="flex flex-col items-center gap-3 group transition-all step-inactive" id="step-nav-3" onclick="goToStep(3)">
 <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle">3</div>
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label">Shape</span>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label" data-i18n="step.shape">Shape</span>
 </button>
 <button class="flex flex-col items-center gap-3 group transition-all step-inactive" id="step-nav-4" onclick="goToStep(4)">
 <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle">4</div>
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label">Proof</span>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label" data-i18n="step.proof">Proof</span>
 </button>
 <button class="flex flex-col items-center gap-3 group transition-all step-inactive" id="step-nav-5" onclick="goToStep(5)">
 <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle">5</div>
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label">Bake</span>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label" data-i18n="step.bake">Bake</span>
 </button>
 <button class="flex flex-col items-center gap-3 group transition-all step-inactive" id="step-nav-6" onclick="goToStep(6)">
 <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-headline text-lg step-circle">6</div>
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label">Result</span>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant step-label" data-i18n="step.result">Result</span>
 </button>
 </div>
 </nav>
 <!-- Stage 1: Mix -->
 <section class="space-y-12" id="step-content-1">
 <header>
-<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight">Stage 1: The Initial Mix</h1>
-<p class="font-label text-xs uppercase tracking-[0.2em] text-outline">Bring everything together — you're officially baking!</p>
+<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight" data-i18n="stage1.header">Stage 1: The Initial Mix</h1>
+<p class="font-label text-xs uppercase tracking-[0.2em] text-outline" data-i18n="stage1.sub">Bring everything together — you're officially baking!</p>
 </header>
 <div class="bg-secondary-container/20 border-l-4 border-secondary p-6 rounded-xl flex gap-4 items-start">
   <span class="material-symbols-outlined text-secondary text-3xl shrink-0">emoji_food_beverage</span>
   <div>
-    <h3 class="font-headline text-xl text-secondary mb-1">Welcome to your bake! 🎉</h3>
-    <p class="text-sm text-on-surface-variant leading-relaxed">In this stage you'll mix flour, water, starter, and salt together. Don't worry about it being perfect — a shaggy, rough dough is exactly what you want right now. The magic happens in the hours ahead. Just fill in your amounts below, mix well, and hit <strong>Complete Mix</strong> when you're done.</p>
+    <h3 class="font-headline text-xl text-secondary mb-1" data-i18n="stage1.welcome.title">Welcome to your bake! 🎉</h3>
+    <p class="text-sm text-on-surface-variant leading-relaxed" data-i18n="stage1.welcome.body">In this stage you'll mix flour, water, starter, and salt together. Don't worry about it being perfect — a shaggy, rough dough is exactly what you want right now. The magic happens in the hours ahead. Just fill in your amounts below, mix well, and hit Complete Mix when you're done.</p>
   </div>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
 <div class="md:col-span-5 bg-surface-container-low p-8 rounded-xl space-y-6">
-<h3 class="font-headline text-2xl text-secondary">Formula (<span id="hydration-pct">65</span>% Hydration)</h3>
+<h3 class="font-headline text-2xl text-secondary"><span data-i18n="stage1.formula">Formula</span> (<span id="hydration-pct">65</span>% <span data-i18n="stage1.hydration">Hydration</span>)</h3>
 <ul class="space-y-4">
 <li class="flex justify-between items-center border-b border-outline-variant/15 pb-2">
-<span class="font-body text-on-surface-variant">Strong Bread Flour</span>
+<span class="font-body text-on-surface-variant" data-i18n="stage1.flour">Strong Bread Flour</span>
 <div class="flex items-center gap-1"><input class="w-20 bg-transparent text-right font-headline text-xl text-primary border-none focus:ring-0 p-0" id="input-flour" oninput="updateHydration()" type="number" value="500"/><span class="font-headline text-xl text-primary">g</span></div>
 </li>
 <li class="flex justify-between items-center border-b border-outline-variant/15 pb-2">
-<span class="font-body text-on-surface-variant">Filtered Water</span>
+<span class="font-body text-on-surface-variant" data-i18n="stage1.water">Filtered Water</span>
 <div class="flex items-center gap-1"><input class="w-20 bg-transparent text-right font-headline text-xl text-primary border-none focus:ring-0 p-0" id="input-water" oninput="updateHydration()" type="number" value="325"/><span class="font-headline text-xl text-primary">g</span></div>
 </li>
 <li class="flex justify-between items-center border-b border-outline-variant/15 pb-2">
-<span class="font-body text-on-surface-variant">Active Starter</span>
+<span class="font-body text-on-surface-variant" data-i18n="stage1.starter">Active Starter</span>
 <div class="flex items-center gap-1"><input class="w-20 bg-transparent text-right font-headline text-xl text-primary border-none focus:ring-0 p-0" id="input-starter" type="number" value="100"/><span class="font-headline text-xl text-primary">g</span></div>
 </li>
 <li class="flex justify-between items-center border-b border-outline-variant/15 pb-2">
-<span class="font-body text-on-surface-variant">Fine Sea Salt</span>
+<span class="font-body text-on-surface-variant" data-i18n="stage1.salt">Fine Sea Salt</span>
 <div class="flex items-center gap-1"><input class="w-20 bg-transparent text-right font-headline text-xl text-primary border-none focus:ring-0 p-0" id="input-salt" type="number" value="10"/><span class="font-headline text-xl text-primary">g</span></div>
 </li>
 </ul>
 <div class="pt-4 space-y-4">
 <div>
-<label class="block font-label text-[10px] uppercase tracking-widest font-bold text-primary mb-2">✦ Bake Name / Recipe <span class="text-secondary normal-case tracking-normal font-normal">(name your loaf!)</span></label>
-<input class="w-full bg-surface-container border-none rounded-lg px-4 py-3 text-primary font-headline" id="input-recipe-name" type="text" placeholder="e.g. Sunday Country Loaf"/>
+<label class="block font-label text-[10px] uppercase tracking-widest font-bold text-primary mb-2"><span data-i18n="stage1.bakeName">✦ Bake Name / Recipe</span> <span class="text-secondary normal-case tracking-normal font-normal" data-i18n="stage1.nameYourLoaf">(name your loaf!)</span></label>
+<input class="w-full bg-surface-container border-none rounded-lg px-4 py-3 text-primary font-headline" id="input-recipe-name" type="text" placeholder="e.g. Sunday Country Loaf" data-i18n-placeholder="stage1.bakeNamePlaceholder"/>
 </div>
 <div>
-<label class="block font-label text-[10px] uppercase tracking-widest font-bold text-outline mb-2">Flour Type</label>
-<input class="w-full bg-surface-container border-none rounded-lg px-4 py-3 text-primary font-headline" id="input-flour-type" type="text" placeholder="e.g. Bread Flour, Whole Wheat" value="Bread Flour"/>
+<label class="block font-label text-[10px] uppercase tracking-widest font-bold text-outline mb-2" data-i18n="stage1.flourType">Flour Type</label>
+<input class="w-full bg-surface-container border-none rounded-lg px-4 py-3 text-primary font-headline" id="input-flour-type" type="text" placeholder="e.g. Bread Flour, Whole Wheat" data-i18n-placeholder="stage1.flourTypePlaceholder" value="Bread Flour"/>
 </div>
 </div>
-<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-lg font-label uppercase tracking-widest text-sm shadow-lg hover:translate-y-[-2px] transition-all" onclick="completeStep1()">Complete Mix &amp; Start Bulk</button>
+<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-lg font-label uppercase tracking-widest text-sm shadow-lg hover:translate-y-[-2px] transition-all" onclick="completeStep1()" data-i18n="stage1.completeBtn">Complete Mix &amp; Start Bulk</button>
 </div>
 <div class="md:col-span-7 space-y-6">
 <div class="bg-surface-container p-6 rounded-xl space-y-4">
-  <h4 class="font-headline text-xl text-secondary">How to Mix — Step by Step</h4>
+  <h4 class="font-headline text-xl text-secondary" data-i18n="stage1.howTo.title">How to Mix — Step by Step</h4>
   <ol class="space-y-3 text-sm text-on-surface-variant">
-    <li class="flex gap-3 items-start"><span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-xs shrink-0 font-bold">1</span><span>Combine flour and water in a large bowl. Mix with your hands until no dry flour remains. Cover and rest 30 min (autolyse — this kick-starts gluten development).</span></li>
-    <li class="flex gap-3 items-start"><span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-xs shrink-0 font-bold">2</span><span>Add your active starter and squeeze it through the dough until fully absorbed. The dough will feel slippery at first — keep going!</span></li>
-    <li class="flex gap-3 items-start"><span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-xs shrink-0 font-bold">3</span><span>Sprinkle salt over the dough, then add a tiny splash of water to help it dissolve. Squeeze and fold until the salt is worked in.</span></li>
-    <li class="flex gap-3 items-start"><span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-xs shrink-0 font-bold">4</span><span>Do 2–3 minutes of folds in the bowl (grab, stretch, fold over). The dough should feel cohesive and hold together — a little rough is perfectly fine.</span></li>
+    <li class="flex gap-3 items-start"><span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-xs shrink-0 font-bold">1</span><span data-i18n="stage1.howTo.1">Combine flour and water in a large bowl. Mix with your hands until no dry flour remains. Cover and rest 30 min (autolyse — this kick-starts gluten development).</span></li>
+    <li class="flex gap-3 items-start"><span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-xs shrink-0 font-bold">2</span><span data-i18n="stage1.howTo.2">Add your active starter and squeeze it through the dough until fully absorbed. The dough will feel slippery at first — keep going!</span></li>
+    <li class="flex gap-3 items-start"><span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-xs shrink-0 font-bold">3</span><span data-i18n="stage1.howTo.3">Sprinkle salt over the dough, then add a tiny splash of water to help it dissolve. Squeeze and fold until the salt is worked in.</span></li>
+    <li class="flex gap-3 items-start"><span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-xs shrink-0 font-bold">4</span><span data-i18n="stage1.howTo.4">Do 2–3 minutes of folds in the bowl (grab, stretch, fold over). The dough should feel cohesive and hold together — a little rough is perfectly fine.</span></li>
   </ol>
 </div>
 <div class="bg-primary/5 border border-primary/20 p-5 rounded-xl flex gap-3 items-start">
   <span class="material-symbols-outlined text-primary text-2xl shrink-0">timer</span>
   <div>
-    <span class="font-label text-[10px] uppercase tracking-widest font-bold text-primary block mb-1">After you hit "Complete Mix"…</span>
-    <p class="text-sm text-on-surface-variant leading-relaxed">The app will start a <strong>60-minute rest timer</strong> automatically. This rest lets the gluten relax before your first stretch &amp; fold. You can leave the dough covered on the counter — no action needed yet!</p>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold text-primary block mb-1" data-i18n="stage1.afterMix.label">After you hit "Complete Mix"…</span>
+    <p class="text-sm text-on-surface-variant leading-relaxed" data-i18n="stage1.afterMix.body">The app will start a 60-minute rest timer automatically. This rest lets the gluten relax before your first stretch & fold. You can leave the dough covered on the counter — no action needed yet!</p>
   </div>
 </div>
-<div class="p-5 border-l-4 border-secondary-container bg-surface-container-low italic text-on-surface-variant leading-relaxed text-sm rounded-r-xl">
+<div class="p-5 border-l-4 border-secondary-container bg-surface-container-low italic text-on-surface-variant leading-relaxed text-sm rounded-r-xl" data-i18n="stage1.quote">
   "It doesn't need to be smooth yet. Trust the process — the gluten will build itself over the next few hours of bulk fermentation." 🍞
 </div>
 </div>
@@ -585,86 +585,86 @@
 <section class="hidden-step space-y-12" id="step-content-2">
 <header class="flex flex-col md:flex-row md:items-end justify-between gap-4">
 <div>
-<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight">Stage 2: Bulk</h1>
-<p class="font-label text-xs uppercase tracking-[0.2em] text-outline">4 Rounds of Stretch &amp; Fold — the app guides you step by step</p>
+<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight" data-i18n="stage2.header">Stage 2: Bulk</h1>
+<p class="font-label text-xs uppercase tracking-[0.2em] text-outline" data-i18n="stage2.sub">4 Rounds of Stretch &amp; Fold — the app guides you step by step</p>
 </div>
 <div class="bg-primary/5 px-6 py-4 rounded-xl border border-primary/10">
-<span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary block mb-1">Total Fermentation Time</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary block mb-1" data-i18n="stage2.totalTime">Total Fermentation Time</span>
 <div class="font-headline text-3xl text-primary" id="bulk-total-timer">00:00:00</div>
 </div>
 </header>
 <div class="bg-primary/5 border border-primary/20 rounded-xl p-6 mb-8" id="rest-60-container">
   <div class="flex flex-col md:flex-row md:items-center gap-4 justify-between">
     <div>
-      <span class="font-label text-[10px] uppercase tracking-[0.2em] font-bold text-secondary block mb-1">Initial Rest — 60 Minutes</span>
-      <p class="text-sm text-on-surface-variant">Let the gluten relax before your first stretch &amp; fold. Round 1 unlocks when this timer finishes.</p>
+      <span class="font-label text-[10px] uppercase tracking-[0.2em] font-bold text-secondary block mb-1" data-i18n="stage2.initRest.label">Initial Rest — 60 Minutes</span>
+      <p class="text-sm text-on-surface-variant" data-i18n="stage2.initRest.sub">Let the gluten relax before your first stretch &amp; fold. Round 1 unlocks when this timer finishes.</p>
     </div>
     <div class="flex flex-col items-center gap-3 shrink-0">
       <div class="font-headline text-4xl text-primary" id="rest-timer-display">60:00</div>
       <div class="flex gap-2">
-        <button class="px-4 py-2 bg-primary text-on-primary rounded-full text-[10px] font-label uppercase tracking-widest" id="rest-timer-btn" onclick="toggleRestTimer()">Start Rest</button>
+        <button class="px-4 py-2 bg-primary text-on-primary rounded-full text-[10px] font-label uppercase tracking-widest" id="rest-timer-btn" onclick="toggleRestTimer()" data-i18n="stage2.startRest">Start Rest</button>
       </div>
     </div>
   </div>
-  <div class="hidden mt-4 p-3 bg-green-100 text-green-800 rounded-lg text-sm font-label font-bold text-center" id="rest-timer-complete-msg">
+  <div class="hidden mt-4 p-3 bg-green-100 text-green-800 rounded-lg text-sm font-label font-bold text-center" id="rest-timer-complete-msg" data-i18n="stage2.restDone">
     ✔ Rest complete — Round 1 is now unlocked!
   </div>
 </div>
 <div class="bg-surface-container-low border border-outline-variant/30 rounded-xl p-5 flex gap-4 items-start">
   <span class="material-symbols-outlined text-secondary text-2xl shrink-0">info</span>
   <div>
-    <h4 class="font-headline text-lg text-secondary mb-1">How Stretch &amp; Fold Works</h4>
-    <p class="text-sm text-on-surface-variant leading-relaxed">Each round is <strong>30 minutes long</strong> and unlocks automatically when the previous one finishes. When a timer starts, grab the dough from one side, stretch it up as high as it will go without tearing, then fold it over the center. Rotate the bowl and repeat 4 times. That's one "set" — it only takes about 30 seconds! Then cover the bowl and let it rest until the next round unlocks.</p>
+    <h4 class="font-headline text-lg text-secondary mb-1" data-i18n="stage2.howWorks.title">How Stretch &amp; Fold Works</h4>
+    <p class="text-sm text-on-surface-variant leading-relaxed" data-i18n="stage2.howWorks.body">Each round is 30 minutes long and unlocks automatically when the previous one finishes. When a timer starts, grab the dough from one side, stretch it up as high as it will go without tearing, then fold it over the center. Rotate the bowl and repeat 4 times. That's one "set" — it only takes about 30 seconds! Then cover the bowl and let it rest until the next round unlocks.</p>
   </div>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 <div class="grid grid-cols-2 gap-4">
 <div class="bg-surface-container-low/50 p-6 rounded-xl border border-dashed border-outline-variant/30 flex flex-col items-center gap-4 text-center grayscale opacity-50 transition-all" id="bulk-timer-1">
 <span class="material-symbols-outlined text-4xl" id="icon-1">lock</span>
-<div><span class="font-label text-[10px] uppercase tracking-widest font-bold">Round 1</span><div class="font-headline text-2xl timer-display">30:00</div></div>
-<div class="flex gap-2 w-full justify-center"><button class="px-3 py-1.5 bg-outline text-on-surface-variant rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full" disabled onclick="toggleTimer(1)">Locked</button></div>
+<div><span class="font-label text-[10px] uppercase tracking-widest font-bold" data-i18n="stage2.round1">Round 1</span><div class="font-headline text-2xl timer-display">30:00</div></div>
+<div class="flex gap-2 w-full justify-center"><button class="px-3 py-1.5 bg-outline text-on-surface-variant rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full" disabled onclick="toggleTimer(1)" data-i18n="stage2.locked">Locked</button></div>
 </div>
 <div class="bg-surface-container-low/50 p-6 rounded-xl border border-dashed border-outline-variant/30 flex flex-col items-center gap-4 text-center grayscale opacity-50 transition-all" id="bulk-timer-2">
 <span class="material-symbols-outlined text-4xl" id="icon-2">lock</span>
-<div><span class="font-label text-[10px] uppercase tracking-widest font-bold">Round 2</span><div class="font-headline text-2xl timer-display">30:00</div></div>
-<div class="flex gap-2 w-full justify-center"><button class="px-3 py-1.5 bg-outline text-on-surface-variant rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full" disabled onclick="toggleTimer(2)">Locked</button></div>
+<div><span class="font-label text-[10px] uppercase tracking-widest font-bold" data-i18n="stage2.round2">Round 2</span><div class="font-headline text-2xl timer-display">30:00</div></div>
+<div class="flex gap-2 w-full justify-center"><button class="px-3 py-1.5 bg-outline text-on-surface-variant rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full" disabled onclick="toggleTimer(2)" data-i18n="stage2.locked">Locked</button></div>
 </div>
 <div class="bg-surface-container-low/50 p-6 rounded-xl border border-dashed border-outline-variant/30 flex flex-col items-center gap-4 text-center grayscale opacity-50 transition-all" id="bulk-timer-3">
 <span class="material-symbols-outlined text-4xl" id="icon-3">lock</span>
-<div><span class="font-label text-[10px] uppercase tracking-widest font-bold">Round 3</span><div class="font-headline text-2xl timer-display">30:00</div></div>
-<div class="flex gap-2 w-full justify-center"><button class="px-3 py-1.5 bg-outline text-on-surface-variant rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full" disabled onclick="toggleTimer(3)">Locked</button></div>
+<div><span class="font-label text-[10px] uppercase tracking-widest font-bold" data-i18n="stage2.round3">Round 3</span><div class="font-headline text-2xl timer-display">30:00</div></div>
+<div class="flex gap-2 w-full justify-center"><button class="px-3 py-1.5 bg-outline text-on-surface-variant rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full" disabled onclick="toggleTimer(3)" data-i18n="stage2.locked">Locked</button></div>
 </div>
 <div class="bg-surface-container-low/50 p-6 rounded-xl border border-dashed border-outline-variant/30 flex flex-col items-center gap-4 text-center grayscale opacity-50 transition-all" id="bulk-timer-4">
 <span class="material-symbols-outlined text-4xl" id="icon-4">lock</span>
-<div><span class="font-label text-[10px] uppercase tracking-widest font-bold">Round 4</span><div class="font-headline text-2xl timer-display">30:00</div></div>
-<div class="flex gap-2 w-full justify-center"><button class="px-3 py-1.5 bg-outline text-on-surface-variant rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full" disabled onclick="toggleTimer(4)">Locked</button></div>
+<div><span class="font-label text-[10px] uppercase tracking-widest font-bold" data-i18n="stage2.round4">Round 4</span><div class="font-headline text-2xl timer-display">30:00</div></div>
+<div class="flex gap-2 w-full justify-center"><button class="px-3 py-1.5 bg-outline text-on-surface-variant rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full" disabled onclick="toggleTimer(4)" data-i18n="stage2.locked">Locked</button></div>
 </div>
 </div>
 <div class="space-y-6">
 <div class="bg-surface-container-low border border-outline-variant/30 p-6 rounded-xl flex flex-col sm:flex-row sm:items-center gap-4">
   <div class="flex-1">
-    <label class="block font-label text-[10px] uppercase tracking-widest font-bold text-secondary mb-1">📍 Final Dough Temp — After Your Last Stretch &amp; Fold</label>
-    <p class="text-xs text-on-surface-variant">Take your dough's temperature now. This tells you which row of the table below to use for timing.</p>
+    <label class="block font-label text-[10px] uppercase tracking-widest font-bold text-secondary mb-1" data-i18n="stage2.doughTemp.label">📍 Final Dough Temp — After Your Last Stretch &amp; Fold</label>
+    <p class="text-xs text-on-surface-variant" data-i18n="stage2.doughTemp.sub">Take your dough's temperature now. This tells you which row of the table below to use for timing.</p>
   </div>
   <div class="flex items-center gap-2 shrink-0"><input class="w-24 bg-surface-container border border-outline-variant/40 rounded-lg px-3 py-3 text-primary font-headline text-xl text-center" id="input-initial-temp" type="number" value="78"/><span class="font-headline text-xl text-primary">°F</span></div>
 </div>
 <div class="bg-green-50 border border-green-200 p-6 rounded-xl mb-2">
-  <h4 class="font-headline text-xl text-green-800 mb-3">✅ How do I know bulk fermentation is done?</h4>
-  <p class="text-sm text-green-900 mb-4">After all 4 rounds of stretch &amp; fold, look for these signs before moving to shaping:</p>
+  <h4 class="font-headline text-xl text-green-800 mb-3" data-i18n="stage2.bulkDone.title">✅ How do I know bulk fermentation is done?</h4>
+  <p class="text-sm text-green-900 mb-4" data-i18n="stage2.bulkDone.sub">After all 4 rounds of stretch &amp; fold, look for these signs before moving to shaping:</p>
   <ul class="space-y-2 text-sm text-green-900">
-    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600 text-base">check_circle</span> Dough has risen <strong>50–75%</strong> in size</li>
-    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600 text-base">check_circle</span> Dough jiggles like jello when you shake the bowl</li>
-    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600 text-base">check_circle</span> Bubbles visible on the surface and along the sides</li>
-    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600 text-base">check_circle</span> Dough feels airy and light, not dense</li>
-    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600 text-base">check_circle</span> Smooth, domed surface (not flat or sunken)</li>
+    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600 text-base">check_circle</span> <span data-i18n="stage2.bulkDone.1">Dough has risen 50–75% in size</span></li>
+    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600 text-base">check_circle</span> <span data-i18n="stage2.bulkDone.2">Dough jiggles like jello when you shake the bowl</span></li>
+    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600 text-base">check_circle</span> <span data-i18n="stage2.bulkDone.3">Bubbles visible on the surface and along the sides</span></li>
+    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600 text-base">check_circle</span> <span data-i18n="stage2.bulkDone.4">Dough feels airy and light, not dense</span></li>
+    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600 text-base">check_circle</span> <span data-i18n="stage2.bulkDone.5">Smooth, domed surface (not flat or sunken)</span></li>
   </ul>
-  <p class="text-xs text-green-700 mt-3 italic">If you're unsure, wait another 30 minutes and check again.</p>
+  <p class="text-xs text-green-700 mt-3 italic" data-i18n="stage2.bulkDone.hint">If you're unsure, wait another 30 minutes and check again.</p>
 </div>
 <div class="bg-secondary-container/10 p-8 rounded-xl">
-<h3 class="font-headline text-2xl text-secondary mb-6">Dough Temp vs. Target Rise</h3>
+<h3 class="font-headline text-2xl text-secondary mb-6" data-i18n="stage2.tempTable.title">Dough Temp vs. Target Rise</h3>
 <div class="overflow-hidden border border-outline-variant/30 rounded-lg">
 <table class="w-full text-sm font-label uppercase tracking-wider">
-<thead class="bg-surface-container-high"><tr class="text-left"><th class="p-3 border-b border-outline-variant/30">Dough Temp</th><th class="p-3 border-b border-outline-variant/30">Approx. Time</th><th class="p-3 border-b border-outline-variant/30">Target Rise</th></tr></thead>
+<thead class="bg-surface-container-high"><tr class="text-left"><th class="p-3 border-b border-outline-variant/30" data-i18n="stage2.tempTable.col1">Dough Temp</th><th class="p-3 border-b border-outline-variant/30" data-i18n="stage2.tempTable.col2">Approx. Time</th><th class="p-3 border-b border-outline-variant/30" data-i18n="stage2.tempTable.col3">Target Rise</th></tr></thead>
 <tbody class="divide-y divide-outline-variant/30">
 <tr><td class="p-3">65°F (18°C)</td><td class="p-3">14–18 hrs</td><td class="p-3">80–100%</td></tr>
 <tr class="bg-surface-container-low"><td class="p-3">68°F (20°C)</td><td class="p-3">12–14 hrs</td><td class="p-3">80–100%</td></tr>
@@ -675,7 +675,7 @@
 </tbody>
 </table>
 </div>
-<button class="w-full mt-8 py-4 bg-secondary text-on-secondary rounded-lg font-label uppercase tracking-widest text-sm hover:opacity-90 transition-all" onclick="goToStep(3)">🎉 Bulk Done — Let's Shape!</button>
+<button class="w-full mt-8 py-4 bg-secondary text-on-secondary rounded-lg font-label uppercase tracking-widest text-sm hover:opacity-90 transition-all" onclick="goToStep(3)" data-i18n="stage2.nextStep">🎉 Bulk Done — Let's Shape!</button>
 </div>
 </div>
 </div>
@@ -683,107 +683,107 @@
 <!-- Stage 3: Shape -->
 <section class="hidden-step space-y-12" id="step-content-3">
 <header>
-<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight">Stage 3: Shaping</h1>
-<p class="font-label text-xs uppercase tracking-[0.2em] text-outline">Creating tension and surface skin — almost there!</p>
+<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight" data-i18n="stage3.header">Stage 3: Shaping</h1>
+<p class="font-label text-xs uppercase tracking-[0.2em] text-outline" data-i18n="stage3.sub">Creating tension and surface skin — almost there!</p>
 </header>
 <div class="bg-secondary-container/20 border-l-4 border-secondary p-6 rounded-xl flex gap-4 items-start">
   <span class="material-symbols-outlined text-secondary text-3xl shrink-0">pan_tool</span>
   <div>
-    <h3 class="font-headline text-xl text-secondary mb-1">You made it through bulk fermentation! 🙌</h3>
-    <p class="text-sm text-on-surface-variant leading-relaxed">Shaping has two parts: a quick <strong>preshape</strong> (a rough round), then a 30-minute bench rest, then the <strong>final shape</strong> (a tighter round) before it goes in the fridge. The goal is to create surface tension — the skin on the outside of the dough is what gives your loaf its structure in the oven.</p>
+    <h3 class="font-headline text-xl text-secondary mb-1" data-i18n="stage3.welcome.title">You made it through bulk fermentation! 🙌</h3>
+    <p class="text-sm text-on-surface-variant leading-relaxed" data-i18n="stage3.welcome.body">Shaping has two parts: a quick preshape (a rough round), then a 30-minute bench rest, then the final shape (a tighter round) before it goes in the fridge. The goal is to create surface tension — the skin on the outside of the dough is what gives your loaf its structure in the oven.</p>
   </div>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 <div class="space-y-6">
 <div class="bg-surface-container-high p-12 rounded-2xl text-center border border-primary/20" id="preshape-timer">
-<span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary mb-4 block">Preshape Bench Rest</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary mb-4 block" data-i18n="stage3.preshape">Preshape Bench Rest</span>
 <div class="font-headline text-6xl text-primary mb-8 timer-display">30:00</div>
-<button class="px-8 py-3 bg-primary text-on-primary rounded-full font-label uppercase tracking-widest text-sm shadow-lg hover:opacity-90 start-btn" onclick="toggleStaticTimer('preshape-timer', 30*60)">Start Rest</button>
+<button class="px-8 py-3 bg-primary text-on-primary rounded-full font-label uppercase tracking-widest text-sm shadow-lg hover:opacity-90 start-btn" onclick="toggleStaticTimer('preshape-timer', 30*60)" data-i18n="stage3.startRest">Start Rest</button>
 </div>
 <div class="p-6 bg-surface-container-low rounded-xl border-l-4 border-secondary space-y-3">
-<h4 class="font-headline text-xl mb-2">Technique: Final Shape</h4>
-<p class="text-sm leading-relaxed text-on-surface-variant">After the bench rest timer, do your final shape:</p>
+<h4 class="font-headline text-xl mb-2" data-i18n="stage3.finalShape.title">Technique: Final Shape</h4>
+<p class="text-sm leading-relaxed text-on-surface-variant" data-i18n="stage3.finalShape.sub">After the bench rest timer, do your final shape:</p>
 <ol class="text-sm text-on-surface-variant space-y-1 list-decimal list-inside">
-  <li>Lightly flour your work surface with rice flour</li>
-  <li>Flip the dough upside-down onto the bench</li>
-  <li>Fold top edge to center, bottom to center, then left and right sides over</li>
-  <li>Flip seam-side down and cup both hands around the dough</li>
-  <li>Pull it gently toward you, dragging it across the bench — this creates tension on the surface skin</li>
-  <li>Repeat a few times until the surface feels taut, then place seam-side up into your floured banneton</li>
+  <li data-i18n="stage3.finalShape.1">Lightly flour your work surface with rice flour</li>
+  <li data-i18n="stage3.finalShape.2">Flip the dough upside-down onto the bench</li>
+  <li data-i18n="stage3.finalShape.3">Fold top edge to center, bottom to center, then left and right sides over</li>
+  <li data-i18n="stage3.finalShape.4">Flip seam-side down and cup both hands around the dough</li>
+  <li data-i18n="stage3.finalShape.5">Pull it gently toward you, dragging it across the bench — this creates tension on the surface skin</li>
+  <li data-i18n="stage3.finalShape.6">Repeat a few times until the surface feels taut, then place seam-side up into your floured banneton</li>
 </ol>
 </div>
 </div>
 <div class="grid grid-cols-1 gap-4">
 <div class="bg-surface-container p-6 rounded-xl">
-<h4 class="font-headline text-xl mb-4">Shaping Checklist</h4>
+<h4 class="font-headline text-xl mb-4" data-i18n="stage3.checklist.title">Shaping Checklist</h4>
 <ul class="space-y-4">
-<li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary text-sm">check_circle</span> No bubbles popped on surface</li>
-<li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary text-sm">check_circle</span> Strong lateral tension felt</li>
-<li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary text-sm">check_circle</span> Seamless bottom closure</li>
+<li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary text-sm">check_circle</span> <span data-i18n="stage3.checklist.1">No bubbles popped on surface</span></li>
+<li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary text-sm">check_circle</span> <span data-i18n="stage3.checklist.2">Strong lateral tension felt</span></li>
+<li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary text-sm">check_circle</span> <span data-i18n="stage3.checklist.3">Seamless bottom closure</span></li>
 </ul>
 </div>
-<button class="py-4 bg-secondary text-on-secondary rounded-lg font-label uppercase tracking-widest text-sm hover:opacity-90 transition-all" onclick="goToStep(4)">Shaped! — Time to Proof 🧊</button>
+<button class="py-4 bg-secondary text-on-secondary rounded-lg font-label uppercase tracking-widest text-sm hover:opacity-90 transition-all" onclick="goToStep(4)" data-i18n="stage3.nextStep">Shaped! — Time to Proof 🧊</button>
 </div>
 </div>
 </section>
 <!-- Stage 4: Proof -->
 <section class="hidden-step space-y-12" id="step-content-4">
 <header>
-<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight">Stage 4: Proofing</h1>
-<p class="font-label text-xs uppercase tracking-[0.2em] text-outline">Into the fridge overnight — the hard part is over!</p>
+<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight" data-i18n="stage4.header">Stage 4: Proofing</h1>
+<p class="font-label text-xs uppercase tracking-[0.2em] text-outline" data-i18n="stage4.sub">Into the fridge overnight — the hard part is over!</p>
 </header>
 <div class="bg-secondary-container/20 border-l-4 border-secondary p-6 rounded-xl flex gap-4 items-start">
   <span class="material-symbols-outlined text-secondary text-3xl shrink-0">ac_unit</span>
   <div>
-    <h3 class="font-headline text-xl text-secondary mb-1">You're in the home stretch! ❄️</h3>
-    <p class="text-sm text-on-surface-variant leading-relaxed">The cold fridge slows fermentation way down, letting the dough develop more complex flavor and firm up so it's easier to score. After the 10-minute ambient proof and stitching, cover your banneton in a plastic bag and put it in the fridge. You can bake it <strong>12–16 hours later</strong>.</p>
+    <h3 class="font-headline text-xl text-secondary mb-1" data-i18n="stage4.welcome.title">You're in the home stretch! ❄️</h3>
+    <p class="text-sm text-on-surface-variant leading-relaxed" data-i18n="stage4.welcome.body">The cold fridge slows fermentation way down, letting the dough develop more complex flavor and firm up so it's easier to score. After the 10-minute ambient proof and stitching, cover your banneton in a plastic bag and put it in the fridge. You can bake it 12–16 hours later.</p>
   </div>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 <div class="bg-surface-container-low p-8 rounded-xl space-y-8" id="ambient-timer-container">
 <div>
-<span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary">Final Stitching Window</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary" data-i18n="stage4.stitchLabel">Final Stitching Window</span>
 <div class="font-headline text-5xl text-primary my-4 timer-display">10:00</div>
-<button class="px-6 py-2 bg-primary text-on-primary rounded-full text-xs font-label uppercase tracking-widest start-btn" onclick="toggleStaticTimer('ambient-timer-container', 10*60)">Start Ambient Proof</button>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full text-xs font-label uppercase tracking-widest start-btn" onclick="toggleStaticTimer('ambient-timer-container', 10*60)" data-i18n="stage4.startAmbient">Start Ambient Proof</button>
 </div>
 <div class="space-y-4 pt-6 border-t border-outline-variant/30">
-<h4 class="font-headline text-2xl text-secondary">Stitching Instructions</h4>
-<p class="text-sm text-on-surface-variant leading-relaxed">Wait 10 minutes after basket entry. "Stitch" the dough by pulling sides over each other like a corset. This adds structural support for the oven spring.</p>
+<h4 class="font-headline text-2xl text-secondary" data-i18n="stage4.stitch.title">Stitching Instructions</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed" data-i18n="stage4.stitch.body">Wait 10 minutes after basket entry. "Stitch" the dough by pulling sides over each other like a corset. This adds structural support for the oven spring.</p>
 </div>
 </div>
 <div class="bg-secondary-container/20 p-8 rounded-xl flex flex-col justify-between">
 <div>
-<h4 class="font-headline text-2xl mb-6">Cold Proof Guide</h4>
+<h4 class="font-headline text-2xl mb-6" data-i18n="stage4.guide.title">Cold Proof Guide</h4>
 <ul class="space-y-6">
-<li class="flex items-start gap-4"><span class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs shrink-0">1</span><p class="text-sm">Place banneton in a plastic bag to prevent skinning.</p></li>
-<li class="flex items-start gap-4"><span class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs shrink-0">2</span><p class="text-sm">Retard in fridge (38°F / 3°C) for 12-16 hours.</p></li>
-<li class="flex items-start gap-4"><span class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs shrink-0">3</span><p class="text-sm">Bake directly from cold for best scoring definition.</p></li>
+<li class="flex items-start gap-4"><span class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs shrink-0">1</span><p class="text-sm" data-i18n="stage4.guide.1">Place banneton in a plastic bag to prevent skinning.</p></li>
+<li class="flex items-start gap-4"><span class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs shrink-0">2</span><p class="text-sm" data-i18n="stage4.guide.2">Retard in fridge (38°F / 3°C) for 12-16 hours.</p></li>
+<li class="flex items-start gap-4"><span class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs shrink-0">3</span><p class="text-sm" data-i18n="stage4.guide.3">Bake directly from cold for best scoring definition.</p></li>
 </ul>
 </div>
 <div class="mt-6">
-<label class="block font-label text-[10px] uppercase tracking-widest font-bold text-secondary mb-2">Fridge/Proof Temp (°F)</label>
+<label class="block font-label text-[10px] uppercase tracking-widest font-bold text-secondary mb-2" data-i18n="stage4.proofTemp">Fridge/Proof Temp (°F)</label>
 <input class="w-full bg-surface-container border-none rounded-lg px-4 py-3 text-secondary font-headline" id="input-proof-temp" type="number" value="38"/>
 </div>
-<button class="mt-8 py-4 bg-secondary text-on-secondary rounded-lg font-label uppercase tracking-widest text-sm hover:opacity-90 transition-all" onclick="fridgeAndProof()">Into the Fridge — See You Tomorrow! 🔥</button>
+<button class="mt-8 py-4 bg-secondary text-on-secondary rounded-lg font-label uppercase tracking-widest text-sm hover:opacity-90 transition-all" onclick="fridgeAndProof()" data-i18n="stage4.nextStep">Into the Fridge — See You Tomorrow! 🔥</button>
 </div>
 </div>
 </section>
 <!-- Stage 5: Bake -->
 <section class="hidden-step space-y-12" id="step-content-5">
 <header>
-<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight">Stage 5: Oven Mechanics</h1>
-<p class="font-label text-xs uppercase tracking-[0.2em] text-outline">The Maillard reaction and final transformation</p>
+<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight" data-i18n="stage5.header">Stage 5: Oven Mechanics</h1>
+<p class="font-label text-xs uppercase tracking-[0.2em] text-outline" data-i18n="stage5.sub">The Maillard reaction and final transformation</p>
 </header>
 <div class="bg-primary/5 border border-primary/20 rounded-2xl p-5 flex items-center justify-between gap-4">
   <div class="flex items-center gap-3">
     <span class="material-symbols-outlined text-primary text-3xl">ac_unit</span>
     <div>
-      <span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary block mb-1">Dough in Fridge For</span>
+      <span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary block mb-1" data-i18n="stage5.fridgeFor">Dough in Fridge For</span>
       <span class="font-headline text-2xl text-primary" id="cold-proof-elapsed-display">--:--:--</span>
     </div>
   </div>
   <div class="text-right">
-    <span class="font-label text-[10px] uppercase tracking-widest font-bold text-outline block mb-1">Oven Temp</span>
+    <span class="font-label text-[10px] uppercase tracking-widest font-bold text-outline block mb-1" data-i18n="stage5.ovenTemp">Oven Temp</span>
     <div class="flex items-center gap-1 justify-end">
       <input class="w-20 bg-surface-container border border-outline-variant/40 rounded-lg px-2 py-2 text-primary font-headline text-xl text-center" id="input-bake-temp" type="number" value="450"/>
       <span class="font-headline text-xl text-primary">°F</span>
@@ -793,40 +793,40 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 <div class="bg-surface-container-high p-8 rounded-xl space-y-6" id="bake-timer-1">
 <div class="flex justify-between items-start">
-<div><span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary">Phase 1: Steam Expansion</span><h4 class="font-headline text-2xl">Lid On • 25 Mins</h4></div>
+<div><span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary" data-i18n="stage5.phase1.label">Phase 1: Steam Expansion</span><h4 class="font-headline text-2xl" data-i18n="stage5.phase1.title">Lid On • 25 Mins</h4></div>
 <span class="material-symbols-outlined text-primary text-3xl">deck</span>
 </div>
-<p class="text-sm text-on-surface-variant leading-relaxed">Preheat oven &amp; Dutch Oven to 500°F. <strong>Lower to 450°F</strong> immediately after placing dough inside. The steam trapped inside allows the crust to expand fully.</p>
+<p class="text-sm text-on-surface-variant leading-relaxed" data-i18n="stage5.phase1.body">Preheat oven &amp; Dutch Oven to 500°F. Lower to 450°F immediately after placing dough inside. The steam trapped inside allows the crust to expand fully.</p>
 <div class="text-center py-4 bg-surface-container rounded-lg">
 <div class="font-headline text-4xl mb-4 timer-display">25:00</div>
-<button class="px-6 py-2 bg-primary text-on-primary rounded-full text-xs font-label uppercase tracking-widest start-btn" onclick="startBakePhase1()">Start Timer</button>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full text-xs font-label uppercase tracking-widest start-btn" onclick="startBakePhase1()" data-i18n="stage5.startTimer">Start Timer</button>
 </div>
 </div>
 <div class="bg-secondary-container/30 p-8 rounded-xl space-y-6" id="bake-timer-2">
 <div class="flex justify-between items-start">
-<div><span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary">Phase 2: Color &amp; Cure</span><h4 class="font-headline text-2xl">Lid Off • 20 Mins</h4></div>
+<div><span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary" data-i18n="stage5.phase2.label">Phase 2: Color &amp; Cure</span><h4 class="font-headline text-2xl" data-i18n="stage5.phase2.title">Lid Off • 20 Mins</h4></div>
 <span class="material-symbols-outlined text-secondary text-3xl">local_fire_department</span>
 </div>
-<p class="text-sm text-on-surface-variant leading-relaxed">Remove lid to develop deep amber crust. Target internal temperature: <strong>205-210°F</strong>.</p>
+<p class="text-sm text-on-surface-variant leading-relaxed" data-i18n="stage5.phase2.body">Remove lid to develop deep amber crust. Target internal temperature: 205-210°F.</p>
 <div class="text-center py-4 bg-surface-container rounded-lg">
 <div class="font-headline text-4xl mb-4 timer-display">20:00</div>
-<button class="px-6 py-2 bg-secondary text-on-secondary rounded-full text-xs font-label uppercase tracking-widest start-btn" onclick="toggleStaticTimer('bake-timer-2', 20*60)">Start Timer</button>
+<button class="px-6 py-2 bg-secondary text-on-secondary rounded-full text-xs font-label uppercase tracking-widest start-btn" onclick="toggleStaticTimer('bake-timer-2', 20*60)" data-i18n="stage5.startTimer">Start Timer</button>
 </div>
 </div>
 </div>
 <div class="text-center pt-8">
-<button class="px-12 py-4 bg-secondary text-on-secondary rounded-lg font-label uppercase tracking-widest text-sm shadow-xl hover:scale-105 transition-all" onclick="goToStep(6)">Record Final Result</button>
+<button class="px-12 py-4 bg-secondary text-on-secondary rounded-lg font-label uppercase tracking-widest text-sm shadow-xl hover:scale-105 transition-all" onclick="goToStep(6)" data-i18n="stage5.nextStep">Record Final Result</button>
 </div>
 </section>
 <!-- Stage 6: Result -->
 <section class="hidden-step space-y-12" id="step-content-6">
 <header class="text-center">
-<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight">Bake Complete</h1>
-<p class="font-label text-xs uppercase tracking-[0.2em] text-outline">Documentation and Reflection</p>
+<h1 class="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight" data-i18n="stage6.header">Bake Complete</h1>
+<p class="font-label text-xs uppercase tracking-[0.2em] text-outline" data-i18n="stage6.sub">Documentation and Reflection</p>
 </header>
 <div class="bg-surface-container-lowest p-12 rounded-2xl border border-outline-variant/10 shadow-sm max-w-2xl mx-auto space-y-10">
 <div class="text-center">
-<h3 class="font-headline text-3xl mb-6">Crumb Rating</h3>
+<h3 class="font-headline text-3xl mb-6" data-i18n="stage6.crumbRating">Crumb Rating</h3>
 <div class="flex justify-center gap-2" id="star-rating">
 <button class="material-symbols-outlined text-4xl text-outline-variant hover:text-primary-container transition-colors" onclick="setRating(1)">star</button>
 <button class="material-symbols-outlined text-4xl text-outline-variant hover:text-primary-container transition-colors" onclick="setRating(2)">star</button>
@@ -841,11 +841,11 @@
 <img class="absolute inset-0 w-full h-full object-cover hidden" id="preview-img" src=""/>
 <div class="group-hover:scale-110 transition-transform" id="upload-prompt">
 <span class="material-symbols-outlined text-4xl text-outline mb-2">add_a_photo</span>
-<p class="font-label text-xs uppercase tracking-widest text-outline font-bold">Upload Final Crumb Shot</p>
+<p class="font-label text-xs uppercase tracking-widest text-outline font-bold" data-i18n="stage6.uploadPhoto">Upload Final Crumb Shot</p>
 </div>
 </div>
-<textarea class="w-full bg-surface-container border-none rounded-xl p-6 text-sm focus:ring-1 focus:ring-primary h-40 resize-none" id="bake-notes" placeholder="Notes on crumb texture, crust depth, or adjustments for next time..."></textarea>
-<button class="w-full py-4 bg-primary text-on-primary rounded-lg font-label uppercase tracking-widest text-sm hover:opacity-90 shadow-lg transition-all" id="save-button" onclick="saveLog()">Save to Archive</button>
+<textarea class="w-full bg-surface-container border-none rounded-xl p-6 text-sm focus:ring-1 focus:ring-primary h-40 resize-none" id="bake-notes" placeholder="Notes on crumb texture, crust depth, or adjustments for next time..." data-i18n-placeholder="stage6.notesPlaceholder"></textarea>
+<button class="w-full py-4 bg-primary text-on-primary rounded-lg font-label uppercase tracking-widest text-sm hover:opacity-90 shadow-lg transition-all" id="save-button" onclick="saveLog()" data-i18n="stage6.saveBtn">Save to Archive</button>
 </div>
 </div>
 </section>
@@ -861,7 +861,7 @@
 <span class="material-symbols-outlined text-primary">hourglass_top</span>
 </div>
 <div>
-<span class="font-label text-[10px] uppercase tracking-widest font-bold block mb-1 text-secondary" id="timer-label">Active Timer</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold block mb-1 text-secondary" id="timer-label" data-i18n="timer.activeTimer">Active Timer</span>
 <span class="font-headline text-2xl text-on-surface" id="timer-countdown">--:--</span>
 </div>
 </div>
