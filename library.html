@@ -6,6 +6,24 @@
 <title>Pancito y Más Sourdough Companion App - The Bread Library</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="i18n.js"></script>
+<script>
+// Library translation hook — isolated in its own script tag.
+// setLang() in i18n.js calls renderLibrary() automatically when toggled.
+// We also retry on multiple timers in case Tailwind CDN or some other
+// post-load script reverts text content after applyTranslations runs.
+(function () {
+  function reapply() {
+    try { if (window.PymI18n) window.PymI18n.applyTranslations(); } catch (e) {}
+  }
+  window.renderLibrary = reapply;
+  document.addEventListener('DOMContentLoaded', reapply);
+  window.addEventListener('load', reapply);
+  // Defensive retries to catch any post-load DOM resets
+  setTimeout(reapply, 100);
+  setTimeout(reapply, 500);
+  setTimeout(reapply, 1500);
+})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
@@ -502,17 +520,6 @@
     }
   });
 })();
-
-// ── Library translation hook ──────────────────────────────────────────────
-// Called by setLang() in i18n.js whenever the user switches language,
-// and also on window.load (after Tailwind CDN finishes) to ensure
-// translations stick even if the CDN script runs after DOMContentLoaded.
-window.renderLibrary = function() {
-  if (window.PymI18n) window.PymI18n.applyTranslations();
-};
-window.addEventListener(‘load’, function() {
-  if (window.PymI18n) window.PymI18n.applyTranslations();
-});
 
 // ── Swipe right / Android back button → go back to Dashboard ─────────────
 (function() {
