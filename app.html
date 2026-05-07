@@ -1199,26 +1199,33 @@ Record a New Bake
 <div class="badge-tooltip" id="badge-tooltip"></div>
 
 <!-- BottomNavBar (persistent, outside views) -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]" style="padding-bottom: max(1.5rem, env(safe-area-inset-bottom))">
-  <button id="bn-dashboard" class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" onclick="showView('view-dashboard')">
+<!--
+  Uses grid grid-cols-5 (not flex justify-around) so every tab gets exactly
+  1/5 of the screen width regardless of label length — guarantees that the
+  longest Spanish word (Biblioteca / Historial / Hornear) can never push
+  Logros off-screen on narrow phones. Inner padding is minimized and labels
+  use min-w-0 + truncate as a graceful fallback for very long translations.
+-->
+<nav class="fixed bottom-0 left-0 w-full z-50 grid grid-cols-5 items-stretch gap-0 px-1 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]" style="padding-bottom: max(1.5rem, env(safe-area-inset-bottom))">
+  <button id="bn-dashboard" class="flex flex-col items-stretch justify-center text-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl mx-0.5 px-1 py-2 min-w-0 overflow-hidden" onclick="showView('view-dashboard')">
     <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">home_max</span>
-    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1" data-i18n="nav.dash">Dash</span>
+    <span class="font-label text-[10px] uppercase tracking-tight font-bold mt-1 block truncate" data-i18n="nav.dash">Dash</span>
   </button>
-  <button id="bn-bake" class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" onclick="showView('view-bake')">
+  <button id="bn-bake" class="flex flex-col items-stretch justify-center text-center text-[#875305]/60 mx-0.5 px-1 py-2 rounded-2xl hover:bg-surface-container transition-all min-w-0 overflow-hidden" onclick="showView('view-bake')">
     <span class="material-symbols-outlined text-[20px]">timer</span>
-    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1" data-i18n="nav.bake">Bake</span>
+    <span class="font-label text-[10px] uppercase tracking-tight font-bold mt-1 block truncate" data-i18n="nav.bake">Bake</span>
   </button>
-  <button id="bn-library" class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" onclick="showView('view-library')">
+  <button id="bn-library" class="flex flex-col items-stretch justify-center text-center text-[#875305]/60 mx-0.5 px-1 py-2 rounded-2xl hover:bg-surface-container transition-all min-w-0 overflow-hidden" onclick="showView('view-library')">
     <span class="material-symbols-outlined text-[20px]">book_5</span>
-    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1" data-i18n="nav.library">Library</span>
+    <span class="font-label text-[10px] uppercase tracking-tight font-bold mt-1 block truncate" data-i18n="nav.library">Library</span>
   </button>
-  <button id="bn-archive" class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" onclick="showView('view-archive')">
+  <button id="bn-archive" class="flex flex-col items-stretch justify-center text-center text-[#875305]/60 mx-0.5 px-1 py-2 rounded-2xl hover:bg-surface-container transition-all min-w-0 overflow-hidden" onclick="showView('view-archive')">
     <span class="material-symbols-outlined text-[20px]">inventory_2</span>
-    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1" data-i18n="nav.archive">Archive</span>
+    <span class="font-label text-[10px] uppercase tracking-tight font-bold mt-1 block truncate" data-i18n="nav.archive">Archive</span>
   </button>
-  <button id="bn-achievements" class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" onclick="showView('view-achievements')">
+  <button id="bn-achievements" class="flex flex-col items-stretch justify-center text-center text-[#875305]/60 mx-0.5 px-1 py-2 rounded-2xl hover:bg-surface-container transition-all min-w-0 overflow-hidden" onclick="showView('view-achievements')">
     <span class="material-symbols-outlined text-[20px]">workspace_premium</span>
-    <span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1" data-i18n="nav.badges">Badges</span>
+    <span class="font-label text-[10px] uppercase tracking-tight font-bold mt-1 block truncate" data-i18n="nav.badges">Badges</span>
   </button>
 </nav>
 
