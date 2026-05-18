@@ -1709,9 +1709,12 @@ function prevLesson() {
 
 // ── Already has a starter ─────────────────────────────────────────────────
 function hasStarter() {
-  // Request notification permission regardless of starter creation path
+  // Only set up a default reminder if none is already configured — avoids
+  // overwriting a custom time the user saved in the main app and prevents
+  // duplicate notifications from stacking up on re-entry.
   if (window.PymGamification) {
-    PymGamification.scheduleStarterReminder(true, 9, 0);
+    const _rem = JSON.parse(localStorage.getItem('pym_starter_reminder') || '{}');
+    if (!_rem.enabled) PymGamification.scheduleStarterReminder(true, 9, 0);
   }
   goTo('c1s1');
 }
@@ -1726,9 +1729,11 @@ function beginStarterCreation() {
     creatingStarter: true,
     starterCreationStarted: new Date().toISOString(),
   }));
-  // Schedule daily reminder via gamification module if available
+  // Schedule daily reminder only if none is already configured — same guard
+  // as hasStarter() to prevent overwriting a custom time or duplicating.
   if (window.PymGamification) {
-    PymGamification.scheduleStarterReminder(true, 9, 0);
+    const _rem = JSON.parse(localStorage.getItem('pym_starter_reminder') || '{}');
+    if (!_rem.enabled) PymGamification.scheduleStarterReminder(true, 9, 0);
   }
   // Unlock born_from_scratch badge at the END of onboarding when creation is done
   // (We'll check this flag in finishOnboarding)
