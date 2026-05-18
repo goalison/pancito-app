@@ -1734,6 +1734,9 @@ function prevLesson() {
 
 // ── Language picker ───────────────────────────────────────────────────────
 function pickLang(lang) {
+  // Write directly to localStorage first so the language is set even if PymI18n
+  // isn't ready for any reason, then let setLang handle the UI update.
+  try { localStorage.setItem('pym_lang', lang); } catch(_) {}
   if (window.PymI18n) window.PymI18n.setLang(lang);
   goTo('c0s1');
 }
@@ -3475,13 +3478,15 @@ function launchParticles() {
     document.getElementById('c0s0').classList.add('hidden');
     document.getElementById('c1s1').classList.remove('hidden');
     if (ob.creatingStarter) creatingStarter = true;
-  } else if (localStorage.getItem('pym_lang')) {
-    // Language already chosen (e.g. returning mid-onboarding without a name yet) — skip picker
+  } else if (ob && ob.currentScreen && ob.currentScreen !== 'c0s0') {
+    // User already navigated past the language picker in a previous session — restore to c0s1.
+    // We use pym_onboarding.currentScreen (set by goTo) rather than pym_lang so that an
+    // existing pym_lang='en' from a prior install doesn't silently bypass the picker.
     currentScreen = 'c0s1';
     document.getElementById('c0s0').classList.add('hidden');
     document.getElementById('c0s1').classList.remove('hidden');
   }
-  // else: brand new user starts on c0s0 (language picker, visible by default)
+  // else: brand new user (or someone who never made it past c0s0) starts on c0s0
   updateNav();
 })();
 </script>
