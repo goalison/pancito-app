@@ -20,6 +20,15 @@
     if (typeof renderAchievements === 'function') try { renderAchievements(); } catch (_) {}
     if (typeof renderLibrary      === 'function') try { renderLibrary();      } catch (_) {}
     if (typeof renderStarterCompanion === 'function') try { renderStarterCompanion(); } catch (_) {}
+    // Re-schedule the starter reminder so the notification body reflects the new language.
+    // The message text is baked into the payload at schedule time, so switching language
+    // without rescheduling leaves the notification in the old language forever.
+    try {
+      var rem = JSON.parse(localStorage.getItem('pym_starter_reminder') || '{}');
+      if (rem.enabled && window.PymGamification) {
+        window.PymGamification.scheduleStarterReminder(true, rem.hour != null ? rem.hour : 8, rem.minute != null ? rem.minute : 0);
+      }
+    } catch (_) {}
   }
 
   function t(key) {
