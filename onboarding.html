@@ -321,9 +321,34 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- C0-S0: Language picker (shown first to brand-new users)               -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="screen" id="c0s0">
+  <div class="flex-1 flex flex-col items-center justify-center px-8 text-center gap-6">
+    <div class="text-7xl mb-2">🍞</div>
+    <div>
+      <h1 class="font-headline font-bold text-3xl leading-tight text-[#875305] mb-1">Pancito y Más</h1>
+      <p class="text-[#847466] text-xs font-semibold uppercase tracking-widest">Your sourdough journey · Tu aventura panadera</p>
+    </div>
+    <div class="w-full max-w-xs bg-[#f8f3e9] rounded-3xl p-6 border border-[#d6c3b3]/50">
+      <p class="font-bold text-[#514538] text-base mb-1">Choose your language</p>
+      <p class="text-[#847466] text-sm mb-5">Elige el idioma de tu aventura</p>
+      <div class="flex flex-col gap-3">
+        <button onclick="pickLang('en')" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform flex items-center justify-center gap-2 shadow-md">
+          <span class="text-xl">🇺🇸</span> English
+        </button>
+        <button onclick="pickLang('es')" class="w-full py-4 bg-[#f2ede3] text-[#875305] rounded-2xl font-bold text-base active:scale-95 transition-transform border border-[#d6c3b3] flex items-center justify-center gap-2">
+          <span class="text-xl">🇲🇽</span> Español
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
 <!-- PRE-CHAPTER — Do you have a starter?                                  -->
 <!-- ══════════════════════════════════════════════════════════════════════ -->
-<div class="screen" id="c0s1">
+<div class="screen hidden" id="c0s1">
   <div class="flex-1 flex flex-col items-center px-8 text-center pt-20 pb-6">
     <span class="material-symbols-outlined text-6xl text-[#C4863A] mb-6" style="font-variation-settings:'FILL' 1;">science</span>
     <h2 class="font-headline font-bold text-3xl leading-tight mb-4" data-i18n="onboarding.c0s1.heading">Do you already have a sourdough starter?</h2>
@@ -1403,7 +1428,7 @@
 <script>
 const t = k => (window.PymI18n && window.PymI18n.t(k)) || k;
 // ── State ─────────────────────────────────────────────────────────────────
-let currentScreen = 'c0s1';
+let currentScreen = 'c0s0';
 let starterName   = 'Bubbles';
 let selectedActivity = null;
 let lessonIndex   = 0;
@@ -1476,7 +1501,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 const SCREENS_ORDER = [
-  'c0s1','c0s2','c1s1','c1s2','c1s3','c2s1','c1game',
+  'c0s0','c0s1','c0s2','c1s1','c1s2','c1s3','c2s1','c1game',
   'c5game','c6game','c2quiz',
   'c2game',
   'c7game','c8game','c9game','c10game','c11game',
@@ -1705,6 +1730,12 @@ function prevLesson() {
     renderLesson();
     card.classList.remove('leaving-back');
   }, 300);
+}
+
+// ── Language picker ───────────────────────────────────────────────────────
+function pickLang(lang) {
+  if (window.PymI18n) window.PymI18n.setLang(lang);
+  goTo('c0s1');
 }
 
 // ── Already has a starter ─────────────────────────────────────────────────
@@ -3439,13 +3470,18 @@ function launchParticles() {
     document.querySelectorAll('#c4StarterName,#c4StarterName2').forEach(el => el.textContent = starterName);
     document.querySelectorAll('#feedBtnName,#c4JarLabel,#c4CelebName,#c4CelebName2,#starterJarLabel').forEach(el => el.textContent = starterName);
     document.getElementById('c1s3Headline').textContent = starterName + t('onboarding.c1s3.isAlive');
-    // They already answered the starter question — skip c0s1
+    // They already answered the starter question — skip c0s0 and c0s1
     currentScreen = 'c1s1';
-    document.getElementById('c0s1').classList.add('hidden');
+    document.getElementById('c0s0').classList.add('hidden');
     document.getElementById('c1s1').classList.remove('hidden');
     if (ob.creatingStarter) creatingStarter = true;
+  } else if (localStorage.getItem('pym_lang')) {
+    // Language already chosen (e.g. returning mid-onboarding without a name yet) — skip picker
+    currentScreen = 'c0s1';
+    document.getElementById('c0s0').classList.add('hidden');
+    document.getElementById('c0s1').classList.remove('hidden');
   }
-  // else: brand new user starts on c0s1 (visible by default)
+  // else: brand new user starts on c0s0 (language picker, visible by default)
   updateNav();
 })();
 </script>
