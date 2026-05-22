@@ -170,14 +170,15 @@
         <h2 class="font-headline text-4xl text-white font-bold mb-3 leading-tight" data-i18n="library.ebook.title">A Sourdough Starter Journey</h2>
         <p class="font-label text-sm text-primary-fixed font-bold mb-4" data-i18n="library.ebook.tagline">Learn how to create your first loaf in 10 days!</p>
         <p class="text-white/70 text-base leading-relaxed mb-8" data-i18n="library.ebook.sub">Sign in with Google, LinkedIn, Microsoft, or Email to get instant access to your free guide.</p>
-        <button
-          onclick="openEbookSignup()"
-          class="inline-flex items-center gap-3 bg-white text-on-surface font-bold px-7 py-4 rounded-xl shadow-lg active:scale-95 transition-transform text-sm border-none cursor-pointer"
+        <a
+          href="https://pancitoymas.com/thank-you-ebook-download/"
+          target="_blank"
+          class="inline-flex items-center gap-3 bg-white text-on-surface font-bold px-7 py-4 rounded-xl shadow-lg active:scale-95 transition-transform text-sm"
         >
           <span class="material-symbols-outlined text-primary text-xl">download</span>
           <span data-i18n="library.ebook.cta">Download Your Copy Now</span>
-        </button>
-        <p class="text-white/40 text-xs mt-4" data-i18n="library.ebook.note">Free · Enter your name &amp; email · Delivered instantly</p>
+        </a>
+        <p class="text-white/40 text-xs mt-4" data-i18n="library.ebook.note">Free · Instant access · Sign in with Google, LinkedIn or Email</p>
       </div>
     </div>
   </div>
@@ -437,99 +438,6 @@
 </section>
 
 </main>
-
-<!-- ── eBook Signup Sheet ──────────────────────────────────────────────── -->
-<div id="ebook-signup-overlay" onclick="closeEbookSignup()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1000;"></div>
-<div id="ebook-signup-sheet" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-radius:24px 24px 0 0;z-index:1001;padding:28px 24px 40px;box-shadow:0 -8px 40px rgba(0,0,0,0.18);max-width:540px;margin:0 auto;">
-  <!-- Handle -->
-  <div style="width:40px;height:4px;background:#d6c3b3;border-radius:100px;margin:0 auto 20px;"></div>
-  <!-- Success state (hidden until submit) -->
-  <div id="ebook-success" style="display:none;text-align:center;padding:16px 0 8px;">
-    <span class="material-symbols-outlined" style="font-size:48px;color:#875305;">mark_email_read</span>
-    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:#1d1c16;margin:12px 0 8px;">Check your inbox!</h3>
-    <p style="font-size:14px;color:#514538;line-height:1.6;">Your free eBook is on its way. If you don't see it in a few minutes, check your spam folder.</p>
-    <button onclick="closeEbookSignup()" style="margin-top:20px;width:100%;padding:14px;background:#875305;color:#fff;border-radius:14px;font-weight:700;font-size:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">Done</button>
-  </div>
-  <!-- Form state -->
-  <div id="ebook-form-state">
-    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:#1d1c16;margin:0 0 4px;">Get your free eBook</h3>
-    <p style="font-size:13px;color:#514538;margin:0 0 20px;">Enter your name and email — we'll send it straight to your inbox.</p>
-    <label style="font-size:11px;font-weight:700;color:#514538;display:block;margin-bottom:6px;">First Name</label>
-    <input id="ebook-name" type="text" placeholder="e.g. Maria" autocomplete="given-name"
-      style="width:100%;padding:12px 14px;border:2px solid #d6c3b3;border-radius:12px;font-size:14px;color:#1d1c16;background:#fef9ef;margin-bottom:14px;box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;outline:none;"/>
-    <label style="font-size:11px;font-weight:700;color:#514538;display:block;margin-bottom:6px;">Email</label>
-    <input id="ebook-email" type="email" placeholder="you@example.com" autocomplete="email"
-      style="width:100%;padding:12px 14px;border:2px solid #d6c3b3;border-radius:12px;font-size:14px;color:#1d1c16;background:#fef9ef;margin-bottom:20px;box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;outline:none;"/>
-    <div id="ebook-error" style="display:none;color:#c0392b;font-size:12px;font-weight:600;margin-bottom:12px;"></div>
-    <button onclick="submitEbookSignup()" id="ebook-submit-btn"
-      style="width:100%;padding:14px;background:#875305;color:#fff;border-radius:14px;font-weight:700;font-size:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;">
-      <span class="material-symbols-outlined" style="font-size:18px;">download</span>
-      Send Me the Free eBook
-    </button>
-    <p style="font-size:11px;color:#9e8c7e;text-align:center;margin-top:12px;">No spam, ever. Unsubscribe anytime.</p>
-  </div>
-</div>
-
-<script>
-function openEbookSignup() {
-  var overlay = document.getElementById('ebook-signup-overlay');
-  var sheet   = document.getElementById('ebook-signup-sheet');
-  overlay.style.display = 'block';
-  sheet.style.display   = 'block';
-  sheet.style.animation = 'pym-fade-in 0.25s ease';
-  document.getElementById('ebook-success').style.display    = 'none';
-  document.getElementById('ebook-form-state').style.display = 'block';
-  document.getElementById('ebook-error').style.display      = 'none';
-}
-
-function closeEbookSignup() {
-  document.getElementById('ebook-signup-overlay').style.display = 'none';
-  document.getElementById('ebook-signup-sheet').style.display   = 'none';
-}
-
-async function submitEbookSignup() {
-  var name  = (document.getElementById('ebook-name').value  || '').trim();
-  var email = (document.getElementById('ebook-email').value || '').trim();
-  var errEl = document.getElementById('ebook-error');
-  var btn   = document.getElementById('ebook-submit-btn');
-
-  errEl.style.display = 'none';
-  if (!name)  { errEl.textContent = 'Please enter your first name.'; errEl.style.display = 'block'; return; }
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    errEl.textContent = 'Please enter a valid email address.';
-    errEl.style.display = 'block';
-    return;
-  }
-
-  btn.textContent = 'Sending…';
-  btn.disabled    = true;
-
-  try {
-    // ── Mailchimp API call goes here ──────────────────────────────────────
-    // Replace the fetch below with your actual Mailchimp endpoint once ready.
-    // Example using a server-side proxy or Mailchimp's embed form action URL:
-    //
-    // await fetch('https://YOUR-PROXY-URL/subscribe', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ firstName: name, email: email })
-    // });
-    //
-    // For now, we simulate a short delay and show success.
-    await new Promise(function(r) { setTimeout(r, 800); });
-    // ─────────────────────────────────────────────────────────────────────
-
-    document.getElementById('ebook-form-state').style.display = 'none';
-    document.getElementById('ebook-success').style.display    = 'block';
-  } catch(e) {
-    errEl.textContent = 'Something went wrong. Please try again.';
-    errEl.style.display = 'block';
-    btn.textContent = 'Send Me the Free eBook';
-    btn.disabled    = false;
-  }
-}
-</script>
-
 <!-- BottomNavBar -->
 <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.05)] rounded-t-[2rem]" style="padding-bottom: max(1.5rem, env(safe-area-inset-bottom))">
 <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl hover:bg-surface-container transition-all" href="index.html">
