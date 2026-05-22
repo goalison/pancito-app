@@ -1442,6 +1442,13 @@
     var G = window.PymGamification;
     if (!G) { closeCheckinSheet(); return; }
     G.feedStarter(_checkinActivity, temp, '');
+    // Schedule follow-up reminders (6h, 12h, 18h) if notifications are on
+    try {
+      var _rem = JSON.parse(localStorage.getItem('pym_starter_reminder') || '{}');
+      if (_rem.enabled && G.scheduleFeedCheckInReminders) {
+        G.scheduleFeedCheckInReminders(true);
+      }
+    } catch(_) {}
     var newUnlocks = G.checkAchievements(
       JSON.parse(localStorage.getItem('pym_logs') || '[]'),
       G.getStreak(),
@@ -1462,6 +1469,9 @@
     var hour   = isNaN(parts[0]) ? 8  : parts[0];
     var minute = isNaN(parts[1]) ? 0  : parts[1];
     G.scheduleStarterReminder(enabled, hour, minute).then(function() {
+      if (enabled && G.scheduleFeedCheckInReminders) {
+        G.scheduleFeedCheckInReminders(true);
+      }
       _showReminderToast(enabled, hour, minute, false);
     }).catch(function() {
       _showReminderToast(enabled, hour, minute, true);

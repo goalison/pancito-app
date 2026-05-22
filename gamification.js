@@ -100,8 +100,7 @@
   function feedStarter(activity, temp, notes) {
     let s = _get('pym_starter') || { name: 'Bubbles', health: 60, totalFeedings: 0 };
     const currentHealth = _computeHealth(s);
-    const boost = activity === 'doubling' ? 30 : activity === 'bubbly' ? 20 : 5;
-    s.health = Math.min(100, currentHealth + boost);
+    s.health = activity === 'doubling' ? 100 : activity === 'bubbly' ? 70 : 30;
     s.lastFed = new Date().toISOString();
     s.totalFeedings = (s.totalFeedings || 0) + 1;
     s.stage = _healthToStage(s.health);
@@ -682,7 +681,8 @@
     const cap = window.Capacitor?.Plugins?.LocalNotifications;
     if (!cap) return;
 
-    await cap.cancel({ notifications: [{ id: NOTIF_ID }] }).catch(() => {});
+    // Cancel daily reminder + all feed check-in reminders
+    await cap.cancel({ notifications: [9001, 9002, 9003, 9004].map(id => ({ id })) }).catch(() => {});
     if (!enabled) return;
 
     // Request permission first — required on Android 13+
@@ -736,6 +736,46 @@
   }
 
   // ══════════════════════════════════════════════════════════════════════════
+  // FEED CHECK-IN REMINDERS  (up to 3 per day, every 6 hours after feeding)
+  // ══════════════════════════════════════════════════════════════════════════
+  async function scheduleFeedCheckInReminders(enabled) {
+    const CHANNEL_ID = 'starter-reminders';
+    const FEED_IDS   = [9002, 9003, 9004];
+    const cap = window.Capacitor?.Plugins?.LocalNotifications;
+    if (!cap) return;
+
+    await cap.cancel({ notifications: FEED_IDS.map(id => ({ id })) }).catch(() => {});
+    if (!enabled) return;
+
+    const starter = getStarterState();
+    if (!starter) return;
+
+    const name     = starter.name || (_lang() === 'es' ? 'tu masa madre' : 'your starter');
+    const lang     = _lang();
+    const lastFed  = starter.lastFed ? new Date(starter.lastFed) : new Date();
+    const now      = new Date();
+
+    for (let i = 0; i < FEED_IDS.length; i++) {
+      const fire = new Date(lastFed.getTime() + (i + 1) * 6 * 3600000);
+      if (fire <= now) continue; // this slot already passed — skip it
+
+      const hours = (i + 1) * 6;
+      const body  = lang === 'es'
+        ? `¡${name} lleva ${hours} horas sin comer! 🫙 Hora de revisar y darle de comer.`
+        : `${name} hasn't been fed in ${hours} hours! 🫙 Time for a check-in and feed.`;
+
+      await cap.schedule({ notifications: [{
+        id:        FEED_IDS[i],
+        title:     'Pancito y Más 🍞',
+        body,
+        channelId: CHANNEL_ID,
+        sound:     'default',
+        schedule:  { at: fire },
+      }]}).catch(() => {});
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
   // PUBLIC API
   // ══════════════════════════════════════════════════════════════════════════
   window.PymGamification = {
@@ -766,6 +806,7 @@
     isFeatureUnlocked,
     // Notifications
     scheduleStarterReminder,
+    scheduleFeedCheckInReminders,
     // Utility
     today: _today,
   };
