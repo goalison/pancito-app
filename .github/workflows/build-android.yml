@@ -78,19 +78,54 @@ jobs:
           fi
 
       # ── 6b. Patch LocalNotifications to use setAlarmClock ──────────────────
+      # setAlarmClock is the ONLY AlarmManager API that bypasses Doze + App
+      # Standby for alarms more than ~10 min out. All other methods
+      # (set, setExact, setAndAllowWhileIdle, setExactAndAllowWhileIdle) get
+      # deferred until the next maintenance window or app foreground — which
+      # is the "all alarms fire when I open the app" symptom.
       - name: Patch LocalNotifications to use setAlarmClock
         run: |
           patch_lnm() {
             local f="$1"
+            echo "── BEFORE ($f):"
+            grep -nE 'alarmManager\.(set|setExact|setAndAllowWhileIdle|setExactAndAllowWhileIdle|setAlarmClock)\(' "$f" || echo "  (no scheduling calls found)"
+            # Order matters: longest method names FIRST so shorter ones don't false-match the prefix.
             sed -E -i 's/alarmManager\.setExactAndAllowWhileIdle\([^,]+,[[:space:]]*([^,]+),[[:space:]]*([^)]+)\)/alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(\1, null), \2)/g' "$f"
             sed -E -i 's/alarmManager\.setAndAllowWhileIdle\([^,]+,[[:space:]]*([^,]+),[[:space:]]*([^)]+)\)/alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(\1, null), \2)/g' "$f"
             sed -E -i 's/alarmManager\.setExact\([^,]+,[[:space:]]*([^,]+),[[:space:]]*([^)]+)\)/alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(\1, null), \2)/g' "$f"
             sed -E -i 's/alarmManager\.set\(AlarmManager\.[A-Z_]+,[[:space:]]*([^,]+),[[:space:]]*([^)]+)\)/alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(\1, null), \2)/g' "$f"
+            echo "── AFTER ($f):"
+            grep -nE 'alarmManager\.(set|setExact|setAndAllowWhileIdle|setExactAndAllowWhileIdle|setAlarmClock)\(' "$f" || echo "  (no scheduling calls found)"
           }
           LNM_NM=$(find node_modules/@capacitor/local-notifications -name "LocalNotificationManager.java" 2>/dev/null | head -1)
-          if [ -n "$LNM_NM" ]; then patch_lnm "$LNM_NM"; fi
+          if [ -n "$LNM_NM" ]; then echo "Found node_modules copy: $LNM_NM"; patch_lnm "$LNM_NM"; fi
           LNM_AND=$(find android -name "LocalNotificationManager.java" 2>/dev/null | head -1)
-          if [ -n "$LNM_AND" ]; then patch_lnm "$LNM_AND"; fi
+          if [ -n "$LNM_AND" ]; then echo "Found android copy: $LNM_AND"; patch_lnm "$LNM_AND"; fi
+
+          # ── HARD ASSERTION ──────────────────────────────────────────────────
+          # At least one file must contain setAlarmClock AND must NOT contain any
+          # deferred-by-Doze method. If either fails, the patch did not match the
+          # source (e.g. Capacitor changed the formatting). Fail the build loudly
+          # instead of shipping an APK that LOOKS patched but isn't.
+          PATCHED_ANY=0
+          for f in "$LNM_NM" "$LNM_AND"; do
+            [ -z "$f" ] && continue
+            if grep -qE 'alarmManager\.(set|setExact|setAndAllowWhileIdle|setExactAndAllowWhileIdle)\(' "$f"; then
+              echo "ERROR: $f still contains a Doze-deferrable scheduling call:"
+              grep -nE 'alarmManager\.(set|setExact|setAndAllowWhileIdle|setExactAndAllowWhileIdle)\(' "$f"
+              exit 1
+            fi
+            if ! grep -q 'alarmManager\.setAlarmClock(' "$f"; then
+              echo "ERROR: $f has no setAlarmClock() — patch did not apply"
+              exit 1
+            fi
+            echo "✓ $f: only setAlarmClock remains"
+            PATCHED_ANY=1
+          done
+          if [ "$PATCHED_ANY" = "0" ]; then
+            echo "ERROR: no LocalNotificationManager.java found anywhere — patch step ran against nothing"
+            exit 1
+          fi
 
       # ── 6c. Add alarm permissions to AndroidManifest ───────────────────────
       - name: Add alarm permissions to AndroidManifest
