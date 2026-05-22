@@ -117,6 +117,67 @@ jobs:
           print('✓ Permissions injected')
           PYEOF
 
+      # ── 6d. Patch MainActivity to request battery-optimization exemption ───
+      - name: Patch MainActivity to request battery-optimization exemption
+        run: |
+          python3 << 'PYEOF'
+          import os, glob
+          # Find MainActivity.java anywhere under android/
+          matches = glob.glob('android/**/MainActivity.java', recursive=True)
+          if not matches:
+              print('ERROR: MainActivity.java not found under android/')
+              raise SystemExit(1)
+          path = matches[0]
+          print('Patching:', path)
+          with open(path, 'r') as f:
+              content = f.read()
+
+          if 'requestBatteryOptimizationExemption' in content:
+              print('✓ Already patched — skipping')
+              raise SystemExit(0)
+
+          package_line = content.split('\n', 1)[0]  # keep the existing "package ..." line
+          new_content = package_line + """
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.PowerManager;
+import android.provider.Settings;
+
+import com.getcapacitor.BridgeActivity;
+
+public class MainActivity extends BridgeActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestBatteryOptimizationExemption();
+    }
+
+    private void requestBatteryOptimizationExemption() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                String packageName = getPackageName();
+                PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+                if (pm != null && !pm.isIgnoringBatteryOptimizations(packageName)) {
+                    Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                    intent.setData(Uri.parse("package:" + packageName));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            }
+        } catch (Exception e) {
+            // best-effort — never crash the app over this
+        }
+    }
+}
+"""
+          with open(path, 'w') as f:
+              f.write(new_content)
+          print('✓ MainActivity patched to request battery-optimization exemption on launch')
+          PYEOF
+
       # ── 7. Decode release keystore from secret ──────────────────────────────
       - name: Decode release keystore
         run: |
