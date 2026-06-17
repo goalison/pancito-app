@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You're holding something made with love — Pancito y Más</title>
+  <meta name="description" content="This sourdough was baked by Alison from Pancito y Más, a Chilean-American sourdough brand based in San Diego.">
+
+  <!-- Brand Fonts: Fraunces · Noto Serif · Plus Jakarta Sans · Caveat · JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;1,500&family=Noto+Serif:ital,wght@0,400;0,700;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;700;800&family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── Brand Color Tokens ─── */
+    :root {
+      /* Core */
+      --cream:       #f4ead4;  /* Primary background / paper */
+      --terracotta:  #9c4624;  /* Brand primary, fills, links */
+      --cocoa:       #3d1d0c;  /* Headings, deep contrast */
+      --ink:         #1d1c16;  /* Body text */
+      /* Accent */
+      --wheat:       #c89a4a;  /* Rules, sprigs, detail */
+      --amber:       #ffb967;  /* Highlight on dark */
+      --rose:        #c4576a;  /* Secondary accent */
+      --terra-deep:  #7a3818;  /* Terracotta shade */
+      /* Neutral / Tint */
+      --cream-2:     #ece4d3;  /* Alt background */
+      --cream-3:     #fbf3df;  /* Card fill */
+      --parchment:   #f7eed7;  /* Icon background */
+      --muted:       #7a6651;  /* Captions / secondary text */
+      --ink-soft:    #3d2a18;  /* Body emphasis */
+      --cocoa-2:     #2a1408;  /* Deepest shade */
+
+      /* Brand Font Stacks */
+      --font-logo:    'Fraunces', serif;           /* Logo wordmark only */
+      --font-heading: 'Noto Serif', serif;          /* Display / Headlines */
+      --font-body:    'Plus Jakarta Sans', system-ui, sans-serif; /* Body / UI */
+      --font-accent:  'Caveat', cursive;            /* Handwritten accent */
+      --font-label:   'JetBrains Mono', monospace;  /* Labels / Eyebrows */
+
+      /* Spacing scale (base 8) */
+      --sp-4:   4px;
+      --sp-8:   8px;
+      --sp-12:  12px;
+      --sp-16:  16px;
+      --sp-24:  24px;
+      --sp-32:  32px;
+    }
+
+    /* ─── Reset ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--ink);
+      background-color: var(--cream);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── Layout ─── */
+    .container {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 0 var(--sp-24);
+    }
+
+    /* ─── Eyebrow Labels (JetBrains Mono, uppercase, +tracking) ─── */
+    .eyebrow {
+      font-family: var(--font-label);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    /* ─── Wheat Rule Divider ─── */
+    .wheat-rule {
+      border: none;
+      border-top: 1px solid rgba(200, 154, 74, 0.35);
+      margin: 0;
+    }
+
+    /* ─── Buttons — pill / 999px radius per Brand Book ─── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-8);
+      padding: 15px 32px;
+      border-radius: 999px;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 15px;
+      line-height: 1;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.15s ease;
+      text-align: center;
+      border: none;
+    }
+    .btn:hover  { opacity: 0.88; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); opacity: 1; }
+
+    /* Primary: Terracotta fill, Cream text */
+    .btn-primary {
+      background-color: var(--terracotta);
+      color: var(--cream);
+    }
+    /* Secondary: Terracotta 2px outline */
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--terracotta);
+      border: 2px solid var(--terracotta);
+    }
+    /* Cocoa: Cocoa fill, Amber text */
+    .btn-cocoa {
+      background-color: var(--cocoa);
+      color: var(--amber);
+    }
+    /* Cream: for use on dark/terracotta backgrounds */
+    .btn-cream {
+      background-color: var(--cream);
+      color: var(--terracotta);
+    }
+
+    /* ─── Badges / Pills ─── */
+    .badge {
+      display: inline-block;
+      padding: var(--sp-4) var(--sp-16);
+      border-radius: 999px;
+      font-family: var(--font-label);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .badge-cocoa { background-color: var(--cocoa); color: var(--amber); }
+    .badge-wheat { background-color: rgba(200,154,74,.18); color: var(--cocoa); }
+
+
+    /* ═══════════════════════════════════════════
+       HERO  — Terracotta + Cream (per Brand Book
+       "hero panels, callouts" pairing)
+    ═══════════════════════════════════════════ */
+    #hero {
+      background-color: var(--terracotta);
+      color: var(--cream);
+      padding: 64px var(--sp-24) 56px;
+      text-align: center;
+    }
+    #hero .eyebrow {
+      color: var(--amber);
+      margin-bottom: var(--sp-16);
+    }
+    #hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(26px, 7.5vw, 40px);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      color: var(--cream);
+      margin-bottom: var(--sp-16);
+    }
+    #hero p.subtext {
+      font-size: 16px;
+      line-height: 1.7;
+      color: rgba(244, 234, 212, 0.87);
+      max-width: 520px;
+      margin: 0 auto var(--sp-32);
+    }
+    #hero .cta-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--sp-16);
+    }
+    /* Accent handwritten text for secondary CTA */
+    #hero .tag-cta {
+      font-family: var(--font-accent);
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--amber);
+      line-height: 1.3;
+    }
+
+
+    /* ═══════════════════════════════════════════
+       TAG CHALLENGE  — Cream background
+    ═══════════════════════════════════════════ */
+    #tag-challenge {
+      background-color: var(--cream);
+      padding: 56px var(--sp-24);
+      text-align: center;
+    }
+    #tag-challenge .eyebrow {
+      color: var(--terracotta);
+      margin-bottom: var(--sp-12);
+    }
+    #tag-challenge h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(22px, 6vw, 34px);
+      font-weight: 700;
+      color: var(--cocoa);
+      letter-spacing: -0.01em;
+      margin-bottom: var(--sp-16);
+    }
+    #tag-challenge p.body-copy {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--ink);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    #tag-challenge p.hashtag {
+      font-family: var(--font-label);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-top: var(--sp-16);
+    }
+    #tag-challenge .tag-card {
+      margin-top: var(--sp-32);
+      background-color: var(--cream-3);
+      border: 1px solid rgba(200,154,74,.35);
+      border-radius: 10px; /* cards: 10px per Brand Book */
+      padding: var(--sp-24);
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #tag-challenge .tag-card .step {
+      font-family: var(--font-label);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: var(--sp-8);
+    }
+    #tag-challenge .tag-card .step-text {
+      font-size: 15px;
+      color: var(--ink);
+    }
+    /* Numbered steps: terracotta circles per Brand Book */
+    #tag-challenge .steps-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-12);
+      text-align: left;
+      max-width: 400px;
+      margin: var(--sp-24) auto 0;
+    }
+    #tag-challenge .steps-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--sp-12);
+      font-size: 15px;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    #tag-challenge .step-num {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background-color: var(--terracotta);
+      color: var(--cream);
+      font-family: var(--font-label);
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+
+    /* ═══════════════════════════════════════════
+       EBOOK  — Cream-3 card background
+    ═══════════════════════════════════════════ */
+    #ebook {
+      background-color: var(--cream-3);
+      padding: 56px var(--sp-24);
+      text-align: center;
+    }
+    #ebook .eyebrow {
+      color: var(--wheat);
+      margin-bottom: var(--sp-12);
+    }
+    #ebook h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(22px, 5.5vw, 32px);
+      font-weight: 700;
+      color: var(--cocoa);
+      letter-spacing: -0.01em;
+      margin-bottom: var(--sp-16);
+    }
+    #ebook p.body-copy {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--ink);
+      max-width: 480px;
+      margin: 0 auto var(--sp-24);
+    }
+    #ebook .badge-row {
+      margin-top: var(--sp-16);
+    }
+    /* Callout: "Good to know" style per Brand Book */
+    #ebook .bilingual-note {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-8);
+      background-color: rgba(200,154,74,.12);
+      border-left: 3px solid var(--wheat);
+      border-radius: 0 8px 8px 0;
+      padding: var(--sp-8) var(--sp-16);
+      font-size: 13px;
+      color: var(--cocoa);
+      font-weight: 500;
+      margin-top: var(--sp-16);
+    }
+
+
+    /* ═══════════════════════════════════════════
+       APP  — Cocoa + Amber (dark panel pairing)
+    ═══════════════════════════════════════════ */
+    #app {
+      background-color: var(--cocoa);
+      color: var(--cream);
+      padding: 56px var(--sp-24);
+      text-align: center;
+    }
+    #app .eyebrow {
+      color: var(--amber);
+      margin-bottom: var(--sp-12);
+    }
+    #app h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(22px, 5.5vw, 32px);
+      font-weight: 700;
+      color: var(--cream);
+      letter-spacing: -0.01em;
+      margin-bottom: var(--sp-16);
+    }
+    #app p.body-copy {
+      font-size: 16px;
+      line-height: 1.7;
+      color: rgba(244, 234, 212, 0.85);
+      max-width: 480px;
+      margin: 0 auto var(--sp-24);
+    }
+    #app .feature-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-8);
+      justify-content: center;
+      margin-bottom: var(--sp-24);
+    }
+    #app .feature-pills .pill {
+      font-family: var(--font-label);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background-color: rgba(255,185,103,.12);
+      color: var(--amber);
+      border: 1px solid rgba(255,185,103,.3);
+      border-radius: 999px;
+      padding: 5px 12px;
+    }
+
+
+    /* ═══════════════════════════════════════════
+       KIT  — Cream-2 alt background
+    ═══════════════════════════════════════════ */
+    #kit {
+      background-color: var(--cream-2);
+      padding: 56px var(--sp-24);
+      text-align: center;
+    }
+    #kit .eyebrow {
+      color: var(--terracotta);
+      margin-bottom: var(--sp-12);
+    }
+    #kit h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(22px, 5.5vw, 32px);
+      font-weight: 700;
+      color: var(--cocoa);
+      letter-spacing: -0.01em;
+      margin-bottom: var(--sp-16);
+    }
+    #kit p.body-copy {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--ink);
+      max-width: 480px;
+      margin: 0 auto var(--sp-24);
+    }
+    #kit .badge-row {
+      margin-top: var(--sp-16);
+    }
+    #kit .kit-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-8);
+      justify-content: center;
+      margin-bottom: var(--sp-24);
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #kit .kit-item {
+      font-family: var(--font-label);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background-color: var(--parchment);
+      color: var(--cocoa);
+      border: 1px solid rgba(200,154,74,.4);
+      border-radius: 6px;
+      padding: 6px 12px;
+    }
+
+
+    /* ═══════════════════════════════════════════
+       FOOTER  — Cocoa + Amber pairing (Brand Book:
+       "pills, tags, footers")
+    ═══════════════════════════════════════════ */
+    footer {
+      background-color: var(--cocoa);
+      padding: 48px var(--sp-24) 40px;
+      text-align: center;
+    }
+    footer .made-with {
+      font-family: var(--font-accent);
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--amber);
+      line-height: 1.4;
+      margin-bottom: var(--sp-16);
+    }
+    footer .ig-link {
+      display: inline-block;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--cream);
+      padding: 10px 24px;
+      border-radius: 999px;
+      border: 1px solid rgba(244,234,212,.25);
+      margin-bottom: var(--sp-16);
+      transition: background-color 0.2s;
+    }
+    footer .ig-link:hover {
+      background-color: rgba(244,234,212,.08);
+    }
+    footer .site-url {
+      font-family: var(--font-label);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-top: var(--sp-8);
+    }
+    footer .signoff {
+      font-family: var(--font-accent);
+      font-size: 16px;
+      font-weight: 500;
+      color: rgba(255,185,103,.55);
+      margin-top: var(--sp-24);
+      font-style: italic;
+    }
+
+
+    /* ═══════════════════════════════════════════
+       STICKY INSTAGRAM BUTTON — mobile only
+    ═══════════════════════════════════════════ */
+    .sticky-ig {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      white-space: nowrap;
+      box-shadow: 0 8px 22px rgba(29, 28, 22, 0.28);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE — mobile-first
+    ═══════════════════════════════════════════ */
+    @media (max-width: 600px) {
+      .sticky-ig { display: inline-flex; }
+      /* Push footer content above the sticky button */
+      footer { padding-bottom: 84px; }
+    }
+
+    @media (max-width: 390px) {
+      #hero h1    { font-size: 24px; }
+      #hero p.subtext { font-size: 15px; }
+      .btn        { font-size: 14px; padding: 13px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+
+  <!-- ═══════════════════════════════════════
+       SECTION 1 · HERO
+       Brand pairing: Terracotta + Cream
+  ═══════════════════════════════════════ -->
+  <section id="hero">
+    <div class="container">
+      <p class="eyebrow">Pancito y Más · San Diego</p>
+
+      <h1>You're holding something<br>made with love 🍞</h1>
+
+      <p class="subtext">
+        This sourdough was baked by Alison from Pancito y Más —
+        a Chilean-American sourdough brand based in San Diego.
+      </p>
+
+      <div class="cta-stack">
+        <a
+          href="https://instagram.com/pancitoymas_kit"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-cream"
+        >
+          Follow us on Instagram
+        </a>
+
+        <span class="tag-cta">Tag us in your photo @pancitoymas_kit</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="wheat-rule">
+
+
+  <!-- ═══════════════════════════════════════
+       SECTION 2 · TAG CHALLENGE
+       Background: Cream
+  ═══════════════════════════════════════ -->
+  <section id="tag-challenge">
+    <div class="container">
+      <p class="eyebrow">Tag Challenge</p>
+      <h2>Show us your loaf! 📸</h2>
+
+      <p class="body-copy">
+        Take a photo with your bread, post it on Instagram,
+        and tag @pancitoymas_kit. We repost every week!
+      </p>
+
+      <ul class="steps-list">
+        <li>
+          <span class="step-num">1</span>
+          <span>Bake (or slice!) your Pancito y Más sourdough</span>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <span>Post your photo on Instagram</span>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <span>Tag <strong>@pancitoymas_kit</strong> — we'll repost weekly picks</span>
+        </li>
+      </ul>
+
+      <p class="hashtag">#PancitoyMas_Kit</p>
+    </div>
+  </section>
+
+  <hr class="wheat-rule">
+
+
+  <!-- ═══════════════════════════════════════
+       SECTION 3 · EBOOK
+       Background: Cream-3 (card fill)
+  ═══════════════════════════════════════ -->
+  <section id="ebook">
+    <div class="container">
+      <p class="eyebrow">Free Guide</p>
+      <h2>Learn to bake your own sourdough</h2>
+
+      <p class="body-copy">
+        Our bilingual sourdough guide walks you through
+        everything — from feeding your starter to scoring your first loaf.
+        Available in English and Spanish.
+      </p>
+
+      <a
+        href="http://eepurl.com/RywppU9r1f"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-primary"
+      >
+        Get the Free Guide
+      </a>
+
+      <div class="badge-row">
+        <span class="bilingual-note">
+          📖 &nbsp;Bilingual · English &amp; Español
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="wheat-rule">
+
+
+  <!-- ═══════════════════════════════════════
+       SECTION 4 · APP
+       Brand pairing: Cocoa + Amber (dark panel)
+  ═══════════════════════════════════════ -->
+  <section id="app">
+    <div class="container">
+      <p class="eyebrow">Free App</p>
+      <h2>Track your bakes with our free app</h2>
+
+      <p class="body-copy">
+        The Pancito y Más Baking Log app helps you track
+        fermentation times, log your bakes, and earn achievements.
+      </p>
+
+      <div class="feature-pills">
+        <span class="pill">Fermentation Timers</span>
+        <span class="pill">Bake Archive</span>
+        <span class="pill">Starter Companion</span>
+        <span class="pill">Works Offline</span>
+      </div>
+
+      <a
+        href="https://play.google.com/store/apps/details?id=com.pancitoymas.sourdough&pcampaignid=web_share"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-primary"
+      >
+        Download on Google Play
+      </a>
+    </div>
+  </section>
+
+  <hr class="wheat-rule">
+
+
+  <!-- ═══════════════════════════════════════
+       SECTION 5 · KIT
+       Background: Cream-2 (alt background)
+  ═══════════════════════════════════════ -->
+  <section id="kit">
+    <div class="container">
+      <p class="eyebrow">Starter Kit</p>
+      <h2>Everything you need to start baking</h2>
+
+      <p class="body-copy">
+        Our sourdough starter kit includes a banneton,
+        bench scraper, dough whisk, scoring lame, glass jar, digital scale,
+        and more — everything to bake your first loaf with confidence.
+      </p>
+
+      <div class="kit-items" aria-label="What's in the kit">
+        <span class="kit-item">Banneton</span>
+        <span class="kit-item">Bench Scraper</span>
+        <span class="kit-item">Dough Whisk</span>
+        <span class="kit-item">Scoring Lame</span>
+        <span class="kit-item">37oz Glass Jar</span>
+        <span class="kit-item">Digital Scale</span>
+        <span class="kit-item">Linen Liner</span>
+        <span class="kit-item">Step Guide</span>
+      </div>
+
+      <a
+        href="https://www.amazon.com/dp/B0FZWXPXF6?maas=maas_adg_9469FAF870BAA9D072E90EE503019C38_afap_abs&ref_=aa_maas&tag=maas"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-primary"
+      >
+        Shop the Kit on Amazon
+      </a>
+
+      <div class="badge-row">
+        <span class="badge badge-cocoa">Amazon's Choice ⭐ 4.7</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════
+       SECTION 6 · FOOTER
+       Brand pairing: Cocoa + Amber
+  ═══════════════════════════════════════ -->
+  <footer>
+    <div class="container">
+      <p class="made-with">Made with 💛 in San Diego by Pancito y Más</p>
+
+      <a
+        href="https://instagram.com/pancitoymas_kit"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="ig-link"
+      >
+        @pancitoymas_kit on Instagram
+      </a>
+
+      <p class="site-url">pancitoymas.com</p>
+
+      <p class="signoff">Made with flour, water, salt &amp; a little code.</p>
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════════════════════════════
+       STICKY INSTAGRAM BUTTON — visible on mobile only
+  ═══════════════════════════════════════ -->
+  <a
+    href="https://instagram.com/pancitoymas_kit"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="btn btn-primary sticky-ig"
+    aria-label="Follow Pancito y Más on Instagram"
+  >
+    Follow on Instagram
+  </a>
+
+
+</body>
+</html>
