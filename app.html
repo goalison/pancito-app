@@ -1324,9 +1324,15 @@
     var hasPendingFlag = localStorage.getItem('pym_alarm_pending') === '1' ||
                          localStorage.getItem('pym_pending_alarm') === '1';
     if (!hasPendingFlag && !hasAnyExpiredTimer()) return false;
-    // Normalise to the single key the audio machinery reads
-    localStorage.setItem('pym_alarm_pending', '1');
-    localStorage.removeItem('pym_pending_alarm');
+    if (IS_NATIVE) {
+      // Native: the notification already rang — clear both flags so nothing replays.
+      localStorage.removeItem('pym_alarm_pending');
+      localStorage.removeItem('pym_pending_alarm');
+    } else {
+      // Normalise to the single key the audio machinery reads
+      localStorage.setItem('pym_alarm_pending', '1');
+      localStorage.removeItem('pym_pending_alarm');
+    }
     showView('view-bake');
     // Give initBakeView() a moment to run, then play alarm audio (web/PWA only — native uses Bake Alarms notification)
     if (!IS_NATIVE) setTimeout(function() { if (typeof tryPlayPendingAlarm === 'function') tryPlayPendingAlarm(); }, 800);
@@ -1830,10 +1836,20 @@
     } catch(e) {}
   }
 
+  // Only ring once per expiry: multiple code paths (tick intervals, visibilitychange,
+  // restore-on-open, pending-alarm taps) can all request the alarm for the same event.
+  let _lastAlarmPlayedTs = 0;
   function playAlarm() {
+    // Native: every timer schedules a Bake Alarms notification (sendAlarm), and that
+    // notification is the alarm — it sounds in foreground, background, and locked.
+    // Playing WebView audio on top of it makes the alarm go off twice.
+    if (IS_NATIVE) return;
     try {
       const ctx = getAudioCtx();
       const doAlarm = function() {
+        var _now = Date.now();
+        if (_now - _lastAlarmPlayedTs < 5000) return;
+        _lastAlarmPlayedTs = _now;
         const times = [0, 0.28, 0.56, 1.1, 1.38, 1.66, 2.2, 2.48, 2.76];
         times.forEach(function(t) {
           const o = ctx.createOscillator(), g = ctx.createGain();
@@ -1862,11 +1878,15 @@
   let _alarmResumePending = false;
 
   function setPendingAlarm() {
+    // Native: the scheduled notification already handled the alarm — queuing
+    // WebView audio here would make it ring again on the next tap.
+    if (IS_NATIVE) return;
     localStorage.setItem(ALARM_PENDING_KEY, '1');
-    if (!IS_NATIVE) setTimeout(function() { tryPlayPendingAlarm(); }, 1000);
+    setTimeout(function() { tryPlayPendingAlarm(); }, 1000);
   }
 
   function tryPlayPendingAlarm() {
+    if (IS_NATIVE) { localStorage.removeItem(ALARM_PENDING_KEY); return; }
     if (!localStorage.getItem(ALARM_PENDING_KEY)) return;
     if (_alarmResumePending) return;
     try {
@@ -1884,8 +1904,11 @@
     } catch(e) { localStorage.removeItem(ALARM_PENDING_KEY); }
   }
 
-  document.addEventListener('touchstart', tryPlayPendingAlarm, { passive: true });
-  document.addEventListener('click', tryPlayPendingAlarm);
+  // Web/PWA only — on native the notification is the alarm, so taps must not replay it
+  if (!IS_NATIVE) {
+    document.addEventListener('touchstart', tryPlayPendingAlarm, { passive: true });
+    document.addEventListener('click', tryPlayPendingAlarm);
+  }
 
   // ── Static timer (preshape, ambient, bake phases) ────────
   const STATIC_TIMER_KEY = 'pym_static_timer';

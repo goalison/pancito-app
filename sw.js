@@ -67,19 +67,30 @@ function scheduleTimeout(id, label, endTime) {
 
 // ── On SW startup, replay any alarms stored in IndexedDB ─────────────────────
 
+// Guard against concurrent runs: this is called from every fetch event, so a page
+// load triggers many overlapping calls — without the guard an expired alarm can be
+// fired several times before its delete commits.
+let _checkingAlarms = false;
 async function checkStoredAlarms() {
-  let alarms;
-  try { alarms = await getAllAlarms(); } catch (e) { return; }
-  const now = Date.now();
-  for (const alarm of alarms) {
-    if (alarm.endTime <= now) {
-      // Alarm already passed while SW was dead — fire it now
-      await fireNotification(alarm.id, alarm.label).catch(() => {});
-      await deleteAlarm(alarm.id).catch(() => {});
-    } else {
-      // Still in the future — reschedule the timeout
-      scheduleTimeout(alarm.id, alarm.label, alarm.endTime);
+  if (_checkingAlarms) return;
+  _checkingAlarms = true;
+  try {
+    let alarms;
+    try { alarms = await getAllAlarms(); } catch (e) { return; }
+    const now = Date.now();
+    for (const alarm of alarms) {
+      if (alarm.endTime <= now) {
+        // Alarm already passed while SW was dead — delete first so a failure
+        // can't replay it, then fire it once
+        await deleteAlarm(alarm.id).catch(() => {});
+        await fireNotification(alarm.id, alarm.label).catch(() => {});
+      } else {
+        // Still in the future — reschedule the timeout
+        scheduleTimeout(alarm.id, alarm.label, alarm.endTime);
+      }
     }
+  } finally {
+    _checkingAlarms = false;
   }
 }
 
