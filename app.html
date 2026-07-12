@@ -224,7 +224,7 @@
 </script>
 
 <!-- ── Welcome screen (first launch only) ──────────────────────────────── -->
-<div id="pym-welcome-overlay" class="hidden" style="position:fixed;inset:0;z-index:99999;background:#fef9ef;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;font-family:'Plus Jakarta Sans',sans-serif;">
+<div id="pym-welcome-overlay" style="display:none;position:fixed;inset:0;z-index:99999;background:#fef9ef;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;font-family:'Plus Jakarta Sans',sans-serif;">
   <img alt="Pancito y Más Logo" src="logo.png" style="width:88px;height:88px;object-fit:contain;margin-bottom:1.5rem;"/>
   <h1 style="font-family:'Noto Serif',serif;font-style:italic;font-weight:700;font-size:1.75rem;color:#875305;margin-bottom:0.75rem;" data-i18n="welcome.title">Pancito y Más</h1>
   <p style="font-size:1rem;color:#514538;max-width:340px;line-height:1.5;margin-bottom:2rem;" data-i18n="welcome.tagline">Your companion for baking your first sourdough.</p>
@@ -1367,7 +1367,7 @@
     // Reveal the welcome screen for brand-new users (decided by the gate script in <head>)
     if (window._pymShowWelcome) {
       var welcomeOverlay = document.getElementById('pym-welcome-overlay');
-      if (welcomeOverlay) { welcomeOverlay.classList.remove('hidden'); _updateWelcomeLangUI(); }
+      if (welcomeOverlay) { welcomeOverlay.style.display = 'flex'; _updateWelcomeLangUI(); }
     }
   });
 
@@ -1381,7 +1381,7 @@
   function _pymStartApp() {
     try { localStorage.setItem('pym_welcome_seen', 'true'); } catch(e) {}
     var overlay = document.getElementById('pym-welcome-overlay');
-    if (overlay) overlay.classList.add('hidden');
+    if (overlay) overlay.style.display = 'none';
     showView('view-dashboard');
   }
 
