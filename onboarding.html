@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>Pancito y Más — Your Journey Begins</title>
+<title>Pancito y Más — Sourdough Bootcamp</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0..1&display=swap" rel="stylesheet"/>
@@ -1850,7 +1850,7 @@ function initEquipment() {
       <div class="flex-1 min-w-0">
         <div class="font-bold text-sm text-[#1d1c16]">${e.name}</div>
         <div class="text-xs text-[#514538] mt-0.5">${e.desc}</div>
-        ${e.guide ? `<a href="${e.guide}" class="text-[10px] text-[#C4863A] font-bold uppercase tracking-wider mt-1 block" onclick="event.stopPropagation()">Learn more →</a>` : ''}
+        ${e.guide ? `<a href="${e.guide}" class="text-[10px] text-[#C4863A] font-bold uppercase tracking-wider mt-1 block" onclick="event.stopPropagation();event.preventDefault();openEquipGuide('${e.guide}','${e.name.replace(/'/g,"\\'")}')">Learn more →</a>` : ''}
       </div>
       <div class="flex flex-col gap-1.5 shrink-0">
         <button class="equip-btn have text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all" onclick="toggleEquip('${e.id}','have',this.closest('.flex'))">✓ Have it</button>
@@ -1858,6 +1858,27 @@ function initEquipment() {
       </div>
     </div>
   `).join('');
+}
+
+// Equipment "Learn more" opens the guide in an in-flow modal instead of
+// navigating away — leaving onboarding.html previously ejected the user
+// from the whole Bootcamp flow with no way back except the OS back button.
+function openEquipGuide(url, title) {
+  const overlay = document.createElement('div');
+  overlay.id = 'equip-guide-modal';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(44,24,16,0.6);display:flex;align-items:flex-end;justify-content:center;';
+  overlay.innerHTML = `
+    <div style="background:#fef9ef;width:100%;max-width:640px;height:88vh;border-radius:24px 24px 0 0;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 -10px 40px rgba(0,0,0,0.25);">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(214,195,179,0.4);flex-shrink:0;">
+        <span style="font-weight:800;font-size:13px;color:#875305;text-transform:uppercase;letter-spacing:.08em;">${title}</span>
+        <button onclick="document.getElementById('equip-guide-modal').remove()" style="background:none;border:none;cursor:pointer;padding:4px;">
+          <span class="material-symbols-outlined" style="color:#875305;">close</span>
+        </button>
+      </div>
+      <iframe src="${url}" style="flex:1;border:none;width:100%;"></iframe>
+    </div>`;
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
 }
 
 let _kitBannerShown = false;
@@ -3461,33 +3482,69 @@ function launchParticles() {
   }
 }
 
-// ── Init: check if onboarding is already complete ─────────────────────────
+// ── Init: restore exactly where the user left off ──────────────────────────
+// Sourdough Bootcamp is now an optional, replayable game reached from the
+// Dashboard's Bootcamp card, not a forced gate — so "already complete" no
+// longer redirects away. It resumes from Chapter 1 instead (a replay), while
+// mid-flow progress resumes at the exact saved screen.
 (function init() {
-  const ob = JSON.parse(storage.getItem('pym_onboarding')||'null');
-  if (ob && ob.complete) {
-    window.location.href = 'app.html';
-    return;
-  }
-  // Restore starter name if they left mid-onboarding
-  if (ob && ob.starterName) {
+  const ob = JSON.parse(storage.getItem('pym_onboarding')||'{}');
+
+  // Restore starter name if we have one (mid-flow or fully complete)
+  if (ob.starterName) {
     starterName = ob.starterName;
     document.querySelectorAll('#c4StarterName,#c4StarterName2').forEach(el => el.textContent = starterName);
     document.querySelectorAll('#feedBtnName,#c4JarLabel,#c4CelebName,#c4CelebName2,#starterJarLabel').forEach(el => el.textContent = starterName);
     document.getElementById('c1s3Headline').textContent = starterName + t('onboarding.c1s3.isAlive');
-    // They already answered the starter question — skip c0s0 and c0s1
-    currentScreen = 'c1s1';
-    document.getElementById('c0s0').classList.add('hidden');
-    document.getElementById('c1s1').classList.remove('hidden');
     if (ob.creatingStarter) creatingStarter = true;
-  } else if (ob && ob.currentScreen && ob.currentScreen !== 'c0s0') {
-    // User already navigated past the language picker in a previous session — restore to c0s1.
-    // We use pym_onboarding.currentScreen (set by goTo) rather than pym_lang so that an
-    // existing pym_lang='en' from a prior install doesn't silently bypass the picker.
-    currentScreen = 'c0s1';
-    document.getElementById('c0s0').classList.add('hidden');
-    document.getElementById('c0s1').classList.remove('hidden');
   }
-  // else: brand new user (or someone who never made it past c0s0) starts on c0s0
+
+  // Screens whose interactive widgets need re-initializing when landed on
+  // directly (mirrors the re-init list goBack() already uses, plus the two
+  // forward-only screens — c3s1's equipment list and c4game's feeding game —
+  // that goBack() doesn't cover).
+  const RESUME_INIT = {
+    c1game:  () => initQuiz('c1'),
+    c5game:  initMixGame,
+    c6game:  initFoldGame,
+    c2quiz:  () => initQuiz('c2'),
+    c2game:  initBulkGame,
+    c7game:  initTempGame,
+    c8game:  initPreshapeGame,
+    c9game:  initShapeGame,
+    c10game: initProofGame,
+    c11game: initBakeGame,
+    c3s1:    initEquipment,
+    c3game:  () => initQuiz('c3'),
+    c4game:  initFeedingGame,
+  };
+
+  let resumeId = null;
+  if (!ob.complete && ob.currentScreen && SCREENS_ORDER.indexOf(ob.currentScreen) > 0) {
+    // Mid-flow — resume at the exact screen saved by the last goTo() call.
+    resumeId = ob.currentScreen;
+  } else if (ob.starterName) {
+    // Fully complete (replay), or a legacy save without currentScreen —
+    // start the game fresh from Chapter 1 rather than dumping them back
+    // on whatever screen they finished on.
+    resumeId = 'c1s1';
+  } else {
+    // Brand new user. Language is now handled by the app's welcome screen
+    // (Phase 2) — auto-skip this game's own language picker (c0s0)
+    // whenever a language is already known.
+    let langKnown = false;
+    try { langKnown = !!localStorage.getItem('pym_lang'); } catch(_) {}
+    if (langKnown) resumeId = 'c0s1';
+  }
+
+  if (resumeId) {
+    document.getElementById('c0s0').classList.add('hidden');
+    document.getElementById(resumeId).classList.remove('hidden');
+    currentScreen = resumeId;
+    if (RESUME_INIT[resumeId]) { try { RESUME_INIT[resumeId](); } catch(_) {} }
+  }
+  // else: brand new user with no known language (rare/legacy direct-file
+  // open) starts on c0s0, same as before.
   updateNav();
 })();
 </script>

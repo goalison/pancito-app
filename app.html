@@ -207,14 +207,37 @@
 <body class="bg-[#fef9ef] text-on-surface font-body">
 
 <script>
-  // Onboarding gate
+  // First-run gate: decide whether to show the one-time welcome screen.
+  // The Sourdough Bootcamp game (onboarding.html) is no longer a forced entry
+  // point — it's reachable any time from the Dashboard's Bootcamp card.
+  window._pymShowWelcome = false;
   (function() {
     try {
       const ob = JSON.parse(localStorage.getItem('pym_onboarding') || '{}');
-      if (!ob.complete) { window.location.replace('onboarding.html'); }
+      const hasLogs = (function() {
+        try { return JSON.parse(localStorage.getItem('pym_logs') || '[]').length > 0; } catch(_) { return false; }
+      })();
+      const seenWelcome = localStorage.getItem('pym_welcome_seen') === 'true';
+      window._pymShowWelcome = !ob.complete && !hasLogs && !seenWelcome;
     } catch(_) {}
   })();
 </script>
+
+<!-- ── Welcome screen (first launch only) ──────────────────────────────── -->
+<div id="pym-welcome-overlay" class="hidden" style="position:fixed;inset:0;z-index:99999;background:#fef9ef;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;font-family:'Plus Jakarta Sans',sans-serif;">
+  <img alt="Pancito y Más Logo" src="logo.png" style="width:88px;height:88px;object-fit:contain;margin-bottom:1.5rem;"/>
+  <h1 style="font-family:'Noto Serif',serif;font-style:italic;font-weight:700;font-size:1.75rem;color:#875305;margin-bottom:0.75rem;" data-i18n="welcome.title">Pancito y Más</h1>
+  <p style="font-size:1rem;color:#514538;max-width:340px;line-height:1.5;margin-bottom:2rem;" data-i18n="welcome.tagline">Your companion for baking your first sourdough.</p>
+  <div style="display:inline-flex;border:1.5px solid #d6c3b3;border-radius:999px;overflow:hidden;margin-bottom:2.5rem;">
+    <button class="pym-lang-btn" data-lang="es" onclick="window.PymI18n.setLang('es');_updateWelcomeLangUI();" style="padding:10px 20px;font-weight:800;font-size:13px;border:none;cursor:pointer;font-family:inherit;">
+      <span class="welcome-lang-check" data-lang="es"></span><span data-i18n="welcome.langEs">Español</span>
+    </button>
+    <button class="pym-lang-btn" data-lang="en" onclick="window.PymI18n.setLang('en');_updateWelcomeLangUI();" style="padding:10px 20px;font-weight:800;font-size:13px;border:none;cursor:pointer;font-family:inherit;">
+      <span class="welcome-lang-check" data-lang="en"></span><span data-i18n="welcome.langEn">English</span>
+    </button>
+  </div>
+  <button onclick="_pymStartApp()" style="width:100%;max-width:300px;padding:16px;background:#875305;color:#fff;border-radius:16px;font-weight:700;font-size:16px;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(135,83,5,0.3);" data-i18n="welcome.start">Start</button>
+</div>
 
 <!-- TopAppBar -->
 <header class="bg-[#fef9ef] sticky top-0 z-50 border-b border-[#d6c3b3]/20" style="padding-top: env(safe-area-inset-top)">
@@ -425,6 +448,25 @@
   </div>
 </section>
 
+<!-- ── Bootcamp + Hydration Calculator cards ────────────────────────────── -->
+<section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <button id="bootcamp-card" onclick="_pymOpenBootcamp()" class="text-left bg-surface-container-low rounded-2xl p-5 hover:bg-surface-container transition-all active:scale-[0.98]">
+    <div class="flex items-center gap-2 mb-1.5">
+      <span class="text-xl leading-none">🎓</span>
+      <p class="font-headline text-base font-bold text-on-surface" data-i18n="bootcamp.cardTitle">Sourdough Bootcamp</p>
+    </div>
+    <p class="text-xs text-on-surface-variant mb-2" data-i18n="bootcamp.cardSub">Learn by playing</p>
+    <p class="text-[10px] font-bold uppercase tracking-wider text-primary" id="bootcamp-progress-label" data-i18n="bootcamp.cardStart">Start playing →</p>
+  </button>
+  <button id="hydration-card" onclick="openHydrationCalcSheet()" class="text-left bg-surface-container-low rounded-2xl p-5 hover:bg-surface-container transition-all active:scale-[0.98]">
+    <div class="flex items-center gap-2 mb-1.5">
+      <span class="text-xl leading-none">🧮</span>
+      <p class="font-headline text-base font-bold text-on-surface" data-i18n="hydration.cardTitle">Hydration Calculator</p>
+    </div>
+    <p class="text-xs text-on-surface-variant" data-i18n="hydration.cardSub">Check your dough’s hydration %</p>
+  </button>
+</section>
+
 <!-- ── Daily Baker's Tip Card ─────────────────────────────────────────── -->
 <section class="rounded-2xl border-l-4 border-primary p-5 bg-surface-container-low" id="daily-tip-card">
   <div class="flex items-center gap-2 mb-2">
@@ -468,6 +510,12 @@
     <button class="text-primary font-bold underline" onclick="showView('view-library')" data-i18n="kit.browseLib">Browse the Library</button>
   </p>
 </section>
+<p class="text-center">
+  <button class="text-[10px] font-bold text-primary uppercase tracking-wider inline-flex items-center gap-1" onclick="_pymReplayCoachMarks()">
+    <span class="material-symbols-outlined" style="font-size:13px;">replay</span>
+    <span data-i18n="coach.replay">Replay tutorial</span>
+  </button>
+</p>
 </main>
 </div>
 <div id="view-bake" class="app-view hidden">
@@ -1315,7 +1363,27 @@
     try { _bootView = sessionStorage.getItem('pym_boot_view'); if (_bootView) sessionStorage.removeItem('pym_boot_view'); } catch(e) {}
     if (_bootView) showView(_bootView);
     else if (!checkPendingAlarmOnStart()) showView('view-dashboard');
+
+    // Reveal the welcome screen for brand-new users (decided by the gate script in <head>)
+    if (window._pymShowWelcome) {
+      var welcomeOverlay = document.getElementById('pym-welcome-overlay');
+      if (welcomeOverlay) { welcomeOverlay.classList.remove('hidden'); _updateWelcomeLangUI(); }
+    }
   });
+
+  function _updateWelcomeLangUI() {
+    var lang = (window.PymI18n && window.PymI18n.getCurrentLang) ? window.PymI18n.getCurrentLang() : 'en';
+    document.querySelectorAll('#pym-welcome-overlay .welcome-lang-check').forEach(function(el) {
+      el.textContent = el.getAttribute('data-lang') === lang ? '✓ ' : '';
+    });
+  }
+
+  function _pymStartApp() {
+    try { localStorage.setItem('pym_welcome_seen', 'true'); } catch(e) {}
+    var overlay = document.getElementById('pym-welcome-overlay');
+    if (overlay) overlay.classList.add('hidden');
+    showView('view-dashboard');
+  }
 
   function checkPendingAlarmOnStart() {
     // Check both alarm-pending keys (alarm-bridge.js writes pym_pending_alarm; app.html writes pym_alarm_pending)
@@ -1590,6 +1658,168 @@
     document.addEventListener('click', handler, true);
   }
 
+  // ════════════════════════════════════════════════════════
+  // Sourdough Bootcamp card
+  // ════════════════════════════════════════════════════════
+  function _pymOpenBootcamp() { window.location.href = 'onboarding.html'; }
+
+  function _renderBootcampCard() {
+    var label = document.getElementById('bootcamp-progress-label');
+    if (!label) return;
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){ return k; };
+    var ob; try { ob = JSON.parse(localStorage.getItem('pym_onboarding') || '{}'); } catch(e) { ob = {}; }
+    var chapterMap = {
+      c0s1:0, c0s2:0,
+      c1s1:1, c1s2:1, c1s3:1, c2s1:1, c1game:1,
+      c5game:2, c6game:2, c2quiz:2, c2game:2, c7game:2, c8game:2, c9game:2, c10game:2, c11game:2,
+      c3s1:3, c3game:3,
+      c4s1:4, c4game:4, c4s2:4, c4s3:4
+    };
+    var ch = !ob.complete ? (chapterMap[ob.currentScreen] || 0) : 0;
+    label.textContent = ch > 0 ? _t('bootcamp.cardProgress').replace('{n}', ch) : _t('bootcamp.cardStart');
+  }
+
+  // ════════════════════════════════════════════════════════
+  // 3-step first-run coach marks (Dashboard bottom-nav tour)
+  // ════════════════════════════════════════════════════════
+  var COACH_STEPS = [
+    { target: '#bn-bake',    key: 'coach.step1' },
+    { target: '#bn-library', key: 'coach.step2' },
+    { target: '#bn-archive', key: 'coach.step3' }
+  ];
+
+  function _maybeStartCoachMarks() {
+    var seen = false;
+    try { seen = localStorage.getItem('pym_coachmarks_seen') === 'true'; } catch(e) {}
+    var armCelebration = function() { if (window.PymCelebration) _armFirstActionCelebration(); };
+    if (seen) { armCelebration(); return; }
+    _startCoachMarks(armCelebration);
+  }
+
+  function _pymReplayCoachMarks() {
+    var existing = document.getElementById('pym-coach-overlay');
+    if (existing) existing.remove();
+    _startCoachMarks(function() {});
+  }
+
+  function _startCoachMarks(onDone) {
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){ return k; };
+    var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var step = 0;
+
+    var overlay = document.createElement('div');
+    overlay.id = 'pym-coach-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:9995;';
+    document.body.appendChild(overlay);
+
+    function finish() {
+      try { localStorage.setItem('pym_coachmarks_seen', 'true'); } catch(e) {}
+      overlay.remove();
+      if (onDone) onDone();
+    }
+
+    function renderStep() {
+      var s = COACH_STEPS[step];
+      var target = document.querySelector(s.target);
+      overlay.innerHTML = '';
+      if (!target) { finish(); return; }
+      var rect = target.getBoundingClientRect();
+      var pad = 8;
+      var transition = reducedMotion ? '' : 'transition:top .25s ease,left .25s ease,width .25s ease,height .25s ease;';
+
+      // Dim the whole screen except a rounded "cutout" around the target,
+      // built from a huge box-shadow rather than an actual clip-path/mask.
+      var hole = document.createElement('div');
+      hole.style.cssText = 'position:fixed;pointer-events:none;border-radius:20px;' +
+        'top:' + (rect.top - pad) + 'px;left:' + (rect.left - pad) + 'px;' +
+        'width:' + (rect.width + pad * 2) + 'px;height:' + (rect.height + pad * 2) + 'px;' +
+        'box-shadow:0 0 0 9999px rgba(29,28,22,0.72);' + transition;
+      overlay.appendChild(hole);
+
+      // Let taps on the spotlighted element itself pass through and advance the tour
+      var hitArea = document.createElement('div');
+      hitArea.style.cssText = 'position:fixed;pointer-events:auto;cursor:pointer;' +
+        'top:' + (rect.top - pad) + 'px;left:' + (rect.left - pad) + 'px;' +
+        'width:' + (rect.width + pad * 2) + 'px;height:' + (rect.height + pad * 2) + 'px;';
+      hitArea.onclick = function() { target.click(); advance(); };
+      overlay.appendChild(hitArea);
+
+      // Tooltip callout
+      var tip = document.createElement('div');
+      tip.style.cssText = 'position:fixed;pointer-events:auto;max-width:260px;background:#fef9ef;border-radius:16px;' +
+        'padding:16px;box-shadow:0 12px 32px rgba(0,0,0,0.3);font-family:\'Plus Jakarta Sans\',sans-serif;';
+      var roomAbove = rect.top - 14;
+      if (roomAbove > 140) tip.style.bottom = (window.innerHeight - rect.top + 14) + 'px';
+      else tip.style.top = (rect.bottom + 14) + 'px';
+      tip.style.left = Math.max(16, Math.min(rect.left, window.innerWidth - 276)) + 'px';
+
+      var nextLabel = step < COACH_STEPS.length - 1 ? _t('coach.next') : _t('coach.done');
+      tip.innerHTML =
+        '<p style="font-size:14px;color:#1d1c16;font-weight:700;line-height:1.4;margin-bottom:14px;">' + _t(s.key) + '</p>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">' +
+          '<button id="pym-coach-skip" style="background:none;border:none;color:#847466;font-weight:700;font-size:12px;cursor:pointer;padding:6px 4px;">' + _t('coach.skip') + '</button>' +
+          '<button id="pym-coach-next" style="background:#875305;color:#fff;border:none;border-radius:10px;padding:8px 18px;font-weight:700;font-size:12px;cursor:pointer;">' + nextLabel + '</button>' +
+        '</div>';
+      overlay.appendChild(tip);
+
+      document.getElementById('pym-coach-skip').onclick = finish;
+      document.getElementById('pym-coach-next').onclick = advance;
+    }
+
+    function advance() {
+      step++;
+      if (step >= COACH_STEPS.length) finish();
+      else renderStep();
+    }
+
+    renderStep();
+  }
+
+  // ════════════════════════════════════════════════════════
+  // Hydration Calculator (standalone sheet — same formula as Bake Stage 1)
+  // ════════════════════════════════════════════════════════
+  function openHydrationCalcSheet() {
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){ return k; };
+    var sheet = document.createElement('div');
+    sheet.className = 'pym-sheet-overlay';
+    sheet.id = 'pym-hydration-sheet';
+    sheet.innerHTML = '<div class="pym-sheet" style="font-family:\'Plus Jakarta Sans\',sans-serif;">' +
+      '<div class="w-10 h-1 bg-outline-variant rounded-full mx-auto mb-4"></div>' +
+      '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#514538;margin-bottom:6px;">' + _t('hydration.sheetTitle') + '</p>' +
+      '<p style="font-size:13px;color:#514538;margin-bottom:1.2rem;line-height:1.5;">' + _t('hydration.sheetSub') + '</p>' +
+      '<div style="display:flex;gap:12px;margin-bottom:1.2rem;">' +
+        '<div style="flex:1;">' +
+          '<label style="font-size:11px;font-weight:700;color:#514538;display:block;margin-bottom:4px;">' + _t('hydration.flourLabel') + '</label>' +
+          '<input id="hydrocalc-flour" type="number" value="500" oninput="_updateHydroCalc()" style="width:100%;padding:10px 12px;border:2px solid #d6c3b3;border-radius:12px;font-size:16px;font-weight:700;color:#875305;background:#fef9ef;box-sizing:border-box;"/>' +
+        '</div>' +
+        '<div style="flex:1;">' +
+          '<label style="font-size:11px;font-weight:700;color:#514538;display:block;margin-bottom:4px;">' + _t('hydration.waterLabel') + '</label>' +
+          '<input id="hydrocalc-water" type="number" value="325" oninput="_updateHydroCalc()" style="width:100%;padding:10px 12px;border:2px solid #d6c3b3;border-radius:12px;font-size:16px;font-weight:700;color:#875305;background:#fef9ef;box-sizing:border-box;"/>' +
+        '</div>' +
+      '</div>' +
+      '<div style="text-align:center;background:#f2ede3;border-radius:14px;padding:16px;margin-bottom:1.2rem;">' +
+        '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#847466;margin-bottom:4px;">' + _t('hydration.resultLabel') + '</p>' +
+        '<p style="font-family:\'Noto Serif\',serif;font-size:2.2rem;font-weight:700;color:#875305;" id="hydrocalc-result">65%</p>' +
+      '</div>' +
+      '<button onclick="closeHydrationCalcSheet()" style="width:100%;padding:14px;background:#875305;color:#fff;border-radius:14px;font-weight:700;font-size:14px;border:none;cursor:pointer;font-family:\'Plus Jakarta Sans\',sans-serif;">' + _t('hydration.close') + '</button>' +
+    '</div>';
+    sheet.addEventListener('click', function(e) { if (e.target === sheet) closeHydrationCalcSheet(); });
+    document.body.appendChild(sheet);
+    _updateHydroCalc();
+  }
+
+  function _updateHydroCalc() {
+    var flour = parseFloat(document.getElementById('hydrocalc-flour') && document.getElementById('hydrocalc-flour').value) || 0;
+    var water = parseFloat(document.getElementById('hydrocalc-water') && document.getElementById('hydrocalc-water').value) || 0;
+    var result = document.getElementById('hydrocalc-result');
+    if (result) result.textContent = (flour > 0 ? Math.round((water / flour) * 100) : 0) + '%';
+  }
+
+  function closeHydrationCalcSheet() {
+    var s = document.getElementById('pym-hydration-sheet');
+    if (s) { s.style.animation = 'pym-fade-in 0.2s ease reverse forwards'; setTimeout(function() { s.remove(); }, 200); }
+  }
+
   function renderDashboard() {
     // Date label
     var now = new Date();
@@ -1643,6 +1873,7 @@
       }
 
       renderStarterCompanion();
+      _renderBootcampCard();
 
       // Recent badges strip
       var recentBadges = G.getUnlockedBadges().slice(-3).reverse();
@@ -1664,8 +1895,8 @@
         }
       }
 
-      if (!_dashboardInitialized && window.PymCelebration) {
-        _armFirstActionCelebration();
+      if (!_dashboardInitialized) {
+        _maybeStartCoachMarks();
       }
     }
 

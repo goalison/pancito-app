@@ -5,6 +5,20 @@
 (function () {
   'use strict';
 
+  // ── First-launch device language detection ──────────────────────────────
+  // Runs once, synchronously, before anything reads pym_lang. If the user has
+  // never picked a language (manually, via the header toggle, or via a prior
+  // launch), seed it from the device locale so day-one Spanish speakers don't
+  // silently see an English app. Once pym_lang exists, this never runs again —
+  // the header EN/ES pills (below) remain the manual override from then on.
+  (function detectDeviceLang() {
+    try {
+      if (localStorage.getItem('pym_lang')) return;
+      var deviceLang = ((navigator.language || navigator.userLanguage || '') + '').toLowerCase();
+      localStorage.setItem('pym_lang', deviceLang.indexOf('es') === 0 ? 'es' : 'en');
+    } catch (_) {}
+  })();
+
   // ── Core helpers ──────────────────────────────────────────────────────────
   function getCurrentLang() {
     try { return localStorage.getItem('pym_lang') || 'en'; } catch (_) { return 'en'; }
@@ -151,6 +165,38 @@
       'nav.archive':   'Archive',
       'nav.dash':      'Dash',
       'nav.badges':    'Badges',
+
+      // ── Welcome screen (first launch only) ───────────────────────────────
+      'welcome.title':   'Pancito y Más',
+      'welcome.tagline': 'Your companion for baking your first sourdough.',
+      'welcome.langEs':  'Español',
+      'welcome.langEn':  'English',
+      'welcome.start':   'Start',
+
+      // ── Dashboard — Sourdough Bootcamp card ──────────────────────────────
+      'bootcamp.cardTitle':    'Sourdough Bootcamp',
+      'bootcamp.cardSub':      'Learn by playing',
+      'bootcamp.cardStart':    'Start playing →',
+      'bootcamp.cardProgress': 'Chapter {n} of 4 — Resume →',
+
+      // ── Dashboard — Hydration Calculator card + sheet ────────────────────
+      'hydration.cardTitle':    'Hydration Calculator',
+      'hydration.cardSub':      'Check your dough’s hydration %',
+      'hydration.sheetTitle':   'Hydration Calculator',
+      'hydration.sheetSub':     'Enter your flour and water weights to see the hydration percentage.',
+      'hydration.flourLabel':   'Flour (g)',
+      'hydration.waterLabel':   'Water (g)',
+      'hydration.resultLabel':  'Hydration',
+      'hydration.close':        'Done',
+
+      // ── First-run 3-step coach marks ─────────────────────────────────────
+      'coach.step1':  'To start a recipe, tap here',
+      'coach.step2':  'Guides, glossary and troubleshooting',
+      'coach.step3':  'Your bakes and notes live here',
+      'coach.skip':   'Skip',
+      'coach.next':   'Next',
+      'coach.done':   'Got it',
+      'coach.replay': 'Replay tutorial',
 
       // ── Days / time-of-day ───────────────────────────────────────────────
       'day.sunday':    'Sunday',
@@ -1210,6 +1256,38 @@
       'nav.archive':   'Historial',
       'nav.dash':      'Inicio',
       'nav.badges':    'Logros',
+
+      // ── Welcome screen (first launch only) ───────────────────────────────
+      'welcome.title':   'Pancito y Más',
+      'welcome.tagline': 'Tu compañero para hornear tu primera masa madre.',
+      'welcome.langEs':  'Español',
+      'welcome.langEn':  'English',
+      'welcome.start':   'Empezar',
+
+      // ── Dashboard — Sourdough Bootcamp card ──────────────────────────────
+      'bootcamp.cardTitle':    'Bootcamp de Masa Madre',
+      'bootcamp.cardSub':      'Aprende jugando',
+      'bootcamp.cardStart':    'Empezar a jugar →',
+      'bootcamp.cardProgress': 'Capítulo {n} de 4 — Continuar →',
+
+      // ── Dashboard — Hydration Calculator card + sheet ────────────────────
+      'hydration.cardTitle':    'Calculadora de Hidratación',
+      'hydration.cardSub':      'Revisa el porcentaje de hidratación de tu masa',
+      'hydration.sheetTitle':   'Calculadora de Hidratación',
+      'hydration.sheetSub':     'Ingresa el peso de tu harina y agua para ver el porcentaje de hidratación.',
+      'hydration.flourLabel':   'Harina (g)',
+      'hydration.waterLabel':   'Agua (g)',
+      'hydration.resultLabel':  'Hidratación',
+      'hydration.close':        'Listo',
+
+      // ── First-run 3-step coach marks ─────────────────────────────────────
+      'coach.step1':  'Para empezar una receta, toca aquí',
+      'coach.step2':  'Guías, glosario y ayuda',
+      'coach.step3':  'Tus panes y sus notas viven aquí',
+      'coach.skip':   'Saltar',
+      'coach.next':   'Siguiente',
+      'coach.done':   'Entendido',
+      'coach.replay': 'Ver tutorial',
 
       // ── Days / time-of-day ───────────────────────────────────────────────
       'day.sunday':    'Domingo',
