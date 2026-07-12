@@ -212,6 +212,9 @@
       'starter.stage.peak':     'Peak',
       // Default name when starter has not been named yet
       'starter.defaultName':    'Your Starter',
+      // Empty state — shown when the user skipped onboarding and never named a starter
+      'starter.empty.cta':      'Name your starter to begin',
+      'starter.empty.btn':      'Name Your Starter',
       // Tip categories (rendered in the daily-tip card)
       'tipCat.fermentation':    'Fermentation',
       'tipCat.starter':         'Starter',
@@ -430,7 +433,7 @@
       'archive.title':       'Archive',
       'archive.calcStorage': 'Calculating storage...',
       'archive.autoBackup':  'Auto-backup active',
-      'archive.saveDrive':   'Save to Google Drive',
+      'archive.exportBackup': 'Export backup file',
       'archive.filterAll':   'Type: All',
       'archive.filterRating':'Rating: 4.0+',
       'archive.sortedDate':  'Sorted by Date',
@@ -438,10 +441,9 @@
       'archive.dataSection': 'Data Management',
       'archive.restore.title': 'Restore Backup',
       'archive.restore.sub':   'Restore your bake archive from a saved backup file.',
-      'archive.restoreDrive':  'Restore from Drive',
-      'archive.chooseFile':    'Choose File',
+      'archive.importBackup':  'Import backup file',
       'archive.clear.title':   'Clear Local Data',
-      'archive.clear.sub':     'Permanently wipe all bake records from this device. Export to Google Drive first!',
+      'archive.clear.sub':     'Permanently wipe all bake records from this device. Export a backup first!',
       'archive.clearBtn':      'Clear',
       // Dynamic archive strings (rendered in JS)
       'archive.bakesStored':   'bakes stored',
@@ -523,7 +525,7 @@
       'library.featured.sub':      'Why the first 10 minutes in the oven make or break your loaf — and how to get it right every single time.',
       'library.readArticle':       'Read Article',
       'library.readGuide':         'Read Guide',
-      'library.tutorials.title':   'Artisan Tutorials',
+      'library.tutorials.title':   'Artisan Guides',
       'library.tutorials.tiktok':  'Watch on TikTok',
       'library.stretchFold.cat':   'Foundations',
       'library.stretchFold.title': 'The Stretch & Fold',
@@ -1268,6 +1270,9 @@
       'starter.stage.peak':     'En su Punto',
       // Default name when starter has not been named yet
       'starter.defaultName':    'Tu Masa Madre',
+      // Empty state — shown when the user skipped onboarding and never named a starter
+      'starter.empty.cta':      'Dale un nombre a tu masa madre para comenzar',
+      'starter.empty.btn':      'Nombra tu Masa Madre',
       // Tip categories (rendered in the daily-tip card)
       'tipCat.fermentation':    'Fermentación',
       'tipCat.starter':         'Masa Madre',
@@ -1486,7 +1491,7 @@
       'archive.title':       'Historial',
       'archive.calcStorage': 'Calculando almacenamiento...',
       'archive.autoBackup':  'Respaldo automático activo',
-      'archive.saveDrive':   'Guardar en Google Drive',
+      'archive.exportBackup': 'Exportar copia de seguridad',
       'archive.filterAll':   'Tipo: Todo',
       'archive.filterRating':'Calificación: 4.0+',
       'archive.sortedDate':  'Ordenado por Fecha',
@@ -1494,10 +1499,9 @@
       'archive.dataSection': 'Gestión de Datos',
       'archive.restore.title': 'Restaurar Respaldo',
       'archive.restore.sub':   'Restaura tu historial desde un archivo de respaldo guardado.',
-      'archive.restoreDrive':  'Restaurar desde Drive',
-      'archive.chooseFile':    'Elegir Archivo',
+      'archive.importBackup':  'Importar copia de seguridad',
       'archive.clear.title':   'Borrar Datos Locales',
-      'archive.clear.sub':     '¡Borra permanentemente todos los registros de este dispositivo. Exporta a Google Drive primero!',
+      'archive.clear.sub':     '¡Borra permanentemente todos los registros de este dispositivo. Exporta una copia de seguridad primero!',
       'archive.clearBtn':      'Borrar',
       // Dynamic archive strings (rendered in JS)
       'archive.bakesStored':   'horneadas guardadas',
@@ -1579,7 +1583,7 @@
       'library.featured.sub':      'Por qué los primeros 10 minutos en el horno hacen o deshacen tu pan — y cómo lograrlo bien cada vez.',
       'library.readArticle':       'Leer Artículo',
       'library.readGuide':         'Leer Guía',
-      'library.tutorials.title':   'Tutoriales de Artesanía',
+      'library.tutorials.title':   'Guías Artesanales',
       'library.tutorials.tiktok':  'Ver en TikTok',
       'library.stretchFold.cat':   'Fundamentos',
       'library.stretchFold.title': 'El Estira y Dobla',

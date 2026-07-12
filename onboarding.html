@@ -1413,7 +1413,7 @@
     </a>
   </div>
   <div class="px-6 pb-10">
-    <button onclick="finishOnboarding()" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform shadow-lg" data-i18n="onboarding.c4s3.btnBake">
+    <button onclick="finishOnboarding('app.html','view-bake')" class="w-full py-4 bg-[#875305] text-white rounded-2xl font-bold text-base active:scale-95 transition-transform shadow-lg" data-i18n="onboarding.c4s3.btnBake">
       Start My First Bake →
     </button>
     <button onclick="finishOnboarding('app.html')" class="w-full py-3 mt-3 text-[#847466] text-sm font-bold" data-i18n="onboarding.c4s3.btnDash">
@@ -1832,8 +1832,8 @@ function showFacebookCard() {
 
 // ── Chapter 3 (Equipment) ─────────────────────────────────────────────────
 const EQUIPMENT = [
-  { id:'scale',       icon:'scale',        name:'Digital kitchen scale',       desc:'Essential — sourdough is measured by weight, not cups.', guide:'banneton.html' },
-  { id:'dutch_oven',  icon:'outdoor_grill',name:'Dutch oven or combo cooker',  desc:'Traps steam for oven spring. This is your #1 tool.', guide:'bread-sling.html' },
+  { id:'scale',       icon:'scale',        name:'Digital kitchen scale',       desc:'Essential — sourdough is measured by weight, not cups.', guide:null },
+  { id:'dutch_oven',  icon:'outdoor_grill',name:'Dutch oven or combo cooker',  desc:'Traps steam for oven spring. This is your #1 tool.', guide:null },
   { id:'banneton',    icon:'circle',       name:'Banneton / proofing basket',   desc:'Shapes and supports the dough during cold proof.', guide:'banneton.html' },
   { id:'scraper',     icon:'crop_square',  name:'Bench scraper',               desc:'For dividing, shaping, and lifting dough.', guide:'bench-scraper.html' },
   { id:'lame',        icon:'content_cut',  name:'Lame or razor blade',         desc:'For scoring — that beautiful slash before baking.', guide:'lame.html' },
@@ -1850,7 +1850,7 @@ function initEquipment() {
       <div class="flex-1 min-w-0">
         <div class="font-bold text-sm text-[#1d1c16]">${e.name}</div>
         <div class="text-xs text-[#514538] mt-0.5">${e.desc}</div>
-        <a href="${e.guide}" class="text-[10px] text-[#C4863A] font-bold uppercase tracking-wider mt-1 block" onclick="event.stopPropagation()">Learn more →</a>
+        ${e.guide ? `<a href="${e.guide}" class="text-[10px] text-[#C4863A] font-bold uppercase tracking-wider mt-1 block" onclick="event.stopPropagation()">Learn more →</a>` : ''}
       </div>
       <div class="flex flex-col gap-1.5 shrink-0">
         <button class="equip-btn have text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all" onclick="toggleEquip('${e.id}','have',this.closest('.flex'))">✓ Have it</button>
@@ -1944,7 +1944,7 @@ function skipOnboarding() {
   finishOnboarding('app.html');
 }
 
-function finishOnboarding(dest) {
+function finishOnboarding(dest, bootView) {
   const ob = JSON.parse(storage.getItem('pym_onboarding')||'{}');
   storage.setItem('pym_onboarding', JSON.stringify({
     ...ob,
@@ -1955,6 +1955,7 @@ function finishOnboarding(dest) {
   if (window.PymGamification) {
     PymGamification.unlockAchievement('tutorial_completed');
   }
+  if (bootView) { try { sessionStorage.setItem('pym_boot_view', bootView); } catch(e) {} }
   window.location.href = dest || 'app.html';
 }
 

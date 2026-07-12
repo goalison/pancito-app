@@ -884,9 +884,9 @@
 <span class="text-[10px] text-outline-variant" id="autoBackupLabel" data-i18n="archive.autoBackup">Auto-backup active</span>
 </div>
 </div>
-<button id="driveBtn" onclick="saveToGoogleDrive()" class="bg-white border border-outline-variant/30 text-on-surface px-6 py-4 rounded-xl flex items-center gap-3 hover:bg-surface-container transition-all shadow-sm active:scale-95">
-<svg class="w-5 h-5 shrink-0" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg"><path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8H0c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/><path d="M43.65 25L29.9 1.2C28.55 2 27.4 3.1 26.6 4.5L1.2 48.5C.4 49.9 0 51.45 0 53h27.5z" fill="#00ac47"/><path d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5H59.8l5.85 11.5z" fill="#ea4335"/><path d="M43.65 25L57.4 1.2C56.05.4 54.5 0 52.95 0H34.35c-1.55 0-3.1.45-4.45 1.2z" fill="#00832d"/><path d="M59.8 53H27.5L13.75 76.8c1.35.8 2.9 1.2 4.45 1.2h50.9c1.55 0 3.1-.45 4.45-1.2z" fill="#2684fc"/><path d="M73.4 26.5l-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3L43.65 25 59.8 53h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/></svg>
-<span class="font-headline font-bold" data-i18n="archive.saveDrive">Save to Google Drive</span>
+<button id="exportBtn" onclick="exportBackup()" class="bg-white border border-outline-variant/30 text-on-surface px-6 py-4 rounded-xl flex items-center gap-3 hover:bg-surface-container transition-all shadow-sm active:scale-95">
+<span class="material-symbols-outlined text-primary">ios_share</span>
+<span class="font-headline font-bold" data-i18n="archive.exportBackup">Export backup file</span>
 </button>
 </div>
 </section>
@@ -926,13 +926,9 @@
       </div>
     </div>
     <div class="flex flex-wrap gap-3">
-      <button id="driveImportBtn" onclick="importFromGoogleDrive()" class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2.5 rounded-xl hover:bg-outline-variant/30 transition-colors font-bold text-xs uppercase tracking-wider">
-        <svg class="w-4 h-4 shrink-0" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg"><path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8H0c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/><path d="M43.65 25L29.9 1.2C28.55 2 27.4 3.1 26.6 4.5L1.2 48.5C.4 49.9 0 51.45 0 53h27.5z" fill="#00ac47"/><path d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5H59.8l5.85 11.5z" fill="#ea4335"/><path d="M43.65 25L57.4 1.2C56.05.4 54.5 0 52.95 0H34.35c-1.55 0-3.1.45-4.45 1.2z" fill="#00832d"/><path d="M59.8 53H27.5L13.75 76.8c1.35.8 2.9 1.2 4.45 1.2h50.9c1.55 0 3.1-.45 4.45-1.2z" fill="#2684fc"/><path d="M73.4 26.5l-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3L43.65 25 59.8 53h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/></svg>
-        <span data-i18n="archive.restoreDrive">Restore from Drive</span>
-      </button>
       <label class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2.5 rounded-xl cursor-pointer hover:bg-outline-variant/30 transition-colors font-bold text-xs uppercase tracking-wider">
-        <span class="material-symbols-outlined text-sm">attach_file</span>
-        <span data-i18n="archive.chooseFile">Choose File</span>
+        <span class="material-symbols-outlined text-sm">upload_file</span>
+        <span data-i18n="archive.importBackup">Import backup file</span>
         <input accept=".json" class="hidden" id="importInput" type="file"/>
       </label>
     </div>
@@ -941,7 +937,7 @@
     <div class="bg-error/10 p-3 rounded-xl shrink-0"><span class="material-symbols-outlined text-error text-2xl">delete_sweep</span></div>
     <div class="flex-1 min-w-0">
       <h3 class="font-bold text-base text-on-surface" data-i18n="archive.clear.title">Clear Local Data</h3>
-      <p class="text-xs text-on-surface-variant" data-i18n="archive.clear.sub">Permanently wipe all bake records from this device. Export to Google Drive first!</p>
+      <p class="text-xs text-on-surface-variant" data-i18n="archive.clear.sub">Permanently wipe all bake records from this device. Export a backup first!</p>
     </div>
     <button id="clearDataBtn" class="text-error font-bold text-xs uppercase tracking-widest flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-error/30 hover:bg-error/10 transition-colors shrink-0">
       <span class="material-symbols-outlined text-sm">warning</span>
@@ -1049,7 +1045,7 @@
 <!-- Video Tutorials -->
 <section class="mb-24">
 <div class="flex justify-between items-end mb-12">
-<h2 class="font-headline text-4xl" data-i18n="library.tutorials.title">Artisan Tutorials</h2>
+<h2 class="font-headline text-4xl" data-i18n="library.tutorials.title">Artisan Guides</h2>
 <a class="font-label text-sm text-primary font-bold border-b border-primary/20 pb-1 hover:border-primary transition-all flex items-center gap-1.5" href="https://www.tiktok.com/@pancitoymas" target="_blank" rel="noopener">
   <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.95a8.16 8.16 0 0 0 4.77 1.52V7.01a4.85 4.85 0 0 1-1-.32z"/></svg>
   <span data-i18n="library.tutorials.tiktok">Watch on TikTok</span>
@@ -1060,7 +1056,6 @@
 <div class="relative mb-6 overflow-hidden rounded-xl bg-surface-container-high aspect-[4/5] shadow-sm transition-transform duration-500 group-hover:-translate-y-2">
 <img alt="Hands stretching and folding raw dough on counter" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-stretch-fold.jpg" onerror="this.onerror=null;this.src='https://pancitoymas.com/app/images/featured-rise.jpg';"/>
 <div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><div class="w-16 h-16 rounded-full bg-surface/90 flex items-center justify-center text-primary scale-90 group-hover:scale-100 transition-transform duration-300"><span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">menu_book</span></div></div>
-<div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-full"><span class="font-label text-[10px] font-bold tracking-tighter">04:12</span></div>
 </div>
 <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block" data-i18n="library.stretchFold.cat">Foundations</span>
 <h3 class="font-headline text-2xl mb-2 group-hover:text-primary transition-colors" data-i18n="library.stretchFold.title">The Stretch &amp; Fold</h3>
@@ -1070,7 +1065,6 @@
 <div class="relative mb-6 overflow-hidden rounded-xl bg-surface-container-high aspect-[4/5] shadow-sm transition-transform duration-500 group-hover:-translate-y-2">
 <img alt="Scoring a loaf of bread with a sharp blade" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-scoring.jpg" onerror="this.onerror=null;this.src='https://pancitoymas.com/app/images/featured-rise.jpg';"/>
 <div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><div class="w-16 h-16 rounded-full bg-surface/90 flex items-center justify-center text-primary scale-90 group-hover:scale-100 transition-transform duration-300"><span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">menu_book</span></div></div>
-<div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-full"><span class="font-label text-[10px] font-bold tracking-tighter">08:45</span></div>
 </div>
 <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block" data-i18n="library.scoring.cat">Finishing</span>
 <h3 class="font-headline text-2xl mb-2 group-hover:text-primary transition-colors" data-i18n="library.scoring.title">Scoring Aesthetics</h3>
@@ -1080,7 +1074,6 @@
 <div class="relative mb-6 overflow-hidden rounded-xl bg-surface-container-high aspect-[4/5] shadow-sm transition-transform duration-500 group-hover:-translate-y-2">
 <img alt="A jar of active bubbling sourdough starter" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-starter.jpg" onerror="this.onerror=null;this.src='https://pancitoymas.com/app/images/featured-rise.jpg';"/>
 <div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><div class="w-16 h-16 rounded-full bg-surface/90 flex items-center justify-center text-primary scale-90 group-hover:scale-100 transition-transform duration-300"><span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">menu_book</span></div></div>
-<div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-full"><span class="font-label text-[10px] font-bold tracking-tighter">12:30</span></div>
 </div>
 <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block" data-i18n="library.revival.cat">Maintenance</span>
 <h3 class="font-headline text-2xl mb-2 group-hover:text-primary transition-colors" data-i18n="library.revival.title">The Starter Revival</h3>
@@ -1515,9 +1508,22 @@
     var G = window.PymGamification;
     if (!G) return;
     var s = G.getStarterState();
-    if (!s) return;
-
     var _t = (window.PymI18n && window.PymI18n.t) || function(k){ return k; };
+    var feedBtn = document.getElementById('open-checkin-btn');
+
+    if (!s) {
+      document.getElementById('starter-name-display').textContent = _t('starter.defaultName');
+      document.getElementById('starter-stage-label').textContent  = _t('starter.label');
+      document.getElementById('starter-state-text').textContent   = _t('starter.empty.cta');
+      document.getElementById('starter-health-bar').style.width   = '0%';
+      document.getElementById('starter-health-label').textContent = '';
+      var emptyJar = document.getElementById('starter-jar-body');
+      if (emptyJar) emptyJar.innerHTML = '';
+      if (feedBtn) { feedBtn.textContent = _t('starter.empty.btn'); feedBtn.onclick = openRenameSheet; }
+      return;
+    }
+    if (feedBtn) { feedBtn.textContent = _t('starter.feedBtn'); feedBtn.onclick = openCheckinSheet; }
+
     var STAGE_CONFIG = {
       dormant:  { bubbles: 0, text: _t('starter.dormant'),  color: '#847466', glow: false },
       hungry:   { bubbles: 1, text: _t('starter.hungry'),   color: '#c4863a', glow: false },
@@ -1568,6 +1574,21 @@
   var _dashboardInitialized = false;
   var _dashTimerInterval = null;
   var _dashBulkInterval  = null;
+
+  // Defer any unseen-badge celebration until the user's first tap, instead of
+  // ambushing them with a blocking full-screen modal the instant the Dashboard
+  // first renders (before they've done anything).
+  function _armFirstActionCelebration() {
+    if (!window.PymCelebration) return;
+    var fired = false;
+    var handler = function() {
+      if (fired) return;
+      fired = true;
+      document.removeEventListener('click', handler, true);
+      try { PymCelebration.checkUnseen(); } catch(e) {}
+    };
+    document.addEventListener('click', handler, true);
+  }
 
   function renderDashboard() {
     // Date label
@@ -1644,7 +1665,7 @@
       }
 
       if (!_dashboardInitialized && window.PymCelebration) {
-        setTimeout(function() { PymCelebration.checkUnseen(); }, 800);
+        _armFirstActionCelebration();
       }
     }
 
@@ -2559,12 +2580,6 @@
   var filterActive = false;
   var currentLogs  = [];
 
-  const GDRIVE_CLIENT_ID   = '';
-  const BACKUP_FOLDER_NAME = 'Pancito y Más Backups';
-  const DRIVE_API  = 'https://www.googleapis.com/drive/v3';
-  const UPLOAD_API = 'https://www.googleapis.com/upload/drive/v3';
-  let _driveToken = null, _driveTokenExp = 0;
-
   var _memoryStore = {};
   const storage = (function() {
     try { localStorage.getItem('__pym_test__'); return localStorage; }
@@ -2675,81 +2690,23 @@
     else label.textContent = _t('archive.backupHourAgo').replace('{n}', Math.floor(mins/60));
   }
 
-  if (GDRIVE_CLIENT_ID) { const _gis=document.createElement('script'); _gis.src='https://accounts.google.com/gsi/client'; document.head.appendChild(_gis); }
-
-  function _getDriveToken() {
-    if (_driveToken && Date.now()<_driveTokenExp) return Promise.resolve(_driveToken);
-    if (!GDRIVE_CLIENT_ID||!window.google?.accounts?.oauth2) return Promise.reject(new Error('no_client'));
-    return new Promise((resolve,reject) => { google.accounts.oauth2.initTokenClient({ client_id:GDRIVE_CLIENT_ID, scope:'https://www.googleapis.com/auth/drive.file', callback: r => { if(r.error){reject(new Error(r.error));return;} _driveToken=r.access_token; _driveTokenExp=Date.now()+((r.expires_in||3600)-60)*1000; resolve(_driveToken); } }).requestAccessToken(); });
-  }
-  async function _driveReq(method,path,body,ctype,useUpload) {
-    const base=useUpload?UPLOAD_API:DRIVE_API, opts={method,headers:{Authorization:`Bearer ${_driveToken}`}};
-    if(body){opts.body=body;opts.headers['Content-Type']=ctype;}
-    const r=await fetch(base+path,opts);
-    if(r.status===401){_driveToken=null;await _getDriveToken();opts.headers.Authorization=`Bearer ${_driveToken}`;return fetch(base+path,opts);}
-    return r;
-  }
-  async function _getOrCreateFolder() {
-    const q=`name='${BACKUP_FOLDER_NAME.replace(/'/g,"\\'")}' and mimeType='application/vnd.google-apps.folder' and trashed=false`;
-    const r=await _driveReq('GET',`/files?q=${encodeURIComponent(q)}&fields=files(id)`), {files}=await r.json();
-    if(files?.length) return files[0].id;
-    const cr=await _driveReq('POST','/files',JSON.stringify({name:BACKUP_FOLDER_NAME,mimeType:'application/vnd.google-apps.folder'}),'application/json');
-    return (await cr.json()).id;
-  }
-  async function _uploadToDrive(name,content,folderId) {
-    const boundary='pym_bkp', meta=JSON.stringify({name,parents:[folderId]});
-    const body=`--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n--${boundary}\r\nContent-Type: application/json\r\n\r\n${content}\r\n--${boundary}--`;
-    const r=await _driveReq('POST','/files?uploadType=multipart&fields=id,name',body,`multipart/related; boundary="${boundary}"`,true);
-    if(!r.ok) throw new Error('upload_failed'); return r.json();
-  }
-  async function _listDriveBackups() {
-    const fid=await _getOrCreateFolder(), q=`'${fid}' in parents and trashed=false`;
-    const r=await _driveReq('GET',`/files?q=${encodeURIComponent(q)}&fields=files(id,name,modifiedTime,size)&orderBy=modifiedTime desc`);
-    return (await r.json()).files||[];
-  }
-  async function _downloadDriveFile(fileId) { const r=await _driveReq('GET',`/files/${fileId}?alt=media`); if(!r.ok) throw new Error('download_failed'); return r.text(); }
-
   function _showInfoSheet(icon,title,bodyHtml,btnLabel) {
     const el=document.createElement('div'); el.className='fixed inset-0 z-[200] flex items-end justify-center'; el.style.background='rgba(44,24,16,0.5)';
     el.innerHTML=`<div class="bg-background rounded-t-[2rem] w-full max-w-lg p-7 shadow-2xl"><div class="flex items-start gap-4 mb-6"><div class="bg-primary/10 p-3 rounded-xl shrink-0"><span class="material-symbols-outlined text-primary text-2xl">${icon}</span></div><div><h3 class="font-headline font-bold text-lg text-on-surface">${title}</h3><div class="text-sm text-on-surface-variant mt-2 leading-relaxed">${bodyHtml}</div></div></div><button class="w-full py-3.5 bg-primary text-white rounded-2xl font-bold text-sm active:scale-95 transition-transform" onclick="this.closest('.fixed').remove()">${btnLabel}</button></div>`;
     el.addEventListener('click',e=>{if(e.target===el)el.remove();}); document.body.appendChild(el);
   }
 
-  async function saveToGoogleDrive() {
+  async function exportBackup() {
     const logs=getLogs(); if(!logs.length){_pymToast('No bakes to back up yet — record your first bake first!');return;}
     const filename=`pancito-backup-${new Date().toISOString().split('T')[0]}.json`, content=JSON.stringify(logs,null,2);
-    const btn=document.getElementById('driveBtn'), origHTML=btn.innerHTML;
+    const btn=document.getElementById('exportBtn'), origHTML=btn.innerHTML;
     const setBtn=(icon,text,busy)=>{btn.disabled=busy;btn.innerHTML=`<span class="material-symbols-outlined${busy?' animate-spin':''}">${icon}</span><span class="font-headline font-bold">${text}</span>`;};
-    if(GDRIVE_CLIENT_ID){setBtn('sync','Signing in to Drive…',true);try{await _getDriveToken();setBtn('cloud_upload','Uploading…',true);const fid=await _getOrCreateFolder();await _uploadToDrive(filename,content,fid);storage.setItem('pym_auto_backup_time',Date.now());updateBackupLabel();setBtn('check_circle','Saved to Drive!',false);setTimeout(()=>{btn.innerHTML=origHTML;btn.disabled=false;},3000);return;}catch(e){btn.innerHTML=origHTML;btn.disabled=false;if(e.name==='AbortError')return;}}
     const blob=new Blob([content],{type:'application/json'}), file=new File([blob],filename,{type:'application/json'});
-    if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'Pancito y Más Backup',text:`${logs.length} bake entries`});storage.setItem('pym_auto_backup_time',Date.now());updateBackupLabel();setBtn('check_circle','Backup shared!',false);setTimeout(()=>{btn.innerHTML=origHTML;btn.disabled=false;},2000);setTimeout(()=>_showInfoSheet('drive_folder','Backup saved to Google Drive',`Your file is in <strong>Google Drive → My Drive</strong>.<br><br>File name: <code style="font-size:11px">${filename}</code><br><br><strong>To restore:</strong> tap <em>Restore from Drive</em> below, or tap <em>Choose File</em> → Google Drive → My Drive.`,'Got it'),800);return;}catch(e){if(e.name==='AbortError')return;}}
+    if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'Pancito y Más Backup',text:`${logs.length} bake entries`});storage.setItem('pym_auto_backup_time',Date.now());updateBackupLabel();setBtn('check_circle','Backup shared!',false);setTimeout(()=>{btn.innerHTML=origHTML;btn.disabled=false;},2000);return;}catch(e){if(e.name==='AbortError')return;}}
     const url=URL.createObjectURL(blob), a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
     setBtn('download','Downloaded!',false); setTimeout(()=>{btn.innerHTML=origHTML;btn.disabled=false;},3000);
-    _showInfoSheet('folder_open','Backup saved to Downloads folder',`File: <code style="font-size:11px">${filename}</code><br><br>Your backup is on this device's <strong>Downloads folder</strong>.<br><br><strong>To upload to Google Drive:</strong> Open your <em>Files</em> app → Downloads → long-press → Share → Google Drive.`,'Got it');
+    _showInfoSheet('folder_open','Backup file saved',`File: <code style="font-size:11px">${filename}</code><br><br>Your backup is on this device's <strong>Downloads folder</strong> (or wherever you chose to save/share it).<br><br>To restore later, use <em>Import backup file</em> and select this file.`,'Got it');
   }
-
-  async function importFromGoogleDrive() {
-    if(!GDRIVE_CLIENT_ID){_showInfoSheet('help','How to restore from Google Drive',`Tap <strong>Choose File</strong> below.<br><br>In the file picker, browse to <em>Google Drive → My Drive</em> and select your backup file (named <em>pancito-backup-YYYY-MM-DD.json</em>).`,'Got it');return;}
-    const btn=document.getElementById('driveImportBtn'), origHTML=btn?btn.innerHTML:'';
-    if(btn){btn.disabled=true;btn.innerHTML='<span class="material-symbols-outlined animate-spin" style="font-size:14px">sync</span> Loading…';}
-    try{await _getDriveToken();const files=await _listDriveBackups();if(!files.length){_showInfoSheet('search_off','No backups found in Drive',`No backup files were found in your <em>Pancito y Más Backups</em> folder.`,'OK');return;}_showDriveFilePicker(files);}
-    catch(e){if(e.name!=='AbortError'){_showInfoSheet('error','Could not connect to Google Drive','Check your internet connection and try again, or use <em>Choose File</em> to restore from your device.','OK');}}
-    finally{if(btn){btn.disabled=false;btn.innerHTML=origHTML;}}
-  }
-
-  function _showDriveFilePicker(files) {
-    const fmt=iso=>new Date(iso).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
-    const fmtB=b=>+b>1048576?`${(+b/1048576).toFixed(1)} MB`:`${Math.round(+b/1024)} KB`;
-    const el=document.createElement('div'); el.id='drivePickerModal'; el.className='fixed inset-0 z-[200] flex items-end justify-center'; el.style.background='rgba(44,24,16,0.5)';
-    el.innerHTML=`<div class="bg-background rounded-t-[2rem] w-full max-w-lg shadow-2xl" style="max-height:80vh;display:flex;flex-direction:column"><div class="p-6 border-b border-outline-variant/20 shrink-0"><div class="w-10 h-1 bg-outline-variant rounded-full mx-auto mb-4"></div><h3 class="font-headline font-bold text-lg">Restore from Drive</h3><p class="text-xs text-on-surface-variant mt-1">Choose a backup to restore</p></div><div class="overflow-y-auto flex-1 p-4 space-y-2">${files.map(f=>`<button onclick="_selectDriveFile('${f.id}','${f.name.replace(/'/g,"\\'")}');document.getElementById('drivePickerModal').remove();" class="w-full text-left flex items-center gap-4 p-4 rounded-2xl hover:bg-surface-container-high active:scale-95 transition-all border border-outline-variant/20"><span class="material-symbols-outlined text-primary text-2xl shrink-0">backup</span><div class="flex-1 min-w-0"><div class="font-bold text-sm truncate">${f.name}</div><div class="text-xs text-on-surface-variant">${fmt(f.modifiedTime)}${f.size?' · '+fmtB(f.size):''}</div></div><span class="material-symbols-outlined text-outline text-base">chevron_right</span></button>`).join('')}</div><div class="p-4 border-t border-outline-variant/10 shrink-0"><button class="w-full py-3 text-sm font-bold text-on-surface-variant" onclick="document.getElementById('drivePickerModal').remove()">Cancel</button></div></div>`;
-    el.addEventListener('click',e=>{if(e.target===el)el.remove();}); document.body.appendChild(el);
-  }
-
-  window._selectDriveFile = async function(fileId,name) {
-    try { const text=await _downloadDriveFile(fileId), imported=JSON.parse(text); if(!Array.isArray(imported)) throw new Error('invalid');
-      if(confirm(`Found ${imported.length} bake entries in "${name}".\nMerge with existing archive?`)){const merged=[...getLogs(),...imported].map((item,i)=>({...item,id:item.id||`log-${Date.now()}-${i}`}));const unique=[...new Map(merged.map(m=>[m.id||(m.date+m.recipe),m])).values()];saveLogs(unique);alert(`Restored ${imported.length} entries!`);}
-    } catch(e) { alert('Could not read the backup file. It may be corrupted or in the wrong format.'); }
-  };
 
   function _pymConfirm(html,okLabel,okColor,onOk) {
     const ov=document.createElement('div'); ov.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(44,24,16,0.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1.5rem';
@@ -2791,7 +2748,7 @@
       var clearDataBtn = document.getElementById('clearDataBtn');
       if (clearDataBtn) clearDataBtn.addEventListener('click', function() {
         var _ct = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
-        _pymConfirm('This will permanently delete <strong>ALL bake entries</strong> from this device.<br><br>Export your archive to Google Drive first — this cannot be undone.','Yes, delete all','#B3261E',()=>{_pymConfirm('Are you absolutely sure? Every bake record will be lost forever.','Delete everything','#B3261E',()=>{localStorage.removeItem('pym_logs');localStorage.removeItem('pym_auto_backup');localStorage.removeItem('pym_auto_backup_time');saveLogs([]);_pymToast(_ct('archive.localCleared'));});});
+        _pymConfirm('This will permanently delete <strong>ALL bake entries</strong> from this device.<br><br>Export your archive first — this cannot be undone.','Yes, delete all','#B3261E',()=>{_pymConfirm('Are you absolutely sure? Every bake record will be lost forever.','Delete everything','#B3261E',()=>{localStorage.removeItem('pym_logs');localStorage.removeItem('pym_auto_backup');localStorage.removeItem('pym_auto_backup_time');saveLogs([]);_pymToast(_ct('archive.localCleared'));});});
       });
       var logModal = document.getElementById('logModal');
       if (logModal) logModal.addEventListener('click', function(e) { if(e.target.id==='logModal') closeModal(); });
