@@ -736,43 +736,16 @@
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // FEED CHECK-IN REMINDERS  (up to 3 per day, every 6 hours after feeding)
+  // Legacy feed check-in reminders (removed) — this used to silently schedule
+  // up to 3 extra notifications every 6h after feeding, on top of the single
+  // daily reminder. It made the reminder feel like it was firing more than
+  // once for the same event. One reminder is enough; this just cleans up any
+  // of the old ids (9002-9004) an existing install may still have scheduled.
   // ══════════════════════════════════════════════════════════════════════════
-  async function scheduleFeedCheckInReminders(enabled) {
-    const CHANNEL_ID = 'starter-reminders';
-    const FEED_IDS   = [9002, 9003, 9004];
+  async function cancelLegacyFeedCheckInReminders() {
     const cap = window.Capacitor?.Plugins?.LocalNotifications;
     if (!cap) return;
-
-    await cap.cancel({ notifications: FEED_IDS.map(id => ({ id })) }).catch(() => {});
-    if (!enabled) return;
-
-    const starter = getStarterState();
-    if (!starter) return;
-
-    const name     = starter.name || (_lang() === 'es' ? 'tu masa madre' : 'your starter');
-    const lang     = _lang();
-    const lastFed  = starter.lastFed ? new Date(starter.lastFed) : new Date();
-    const now      = new Date();
-
-    for (let i = 0; i < FEED_IDS.length; i++) {
-      const fire = new Date(lastFed.getTime() + (i + 1) * 6 * 3600000);
-      if (fire <= now) continue; // this slot already passed — skip it
-
-      const hours = (i + 1) * 6;
-      const body  = lang === 'es'
-        ? `¡${name} lleva ${hours} horas sin comer! 🫙 Hora de revisar y darle de comer.`
-        : `${name} hasn't been fed in ${hours} hours! 🫙 Time for a check-in and feed.`;
-
-      await cap.schedule({ notifications: [{
-        id:        FEED_IDS[i],
-        title:     'Pancito y Más 🍞',
-        body,
-        channelId: CHANNEL_ID,
-        sound:     'default',
-        schedule:  { at: fire },
-      }]}).catch(() => {});
-    }
+    await cap.cancel({ notifications: [9002, 9003, 9004].map(id => ({ id })) }).catch(() => {});
   }
 
   // ══════════════════════════════════════════════════════════════════════════
@@ -806,7 +779,7 @@
     isFeatureUnlocked,
     // Notifications
     scheduleStarterReminder,
-    scheduleFeedCheckInReminders,
+    cancelLegacyFeedCheckInReminders,
     // Utility
     today: _today,
   };

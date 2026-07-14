@@ -1324,6 +1324,16 @@
   document.addEventListener('DOMContentLoaded', function() {
     // Boot service worker and Capacitor listeners once for the whole app
     initSW();
+    // One-time cleanup: cancel any stray feed-check-in reminders (ids 9002-9004)
+    // an existing install may already have scheduled from before that system
+    // was removed — it made the single daily reminder feel like it fired twice.
+    try {
+      if (localStorage.getItem('pym_feedcheckin_cleanup_done') !== 'true' && window.PymGamification && window.PymGamification.cancelLegacyFeedCheckInReminders) {
+        window.PymGamification.cancelLegacyFeedCheckInReminders().finally(function() {
+          try { localStorage.setItem('pym_feedcheckin_cleanup_done', 'true'); } catch(e) {}
+        });
+      }
+    } catch(e) {}
     if (typeof IS_NATIVE !== 'undefined' && IS_NATIVE) {
       try {
         var _lnp = window.Capacitor.Plugins.LocalNotifications;
@@ -1514,13 +1524,6 @@
     var G = window.PymGamification;
     if (!G) { closeCheckinSheet(); return; }
     G.feedStarter(_checkinActivity, temp, '');
-    // Schedule follow-up reminders (6h, 12h, 18h) if notifications are on
-    try {
-      var _rem = JSON.parse(localStorage.getItem('pym_starter_reminder') || '{}');
-      if (_rem.enabled && G.scheduleFeedCheckInReminders) {
-        G.scheduleFeedCheckInReminders(true);
-      }
-    } catch(_) {}
     var newUnlocks = G.checkAchievements(
       JSON.parse(localStorage.getItem('pym_logs') || '[]'),
       G.getStreak(),
@@ -1541,9 +1544,6 @@
     var hour   = isNaN(parts[0]) ? 8  : parts[0];
     var minute = isNaN(parts[1]) ? 0  : parts[1];
     G.scheduleStarterReminder(enabled, hour, minute).then(function() {
-      if (enabled && G.scheduleFeedCheckInReminders) {
-        G.scheduleFeedCheckInReminders(true);
-      }
       _showReminderToast(enabled, hour, minute, false);
     }).catch(function() {
       _showReminderToast(enabled, hour, minute, true);
