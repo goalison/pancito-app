@@ -1436,6 +1436,7 @@
   var _checkinActivity = null;
 
   function openRenameSheet() {
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){ return k; };
     var starter = window.PymGamification && window.PymGamification.getStarterState();
     var currentName = (starter && starter.name) || '';
     var sheet = document.createElement('div');
@@ -1443,10 +1444,10 @@
     sheet.id = 'pym-rename-sheet';
     sheet.innerHTML = '<div class="pym-sheet" style="font-family:\'Plus Jakarta Sans\',sans-serif;">' +
       '<div class="w-10 h-1 bg-outline-variant rounded-full mx-auto mb-4"></div>' +
-      '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#514538;margin-bottom:6px;">Name Your Starter</p>' +
-      '<p style="font-family:\'Noto Serif\',serif;font-size:1.1rem;font-weight:700;color:#1d1c16;margin-bottom:1rem;">What would you like to call your starter?</p>' +
-      '<input id="rename-input" type="text" maxlength="20" value="' + currentName.replace(/"/g, '&quot;') + '" placeholder="e.g. Bubbles, Scout, Dough-Remi…" style="width:100%;padding:10px 12px;border:2px solid #d6c3b3;border-radius:12px;font-size:14px;color:#1d1c16;background:#fef9ef;margin-bottom:1.2rem;box-sizing:border-box;"/>' +
-      '<button onclick="submitRename()" style="width:100%;padding:14px;background:#875305;color:#fff;border-radius:14px;font-weight:700;font-size:14px;border:none;cursor:pointer;font-family:\'Plus Jakarta Sans\',sans-serif;">Save Name</button>' +
+      '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#514538;margin-bottom:6px;">' + _t('rename.eyebrow') + '</p>' +
+      '<p style="font-family:\'Noto Serif\',serif;font-size:1.1rem;font-weight:700;color:#1d1c16;margin-bottom:1rem;">' + _t('rename.prompt') + '</p>' +
+      '<input id="rename-input" type="text" maxlength="20" value="' + currentName.replace(/"/g, '&quot;') + '" placeholder="' + _t('rename.placeholder') + '" style="width:100%;padding:10px 12px;border:2px solid #d6c3b3;border-radius:12px;font-size:14px;color:#1d1c16;background:#fef9ef;margin-bottom:1.2rem;box-sizing:border-box;"/>' +
+      '<button onclick="submitRename()" style="width:100%;padding:14px;background:#875305;color:#fff;border-radius:14px;font-weight:700;font-size:14px;border:none;cursor:pointer;font-family:\'Plus Jakarta Sans\',sans-serif;">' + _t('rename.save') + '</button>' +
     '</div>';
     sheet.addEventListener('click', function(e) { if (e.target === sheet) closeRenameSheet(); });
     document.body.appendChild(sheet);
@@ -2940,8 +2941,9 @@
   }
 
   function _pymConfirm(html,okLabel,okColor,onOk) {
+    const _pt = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
     const ov=document.createElement('div'); ov.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(44,24,16,0.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1.5rem';
-    ov.innerHTML=`<div style="background:#fef9ef;border-radius:1.5rem;padding:1.75rem 1.5rem;max-width:320px;width:100%;box-shadow:0 25px 60px rgba(0,0,0,0.22);font-family:'Plus Jakarta Sans',sans-serif"><p style="font-size:14px;color:#514538;line-height:1.65;margin-bottom:1.25rem">${html}</p><div style="display:flex;gap:10px"><button onclick="this.closest('[style]').remove()" style="flex:1;padding:13px;border-radius:12px;border:2px solid #d6c3b3;background:transparent;font-weight:700;font-size:13px;color:#847466;cursor:pointer;font-family:inherit">Cancel</button><button id="_pymOkBtn" style="flex:1;padding:13px;border-radius:12px;background:${okColor||'#B3261E'};color:#fff;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">${okLabel||'OK'}</button></div></div>`;
+    ov.innerHTML=`<div style="background:#fef9ef;border-radius:1.5rem;padding:1.75rem 1.5rem;max-width:320px;width:100%;box-shadow:0 25px 60px rgba(0,0,0,0.22);font-family:'Plus Jakarta Sans',sans-serif"><p style="font-size:14px;color:#514538;line-height:1.65;margin-bottom:1.25rem">${html}</p><div style="display:flex;gap:10px"><button onclick="this.closest('[style]').remove()" style="flex:1;padding:13px;border-radius:12px;border:2px solid #d6c3b3;background:transparent;font-weight:700;font-size:13px;color:#847466;cursor:pointer;font-family:inherit">${_pt('common.cancel')}</button><button id="_pymOkBtn" style="flex:1;padding:13px;border-radius:12px;background:${okColor||'#B3261E'};color:#fff;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">${okLabel||_pt('common.ok')}</button></div></div>`;
     document.body.appendChild(ov); document.getElementById('_pymOkBtn').onclick=()=>{ov.remove();onOk();}; ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
   }
 
@@ -2972,14 +2974,15 @@
       if (_faBtn) _faBtn.addEventListener('click', function() { _setRatingFilter(false); });
       var importInput = document.getElementById('importInput');
       if (importInput) importInput.addEventListener('change', function(e) {
+        var _it = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
         const file=e.target.files[0]; if(!file) return;
-        const reader=new FileReader(); reader.onload=function(ev){try{const importedLogs=JSON.parse(ev.target.result);if(!Array.isArray(importedLogs))throw new Error('Invalid format');if(confirm(`Found ${importedLogs.length} entries. Merge with existing archive?`)){const current=getLogs();const merged=[...current,...importedLogs].map((item,idx)=>({...item,id:item.id||`log-${Date.now()}-${idx}`}));const unique=Array.from(new Map(merged.map(item=>[item.id||(item.date+item.recipe),item])).values());saveLogs(unique);alert('Logs successfully imported!');}}catch(err){alert('Error reading backup file. Please ensure it is a valid JSON export.');}e.target.value='';};
+        const reader=new FileReader(); reader.onload=function(ev){try{const importedLogs=JSON.parse(ev.target.result);if(!Array.isArray(importedLogs))throw new Error('Invalid format');if(confirm(_it('archive.import.confirmMerge').replace('{n}', importedLogs.length))){const current=getLogs();const merged=[...current,...importedLogs].map((item,idx)=>({...item,id:item.id||`log-${Date.now()}-${idx}`}));const unique=Array.from(new Map(merged.map(item=>[item.id||(item.date+item.recipe),item])).values());saveLogs(unique);alert(_it('archive.import.success'));}}catch(err){alert(_it('archive.import.error'));}e.target.value='';};
         reader.readAsText(file);
       });
       var clearDataBtn = document.getElementById('clearDataBtn');
       if (clearDataBtn) clearDataBtn.addEventListener('click', function() {
         var _ct = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
-        _pymConfirm('This will permanently delete <strong>ALL bake entries</strong> from this device.<br><br>Export your archive first — this cannot be undone.','Yes, delete all','#B3261E',()=>{_pymConfirm('Are you absolutely sure? Every bake record will be lost forever.','Delete everything','#B3261E',()=>{localStorage.removeItem('pym_logs');localStorage.removeItem('pym_auto_backup');localStorage.removeItem('pym_auto_backup_time');saveLogs([]);_pymToast(_ct('archive.localCleared'));});});
+        _pymConfirm(_ct('archive.deleteAll.confirm1Body'),_ct('archive.deleteAll.confirm1Btn'),'#B3261E',()=>{_pymConfirm(_ct('archive.deleteAll.confirm2Body'),_ct('archive.deleteAll.confirm2Btn'),'#B3261E',()=>{localStorage.removeItem('pym_logs');localStorage.removeItem('pym_auto_backup');localStorage.removeItem('pym_auto_backup_time');saveLogs([]);_pymToast(_ct('archive.localCleared'));});});
       });
       var logModal = document.getElementById('logModal');
       if (logModal) logModal.addEventListener('click', function(e) { if(e.target.id==='logModal') closeModal(); });

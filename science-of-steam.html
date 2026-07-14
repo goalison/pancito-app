@@ -43,7 +43,7 @@
   <div class="flex justify-between items-center px-6 py-4 w-full max-w-4xl mx-auto">
     <a class="flex items-center gap-3" href="app.html" onclick="try{sessionStorage.setItem('pym_boot_view','view-library')}catch(e){}">
       <span class="material-symbols-outlined text-primary">arrow_back</span>
-      <span class="font-label text-sm text-primary font-bold tracking-wide">Library</span>
+      <span class="font-label text-sm text-primary font-bold tracking-wide" data-i18n="edu.libraryBack">Library</span>
     </a>
     <a class="flex items-center gap-3" href="index.html"><img alt="Pancito y MÃ¡s Logo" class="w-12 h-12 object-contain" src="logo.png"/><span class="font-headline italic font-bold text-primary text-2xl tracking-tight">Pancito y MÃ¡s</span></a>
     <button class="text-primary hover:opacity-80 transition-opacity p-2 rounded-full">
@@ -56,9 +56,9 @@
 
   <!-- Category + Title -->
   <div class="mb-10">
-    <span class="font-label text-[10px] uppercase tracking-[0.2em] text-primary font-extrabold block mb-4">Bake Lab</span>
-    <h1 class="font-headline text-4xl md:text-6xl text-on-surface leading-tight mb-6">The Science of Steam</h1>
-    <p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">Why the first 10 minutes in the oven make or break your loaf â€” and how to get it right every single time.</p>
+    <span class="font-label text-[10px] uppercase tracking-[0.2em] text-primary font-extrabold block mb-4" data-i18n="edu.catBakeLab">Bake Lab</span>
+    <h1 class="font-headline text-4xl md:text-6xl text-on-surface leading-tight mb-6" data-i18n="steam.title">The Science of Steam</h1>
+    <p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed" data-i18n="steam.sub">Why the first 10 minutes in the oven make or break your loaf â€” and how to get it right every single time.</p>
   </div>
 
   <!-- Featured Image -->
@@ -66,94 +66,94 @@
     <img alt="Sourdough loaf baking inside a Dutch oven with steam rising" class="w-full h-full object-cover" src="https://pancitoymas.com/app/images/featured-science-steam.jpg" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')"/>
     <div class="absolute inset-0 flex flex-col items-center justify-center bg-surface-container-highest hidden">
       <span class="material-symbols-outlined text-6xl text-primary/30 mb-3">local_fire_department</span>
-      <span class="font-label text-xs text-outline uppercase tracking-widest">The Science of Steam</span>
+      <span class="font-label text-xs text-outline uppercase tracking-widest" data-i18n="steam.title">The Science of Steam</span>
     </div>
   </div>
 
   <!-- Meta -->
   <div class="flex items-center gap-6 mb-12 pb-8 border-b border-outline-variant">
-    <span class="font-label text-xs text-outline">By Pancito y MÃ¡s</span>
+    <span class="font-label text-xs text-outline" data-i18n="edu.byLine">By Pancito y MÃ¡s</span>
     <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
-    <span class="font-label text-xs text-outline">6 min read</span>
+    <span class="font-label text-xs text-outline" data-i18n="steam.readMin">6 min read</span>
     <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
-    <span class="font-label text-xs text-outline">All Levels</span>
+    <span class="font-label text-xs text-outline" data-i18n="edu.allLevels">All Levels</span>
   </div>
 
   <!-- Article Body -->
   <article class="prose-article">
 
-    <p>You've done everything right â€” a strong starter, good bulk fermentation, a beautiful shape. Then the loaf comes out of the oven flat, dense, and pale. The culprit, more often than not, is steam. Or the lack of it.</p>
+    <p data-i18n="steam.body.introP1">You've done everything right â€” a strong starter, good bulk fermentation, a beautiful shape. Then the loaf comes out of the oven flat, dense, and pale. The culprit, more often than not, is steam. Or the lack of it.</p>
 
-    <p>Steam is not a trick or a shortcut. It is a fundamental part of how bread bakes. Understanding what it does â€” and what happens without it â€” is one of the most important things a home baker can learn.</p>
+    <p data-i18n="steam.body.introP2">Steam is not a trick or a shortcut. It is a fundamental part of how bread bakes. Understanding what it does â€” and what happens without it â€” is one of the most important things a home baker can learn.</p>
 
-    <h2>What Steam Actually Does</h2>
+    <h2 data-i18n="steam.body.h2WhatSteamDoes">What Steam Actually Does</h2>
 
-    <p>When your shaped, cold dough hits a screaming-hot oven, two things need to happen simultaneously: the dough needs to expand rapidly (called <em>oven spring</em>), and the crust needs to stay soft long enough to allow that expansion. Here is the problem â€” heat sets a crust very quickly. Without moisture, the surface firms up within the first few minutes, creating a rigid shell that physically prevents the loaf from opening up.</p>
+    <p data-i18n-html="steam.body.whatSteamDoesP1Html">When your shaped, cold dough hits a screaming-hot oven, two things need to happen simultaneously: the dough needs to expand rapidly (called <em>oven spring</em>), and the crust needs to stay soft long enough to allow that expansion. Here is the problem â€” heat sets a crust very quickly. Without moisture, the surface firms up within the first few minutes, creating a rigid shell that physically prevents the loaf from opening up.</p>
 
-    <p>Steam solves this by keeping the surface of the dough moist and pliable during that critical first window. The moisture condenses on the cool dough surface, temporarily delaying crust formation and allowing the loaf to push outward freely as the gases inside expand.</p>
+    <p data-i18n="steam.body.whatSteamDoesP2">Steam solves this by keeping the surface of the dough moist and pliable during that critical first window. The moisture condenses on the cool dough surface, temporarily delaying crust formation and allowing the loaf to push outward freely as the gases inside expand.</p>
 
-    <p>The result is a loaf with dramatic oven spring, a wide, open score, and â€” once the steam phase ends and the surface dries out â€” a deep, crackly crust that develops through the Maillard reaction.</p>
+    <p data-i18n="steam.body.whatSteamDoesP3">The result is a loaf with dramatic oven spring, a wide, open score, and â€” once the steam phase ends and the surface dries out â€” a deep, crackly crust that develops through the Maillard reaction.</p>
 
-    <h2>The Two Phases of Baking</h2>
+    <h2 data-i18n="steam.body.h2TwoPhases">The Two Phases of Baking</h2>
 
-    <p>Every great sourdough bake has two distinct phases, and understanding them helps you control the outcome.</p>
+    <p data-i18n="steam.body.twoPhasesP1">Every great sourdough bake has two distinct phases, and understanding them helps you control the outcome.</p>
 
-    <p><strong>Phase 1 â€” Steam on (first 20â€“25 minutes):</strong> The oven is as hot as it will go (450â€“500Â°F / 230â€“260Â°C). The steam environment keeps the crust soft. The loaf springs upward, the score opens, and the internal structure sets. This is when size is determined.</p>
+    <p data-i18n-html="steam.body.twoPhasesPhase1Html"><strong>Phase 1 â€” Steam on (first 20â€“25 minutes):</strong> The oven is as hot as it will go (450â€“500Â°F / 230â€“260Â°C). The steam environment keeps the crust soft. The loaf springs upward, the score opens, and the internal structure sets. This is when size is determined.</p>
 
-    <p><strong>Phase 2 â€” Steam off (final 15â€“25 minutes):</strong> The lid comes off, or the steam source is removed. Dry heat takes over. The crust begins to color â€” going from pale gold to deep amber. The Maillard reaction creates the hundreds of flavor compounds responsible for that roasted, complex taste. This is when color and crust thickness are determined.</p>
+    <p data-i18n-html="steam.body.twoPhasesPhase2Html"><strong>Phase 2 â€” Steam off (final 15â€“25 minutes):</strong> The lid comes off, or the steam source is removed. Dry heat takes over. The crust begins to color â€” going from pale gold to deep amber. The Maillard reaction creates the hundreds of flavor compounds responsible for that roasted, complex taste. This is when color and crust thickness are determined.</p>
 
-    <p>Rushing Phase 2, or skipping Phase 1 entirely, produces a loaf that is either pale and chewy or dense and cracked in the wrong places.</p>
+    <p data-i18n="steam.body.twoPhasesP2">Rushing Phase 2, or skipping Phase 1 entirely, produces a loaf that is either pale and chewy or dense and cracked in the wrong places.</p>
 
-    <h2>The Dutch Oven Method</h2>
+    <h2 data-i18n="steam.body.h2DutchOven">The Dutch Oven Method</h2>
 
-    <p>For home bakers, a Dutch oven (or any heavy lidded pot) is the most reliable way to create a steam environment. The logic is elegant: the loaf itself produces steam as its internal moisture evaporates. The lid traps that steam around the loaf for the first phase of baking.</p>
+    <p data-i18n="steam.body.dutchOvenP1">For home bakers, a Dutch oven (or any heavy lidded pot) is the most reliable way to create a steam environment. The logic is elegant: the loaf itself produces steam as its internal moisture evaporates. The lid traps that steam around the loaf for the first phase of baking.</p>
 
-    <p>This is why the Dutch oven method works so consistently â€” you are not adding external steam, you are harnessing the loaf's own moisture.</p>
+    <p data-i18n="steam.body.dutchOvenP2">This is why the Dutch oven method works so consistently â€” you are not adding external steam, you are harnessing the loaf's own moisture.</p>
 
     <ol>
-      <li><strong>Preheat the Dutch oven inside the oven</strong> for at least 45â€“60 minutes at 500Â°F (260Â°C). The pot must be fully saturated with heat, not just warm. A cold pot destroys oven spring.</li>
-      <li><strong>Score the dough directly from the fridge</strong> â€” cold dough is firmer, easier to score cleanly, and holds its shape longer as it hits the heat.</li>
-      <li><strong>Lower the oven to 450Â°F (230Â°C) immediately</strong> after placing the dough inside. The residual heat from 500Â°F does the work; you're just dialing back to prevent burning.</li>
-      <li><strong>Bake covered for 20â€“25 minutes</strong>. Resist lifting the lid. Every time you peek, you release steam.</li>
-      <li><strong>Remove the lid</strong> and bake uncovered for another 20â€“25 minutes until the crust is deeply colored.</li>
+      <li data-i18n-html="steam.body.dutchOvenStep1Html"><strong>Preheat the Dutch oven inside the oven</strong> for at least 45â€“60 minutes at 500Â°F (260Â°C). The pot must be fully saturated with heat, not just warm. A cold pot destroys oven spring.</li>
+      <li data-i18n-html="steam.body.dutchOvenStep2Html"><strong>Score the dough directly from the fridge</strong> â€” cold dough is firmer, easier to score cleanly, and holds its shape longer as it hits the heat.</li>
+      <li data-i18n-html="steam.body.dutchOvenStep3Html"><strong>Lower the oven to 450Â°F (230Â°C) immediately</strong> after placing the dough inside. The residual heat from 500Â°F does the work; you're just dialing back to prevent burning.</li>
+      <li data-i18n-html="steam.body.dutchOvenStep4Html"><strong>Bake covered for 20â€“25 minutes</strong>. Resist lifting the lid. Every time you peek, you release steam.</li>
+      <li data-i18n-html="steam.body.dutchOvenStep5Html"><strong>Remove the lid</strong> and bake uncovered for another 20â€“25 minutes until the crust is deeply colored.</li>
     </ol>
 
-    <h2>Reading the Score</h2>
+    <h2 data-i18n="steam.body.h2ReadingScore">Reading the Score</h2>
 
-    <p>Your score is a direct report card on your steam phase. A wide, dramatic ear that peels back from the loaf means steam was present and the crust stayed supple long enough for real expansion. A tight, closed score that barely opened â€” or that looks burst and ragged â€” usually means the crust set too fast, either from too little steam or a loaf that wasn't cold enough when it went in.</p>
+    <p data-i18n="steam.body.readingScoreP1">Your score is a direct report card on your steam phase. A wide, dramatic ear that peels back from the loaf means steam was present and the crust stayed supple long enough for real expansion. A tight, closed score that barely opened â€” or that looks burst and ragged â€” usually means the crust set too fast, either from too little steam or a loaf that wasn't cold enough when it went in.</p>
 
-    <h2>What Happens Without Steam</h2>
+    <h2 data-i18n="steam.body.h2WithoutSteam">What Happens Without Steam</h2>
 
-    <p>Baking without a lid or steam source produces a "free-baked" loaf. The crust sets within 3â€“5 minutes. Any remaining gas expansion tears through the crust randomly â€” producing side bursts and an uneven crumb â€” rather than expanding through your intentional score. The loaf is also typically shorter and denser, since oven spring is limited by the early crust formation.</p>
+    <p data-i18n="steam.body.withoutSteamP1">Baking without a lid or steam source produces a "free-baked" loaf. The crust sets within 3â€“5 minutes. Any remaining gas expansion tears through the crust randomly â€” producing side bursts and an uneven crumb â€” rather than expanding through your intentional score. The loaf is also typically shorter and denser, since oven spring is limited by the early crust formation.</p>
 
-    <p>Free-baking works for some styles of bread intentionally, but for a classic sourdough boule or batard, steam is non-negotiable.</p>
+    <p data-i18n="steam.body.withoutSteamP2">Free-baking works for some styles of bread intentionally, but for a classic sourdough boule or batard, steam is non-negotiable.</p>
 
-    <h2>Common Steam Mistakes</h2>
+    <h2 data-i18n="steam.body.h2CommonMistakes">Common Steam Mistakes</h2>
 
     <ul>
-      <li><strong>Not preheating long enough</strong> â€” 30 minutes is not enough. A full hour at temperature gives the cast iron time to reach true equilibrium heat. This is the single most common reason loaves don't spring.</li>
-      <li><strong>Lifting the lid too early</strong> â€” the steam phase needs its full 20â€“25 minutes. Opening the lid at 15 minutes releases all the trapped moisture right when the crust is still setting.</li>
-      <li><strong>Scoring too shallow</strong> â€” even with perfect steam, a shallow score closes quickly. A confident, decisive cut at a 30â€“45Â° angle, at least Â½ inch deep, gives the loaf a clear path to expand.</li>
-      <li><strong>Baking a warm loaf</strong> â€” always bake from the fridge. Room-temperature dough spreads laterally in the oven instead of rising vertically. Cold dough holds its shape just long enough for oven spring to take over.</li>
+      <li data-i18n-html="steam.body.mistake1Html"><strong>Not preheating long enough</strong> â€” 30 minutes is not enough. A full hour at temperature gives the cast iron time to reach true equilibrium heat. This is the single most common reason loaves don't spring.</li>
+      <li data-i18n-html="steam.body.mistake2Html"><strong>Lifting the lid too early</strong> â€” the steam phase needs its full 20â€“25 minutes. Opening the lid at 15 minutes releases all the trapped moisture right when the crust is still setting.</li>
+      <li data-i18n-html="steam.body.mistake3Html"><strong>Scoring too shallow</strong> â€” even with perfect steam, a shallow score closes quickly. A confident, decisive cut at a 30â€“45Â° angle, at least Â½ inch deep, gives the loaf a clear path to expand.</li>
+      <li data-i18n-html="steam.body.mistake4Html"><strong>Baking a warm loaf</strong> â€” always bake from the fridge. Room-temperature dough spreads laterally in the oven instead of rising vertically. Cold dough holds its shape just long enough for oven spring to take over.</li>
     </ul>
 
-    <p>Steam is one of those variables that, once you understand it, you cannot un-see. Every loaf tells you exactly what happened in those first ten minutes. The ear, the bloom, the crust color â€” they're all reading from the same page.</p>
+    <p data-i18n="steam.body.closingP1">Steam is one of those variables that, once you understand it, you cannot un-see. Every loaf tells you exactly what happened in those first ten minutes. The ear, the bloom, the crust color â€” they're all reading from the same page.</p>
 
   </article>
 
   <!-- Related Links -->
   <div class="mt-16 pt-8 border-t border-outline-variant">
-    <h3 class="font-headline text-2xl mb-6">Continue Learning</h3>
+    <h3 class="font-headline text-2xl mb-6" data-i18n="steam.body.continueLearning">Continue Learning</h3>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <a href="scoring-aesthetics.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
-        <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Finishing</span>
-        <h4 class="font-headline text-lg mb-1 group-hover:text-primary transition-colors">Scoring Aesthetics</h4>
-        <p class="text-xs text-on-surface-variant">The lame work that creates beautiful, controlled expansion.</p>
+        <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block" data-i18n="edu.catFinishing">Finishing</span>
+        <h4 class="font-headline text-lg mb-1 group-hover:text-primary transition-colors" data-i18n="scoring.title">Scoring Aesthetics</h4>
+        <p class="text-xs text-on-surface-variant" data-i18n="steam.body.relatedScoringDesc">The lame work that creates beautiful, controlled expansion.</p>
       </a>
       <a href="stretch-and-fold.html" class="bg-surface-container-low rounded-xl p-6 group hover:bg-surface-container transition-colors">
-        <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Foundations</span>
-        <h4 class="font-headline text-lg mb-1 group-hover:text-primary transition-colors">The Stretch &amp; Fold</h4>
-        <p class="text-xs text-on-surface-variant">Mastering hydration without heavy kneading.</p>
+        <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block" data-i18n="edu.catFoundations">Foundations</span>
+        <h4 class="font-headline text-lg mb-1 group-hover:text-primary transition-colors" data-i18n="stretchFold.title">The Stretch &amp; Fold</h4>
+        <p class="text-xs text-on-surface-variant" data-i18n="steam.body.relatedStretchFoldDesc">Mastering hydration without heavy kneading.</p>
       </a>
     </div>
   </div>
@@ -162,10 +162,10 @@
 
 <!-- Bottom Nav -->
 <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-3 bg-[#fef9ef]/70 backdrop-blur-xl shadow-[0_-12px_32px_rgba(44,24,16,0.06)] rounded-t-[2rem] md:hidden" style="padding-bottom: max(1.5rem, env(safe-area-inset-bottom))">
-  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl" href="index.html"><span class="material-symbols-outlined">home_max</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1">Dash</span></a>
-  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl" href="app.html" onclick="try{sessionStorage.setItem('pym_boot_view','view-bake')}catch(e){}"><span class="material-symbols-outlined">timer</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1">Bake</span></a>
-  <a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" href="app.html" onclick="try{sessionStorage.setItem('pym_boot_view','view-library')}catch(e){}"><span class="material-symbols-outlined">book_5</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1">Library</span></a>
-  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl" href="app.html" onclick="try{sessionStorage.setItem('pym_boot_view','view-archive')}catch(e){}"><span class="material-symbols-outlined">inventory_2</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1">Archive</span></a>
+  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl" href="index.html"><span class="material-symbols-outlined">home_max</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1" data-i18n="nav.dash">Dash</span></a>
+  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl" href="app.html" onclick="try{sessionStorage.setItem('pym_boot_view','view-bake')}catch(e){}"><span class="material-symbols-outlined">timer</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1" data-i18n="nav.bake">Bake</span></a>
+  <a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#875305] to-[#c4863a] text-white rounded-2xl px-4 py-2" href="app.html" onclick="try{sessionStorage.setItem('pym_boot_view','view-library')}catch(e){}"><span class="material-symbols-outlined">book_5</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1" data-i18n="nav.library">Library</span></a>
+  <a class="flex flex-col items-center justify-center text-[#875305]/60 px-4 py-2 rounded-2xl" href="app.html" onclick="try{sessionStorage.setItem('pym_boot_view','view-archive')}catch(e){}"><span class="material-symbols-outlined">inventory_2</span><span class="font-label text-[10px] font-bold uppercase tracking-widest mt-1" data-i18n="nav.archive">Archive</span></a>
 </nav>
 
 <script src="alarm-bridge.js"></script>

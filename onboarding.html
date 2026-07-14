@@ -1832,32 +1832,35 @@ function showFacebookCard() {
 
 // ── Chapter 3 (Equipment) ─────────────────────────────────────────────────
 const EQUIPMENT = [
-  { id:'scale',       icon:'scale',        name:'Digital kitchen scale',       desc:'Essential — sourdough is measured by weight, not cups.', guide:null },
-  { id:'dutch_oven',  icon:'outdoor_grill',name:'Dutch oven or combo cooker',  desc:'Traps steam for oven spring. This is your #1 tool.', guide:null },
-  { id:'banneton',    icon:'circle',       name:'Banneton / proofing basket',   desc:'Shapes and supports the dough during cold proof.', guide:'banneton.html' },
-  { id:'scraper',     icon:'crop_square',  name:'Bench scraper',               desc:'For dividing, shaping, and lifting dough.', guide:'bench-scraper.html' },
-  { id:'lame',        icon:'content_cut',  name:'Lame or razor blade',         desc:'For scoring — that beautiful slash before baking.', guide:'lame.html' },
-  { id:'thermometer', icon:'thermostat',   name:'Instant-read thermometer',    desc:'Knowing dough temp is key to predicting timing.', guide:'starter-kit.html' },
+  { id:'scale',       icon:'scale',        nameKey:'onboarding.equip.scale.name',    descKey:'onboarding.equip.scale.desc',    guide:null },
+  { id:'dutch_oven',  icon:'outdoor_grill',nameKey:'onboarding.equip.dutch.name',    descKey:'onboarding.equip.dutch.desc',    guide:null },
+  { id:'banneton',    icon:'circle',       nameKey:'onboarding.equip.banneton.name', descKey:'onboarding.equip.banneton.desc', guide:'banneton.html' },
+  { id:'scraper',     icon:'crop_square',  nameKey:'onboarding.equip.scraper.name',  descKey:'onboarding.equip.scraper.desc',  guide:'bench-scraper.html' },
+  { id:'lame',        icon:'content_cut',  nameKey:'onboarding.equip.lame.name',     descKey:'onboarding.equip.lame.desc',     guide:'lame.html' },
+  { id:'thermometer', icon:'thermostat',   nameKey:'onboarding.equip.therm.name',    descKey:'onboarding.equip.therm.desc',    guide:'starter-kit.html' },
 ];
 
 function initEquipment() {
   const list = document.getElementById('equipList');
-  list.innerHTML = EQUIPMENT.map(e => `
+  list.innerHTML = EQUIPMENT.map(e => {
+    const name = t(e.nameKey), desc = t(e.descKey);
+    return `
     <div class="flex items-center gap-4 bg-white rounded-2xl border border-[#d6c3b3]/30 p-4">
       <div class="bg-[#f2ede3] p-2.5 rounded-xl shrink-0">
         <span class="material-symbols-outlined text-[#875305]">${e.icon}</span>
       </div>
       <div class="flex-1 min-w-0">
-        <div class="font-bold text-sm text-[#1d1c16]">${e.name}</div>
-        <div class="text-xs text-[#514538] mt-0.5">${e.desc}</div>
-        ${e.guide ? `<a href="${e.guide}" class="text-[10px] text-[#C4863A] font-bold uppercase tracking-wider mt-1 block" onclick="event.stopPropagation();event.preventDefault();openEquipGuide('${e.guide}','${e.name.replace(/'/g,"\\'")}')">Learn more →</a>` : ''}
+        <div class="font-bold text-sm text-[#1d1c16]">${name}</div>
+        <div class="text-xs text-[#514538] mt-0.5">${desc}</div>
+        ${e.guide ? `<a href="${e.guide}" class="text-[10px] text-[#C4863A] font-bold uppercase tracking-wider mt-1 block" onclick="event.stopPropagation();event.preventDefault();openEquipGuide('${e.guide}','${name.replace(/'/g,"\\'")}')">${t('onboarding.equip.learnMore')}</a>` : ''}
       </div>
       <div class="flex flex-col gap-1.5 shrink-0">
-        <button class="equip-btn have text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all" onclick="toggleEquip('${e.id}','have',this.closest('.flex'))">✓ Have it</button>
-        <button class="equip-btn need text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all" onclick="toggleEquip('${e.id}','need',this.closest('.flex'))">Need it</button>
+        <button class="equip-btn have text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all" onclick="toggleEquip('${e.id}','have',this.closest('.flex'))">${t('onboarding.equip.haveIt')}</button>
+        <button class="equip-btn need text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all" onclick="toggleEquip('${e.id}','need',this.closest('.flex'))">${t('onboarding.equip.needIt')}</button>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 // Equipment "Learn more" opens the guide in an in-flow modal instead of

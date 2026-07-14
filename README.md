@@ -91,6 +91,22 @@ npm run open     # Opens Android Studio
 
 Then in Android Studio: **Run > Run 'app'** to deploy to a device or emulator.
 
+### i18n guardrail
+
+The app is bilingual (English/Spanish) via `i18n.js`. Before shipping translation
+changes, run:
+
+```bash
+node scripts/check-i18n.js
+```
+
+This plain-Node, zero-dependency script (a) verifies every EN key in `i18n.js`
+has a matching ES key and vice versa, and (b) heuristically scans every shipped
+`.html` file for text that looks user-facing but isn't wired through
+`data-i18n`. It's a heuristic, not a parser — it reports possible misses for a
+human to review, it never fails the build. See `TRANSLATIONS-REVIEW.md` for a
+log of translation judgment calls worth a native-speaker's second look.
+
 ---
 
 ## App ID
