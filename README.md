@@ -111,9 +111,10 @@ log of translation judgment calls worth a native-speaker's second look.
 
 Every push to `main` builds a release AAB and, if `PLAY_SERVICE_ACCOUNT_JSON`
 is configured as a GitHub Actions secret, uploads it straight to the Play
-Console **Internal testing** track (see `.github/workflows/build-android.yml`,
-step "Publish to Play Store"). It never auto-publishes to Production — that
-promotion is a manual step in Play Console, on purpose.
+Console **Closed testing → Alpha** track (see
+`.github/workflows/build-android.yml`, step "Publish to Play Store"). It
+never auto-publishes to Production — that promotion is a manual step in Play
+Console, on purpose.
 
 **Release notes**: edit `distribution/whatsnew/en-US/whatsnew` and
 `distribution/whatsnew/es-419/whatsnew` (plain text, ~500 char limit) before
@@ -123,12 +124,18 @@ Play Console → Store presence → Main store listing → languages; rename the
 if your listing uses a different Spanish variant (e.g. `es-ES`, `es-US`).
 
 **One-time setup** (only needs doing once, and only by someone with admin
-access to the Play Console listing):
+access to the Play Console listing). Play Console removed the old "Setup →
+API access" linking page, so service-account access is now granted the same
+way you'd invite a human collaborator:
 1. In Google Cloud Console, create/select a project, enable the "Google Play
-   Android Developer API," create a Service Account, and generate a JSON key.
-2. In Play Console → Setup → API access, link that Google Cloud project, then
-   grant the service account "Release manager" access (or a custom role with
-   "Manage testing tracks and edit tester lists") for this app specifically.
+   Android Developer API," create a Service Account, and generate a JSON key
+   (IAM & Admin → Service Accounts → your account → Keys → Add key → JSON).
+2. In Play Console → Users and permissions → Invite new users, paste the
+   service account's email (looks like `name@project-id.iam.gserviceaccount.com`,
+   shown on its Service Accounts page). Grant it app access to this app
+   specifically, with at minimum the "Release apps to testing tracks"
+   permission — that alone covers Internal, Closed (Alpha/Beta), and Open
+   testing tracks, just not Production.
 3. In the GitHub repo → Settings → Secrets and variables → Actions, add a new
    secret named `PLAY_SERVICE_ACCOUNT_JSON` with the full contents of that
    JSON key file.

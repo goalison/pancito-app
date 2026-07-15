@@ -390,20 +390,22 @@ jobs:
           path: android/app/build/outputs/bundle/release/app-release.aab
           retention-days: 60
 
-      # ── 13. Publish to Play Store (Internal testing track) ──────────────────
+      # ── 13. Publish to Play Store (Closed testing - Alpha track) ────────────
       # Skipped automatically until PLAY_SERVICE_ACCOUNT_JSON is configured as
       # a repo secret — see README.md § "Play Store publishing" for one-time
-      # setup. Never targets production; promoting a release out of Internal
+      # setup. Never targets production; promoting a release out of Closed
       # testing stays a manual step in Play Console on purpose. Release notes
       # come from distribution/whatsnew/<locale>/whatsnew — update those files
-      # before pushing to change what's shown for the next release.
-      - name: Publish to Play Store (Internal testing)
+      # before pushing to change what's shown for the next release. "alpha" is
+      # the API's fixed identifier for Play Console's default "Alpha" closed
+      # testing track (visible in Play Console as Testing > Closed testing).
+      - name: Publish to Play Store (Closed testing - Alpha)
         if: ${{ env.PLAY_SERVICE_ACCOUNT_JSON != '' }}
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ env.PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: com.pancitoymas.sourdough
           releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
-          tracks: internal
+          tracks: alpha
           whatsNewDirectory: distribution/whatsnew
           status: completed
