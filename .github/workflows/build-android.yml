@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      # secrets.* cannot be referenced directly in a step's `if:` condition
+      # (GitHub Actions rejects the whole workflow file at validation time —
+      # "Unrecognized named-value: 'secrets'" — every run failed outright
+      # until this was mapped to a job-level env var instead).
+      PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
 
     steps:
       # ── 1. Get the code ────────────────────────────────────────────────────
@@ -393,10 +398,10 @@ jobs:
       # come from distribution/whatsnew/<locale>/whatsnew — update those files
       # before pushing to change what's shown for the next release.
       - name: Publish to Play Store (Internal testing)
-        if: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON != '' }}
+        if: ${{ env.PLAY_SERVICE_ACCOUNT_JSON != '' }}
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          serviceAccountJsonPlainText: ${{ env.PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: com.pancitoymas.sourdough
           releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
           track: internal
