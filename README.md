@@ -107,6 +107,35 @@ has a matching ES key and vice versa, and (b) heuristically scans every shipped
 human to review, it never fails the build. See `TRANSLATIONS-REVIEW.md` for a
 log of translation judgment calls worth a native-speaker's second look.
 
+### Play Store publishing
+
+Every push to `main` builds a release AAB and, if `PLAY_SERVICE_ACCOUNT_JSON`
+is configured as a GitHub Actions secret, uploads it straight to the Play
+Console **Internal testing** track (see `.github/workflows/build-android.yml`,
+step "Publish to Play Store"). It never auto-publishes to Production — that
+promotion is a manual step in Play Console, on purpose.
+
+**Release notes**: edit `distribution/whatsnew/en-US/whatsnew` and
+`distribution/whatsnew/es-419/whatsnew` (plain text, ~500 char limit) before
+pushing — CI uploads whatever's currently committed there as that release's
+"what's new" text. These locale folder names must match what's configured in
+Play Console → Store presence → Main store listing → languages; rename them
+if your listing uses a different Spanish variant (e.g. `es-ES`, `es-US`).
+
+**One-time setup** (only needs doing once, and only by someone with admin
+access to the Play Console listing):
+1. In Google Cloud Console, create/select a project, enable the "Google Play
+   Android Developer API," create a Service Account, and generate a JSON key.
+2. In Play Console → Setup → API access, link that Google Cloud project, then
+   grant the service account "Release manager" access (or a custom role with
+   "Manage testing tracks and edit tester lists") for this app specifically.
+3. In the GitHub repo → Settings → Secrets and variables → Actions, add a new
+   secret named `PLAY_SERVICE_ACCOUNT_JSON` with the full contents of that
+   JSON key file.
+
+Until that secret exists, the publish step is skipped automatically (build
+still succeeds and still uploads the AAB as a GitHub Actions artifact).
+
 ---
 
 ## App ID
