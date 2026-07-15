@@ -211,6 +211,83 @@ jobs:
           echo "── Result:"
           cat "$MAIN"
 
+      # ── 6e. Configure Android Auto Backup for Apps ──────────────────────────
+      # Backs up SharedPreferences (where @capacitor/preferences stores all
+      # durable pym_* data — see storage.js) and the bake-photos/ files
+      # (@capacitor/filesystem) to the user's Google account automatically,
+      # restored on reinstall or a new device. This complements — does not
+      # replace — the in-app manual "Export backup file" feature. The old
+      # WebView database domain (localStorage/IndexedDB) is excluded since
+      # it's no longer the source of truth for durable data.
+      - name: Configure Android Auto Backup for Apps
+        run: |
+          mkdir -p android/app/src/main/res/xml
+
+          cat > android/app/src/main/res/xml/backup_rules.xml << 'XML_EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <full-backup-content>
+              <include domain="sharedpref" path="."/>
+              <include domain="file" path="bake-photos/"/>
+              <exclude domain="database" path="."/>
+          </full-backup-content>
+          XML_EOF
+
+          cat > android/app/src/main/res/xml/data_extraction_rules.xml << 'XML_EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <data-extraction-rules>
+              <cloud-backup>
+                  <include domain="sharedpref" path="."/>
+                  <include domain="file" path="bake-photos/"/>
+                  <exclude domain="database" path="."/>
+              </cloud-backup>
+              <device-transfer>
+                  <include domain="sharedpref" path="."/>
+                  <include domain="file" path="bake-photos/"/>
+                  <exclude domain="database" path="."/>
+              </device-transfer>
+          </data-extraction-rules>
+          XML_EOF
+
+          echo "✓ Backup rule XML files written"
+
+          python3 << 'PYEOF'
+          import re, sys
+          path = 'android/app/src/main/AndroidManifest.xml'
+          with open(path, 'r') as f:
+              content = f.read()
+
+          m = re.search(r'<application\b[^>]*>', content)
+          if not m:
+              print('ERROR: <application> tag not found in AndroidManifest.xml')
+              sys.exit(1)
+          tag = m.group(0)
+
+          def set_attr(t, name, value):
+              pattern = r'android:' + name + r'="[^"]*"'
+              if re.search(pattern, t):
+                  return re.sub(pattern, 'android:' + name + '="' + value + '"', t)
+              return t.replace('<application', '<application\n        android:' + name + '="' + value + '"', 1)
+
+          new_tag = tag
+          new_tag = set_attr(new_tag, 'allowBackup', 'true')
+          new_tag = set_attr(new_tag, 'fullBackupContent', '@xml/backup_rules')
+          new_tag = set_attr(new_tag, 'dataExtractionRules', '@xml/data_extraction_rules')
+
+          content = content.replace(tag, new_tag, 1)
+          with open(path, 'w') as f:
+              f.write(content)
+          print('✓ AndroidManifest <application> tag patched:')
+          print(new_tag)
+          PYEOF
+
+          echo "── Verifying:"
+          grep -q 'android:allowBackup="true"' android/app/src/main/AndroidManifest.xml || { echo "ERROR: allowBackup not set"; exit 1; }
+          grep -q 'android:fullBackupContent="@xml/backup_rules"' android/app/src/main/AndroidManifest.xml || { echo "ERROR: fullBackupContent not set"; exit 1; }
+          grep -q 'android:dataExtractionRules="@xml/data_extraction_rules"' android/app/src/main/AndroidManifest.xml || { echo "ERROR: dataExtractionRules not set"; exit 1; }
+          [ -f android/app/src/main/res/xml/backup_rules.xml ] || { echo "ERROR: backup_rules.xml missing"; exit 1; }
+          [ -f android/app/src/main/res/xml/data_extraction_rules.xml ] || { echo "ERROR: data_extraction_rules.xml missing"; exit 1; }
+          echo "✓ Auto Backup configured and verified"
+
       # ── 7. Decode release keystore from secret ──────────────────────────────
       - name: Decode release keystore
         run: |

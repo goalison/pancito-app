@@ -41,6 +41,13 @@ migration (AUDIT.md §5 / Phase 4). Two testing tiers are covered:
 - Dashboard shows a small, dismissible (never modal) nudge if the user has
   ≥3 logged bakes and hasn't exported in 30+ days.
 - The welcome screen has a quiet "Restore a backup" link for fresh installs.
+- **Android Auto Backup for Apps** is now also configured (build workflow,
+  "Configure Android Auto Backup for Apps" step). This is a second, fully
+  automatic layer on top of manual export: Android periodically backs up the
+  app's SharedPreferences (all `pym_*` data via `@capacitor/preferences`) and
+  the `bake-photos/` files to the user's Google account in the background,
+  with no action required, and restores them automatically on reinstall or a
+  new device. It does **not** replace manual export — see caveats below.
 
 ---
 
@@ -154,9 +161,47 @@ screen → restore → verify loop once in English and once in Spanish:
    end-to-end, not just that individual strings translate correctly in
    isolation.
 
+### Test D — Android Auto Backup for Apps
+
+This cannot be exercised in this browser-only environment at all — it is a
+build/manifest configuration that only a real Android OS backup pass can
+verify. Reviewed by code inspection only (see "Known limitations" below).
+
+1. Install the app fresh on a device signed into a Google account with
+   backup enabled (Settings → System → Backup). Log a few bakes with photos.
+2. Force a backup pass immediately instead of waiting for the OS's own
+   schedule: `adb shell bmgr backupnow com.pancitoymas.sourdough` (requires
+   a debug-enabled device/emulator with `adb`).
+3. Check the command output / `adb logcat -s BackupManagerService` for a
+   success result for this package.
+4. Uninstall the app, then reinstall it from the same source (Play Store
+   install is the real-world path; a fresh `adb install` of the same APK/AAB
+   signature also triggers restore). On first launch, confirm the bake logs,
+   photos, and gamification state came back **without** using the in-app
+   "Restore a backup" flow at all.
+5. Confirm `adb shell dumpsys backup` lists `com.pancitoymas.sourdough` as
+   backed up, and that its size is well under the ~25MB per-app cap Android
+   enforces.
+
 ---
 
 ## Known limitations / honest caveats
+
+- **Auto Backup for Apps is best-effort, not guaranteed.** It only runs if
+  the device itself has backup enabled (on by default on most phones, but
+  users can turn it off), needs a Wi-Fi connection and the device to be idle
+  and charging, and Android decides the schedule — it is not instant or
+  on-demand from inside the app. The manual "Export backup file" feature
+  remains the reliable, user-controlled path and is not being deprioritized.
+- Auto Backup's ~25MB per-app cap is shared across every backed-up file
+  (SharedPreferences + all `bake-photos/*.jpg`). A user with many
+  high-resolution bake photos could exceed it — Android silently skips
+  backing up that app for the cycle rather than erroring, so there's no
+  in-app way to detect or surface this today.
+- The old WebView `database` domain (localStorage/IndexedDB) is explicitly
+  excluded from both backup rule files, since Preferences/Filesystem are now
+  the source of truth for durable data — this keeps the backup small and
+  avoids restoring stale, superseded copies of the same data.
 
 - `pym_last_export_time` (and the dashboard nudge's dismiss timestamp) are
   themselves durable pym_* keys mirrored to Preferences — if a user's
