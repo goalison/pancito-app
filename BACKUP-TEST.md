@@ -185,6 +185,36 @@ verify. Reviewed by code inspection only (see "Known limitations" below).
 
 ---
 
+## Bug fixed after v177 device testing
+
+**Reported**: on a real device (v177), tapping "Export backup file" showed a
+"saved" notification, but the file wasn't actually in the Downloads folder
+when searched for afterward.
+
+**Root cause**: `exportBackup()` relied on the raw Web Share API
+(`navigator.share`/`navigator.canShare`), which is inconsistently supported
+for files inside a Capacitor Android WebView. When `canShare` returned
+`false` (or `share()` threw for a reason other than the user cancelling),
+execution fell through to a blob-URL `<a download>` click — a browser-page
+trick that, inside an embedded WebView (not a real browser tab), can report
+a phantom download completion without ever writing to the public,
+Files-app-visible Downloads folder. That produced exactly the reported
+symptom: a "saved" notification with no real file to find.
+
+**Fix**: on native, `exportBackup()` now writes the backup via
+`@capacitor/filesystem` (already a dependency, used for bake photos) to the
+app's cache directory, then hands the real `content://` URI to the official
+`@capacitor/share` plugin's native Android share sheet — the officially
+recommended, guaranteed-consistent Capacitor pattern for exporting a file a
+user can save or share, unlike raw `navigator.share`. The web/browser
+fallback path (unaffected by this bug, and unchanged) still uses the
+original blob-download approach, which works correctly in a real browser
+tab. Needs a device retest to confirm the Play Console "Internal testing"
+build produces a "Save your backup" native share sheet and that the chosen
+destination actually contains the file afterward.
+
+---
+
 ## Known limitations / honest caveats
 
 - **Auto Backup for Apps is best-effort, not guaranteed.** It only runs if

@@ -3063,8 +3063,36 @@
       exportLogs.push(log);
     }
     const filename=`pancito-backup-${new Date().toISOString().split('T')[0]}.json`, content=JSON.stringify(exportLogs,null,2);
-    const blob=new Blob([content],{type:'application/json'}), file=new File([blob],filename,{type:'application/json'});
     const markExported = () => { if (window.PymStorage) window.PymStorage.set('pym_last_export_time', Date.now()); updateBackupLabel(); };
+
+    // Native: navigator.share/canShare is unreliable for files inside a
+    // Capacitor Android WebView — when it silently fails, execution used to
+    // fall through to a blob-URL <a download> click, which in an embedded
+    // WebView can fire a phantom "downloaded" success without ever writing
+    // to the public Downloads folder a file manager shows (the exact "got a
+    // notification but can't find the file" bug this replaced). Writing via
+    // Filesystem + handing the real content:// URI to the native Share
+    // plugin is the only path Capacitor guarantees works consistently.
+    if (IS_NATIVE) {
+      try {
+        const Filesystem = window.Capacitor.Plugins.Filesystem, Share = window.Capacitor.Plugins.Share;
+        if (!Filesystem || !Share) throw new Error('Filesystem/Share plugin unavailable');
+        await Filesystem.writeFile({ path: filename, data: content, directory: 'CACHE', encoding: 'utf8' });
+        const { uri } = await Filesystem.getUri({ path: filename, directory: 'CACHE' });
+        await Share.share({ url: uri, title: 'Pancito y Más Backup', dialogTitle: _t('archive.export.shareTitle') });
+        markExported();
+        setBtn('check_circle', _t('archive.export.shared'), false);
+        setTimeout(()=>{btn.innerHTML=origHTML;btn.disabled=false;},2000);
+      } catch (e) {
+        btn.innerHTML=origHTML; btn.disabled=false;
+        _pymToast(_t('archive.export.error'));
+      }
+      return;
+    }
+
+    // Web / dev fallback (real browser — blob download and Web Share both
+    // work correctly here, unlike inside the native WebView shell above).
+    const blob=new Blob([content],{type:'application/json'}), file=new File([blob],filename,{type:'application/json'});
     if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'Pancito y Más Backup',text:`${logs.length} bake entries`});markExported();setBtn('check_circle',_t('archive.export.shared'),false);setTimeout(()=>{btn.innerHTML=origHTML;btn.disabled=false;},2000);return;}catch(e){btn.innerHTML=origHTML;btn.disabled=false;if(e.name==='AbortError')return;}}
     const url=URL.createObjectURL(blob), a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
     markExported();
