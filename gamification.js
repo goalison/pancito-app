@@ -10,7 +10,11 @@
   // ── Language helper ────────────────────────────────────────────────────────
   function _lang() { return (window.PymI18n && window.PymI18n.getCurrentLang()) || 'en'; }
 
-  // ── Safe localStorage wrapper ──────────────────────────────────────────────
+  // ── Storage wrapper ───────────────────────────────────────────────────────
+  // Delegates to window.PymStorage (storage.js) so every pym_* key gamification
+  // touches (streak, starter, achievements, skill tree, etc.) gets mirrored to
+  // native Preferences for durability — see storage.js for why. Falls back to
+  // a plain localStorage/memory shim if storage.js wasn't loaded on this page.
   let _mem = {};
   const _store = (() => {
     try { localStorage.setItem('__pg__', '1'); localStorage.removeItem('__pg__'); return localStorage; }
@@ -19,8 +23,14 @@
     }
   })();
 
-  const _get  = k        => { try { const v = _store.getItem(k); return v ? JSON.parse(v) : null; } catch (_) { return null; } };
-  const _set  = (k, v)   => { try { _store.setItem(k, JSON.stringify(v)); } catch (_) {} };
+  const _get = k => {
+    if (window.PymStorage) return window.PymStorage.get(k, null);
+    try { const v = _store.getItem(k); return v ? JSON.parse(v) : null; } catch (_) { return null; }
+  };
+  const _set = (k, v) => {
+    if (window.PymStorage) { window.PymStorage.set(k, v); return; }
+    try { _store.setItem(k, JSON.stringify(v)); } catch (_) {}
+  };
 
   // ── Today helper ──────────────────────────────────────────────────────────
   const _today = () => new Date().toISOString().split('T')[0];

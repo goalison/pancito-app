@@ -1423,6 +1423,7 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════════════════════════ -->
+<script src="storage.js"></script>
 <script src="i18n.js"></script>
 <script src="gamification.js"></script>
 <script>
@@ -1508,9 +1509,17 @@ const SCREENS_ORDER = [
   'c3s1','c3game','c4s1','c4game','c4s2','c4s3'
 ];
 
-// ── Safe localStorage ─────────────────────────────────────────────────────
+// ── Storage ────────────────────────────────────────────────────────────────
+// Delegates to window.PymStorage (storage.js) so pym_onboarding is mirrored
+// to native Preferences for durability. Keeps the raw getItem/setItem(string)
+// interface every call site below already expects (they do their own
+// JSON.parse/stringify) so none of those call sites need to change.
 let _mem2 = {};
-const storage = (() => {
+const storage = window.PymStorage ? {
+  getItem: k => { const v = window.PymStorage.get(k, null); return v == null ? null : (typeof v === 'string' ? v : JSON.stringify(v)); },
+  setItem: (k, v) => { try { window.PymStorage.set(k, JSON.parse(v)); } catch(_) { window.PymStorage.set(k, v); } },
+  removeItem: k => window.PymStorage.remove(k)
+} : (() => {
   try { localStorage.setItem('__t__','1'); localStorage.removeItem('__t__'); return localStorage; }
   catch(_) { return { getItem:k=>_mem2[k]??null, setItem:(k,v)=>{_mem2[k]=v;}, removeItem:k=>{delete _mem2[k];} }; }
 })();
@@ -1734,9 +1743,9 @@ function prevLesson() {
 
 // ── Language picker ───────────────────────────────────────────────────────
 function pickLang(lang) {
-  // Write directly to localStorage first so the language is set even if PymI18n
-  // isn't ready for any reason, then let setLang handle the UI update.
-  try { localStorage.setItem('pym_lang', lang); } catch(_) {}
+  // window.PymI18n.setLang() persists pym_lang (through PymStorage, mirrored
+  // to native Preferences) and updates the UI. It's always available here —
+  // i18n.js loads via a blocking <script> tag before this code can run.
   if (window.PymI18n) window.PymI18n.setLang(lang);
   goTo('c0s1');
 }
@@ -3536,7 +3545,7 @@ function launchParticles() {
     // (Phase 2) — auto-skip this game's own language picker (c0s0)
     // whenever a language is already known.
     let langKnown = false;
-    try { langKnown = !!localStorage.getItem('pym_lang'); } catch(_) {}
+    try { langKnown = !!(window.PymStorage ? window.PymStorage.get('pym_lang', null) : localStorage.getItem('pym_lang')); } catch(_) {}
     if (langKnown) resumeId = 'c0s1';
   }
 

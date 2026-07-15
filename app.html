@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="storage.js"></script>
 <script src="i18n.js"></script>
 <script src="gamification.js"></script>
 <script src="celebration.js"></script>
@@ -210,17 +211,22 @@
   // First-run gate: decide whether to show the one-time welcome screen.
   // The Sourdough Bootcamp game (onboarding.html) is no longer a forced entry
   // point — it's reachable any time from the Dashboard's Bootcamp card.
+  // This is a preliminary, synchronous-only guess (storage.js hasn't finished
+  // reconciling with native Preferences yet at this point in page parse) —
+  // _pymRecomputeShowWelcome() re-checks it with fully-reconciled data before
+  // the overlay actually reveals/hides, in the DOMContentLoaded handler below.
   window._pymShowWelcome = false;
-  (function() {
+  window._pymRecomputeShowWelcome = function() {
     try {
-      const ob = JSON.parse(localStorage.getItem('pym_onboarding') || '{}');
-      const hasLogs = (function() {
-        try { return JSON.parse(localStorage.getItem('pym_logs') || '[]').length > 0; } catch(_) { return false; }
-      })();
-      const seenWelcome = localStorage.getItem('pym_welcome_seen') === 'true';
+      const get = window.PymStorage ? window.PymStorage.get : function(k, f) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? f : v; } catch(_) { return f; } };
+      const ob = get('pym_onboarding', {});
+      const hasLogs = (get('pym_logs', []) || []).length > 0;
+      const seenWelcome = get('pym_welcome_seen', false) === true || get('pym_welcome_seen', false) === 'true';
       window._pymShowWelcome = !ob.complete && !hasLogs && !seenWelcome;
     } catch(_) {}
-  })();
+    return window._pymShowWelcome;
+  };
+  window._pymRecomputeShowWelcome();
 </script>
 
 <!-- ── Welcome screen (first launch only) ──────────────────────────────── -->
@@ -237,6 +243,7 @@
     </button>
   </div>
   <button onclick="_pymStartApp()" style="width:100%;max-width:300px;padding:16px;background:#875305;color:#fff;border-radius:16px;font-weight:700;font-size:16px;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(135,83,5,0.3);" data-i18n="welcome.start">Start</button>
+  <button onclick="_pymTriggerImportPicker()" style="margin-top:1.25rem;background:none;border:none;color:#847466;font-weight:700;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;" data-i18n="welcome.restoreLink">Restore a backup</button>
 </div>
 
 <!-- TopAppBar -->
@@ -464,6 +471,16 @@
       <p class="font-headline text-base font-bold text-on-surface" data-i18n="hydration.cardTitle">Hydration Calculator</p>
     </div>
     <p class="text-xs text-on-surface-variant" data-i18n="hydration.cardSub">Check your dough’s hydration %</p>
+  </button>
+</section>
+
+<!-- ── Backup nudge (dismissible, never a modal) ────────────────────────── -->
+<section id="backup-nudge" class="hidden rounded-2xl p-4 bg-secondary-container/25 border border-secondary-container/40 flex items-center gap-3">
+  <span class="material-symbols-outlined text-secondary shrink-0">cloud_upload</span>
+  <p class="text-xs text-on-surface flex-1" data-i18n="dashboard.backupNudge.text">Protect your bakes — export a backup</p>
+  <button onclick="showView('view-archive')" class="text-[10px] font-bold uppercase tracking-wider text-secondary shrink-0" data-i18n="dashboard.backupNudge.cta">Export</button>
+  <button onclick="_pymDismissBackupNudge()" class="text-on-surface-variant/50 shrink-0" title="Dismiss">
+    <span class="material-symbols-outlined text-base">close</span>
   </button>
 </section>
 
@@ -929,7 +946,7 @@
 </div>
 <div class="mt-1 flex items-center gap-2" id="autoBackupRow">
 <span class="material-symbols-outlined text-xs text-outline">cloud_done</span>
-<span class="text-[10px] text-outline-variant" id="autoBackupLabel" data-i18n="archive.autoBackup">Auto-backup active</span>
+<span class="text-[10px] text-outline-variant" id="autoBackupLabel" data-i18n="archive.lastBackup.never">No backups yet</span>
 </div>
 </div>
 <button id="exportBtn" onclick="exportBackup()" class="bg-white border border-outline-variant/30 text-on-surface px-6 py-4 rounded-xl flex items-center gap-3 hover:bg-surface-container transition-all shadow-sm active:scale-95">
@@ -1321,9 +1338,18 @@
   }
 
   // Start on dashboard; also boot bake-view once-only inits
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', async function() {
     // Boot service worker and Capacitor listeners once for the whole app
     initSW();
+    // Attach once, unconditionally — so the welcome screen's "Restore a
+    // backup" link (_pymTriggerImportPicker) works even before the Archive
+    // view has ever rendered (its own init used to gate this attachment).
+    var _importInputEl = document.getElementById('importInput');
+    if (_importInputEl) _importInputEl.addEventListener('change', function(e) {
+      var file = e.target.files[0];
+      _pymHandleImportFile(file);
+      e.target.value = '';
+    });
     // One-time cleanup: cancel any stray feed-check-in reminders (ids 9002-9004)
     // an existing install may already have scheduled from before that system
     // was removed — it made the single daily reminder feel like it fired twice.
@@ -1366,6 +1392,15 @@
     document.addEventListener('visibilitychange', function() {
       if (!document.hidden) checkPendingAlarmOnStart();
     });
+    // Wait for storage.js to finish reconciling with native Preferences
+    // before making any decision that reads durable pym_* data (the welcome
+    // gate below, and renderDashboard() inside showView()) — otherwise, in
+    // the rare case where localStorage was cleared by the OS but Preferences
+    // survived, we'd briefly render from empty/stale data. On the common
+    // path (localStorage intact) or on web dev, this resolves immediately.
+    if (window.PymStorage && window.PymStorage.ready) { try { await window.PymStorage.ready; } catch(e) {} }
+    if (window._pymRecomputeShowWelcome) window._pymRecomputeShowWelcome();
+
     // On startup, navigate straight to bake view if there is a pending alarm or expired timer.
     // A one-shot boot view (set by saveLog's post-save reload) takes priority so the
     // user lands on the archive after saving a bake.
@@ -1389,7 +1424,8 @@
   }
 
   function _pymStartApp() {
-    try { localStorage.setItem('pym_welcome_seen', 'true'); } catch(e) {}
+    if (window.PymStorage) window.PymStorage.set('pym_welcome_seen', true);
+    else try { localStorage.setItem('pym_welcome_seen', 'true'); } catch(e) {}
     var overlay = document.getElementById('pym-welcome-overlay');
     if (overlay) overlay.style.display = 'none';
     showView('view-dashboard');
@@ -1526,7 +1562,7 @@
     if (!G) { closeCheckinSheet(); return; }
     G.feedStarter(_checkinActivity, temp, '');
     var newUnlocks = G.checkAchievements(
-      JSON.parse(localStorage.getItem('pym_logs') || '[]'),
+      getLogs(),
       G.getStreak(),
       G.getStarterState()
     );
@@ -1627,7 +1663,7 @@
     }
 
     try {
-      var rem = JSON.parse(localStorage.getItem('pym_starter_reminder') || '{}');
+      var rem = window.PymStorage ? window.PymStorage.get('pym_starter_reminder', {}) : JSON.parse(localStorage.getItem('pym_starter_reminder') || '{}');
       var tog = document.getElementById('reminder-toggle');
       if (tog) tog.checked = !!rem.enabled;
       var timeInput = document.getElementById('reminder-time');
@@ -1668,7 +1704,7 @@
     var label = document.getElementById('bootcamp-progress-label');
     if (!label) return;
     var _t = (window.PymI18n && window.PymI18n.t) || function(k){ return k; };
-    var ob; try { ob = JSON.parse(localStorage.getItem('pym_onboarding') || '{}'); } catch(e) { ob = {}; }
+    var ob; try { ob = window.PymStorage ? window.PymStorage.get('pym_onboarding', {}) : JSON.parse(localStorage.getItem('pym_onboarding') || '{}'); } catch(e) { ob = {}; }
     var chapterMap = {
       c0s1:0, c0s2:0,
       c1s1:1, c1s2:1, c1s3:1, c2s1:1, c1game:1,
@@ -1691,7 +1727,7 @@
 
   function _maybeStartCoachMarks() {
     var seen = false;
-    try { seen = localStorage.getItem('pym_coachmarks_seen') === 'true'; } catch(e) {}
+    try { seen = window.PymStorage ? window.PymStorage.get('pym_coachmarks_seen', false) === true : localStorage.getItem('pym_coachmarks_seen') === 'true'; } catch(e) {}
     var armCelebration = function() { if (window.PymCelebration) _armFirstActionCelebration(); };
     if (seen) { armCelebration(); return; }
     _startCoachMarks(armCelebration);
@@ -1714,7 +1750,8 @@
     document.body.appendChild(overlay);
 
     function finish() {
-      try { localStorage.setItem('pym_coachmarks_seen', 'true'); } catch(e) {}
+      if (window.PymStorage) window.PymStorage.set('pym_coachmarks_seen', true);
+      else try { localStorage.setItem('pym_coachmarks_seen', 'true'); } catch(e) {}
       overlay.remove();
       if (onDone) onDone();
     }
@@ -1821,6 +1858,29 @@
     if (s) { s.style.animation = 'pym-fade-in 0.2s ease reverse forwards'; setTimeout(function() { s.remove(); }, 200); }
   }
 
+  // ════════════════════════════════════════════════════════
+  // Backup nudge — gentle, dismissible, never a modal
+  // ════════════════════════════════════════════════════════
+  var DAY_MS = 86400000;
+  function _pymUpdateDashboardNudge() {
+    var el = document.getElementById('backup-nudge');
+    if (!el) return;
+    var logs = getLogs();
+    if (logs.length < 3) { el.classList.add('hidden'); return; }
+    var lastExport = window.PymStorage ? window.PymStorage.get('pym_last_export_time', null) : null;
+    var daysSinceExport = lastExport ? (Date.now() - lastExport) / DAY_MS : Infinity;
+    if (daysSinceExport < 30) { el.classList.add('hidden'); return; }
+    var dismissedAt = window.PymStorage ? window.PymStorage.get('pym_backup_nudge_dismissed_at', null) : null;
+    var daysSinceDismiss = dismissedAt ? (Date.now() - dismissedAt) / DAY_MS : Infinity;
+    if (daysSinceDismiss < 14) { el.classList.add('hidden'); return; }
+    el.classList.remove('hidden');
+  }
+  function _pymDismissBackupNudge() {
+    if (window.PymStorage) window.PymStorage.set('pym_backup_nudge_dismissed_at', Date.now());
+    var el = document.getElementById('backup-nudge');
+    if (el) el.classList.add('hidden');
+  }
+
   function renderDashboard() {
     // Date label
     var now = new Date();
@@ -1835,7 +1895,7 @@
     var heroDate = document.getElementById('hero-date');
     if (heroDate) heroDate.textContent = (days[now.getDay()] + ' ' + period).toUpperCase();
 
-    var logs = (function() { try { return JSON.parse(localStorage.getItem('pym_logs') || '[]'); } catch(_){ return []; }})();
+    var logs = getLogs();
     var activeBake = (function() { try { return JSON.parse(localStorage.getItem('pym_active_bake')); } catch(_){ return null; }})();
     var G = window.PymGamification;
 
@@ -1875,6 +1935,7 @@
 
       renderStarterCompanion();
       _renderBootcampCard();
+      _pymUpdateDashboardNudge();
 
       // Recent badges strip
       var recentBadges = G.getUnlockedBadges().slice(-3).reverse();
@@ -2710,6 +2771,45 @@
     });
   }
 
+  // ════════════════════════════════════════════════════════
+  // Bake-photo storage: native (Filesystem files) vs. web dev (embedded base64)
+  // ════════════════════════════════════════════════════════
+  // On native, bake photos are written to Filesystem instead of embedded as
+  // base64 inside pym_logs — a handful of full-resolution-ish JPEGs embedded
+  // as data-URIs can push a single Preferences/localStorage value into the
+  // multi-MB range, which is exactly the size class both are unreliable at.
+  // The log entry keeps only a `photoUri` reference (the native URI Filesystem
+  // returns at write time, so rendering can synchronously convertFileSrc() it
+  // — no async read needed at render time). On the web-dev fallback, Filesystem
+  // isn't meaningfully available, so photos stay embedded as base64 exactly as
+  // before (same 400,000-char safety cap as already existed).
+  async function _pymSavePhotoFile(dataUri, id) {
+    if (!IS_NATIVE || !dataUri || dataUri.indexOf('data:image') !== 0) return null;
+    try {
+      var Filesystem = window.Capacitor.Plugins.Filesystem;
+      if (!Filesystem) return null;
+      var base64 = dataUri.split(',')[1];
+      if (!base64) return null;
+      var path = 'bake-photos/' + id + '.jpg';
+      var result = await Filesystem.writeFile({ path: path, data: base64, directory: 'DATA', recursive: true });
+      return { photoUri: result.uri, photoFile: path };
+    } catch (e) { return null; }
+  }
+
+  async function _pymDeletePhotoFile(photoFile) {
+    if (!IS_NATIVE || !photoFile) return;
+    try { await window.Capacitor.Plugins.Filesystem.deleteFile({ path: photoFile, directory: 'DATA' }); } catch (e) {}
+  }
+
+  // Synchronous — safe to call directly in render/template code.
+  function _pymPhotoSrc(log) {
+    if (!log) return null;
+    if (log.photoUri) {
+      try { return window.Capacitor.convertFileSrc(log.photoUri); } catch (e) {}
+    }
+    return log.photo || null;
+  }
+
   async function saveLog() {
     const saveBtn = document.getElementById('save-button');
     saveBtn.disabled = true; saveBtn.innerText = "Saving...";
@@ -2748,13 +2848,25 @@
       comments: document.getElementById('bake-notes')?.value, photo: processedPhoto, inclusions: 'None', autolyse: '30m', mixTime: '15',
       ingredients: { flour: `${flour}g`, water: `${water}g`, starter: `${starter}g`, salt: `${salt}g` }
     };
+    // On native, move the photo out to a Filesystem file so pym_logs stays
+    // small — durable storage is size-sensitive (see storage.js). Falls back
+    // to embedding as base64 (with the size cap below) when not native.
+    if (sessionData.photo) {
+      const savedFile = await _pymSavePhotoFile(sessionData.photo, sessionData.id);
+      if (savedFile) { sessionData.photoUri = savedFile.photoUri; sessionData.photoFile = savedFile.photoFile; sessionData.photo = null; }
+    }
     if (sessionData.photo && sessionData.photo.length > 400000) sessionData.photo = null;
     try {
-      let logs; try { logs = JSON.parse(localStorage.getItem('pym_logs') || '[]'); } catch(_) { logs = []; }
-      if (!Array.isArray(logs)) logs = [];
+      let logs = getLogs();
       logs.unshift(sessionData);
+      // Verify the write actually fits before committing through PymStorage
+      // (whose internal write swallows quota errors silently) — matters most
+      // on the web-dev fallback path where photos are still embedded as
+      // base64; on native the photo already moved to a file above, so
+      // pym_logs itself is tiny and this essentially never fires.
       try { localStorage.setItem('pym_logs', JSON.stringify(logs)); }
-      catch(quotaErr) { if (quotaErr.name === 'QuotaExceededError' || quotaErr.code === 22) { localStorage.setItem('pym_logs', JSON.stringify(logs.map(l => ({ ...l, photo: null })))); } else throw quotaErr; }
+      catch(quotaErr) { if (quotaErr.name === 'QuotaExceededError' || quotaErr.code === 22) { logs = logs.map(l => ({ ...l, photo: null })); localStorage.setItem('pym_logs', JSON.stringify(logs)); } else throw quotaErr; }
+      if (window.PymStorage) window.PymStorage.set('pym_logs', logs);
       try {
         if (window.PymGamification) { const G = window.PymGamification; G.checkAchievements(logs, G.getStreak(), G.getStarterState()); }
       } catch(gamErr) {}
@@ -2770,7 +2882,7 @@
         staticTimerState = { id: null, baseRemaining: 0, startTs: 0, total: 0, running: false };
         currentStep = 1; userRating = 0; currentPhoto = null;
       } catch(e) {}
-      const verifyCount = (() => { try { return JSON.parse(localStorage.getItem('pym_logs') || '[]').length; } catch(_) { return 0; } })();
+      const verifyCount = logs.length;
       const _saveToast = document.createElement('div');
       _saveToast.style.cssText = 'position:fixed;bottom:120px;left:50%;transform:translateX(-50%);background:#875305;color:#fff;padding:14px 24px;border-radius:100px;font-weight:700;font-size:14px;z-index:9999;box-shadow:0 8px 24px rgba(135,83,5,0.35);white-space:nowrap';
       _saveToast.textContent = `✓ Saved — ${verifyCount} bake${verifyCount !== 1 ? 's' : ''} in archive`;
@@ -2812,19 +2924,17 @@
   var filterActive = false;
   var currentLogs  = [];
 
-  var _memoryStore = {};
-  const storage = (function() {
-    try { localStorage.getItem('__pym_test__'); return localStorage; }
-    catch(e) { return { getItem: k => _memoryStore[k]||null, setItem: (k,v) => { _memoryStore[k]=v; }, removeItem: k => { delete _memoryStore[k]; } }; }
-  })();
-
   function getLogs() {
-    try { const raw = localStorage.getItem('pym_logs'); if (!raw) return []; const p = JSON.parse(raw); return Array.isArray(p) ? p : []; } catch(e) { return []; }
+    try {
+      const p = window.PymStorage ? window.PymStorage.get('pym_logs', []) : JSON.parse(localStorage.getItem('pym_logs') || '[]');
+      return Array.isArray(p) ? p : [];
+    } catch (e) { return []; }
   }
 
   function saveLogs(logs) {
-    try { localStorage.setItem('pym_logs', JSON.stringify(logs)); } catch(e) {}
-    autoBackup(logs); updateStorageIndicator(); renderLogs();
+    if (window.PymStorage) window.PymStorage.set('pym_logs', logs);
+    else try { localStorage.setItem('pym_logs', JSON.stringify(logs)); } catch(e) {}
+    updateStorageIndicator(); renderLogs();
   }
 
   function updateStorageIndicator() {
@@ -2867,8 +2977,9 @@
       const _locale = (window.PymI18n && window.PymI18n.getCurrentLang() === 'es') ? 'es-MX' : 'en-US';
       const displayDate = log.date ? new Date(log.date).toLocaleDateString(_locale,{month:'short',day:'numeric',year:'numeric'}).toUpperCase() : 'UNKNOWN DATE';
       const recipeTitle = log.recipe||'Untitled Bake', ratingValue = log.rating||'0', commentsText = log.comments||'No comments recorded.';
-      const photoContent = log.photo
-        ? `<img alt="${recipeTitle}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="${log.photo}"/>`
+      const photoSrc = _pymPhotoSrc(log);
+      const photoContent = photoSrc
+        ? `<img alt="${recipeTitle}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="${photoSrc}"/>`
         : `<div class="w-full h-full flex flex-col items-center justify-center" style="background:linear-gradient(145deg,#f5e8c8 0%,#e8d2a0 50%,#c8a96b 100%)"><span class="material-symbols-outlined" style="font-size:56px;color:rgba(135,83,5,0.3);font-variation-settings:'FILL' 1">bakery_dining</span><p style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(135,83,5,0.35);margin-top:8px">No photo</p></div>`;
       return `<div class="group cursor-pointer" style="animation-delay:${index*50}ms" onclick="openDetails('${log.id||index}')">
         <div class="relative mb-6"><div class="aspect-square overflow-hidden rounded-[2.5rem] bg-surface-container-low shadow-sm group-hover:shadow-2xl transition-all duration-500">${photoContent}</div>
@@ -2884,7 +2995,7 @@
   window.openDetails = function(id) {
     const log = currentLogs.find((l,idx) => (l.id===id||idx.toString()===id)); if (!log) return;
     const modal = document.getElementById('logModal'), content = document.getElementById('modalContent');
-    const photo = log.photo||null;
+    const photo = _pymPhotoSrc(log);
     const _locale2 = (window.PymI18n && window.PymI18n.getCurrentLang() === 'es') ? 'es-MX' : 'en-US';
     const displayDate = new Date(log.date).toLocaleDateString(_locale2,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
     const hydrationVal=log.hydration||'--', bulkVal=log.bulkTime||log.total_bulk_time||'--', tempVal=log.temp||log.initial_temp||'--';
@@ -2910,16 +3021,18 @@
 
   window.closeModal = function() { document.getElementById('logModal').classList.add('hidden'); document.body.style.overflow = ''; };
 
-  function autoBackup(logs) { try { const json=JSON.stringify(logs); storage.setItem('pym_auto_backup',json); storage.setItem('pym_auto_backup_time',Date.now()); updateBackupLabel(); } catch(e) {} }
-
+  // "Last backup" tracks real exports only (pym_last_export_time, set in
+  // exportBackup() below) — not every save. A silent same-device duplicate
+  // copy isn't a backup; it disappears in exactly the same data-loss event
+  // as the original. See AUDIT.md and storage.js for the full reasoning.
   function updateBackupLabel() {
-    const ts = parseInt(storage.getItem('pym_auto_backup_time')||'0'), label = document.getElementById('autoBackupLabel'); if (!label) return;
+    const label = document.getElementById('autoBackupLabel'); if (!label) return;
     const _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
-    if (!ts) { label.textContent = _t('archive.autoBackup'); return; }
-    const mins = Math.round((Date.now()-ts)/60000);
-    if (mins<2) label.textContent = _t('archive.backupJustNow');
-    else if (mins<60) label.textContent = _t('archive.backupMinAgo').replace('{n}', mins);
-    else label.textContent = _t('archive.backupHourAgo').replace('{n}', Math.floor(mins/60));
+    const ts = window.PymStorage ? window.PymStorage.get('pym_last_export_time', null) : null;
+    if (!ts) { label.textContent = _t('archive.lastBackup.never'); return; }
+    const lang = (window.PymI18n && window.PymI18n.getCurrentLang && window.PymI18n.getCurrentLang()) || 'en';
+    const dateStr = new Date(ts).toLocaleDateString(lang === 'es' ? 'es-MX' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    label.textContent = _t('archive.lastBackup.label').replace('{date}', dateStr);
   }
 
   function _showInfoSheet(icon,title,bodyHtml,btnLabel) {
@@ -2929,15 +3042,110 @@
   }
 
   async function exportBackup() {
-    const logs=getLogs(); if(!logs.length){_pymToast('No bakes to back up yet — record your first bake first!');return;}
-    const filename=`pancito-backup-${new Date().toISOString().split('T')[0]}.json`, content=JSON.stringify(logs,null,2);
+    const _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
+    const logs=getLogs(); if(!logs.length){_pymToast(_t('archive.export.noBakes'));return;}
     const btn=document.getElementById('exportBtn'), origHTML=btn.innerHTML;
     const setBtn=(icon,text,busy)=>{btn.disabled=busy;btn.innerHTML=`<span class="material-symbols-outlined${busy?' animate-spin':''}">${icon}</span><span class="font-headline font-bold">${text}</span>`;};
+    setBtn('sync', _t('archive.export.preparing'), true);
+    // Build a self-contained export: any photo stored as a native Filesystem
+    // file gets read back and embedded as base64, so the exported .json is a
+    // single portable file that works standalone on a fresh install or a
+    // different device — not just a reference to a file that won't exist there.
+    const exportLogs = [];
+    for (const log of logs) {
+      if (log.photoUri && IS_NATIVE && log.photoFile) {
+        try {
+          const res = await window.Capacitor.Plugins.Filesystem.readFile({ path: log.photoFile, directory: 'DATA' });
+          exportLogs.push({ ...log, photo: 'data:image/jpeg;base64,' + res.data, photoUri: undefined, photoFile: undefined });
+          continue;
+        } catch (e) {}
+      }
+      exportLogs.push(log);
+    }
+    const filename=`pancito-backup-${new Date().toISOString().split('T')[0]}.json`, content=JSON.stringify(exportLogs,null,2);
     const blob=new Blob([content],{type:'application/json'}), file=new File([blob],filename,{type:'application/json'});
-    if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'Pancito y Más Backup',text:`${logs.length} bake entries`});storage.setItem('pym_auto_backup_time',Date.now());updateBackupLabel();setBtn('check_circle','Backup shared!',false);setTimeout(()=>{btn.innerHTML=origHTML;btn.disabled=false;},2000);return;}catch(e){if(e.name==='AbortError')return;}}
+    const markExported = () => { if (window.PymStorage) window.PymStorage.set('pym_last_export_time', Date.now()); updateBackupLabel(); };
+    if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'Pancito y Más Backup',text:`${logs.length} bake entries`});markExported();setBtn('check_circle',_t('archive.export.shared'),false);setTimeout(()=>{btn.innerHTML=origHTML;btn.disabled=false;},2000);return;}catch(e){btn.innerHTML=origHTML;btn.disabled=false;if(e.name==='AbortError')return;}}
     const url=URL.createObjectURL(blob), a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-    setBtn('download','Downloaded!',false); setTimeout(()=>{btn.innerHTML=origHTML;btn.disabled=false;},3000);
-    _showInfoSheet('folder_open','Backup file saved',`File: <code style="font-size:11px">${filename}</code><br><br>Your backup is on this device's <strong>Downloads folder</strong> (or wherever you chose to save/share it).<br><br>To restore later, use <em>Import backup file</em> and select this file.`,'Got it');
+    markExported();
+    setBtn('download',_t('archive.export.downloaded'),false); setTimeout(()=>{btn.innerHTML=origHTML;btn.disabled=false;},3000);
+    _showInfoSheet('folder_open',_t('archive.export.savedTitle'),_t('archive.export.savedBody').replace('{filename}', `<code style="font-size:11px">${filename}</code>`),_t('common.ok'));
+  }
+
+  // Bottom sheet asking Replace-everything vs. Merge — shared by both the
+  // Archive "Import backup file" button and the welcome screen's quiet
+  // "Restore a backup" link (fresh installs have nothing to merge into, but
+  // the choice still needs to be explicit and bilingual either way).
+  function _pymShowImportChoice(count, onChoice) {
+    const _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
+    const sheet = document.createElement('div');
+    sheet.className = 'pym-sheet-overlay';
+    sheet.id = 'pym-import-choice-sheet';
+    sheet.innerHTML = '<div class="pym-sheet" style="font-family:\'Plus Jakarta Sans\',sans-serif;">' +
+      '<div class="w-10 h-1 bg-outline-variant rounded-full mx-auto mb-4"></div>' +
+      '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#514538;margin-bottom:6px;">' + _t('archive.import.foundLabel').replace('{n}', count) + '</p>' +
+      '<p style="font-size:13px;color:#514538;margin-bottom:1.2rem;line-height:1.5;">' + _t('archive.import.choicePrompt') + '</p>' +
+      '<button id="pym-import-merge" style="width:100%;padding:14px;background:#875305;color:#fff;border-radius:14px;font-weight:700;font-size:14px;border:none;cursor:pointer;margin-bottom:10px;font-family:inherit;">' + _t('archive.import.mergeBtn') + '</button>' +
+      '<button id="pym-import-replace" style="width:100%;padding:14px;background:transparent;color:#B3261E;border:2px solid #B3261E;border-radius:14px;font-weight:700;font-size:14px;cursor:pointer;margin-bottom:10px;font-family:inherit;">' + _t('archive.import.replaceBtn') + '</button>' +
+      '<button id="pym-import-cancel" style="width:100%;padding:12px;background:none;border:none;color:#847466;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;">' + _t('common.cancel') + '</button>' +
+    '</div>';
+    sheet.addEventListener('click', function(e) { if (e.target === sheet) sheet.remove(); });
+    document.body.appendChild(sheet);
+    document.getElementById('pym-import-merge').onclick = function() { sheet.remove(); onChoice('merge'); };
+    document.getElementById('pym-import-replace').onclick = function() { sheet.remove(); onChoice('replace'); };
+    document.getElementById('pym-import-cancel').onclick = function() { sheet.remove(); };
+  }
+
+  // Shared by the Archive "Import backup file" input and the welcome screen's
+  // "Restore a backup" link — both funnel into this one file-picker + handler.
+  function _pymTriggerImportPicker() {
+    const input = document.getElementById('importInput');
+    if (input) input.click();
+  }
+
+  async function _pymHandleImportFile(file) {
+    const _it = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
+    if (!file) return;
+    const text = await file.text().catch(() => null);
+    let importedLogs;
+    try {
+      importedLogs = JSON.parse(text);
+      if (!Array.isArray(importedLogs)) throw new Error('Invalid format');
+    } catch (err) { alert(_it('archive.import.error')); return; }
+
+    _pymShowImportChoice(importedLogs.length, async function(choice) {
+      // Convert any embedded base64 photos back to a native Filesystem file,
+      // mirroring the save path, so the live pym_logs stays slim after a
+      // restore instead of re-bloating with base64 data.
+      const preparedLogs = [];
+      for (let i = 0; i < importedLogs.length; i++) {
+        const item = importedLogs[i];
+        const withId = { ...item, id: item.id || `log-${Date.now()}-${i}` };
+        if (withId.photo && typeof withId.photo === 'string' && withId.photo.indexOf('data:image') === 0) {
+          const saved = await _pymSavePhotoFile(withId.photo, withId.id);
+          if (saved) { withId.photoUri = saved.photoUri; withId.photoFile = saved.photoFile; withId.photo = null; }
+        }
+        preparedLogs.push(withId);
+      }
+      let finalLogs;
+      if (choice === 'replace') {
+        finalLogs = preparedLogs;
+      } else {
+        const current = getLogs();
+        const merged = [...current, ...preparedLogs];
+        finalLogs = Array.from(new Map(merged.map(item => [item.id || (item.date + item.recipe), item])).values());
+      }
+      saveLogs(finalLogs);
+      _pymToast(_it('archive.import.success'));
+      // If this restore was triggered from the first-launch welcome screen,
+      // the user now has data — dismiss the overlay and land on the Dashboard.
+      const welcomeOverlay = document.getElementById('pym-welcome-overlay');
+      if (welcomeOverlay && getComputedStyle(welcomeOverlay).display !== 'none') {
+        if (window.PymStorage) window.PymStorage.set('pym_welcome_seen', true);
+        welcomeOverlay.style.display = 'none';
+        showView('view-archive');
+      }
+    });
   }
 
   function _pymConfirm(html,okLabel,okColor,onOk) {
@@ -2956,7 +3164,12 @@
   window.deleteLog = function(id) {
     let logs=getLogs(), index=logs.findIndex(log=>log.id!=null&&String(log.id)===String(id));
     if(index===-1) index=logs.findIndex((log,idx)=>String(idx)===String(id));
-    if(index!==-1){logs.splice(index,1);saveLogs(logs);let toast=document.getElementById('delete-toast');if(!toast){toast=document.createElement('div');toast.id='delete-toast';toast.className='fixed bottom-32 left-1/2 -translate-x-1/2 z-[200] bg-on-surface text-background text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-full shadow-xl transition-opacity duration-300';document.body.appendChild(toast);}var _dt=(window.PymI18n&&window.PymI18n.t)||function(k){return k;};toast.textContent=_dt('archive.entryRemoved');toast.style.opacity='1';setTimeout(()=>{toast.style.opacity='0';},2000);}
+    if(index!==-1){
+      const removedPhotoFile = logs[index].photoFile;
+      logs.splice(index,1);saveLogs(logs);
+      if (removedPhotoFile) _pymDeletePhotoFile(removedPhotoFile);
+      let toast=document.getElementById('delete-toast');if(!toast){toast=document.createElement('div');toast.id='delete-toast';toast.className='fixed bottom-32 left-1/2 -translate-x-1/2 z-[200] bg-on-surface text-background text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-full shadow-xl transition-opacity duration-300';document.body.appendChild(toast);}var _dt=(window.PymI18n&&window.PymI18n.t)||function(k){return k;};toast.textContent=_dt('archive.entryRemoved');toast.style.opacity='1';setTimeout(()=>{toast.style.opacity='0';},2000);
+    }
   };
 
   function _setRatingFilter(on) {
@@ -2972,17 +3185,17 @@
       var _frBtn = document.getElementById('filterRating'), _faBtn = document.getElementById('filterAll');
       if (_frBtn) _frBtn.addEventListener('click', function() { _setRatingFilter(!filterActive); });
       if (_faBtn) _faBtn.addEventListener('click', function() { _setRatingFilter(false); });
-      var importInput = document.getElementById('importInput');
-      if (importInput) importInput.addEventListener('change', function(e) {
-        var _it = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
-        const file=e.target.files[0]; if(!file) return;
-        const reader=new FileReader(); reader.onload=function(ev){try{const importedLogs=JSON.parse(ev.target.result);if(!Array.isArray(importedLogs))throw new Error('Invalid format');if(confirm(_it('archive.import.confirmMerge').replace('{n}', importedLogs.length))){const current=getLogs();const merged=[...current,...importedLogs].map((item,idx)=>({...item,id:item.id||`log-${Date.now()}-${idx}`}));const unique=Array.from(new Map(merged.map(item=>[item.id||(item.date+item.recipe),item])).values());saveLogs(unique);alert(_it('archive.import.success'));}}catch(err){alert(_it('archive.import.error'));}e.target.value='';};
-        reader.readAsText(file);
-      });
+      // importInput's change listener is attached once, unconditionally, at
+      // boot (not here) — see DOMContentLoaded — so the welcome screen's
+      // "Restore a backup" link works even before Archive has ever rendered.
       var clearDataBtn = document.getElementById('clearDataBtn');
       if (clearDataBtn) clearDataBtn.addEventListener('click', function() {
         var _ct = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
-        _pymConfirm(_ct('archive.deleteAll.confirm1Body'),_ct('archive.deleteAll.confirm1Btn'),'#B3261E',()=>{_pymConfirm(_ct('archive.deleteAll.confirm2Body'),_ct('archive.deleteAll.confirm2Btn'),'#B3261E',()=>{localStorage.removeItem('pym_logs');localStorage.removeItem('pym_auto_backup');localStorage.removeItem('pym_auto_backup_time');saveLogs([]);_pymToast(_ct('archive.localCleared'));});});
+        _pymConfirm(_ct('archive.deleteAll.confirm1Body'),_ct('archive.deleteAll.confirm1Btn'),'#B3261E',()=>{_pymConfirm(_ct('archive.deleteAll.confirm2Body'),_ct('archive.deleteAll.confirm2Btn'),'#B3261E',()=>{
+          getLogs().forEach(function(log){ if (log.photoFile) _pymDeletePhotoFile(log.photoFile); });
+          if (window.PymStorage) window.PymStorage.remove('pym_logs'); else localStorage.removeItem('pym_logs');
+          saveLogs([]);_pymToast(_ct('archive.localCleared'));
+        });});
       });
       var logModal = document.getElementById('logModal');
       if (logModal) logModal.addEventListener('click', function(e) { if(e.target.id==='logModal') closeModal(); });

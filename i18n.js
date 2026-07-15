@@ -5,6 +5,20 @@
 (function () {
   'use strict';
 
+  // Reads/writes pym_lang through window.PymStorage (storage.js) when present
+  // — this mirrors the language preference to native Preferences for
+  // durability, same as every other durable pym_* key. Falls back to plain
+  // localStorage if storage.js wasn't loaded on this page (defensive only —
+  // every page that loads i18n.js also loads storage.js first).
+  function _langGet() {
+    if (window.PymStorage) return window.PymStorage.get('pym_lang', null);
+    try { return localStorage.getItem('pym_lang'); } catch (_) { return null; }
+  }
+  function _langSet(lang) {
+    if (window.PymStorage) { window.PymStorage.set('pym_lang', lang); return; }
+    try { localStorage.setItem('pym_lang', lang); } catch (_) {}
+  }
+
   // ── First-launch device language detection ──────────────────────────────
   // Runs once, synchronously, before anything reads pym_lang. If the user has
   // never picked a language (manually, via the header toggle, or via a prior
@@ -13,19 +27,19 @@
   // the header EN/ES pills (below) remain the manual override from then on.
   (function detectDeviceLang() {
     try {
-      if (localStorage.getItem('pym_lang')) return;
+      if (_langGet()) return;
       var deviceLang = ((navigator.language || navigator.userLanguage || '') + '').toLowerCase();
-      localStorage.setItem('pym_lang', deviceLang.indexOf('es') === 0 ? 'es' : 'en');
+      _langSet(deviceLang.indexOf('es') === 0 ? 'es' : 'en');
     } catch (_) {}
   })();
 
   // ── Core helpers ──────────────────────────────────────────────────────────
   function getCurrentLang() {
-    try { return localStorage.getItem('pym_lang') || 'en'; } catch (_) { return 'en'; }
+    try { return _langGet() || 'en'; } catch (_) { return 'en'; }
   }
 
   function setLang(lang) {
-    try { localStorage.setItem('pym_lang', lang); } catch (_) {}
+    _langSet(lang);
     applyTranslations();
     updateLangToggles();
     // Re-render any JS-driven views that are currently visible
@@ -39,7 +53,7 @@
     // The message text is baked into the payload at schedule time, so switching language
     // without rescheduling leaves the notification in the old language forever.
     try {
-      var rem = JSON.parse(localStorage.getItem('pym_starter_reminder') || '{}');
+      var rem = window.PymStorage ? window.PymStorage.get('pym_starter_reminder', {}) : JSON.parse(localStorage.getItem('pym_starter_reminder') || '{}');
       if (rem.enabled && window.PymGamification) {
         window.PymGamification.scheduleStarterReminder(true, rem.hour != null ? rem.hour : 8, rem.minute != null ? rem.minute : 0);
       }
@@ -177,6 +191,7 @@
       'welcome.langEs':  'Español',
       'welcome.langEn':  'English',
       'welcome.start':   'Start',
+      'welcome.restoreLink': 'Restore a backup',
 
       // ── Dashboard — Sourdough Bootcamp card ──────────────────────────────
       'bootcamp.cardTitle':    'Sourdough Bootcamp',
@@ -220,6 +235,10 @@
       'hero.headline': 'Your dough is breathing.',
       'hero.sub': 'Welcome back to the workbench. The environment is perfect for a slow cold ferment today.',
       'hero.cta': 'Start New Bake',
+
+      // ── Dashboard — backup nudge ──────────────────────────────────────────
+      'dashboard.backupNudge.text': 'Protect your bakes — export a backup',
+      'dashboard.backupNudge.cta':  'Export',
 
       // ── Dashboard — stats ────────────────────────────────────────────────
       'stat.totalBakes':    'Total Bakes',
@@ -511,6 +530,18 @@
       'archive.import.confirmMerge': 'Found {n} entries. Merge with existing archive?',
       'archive.import.success':      'Logs successfully imported!',
       'archive.import.error':        'Error reading backup file. Please ensure it is a valid JSON export.',
+      'archive.lastBackup.never': 'No backups yet',
+      'archive.lastBackup.label': 'Last backup: {date}',
+      'archive.export.noBakes':   'No bakes to back up yet — record your first bake first!',
+      'archive.export.preparing': 'Preparing backup…',
+      'archive.export.shared':    'Backup shared!',
+      'archive.export.downloaded':'Downloaded!',
+      'archive.export.savedTitle':'Backup file saved',
+      'archive.export.savedBody': 'File: {filename}<br><br>Your backup is on this device\'s <strong>Downloads folder</strong> (or wherever you chose to save/share it).<br><br>To restore later, use <em>Import backup file</em> and select this file.',
+      'archive.import.foundLabel':   '{n} entries found',
+      'archive.import.choicePrompt': 'How would you like to restore this backup?',
+      'archive.import.mergeBtn':     'Merge with existing',
+      'archive.import.replaceBtn':   'Replace everything',
       'archive.deleteAll.confirm1Body': 'This will permanently delete <strong>ALL bake entries</strong> from this device.<br><br>Export your archive first — this cannot be undone.',
       'archive.deleteAll.confirm1Btn':  'Yes, delete all',
       'archive.deleteAll.confirm2Body': 'Are you absolutely sure? Every bake record will be lost forever.',
@@ -1682,6 +1713,7 @@
       'welcome.langEs':  'Español',
       'welcome.langEn':  'English',
       'welcome.start':   'Empezar',
+      'welcome.restoreLink': 'Restaurar una copia',
 
       // ── Dashboard — Sourdough Bootcamp card ──────────────────────────────
       'bootcamp.cardTitle':    'Bootcamp de Masa Madre',
@@ -1725,6 +1757,10 @@
       'hero.headline': 'Tu masa está respirando.',
       'hero.sub':      'Bienvenid@ de regreso. El ambiente está perfecto para una fermentación lenta hoy.',
       'hero.cta':      'Iniciar Horneada',
+
+      // ── Dashboard — backup nudge ──────────────────────────────────────────
+      'dashboard.backupNudge.text': 'Protege tus panes — exporta una copia',
+      'dashboard.backupNudge.cta':  'Exportar',
 
       // ── Dashboard — stats ────────────────────────────────────────────────
       'stat.totalBakes':    'Horneadas',
@@ -2015,6 +2051,18 @@
       'archive.import.confirmMerge': 'Se encontraron {n} registros. ¿Combinar con el historial existente?',
       'archive.import.success':      '¡Registros importados con éxito!',
       'archive.import.error':        'Error al leer el archivo de respaldo. Verifica que sea una exportación JSON válida.',
+      'archive.lastBackup.never': 'Aún no hay copias de seguridad',
+      'archive.lastBackup.label': 'Última copia: {date}',
+      'archive.export.noBakes':   '¡Aún no hay horneadas que respaldar — registra tu primera horneada primero!',
+      'archive.export.preparing': 'Preparando copia de seguridad…',
+      'archive.export.shared':    '¡Copia de seguridad compartida!',
+      'archive.export.downloaded':'¡Descargada!',
+      'archive.export.savedTitle':'Copia de seguridad guardada',
+      'archive.export.savedBody': 'Archivo: {filename}<br><br>Tu copia de seguridad está en la <strong>carpeta de Descargas</strong> de este dispositivo (o donde la hayas guardado/compartido).<br><br>Para restaurarla después, usa <em>Importar copia de seguridad</em> y selecciona este archivo.',
+      'archive.import.foundLabel':   'Se encontraron {n} registros',
+      'archive.import.choicePrompt': '¿Cómo te gustaría restaurar esta copia de seguridad?',
+      'archive.import.mergeBtn':     'Combinar con lo existente',
+      'archive.import.replaceBtn':   'Reemplazar todo',
       'archive.deleteAll.confirm1Body': 'Esto eliminará permanentemente <strong>TODAS las horneadas registradas</strong> de este dispositivo.<br><br>Exporta tu historial primero — esto no se puede deshacer.',
       'archive.deleteAll.confirm1Btn':  'Sí, borrar todo',
       'archive.deleteAll.confirm2Body': '¿Estás completamente seguro? Cada registro de horneada se perderá para siempre.',
