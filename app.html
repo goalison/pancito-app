@@ -957,18 +957,14 @@
 </section>
 <!-- Filters Bar -->
 <section class="flex flex-wrap items-center gap-4 mb-10 pb-6 border-b border-outline-variant/15 overflow-x-auto no-scrollbar">
-<button class="flex items-center gap-2 bg-[#C4863A] px-5 py-2.5 rounded-full text-sm font-bold text-white whitespace-nowrap" id="filterAll">
-<span class="material-symbols-outlined text-sm">filter_list</span>
-<span data-i18n="archive.filterAll">Type: All</span>
-</button>
-<button class="flex items-center gap-2 bg-surface-container-high px-5 py-2.5 rounded-full text-sm font-bold text-on-surface border border-outline-variant/20 whitespace-nowrap" id="filterRating">
+<button class="flex items-center gap-2 bg-surface-container-high px-5 py-2.5 rounded-full text-sm font-bold text-on-surface border border-outline-variant/20 whitespace-nowrap" id="filterRatingBtn">
 <span class="material-symbols-outlined text-sm text-primary" style='font-variation-settings: "FILL" 1;'>grade</span>
-<span data-i18n="archive.filterRating">Rating: 4.0+</span>
+<span id="filterRatingLabel">Rating: All</span>
 </button>
-<div class="ml-auto flex items-center gap-4">
-<span class="text-[10px] font-bold uppercase tracking-widest text-outline whitespace-nowrap" data-i18n="archive.sortedDate">Sorted by Date</span>
-<span class="material-symbols-outlined text-primary cursor-pointer">sort</span>
-</div>
+<button class="ml-auto flex items-center gap-2 bg-transparent border-none cursor-pointer" id="sortDateBtn">
+<span class="text-[10px] font-bold uppercase tracking-widest text-outline whitespace-nowrap" id="sortDateLabel">Newest First</span>
+<span class="material-symbols-outlined text-primary" id="sortDateIcon">arrow_downward</span>
+</button>
 </section>
 <!-- Dynamic Logs Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12" id="logsGrid"></div>
@@ -2921,7 +2917,8 @@
   // Archive view
   // ════════════════════════════════════════════════════════
   var _archiveInited = false;
-  var filterActive = false;
+  var ratingFilterMode = 'all'; // 'all' | '5' | '4' | 'le3'
+  var sortOrder = 'desc'; // 'desc' = newest first, 'asc' = oldest first
   var currentLogs  = [];
 
   function getLogs() {
@@ -2960,13 +2957,16 @@
     const grid = document.getElementById('logsGrid'); if (!grid) return;
     let logs; try { logs = getLogs(); } catch(e) { logs = []; }
     if (!Array.isArray(logs)) logs = [];
-    if (filterActive) logs = logs.filter(l => parseFloat(l.rating) >= 4.0);
-    currentLogs = [...logs].sort((a,b) => new Date(b.date)-new Date(a.date));
+    if (ratingFilterMode === '5') logs = logs.filter(l => Math.round(parseFloat(l.rating)||0) === 5);
+    else if (ratingFilterMode === '4') logs = logs.filter(l => Math.round(parseFloat(l.rating)||0) === 4);
+    else if (ratingFilterMode === 'le3') logs = logs.filter(l => (parseFloat(l.rating)||0) <= 3);
+    currentLogs = [...logs].sort((a,b) => sortOrder === 'asc' ? new Date(a.date)-new Date(b.date) : new Date(b.date)-new Date(a.date));
+    _pymUpdateFilterBarLabels();
 
     if (currentLogs.length === 0) {
       const _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
-      if (filterActive) {
-        grid.innerHTML = `<div class="col-span-full py-20 flex flex-col items-center text-center"><span class="text-7xl mb-4">⭐</span><h3 class="font-headline text-3xl text-on-surface mb-3">${_t('archive.filterEmpty.title')}</h3><p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-6">${_t('archive.filterEmpty.body')}</p><button onclick="_setRatingFilter(false)" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">${_t('archive.filterEmpty.cta')}</button></div>`;
+      if (ratingFilterMode !== 'all') {
+        grid.innerHTML = `<div class="col-span-full py-20 flex flex-col items-center text-center"><span class="text-7xl mb-4">⭐</span><h3 class="font-headline text-3xl text-on-surface mb-3">${_t('archive.filterEmpty.title')}</h3><p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-6">${_t('archive.filterEmpty.body')}</p><button onclick="_pymClearRatingFilter()" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">${_t('archive.filterEmpty.cta')}</button></div>`;
       } else {
         grid.innerHTML = `<div class="col-span-full py-20 flex flex-col items-center text-center"><span class="text-7xl mb-4">🍞</span><h3 class="font-headline text-3xl text-on-surface mb-3">${_t('archive.empty.title')}</h3><p class="text-on-surface-variant max-w-sm mx-auto leading-relaxed mb-2">${_t('archive.empty.body')}</p><p class="text-on-surface-variant/70 text-sm max-w-xs mx-auto mb-8">${_t('archive.empty.tip')}</p><button onclick="showView('view-bake')" class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">${_t('archive.empty.cta')}</button></div>`;
       }
@@ -3200,19 +3200,63 @@
     }
   };
 
-  function _setRatingFilter(on) {
-    filterActive=on; const rb=document.getElementById('filterRating'), ab=document.getElementById('filterAll');
-    if(on){rb.style.cssText='background:#875305;color:#fff;border-color:#875305';rb.querySelector('.material-symbols-outlined').style.color='#fff';ab.style.cssText='';}
-    else{rb.style.cssText='';rb.querySelector('.material-symbols-outlined').style.color='';ab.style.cssText='background:#C4863A;color:#fff';}
-    renderLogs();
+  function _pymClearRatingFilter() { ratingFilterMode = 'all'; renderLogs(); }
+
+  function _pymUpdateFilterBarLabels() {
+    const _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
+    const ratingLabel = document.getElementById('filterRatingLabel');
+    if (ratingLabel) {
+      const key = ratingFilterMode === '5' ? 'archive.filterRating.five'
+        : ratingFilterMode === '4' ? 'archive.filterRating.four'
+        : ratingFilterMode === 'le3' ? 'archive.filterRating.le3'
+        : 'archive.filterRating.all';
+      ratingLabel.textContent = _t(key);
+    }
+    const ratingBtn = document.getElementById('filterRatingBtn');
+    if (ratingBtn) ratingBtn.style.cssText = ratingFilterMode !== 'all' ? 'background:#875305;color:#fff;border-color:#875305' : '';
+    const sortLabel = document.getElementById('sortDateLabel');
+    if (sortLabel) sortLabel.textContent = _t(sortOrder === 'asc' ? 'archive.sortedDate.oldest' : 'archive.sortedDate.newest');
+    const sortIcon = document.getElementById('sortDateIcon');
+    if (sortIcon) sortIcon.textContent = sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward';
+  }
+
+  // Bottom sheet for picking a star-rating filter — reuses the same
+  // pym-sheet pattern as the import Replace/Merge choice.
+  function _pymShowRatingFilterSheet() {
+    const _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
+    const sheet = document.createElement('div');
+    sheet.className = 'pym-sheet-overlay';
+    sheet.id = 'pym-rating-filter-sheet';
+    const opts = [
+      {mode:'all', key:'archive.filterRating.all'},
+      {mode:'5',   key:'archive.filterRating.five'},
+      {mode:'4',   key:'archive.filterRating.four'},
+      {mode:'le3', key:'archive.filterRating.le3'}
+    ];
+    sheet.innerHTML = '<div class="pym-sheet" style="font-family:\'Plus Jakarta Sans\',sans-serif;">' +
+      '<div class="w-10 h-1 bg-outline-variant rounded-full mx-auto mb-4"></div>' +
+      '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#514538;margin-bottom:1rem;">' + _t('archive.filterRating.sheetTitle') + '</p>' +
+      opts.map(function(o) {
+        const on = ratingFilterMode === o.mode;
+        return '<button class="pym-rating-opt" data-mode="' + o.mode + '" style="width:100%;padding:14px;background:' + (on ? '#875305' : 'transparent') + ';color:' + (on ? '#fff' : '#514538') + ';border:2px solid ' + (on ? '#875305' : '#e5ddd0') + ';border-radius:14px;font-weight:700;font-size:14px;cursor:pointer;margin-bottom:10px;font-family:inherit;">' + _t(o.key) + '</button>';
+      }).join('') +
+      '<button id="pym-rating-cancel" style="width:100%;padding:12px;background:none;border:none;color:#847466;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;">' + _t('common.cancel') + '</button>' +
+    '</div>';
+    sheet.addEventListener('click', function(e) { if (e.target === sheet) sheet.remove(); });
+    document.body.appendChild(sheet);
+    sheet.querySelectorAll('.pym-rating-opt').forEach(function(btn) {
+      btn.onclick = function() { ratingFilterMode = btn.getAttribute('data-mode'); sheet.remove(); renderLogs(); };
+    });
+    document.getElementById('pym-rating-cancel').onclick = function() { sheet.remove(); };
   }
 
   function renderArchive() {
     if (!_archiveInited) {
       _archiveInited = true;
-      var _frBtn = document.getElementById('filterRating'), _faBtn = document.getElementById('filterAll');
-      if (_frBtn) _frBtn.addEventListener('click', function() { _setRatingFilter(!filterActive); });
-      if (_faBtn) _faBtn.addEventListener('click', function() { _setRatingFilter(false); });
+      var _ratingBtn = document.getElementById('filterRatingBtn');
+      if (_ratingBtn) _ratingBtn.addEventListener('click', _pymShowRatingFilterSheet);
+      var _sortBtn = document.getElementById('sortDateBtn');
+      if (_sortBtn) _sortBtn.addEventListener('click', function() { sortOrder = sortOrder === 'asc' ? 'desc' : 'asc'; renderLogs(); });
       // importInput's change listener is attached once, unconditionally, at
       // boot (not here) — see DOMContentLoaded — so the welcome screen's
       // "Restore a backup" link works even before Archive has ever rendered.
