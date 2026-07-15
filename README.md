@@ -116,12 +116,17 @@ Console **Closed testing → Alpha** track (see
 never auto-publishes to Production — that promotion is a manual step in Play
 Console, on purpose.
 
-**Release notes**: edit `distribution/whatsnew/en-US/whatsnew` and
-`distribution/whatsnew/es-419/whatsnew` (plain text, ~500 char limit) before
+**Release notes**: edit `distribution/whatsnew/whatsnew-en-US` and
+`distribution/whatsnew/whatsnew-es-419` (plain text, ~500 char limit) before
 pushing — CI uploads whatever's currently committed there as that release's
-"what's new" text. These locale folder names must match what's configured in
-Play Console → Store presence → Main store listing → languages; rename them
-if your listing uses a different Spanish variant (e.g. `es-ES`, `es-US`).
+"what's new" text. The `r0adkll/upload-google-play` action requires this
+*exact* flat filename pattern, `whatsnew-<LOCALE>` directly inside
+`distribution/whatsnew/` — not a `<locale>/whatsnew` subdirectory (that's a
+different tool's convention, Fastlane's `supply`, and silently uploads with
+no release notes at all if used here, no error). The `<LOCALE>` suffix must
+match what's configured in Play Console → Store presence → Main store
+listing → languages; rename the files if your listing uses a different
+Spanish variant (e.g. `es-ES`, `es-US`).
 
 **One-time setup** (only needs doing once, and only by someone with admin
 access to the Play Console listing). Play Console removed the old "Setup →
