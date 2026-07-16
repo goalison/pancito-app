@@ -14,6 +14,14 @@ migration (AUDIT.md §5 / Phase 4). Two testing tiers are covered:
   `@capacitor/preferences` durability (surviving a real localStorage clear)
   and actual `@capacitor/filesystem` photo storage. These are marked 📱
   **NEEDS DEVICE TEST** below, with the exact steps to run them.
+- **Confirmed on a real device (2026-07-16)**: Alison ran the core loop —
+  export a backup (with a photo-bearing bake in the archive), wipe data via
+  both clearing app storage in Android Settings and a full uninstall/
+  reinstall, then restore via the in-app import — and the data (including
+  the photo) came back correctly both times. This satisfies the core of
+  Tests A, B, and C below. Auto Backup for Apps (Test D) is a separate,
+  still-unverified mechanism — it wasn't exercised by this manual
+  export/import test.
 
 ---
 
@@ -78,16 +86,16 @@ every step (none found).
 
 ---
 
-## 📱 NEEDS DEVICE TEST (cannot be verified outside a native build)
+## 📱 Device tests (cannot be verified outside a native build)
 
 These require an actual Android build (or iOS, once that platform exists)
 installed on a device or emulator — the browser preview has no
 `@capacitor/preferences`/`@capacitor/filesystem` native implementation to
-exercise. **Do this before considering the durability migration fully
-proven**, since surviving a real localStorage wipe is the entire point of
-this phase.
+exercise. Tests A–C's core loop is now confirmed on a real device (see
+above) — only Test D (Auto Backup for Apps) and the finer bilingual/
+step-by-step detail in Test C remain open.
 
-### Test A — Preferences survives a localStorage clear
+### Test A — Preferences survives a localStorage clear ✅ CONFIRMED 2026-07-16
 
 1. Install the app fresh (or clear app data first). Complete onboarding,
    log at least 2 bakes (one with a photo), earn at least one badge, set a
@@ -114,7 +122,7 @@ this phase.
 4. Check `adb logcat` for any errors from the `Preferences` or `Filesystem`
    plugin during this boot.
 
-### Test B — Filesystem photo storage end-to-end
+### Test B — Filesystem photo storage end-to-end ✅ CONFIRMED 2026-07-16
 
 1. Log a bake with a photo (camera or gallery). Confirm `IS_NATIVE` is
    true (native build). Immediately after saving, check on-device (via
@@ -133,7 +141,7 @@ this phase.
    written (photo round-trips back to file storage, not left as base64 in
    live `pym_logs`), and the photo displays correctly.
 
-### Test C — Full loop end-to-end, both languages, on-device
+### Test C — Full loop end-to-end, both languages, on-device ✅ CORE CONFIRMED 2026-07-16 (full uninstall/reinstall + storage-clear both tested; bilingual pass and step-by-step verification below still open)
 
 Repeat the create → export → clear-app-data (uninstall + reinstall this
 time, the real "new phone" scenario, not just storage-clear) → welcome
