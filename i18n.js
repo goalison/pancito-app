@@ -176,6 +176,7 @@
       // ── Common ────────────────────────────────────────────────────────────
       'common.cancel': 'Cancel',
       'common.ok':     'OK',
+      'common.save':   'Save',
 
       // ── Navigation ──────────────────────────────────────────────────────
       'nav.dashboard': 'Dashboard',
@@ -580,6 +581,9 @@
       'archive.modal.close':      'Close Entry',
       'archive.modal.hrs':        'hrs',
       'archive.modal.min':        'min',
+      'archive.editTimes.btn':    'Edit times',
+      'archive.editTimes.title':  'Edit Stage Times',
+      'archive.editTimes.saved':  'Times updated',
 
       // ── Library view ─────────────────────────────────────────────────────
       'library.label':    'Knowledge & Technique',
@@ -1704,6 +1708,7 @@
       // ── Common ────────────────────────────────────────────────────────────
       'common.cancel': 'Cancelar',
       'common.ok':     'Aceptar',
+      'common.save':   'Guardar',
 
       // ── Navigation ──────────────────────────────────────────────────────
       'nav.dashboard': 'Inicio',
@@ -2107,6 +2112,9 @@
       'archive.modal.close':      'Cerrar Registro',
       'archive.modal.hrs':        'h',
       'archive.modal.min':        'min',
+      'archive.editTimes.btn':    'Editar tiempos',
+      'archive.editTimes.title':  'Editar Tiempos de Etapa',
+      'archive.editTimes.saved':  'Tiempos actualizados',
 
       // ── Library view ─────────────────────────────────────────────────────
       'library.label':    'Conocimiento y Técnica',
