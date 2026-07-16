@@ -731,6 +731,13 @@
     fire.setHours(h, m, 0, 0);
     if (fire <= new Date()) fire.setDate(fire.getDate() + 1);
 
+    // Capacitor's LocalNotifications docs are explicit: "Use either `at`, `on`,
+    // or `every` to schedule notifications" — these are separate, mutually
+    // exclusive recurrence modes, not combinable. `repeats: true` alongside
+    // `at` is already the fully-supported way to repeat daily at that time;
+    // adding `every: 'day'` on top mixed two different native scheduling
+    // paths and is the likely cause of it firing multiple times in a short
+    // window instead of once a day.
     await cap.schedule({ notifications: [{
       id:        NOTIF_ID,
       title:     'Pancito y Más 🍞',
@@ -740,7 +747,6 @@
       schedule:  {
         at:      fire,
         repeats: true,
-        every:   'day',
       },
     }]}).catch(() => {});
   }

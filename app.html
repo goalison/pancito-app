@@ -2240,6 +2240,7 @@
 
   function restoreStaticTimer() {
     try {
+      var _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
       var saved = JSON.parse(localStorage.getItem(STATIC_TIMER_KEY) || 'null');
       if (!saved || !saved.id || !saved.startTs) return;
       var elapsed = Math.floor((Date.now() - saved.startTs) / 1000);
@@ -2251,7 +2252,7 @@
           var doneBtn = doneContainer.querySelector('.start-btn');
           var doneDisp = doneContainer.querySelector('.timer-display');
           if (doneDisp) doneDisp.innerText = '00:00';
-          if (doneBtn) { doneBtn.innerText = 'Done ✓'; doneBtn.disabled = true; }
+          if (doneBtn) { doneBtn.innerText = _t('stage2.done'); doneBtn.setAttribute('data-i18n', 'stage2.done'); doneBtn.disabled = true; }
         }
         hideGlobalTimer(); setPendingAlarm(); return;
       }
@@ -2261,7 +2262,7 @@
       if (!container) return;
       var btn = container.querySelector('.start-btn');
       var display = container.querySelector('.timer-display');
-      if (btn) btn.innerText = 'Pause';
+      if (btn) { btn.innerText = _t('stage2.pause'); btn.setAttribute('data-i18n', 'stage2.pause'); }
       var tick = function() {
         var el = Math.floor((Date.now() - staticTimerState.startTs) / 1000);
         var rem = Math.max(0, staticTimerState.baseRemaining - el);
@@ -2272,7 +2273,7 @@
           clearInterval(activeStaticInterval); activeStaticInterval = null;
           staticTimerState.running = false; localStorage.removeItem(STATIC_TIMER_KEY);
           if (display) display.innerText = '00:00';
-          if (btn) { btn.innerText = 'Done ✓'; btn.disabled = true; }
+          if (btn) { btn.innerText = _t('stage2.done'); btn.setAttribute('data-i18n', 'stage2.done'); btn.disabled = true; }
           playAlarm(); hideGlobalTimer();
         }
       };
@@ -2297,16 +2298,17 @@
   function toggleRestTimer() {
     if (localStorage.getItem(REST_DONE_KEY)) return;
     var btn = document.getElementById('rest-timer-btn');
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
     if (restInterval) {
       clearInterval(restInterval); restInterval = null;
       localStorage.setItem(REST_PAUSED_KEY, restSecondsLeft());
       localStorage.removeItem(REST_START_KEY);
-      if (btn) btn.innerText = 'Resume';
+      if (btn) { btn.innerText = _t('stage2.resume'); btn.setAttribute('data-i18n', 'stage2.resume'); }
       cancelAlarm('rest-timer');
     } else {
       try { var actx = getAudioCtx(); if (actx.state === 'suspended') actx.resume(); } catch(e) {}
       localStorage.setItem(REST_START_KEY, Date.now());
-      if (btn) btn.innerText = 'Pause';
+      if (btn) { btn.innerText = _t('stage2.pause'); btn.setAttribute('data-i18n', 'stage2.pause'); }
       sendAlarm('rest-timer', 'Initial 60-min Rest', restSecondsLeft());
       restTick();
     }
@@ -2328,7 +2330,8 @@
   function finishRestTimer() {
     restUpdateDisplay(0);
     var btn = document.getElementById('rest-timer-btn');
-    if (btn) { btn.disabled = true; btn.innerText = 'Done'; }
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
+    if (btn) { btn.disabled = true; btn.innerText = _t('stage2.done'); btn.setAttribute('data-i18n', 'stage2.done'); }
     var msg = document.getElementById('rest-timer-complete-msg');
     if (msg) msg.classList.remove('hidden');
     playBeep('done'); unlockRound1();
@@ -2337,18 +2340,20 @@
   function unlockRound1() {
     var r1 = document.getElementById('bulk-timer-1');
     if (!r1) return;
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
     r1.classList.remove('grayscale','opacity-50','border-dashed'); r1.classList.add('border-solid');
     var icon = document.getElementById('icon-1');
     if (icon) { icon.innerText = 'hourglass_empty'; icon.classList.add('text-primary'); }
     var r1Btn = r1.querySelector('.start-btn');
-    if (r1Btn) { r1Btn.disabled = false; r1Btn.innerText = 'Start'; r1Btn.className = 'px-3 py-1.5 bg-primary text-on-primary rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full'; }
+    if (r1Btn) { r1Btn.disabled = false; r1Btn.innerText = _t('stage2.start'); r1Btn.setAttribute('data-i18n', 'stage2.start'); r1Btn.className = 'px-3 py-1.5 bg-primary text-on-primary rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full'; }
   }
 
   function restoreRestTimer() {
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
     if (localStorage.getItem(REST_DONE_KEY)) {
       restUpdateDisplay(0);
       var btn = document.getElementById('rest-timer-btn');
-      if (btn) { btn.disabled = true; btn.innerText = 'Done'; }
+      if (btn) { btn.disabled = true; btn.innerText = _t('stage2.done'); btn.setAttribute('data-i18n', 'stage2.done'); }
       var msg = document.getElementById('rest-timer-complete-msg');
       if (msg) msg.classList.remove('hidden');
       unlockRound1(); return;
@@ -2357,11 +2362,11 @@
     restUpdateDisplay(left);
     if (localStorage.getItem(REST_START_KEY)) {
       var btn2 = document.getElementById('rest-timer-btn');
-      if (btn2) btn2.innerText = 'Pause';
+      if (btn2) { btn2.innerText = _t('stage2.pause'); btn2.setAttribute('data-i18n', 'stage2.pause'); }
       restTick();
     } else if (parseInt(localStorage.getItem(REST_PAUSED_KEY) || '0') > 0) {
       var btn3 = document.getElementById('rest-timer-btn');
-      if (btn3) btn3.innerText = 'Resume';
+      if (btn3) { btn3.innerText = _t('stage2.resume'); btn3.setAttribute('data-i18n', 'stage2.resume'); }
     }
   }
 
@@ -2443,11 +2448,18 @@
     try { var done = JSON.parse(localStorage.getItem(ROUNDS_DONE_KEY) || '[]'); if (done.indexOf(num) === -1) done.push(num); localStorage.setItem(ROUNDS_DONE_KEY, JSON.stringify(done)); } catch(e) {}
     clearRoundState();
   }
+  // These buttons cycle through locked/start/pause/resume/done as timers
+  // progress. Each state sets BOTH innerText and the data-i18n attribute
+  // together — leaving data-i18n stale (e.g. still "stage2.locked" after
+  // unlocking) meant any later applyTranslations() sweep (every showView()
+  // call) would silently overwrite the JS-set label back to "Locked", even
+  // though disabled/className had correctly updated to the unlocked look.
   function applyRoundComplete(num) {
     var t = timers[num]; t.completed = true; t.running = false;
     var container = document.getElementById('bulk-timer-' + num); if (!container) return;
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
     var btn = container.querySelector('.start-btn');
-    btn.innerText = 'Done'; btn.disabled = true;
+    btn.innerText = _t('stage2.done'); btn.setAttribute('data-i18n', 'stage2.done'); btn.disabled = true;
     btn.className = 'px-3 py-1.5 bg-secondary text-on-secondary rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full';
     document.getElementById('icon-' + num).innerText = 'check_circle';
     container.querySelector('.timer-display').innerText = '00:00';
@@ -2455,10 +2467,11 @@
   }
   function applyRoundUnlocked(num) {
     var container = document.getElementById('bulk-timer-' + num); if (!container) return;
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
     var btn = container.querySelector('.start-btn'), icon = document.getElementById('icon-' + num);
     container.classList.remove('grayscale','opacity-50','border-dashed'); container.classList.add('border-solid');
     icon.innerText = 'hourglass_empty'; icon.classList.add('text-primary');
-    btn.disabled = false; btn.innerText = 'Start';
+    btn.disabled = false; btn.innerText = _t('stage2.start'); btn.setAttribute('data-i18n', 'stage2.start');
     btn.className = 'px-3 py-1.5 bg-primary text-on-primary rounded-full text-[10px] font-label uppercase tracking-widest start-btn w-full';
   }
   function roundTick(num) {
@@ -2472,14 +2485,15 @@
     var t = timers[num]; if (t.completed) return;
     var container = document.getElementById('bulk-timer-' + num);
     var btn = container.querySelector('.start-btn'), icon = document.getElementById('icon-' + num);
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
     try { var actx = getAudioCtx(); if (actx.state === 'suspended') actx.resume(); } catch(e) {}
     if (t.running) {
       t.baseRemaining = roundSecondsLeft(num); t.startTs = 0;
       clearInterval(t.interval); t.interval = null; t.running = false;
-      btn.innerText = 'Resume'; hideGlobalTimer(); saveRoundState(num); cancelAlarm('round-' + num);
+      btn.innerText = _t('stage2.resume'); btn.setAttribute('data-i18n', 'stage2.resume'); hideGlobalTimer(); saveRoundState(num); cancelAlarm('round-' + num);
     } else {
       t.startTs = Date.now(); t.running = true;
-      btn.innerText = 'Pause'; icon.innerText = 'hourglass_bottom';
+      btn.innerText = _t('stage2.pause'); btn.setAttribute('data-i18n', 'stage2.pause'); icon.innerText = 'hourglass_bottom';
       showGlobalTimer(t.label, t.baseRemaining, 30*60); saveRoundState(num);
       sendAlarm('round-' + num, `Stretch & Fold ${t.label}`, roundSecondsLeft(num));
       roundTick(num);
@@ -2501,16 +2515,17 @@
     const btn = container.querySelector('.start-btn');
     const display = container.querySelector('.timer-display');
     const label = container.querySelector('.font-label')?.innerText || "Timer";
+    const _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
     if (staticTimerState.id === containerId && staticTimerState.running) {
       clearInterval(activeStaticInterval); activeStaticInterval = null;
       const elapsed = Math.floor((Date.now() - staticTimerState.startTs) / 1000);
       staticTimerState.baseRemaining = Math.max(0, staticTimerState.baseRemaining - elapsed);
       staticTimerState.startTs = 0; staticTimerState.running = false;
-      btn.innerText = "Resume"; hideGlobalTimer(); saveStaticTimerState(); cancelAlarm('static-' + containerId);
+      btn.innerText = _t('stage2.resume'); btn.setAttribute('data-i18n', 'stage2.resume'); hideGlobalTimer(); saveStaticTimerState(); cancelAlarm('static-' + containerId);
     } else {
       if (staticTimerState.id !== containerId) { staticTimerState.id = containerId; staticTimerState.baseRemaining = initialSeconds; staticTimerState.total = initialSeconds; }
       staticTimerState.running = true; staticTimerState.startTs = Date.now();
-      btn.innerText = "Pause"; showGlobalTimer(label, staticTimerState.baseRemaining, staticTimerState.total);
+      btn.innerText = _t('stage2.pause'); btn.setAttribute('data-i18n', 'stage2.pause'); showGlobalTimer(label, staticTimerState.baseRemaining, staticTimerState.total);
       saveStaticTimerState(); sendAlarm('static-' + containerId, label, staticTimerState.baseRemaining);
       const tick = () => {
         const elapsed = Math.floor((Date.now() - staticTimerState.startTs) / 1000);
@@ -2521,7 +2536,7 @@
         if (remaining <= 0) {
           clearInterval(activeStaticInterval); activeStaticInterval = null;
           staticTimerState.running = false; display.innerText = "00:00";
-          btn.innerText = "Done ✓"; btn.disabled = true;
+          btn.innerText = _t('stage2.done'); btn.setAttribute('data-i18n', 'stage2.done'); btn.disabled = true;
           localStorage.removeItem(STATIC_TIMER_KEY); playAlarm(); hideGlobalTimer();
         }
       };
@@ -2615,6 +2630,7 @@
   }
 
   function restoreRoundTimers() {
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
     var done = JSON.parse(localStorage.getItem(ROUNDS_DONE_KEY) || '[]');
     done.forEach(function(num) { applyRoundComplete(num); if (num < 4) applyRoundUnlocked(num + 1); });
     try {
@@ -2627,8 +2643,8 @@
         var container = document.getElementById('bulk-timer-' + num);
         var btn = container ? container.querySelector('.start-btn') : null;
         if (left <= 0) { t.running = false; applyRoundComplete(num); markRoundDone(num); hideGlobalTimer(); if (num < 4) applyRoundUnlocked(num + 1); setPendingAlarm(); }
-        else if (t.startTs) { t.running = true; if (btn) btn.innerText = 'Pause'; var icon = document.getElementById('icon-' + num); if (icon) icon.innerText = 'hourglass_bottom'; updateTimerUI(num, left); showGlobalTimer(t.label, left, 30*60); roundTick(num); }
-        else { if (btn) btn.innerText = 'Resume'; updateTimerUI(num, left); }
+        else if (t.startTs) { t.running = true; if (btn) { btn.innerText = _t('stage2.pause'); btn.setAttribute('data-i18n', 'stage2.pause'); } var icon = document.getElementById('icon-' + num); if (icon) icon.innerText = 'hourglass_bottom'; updateTimerUI(num, left); showGlobalTimer(t.label, left, 30*60); roundTick(num); }
+        else { if (btn) { btn.innerText = _t('stage2.resume'); btn.setAttribute('data-i18n', 'stage2.resume'); } updateTimerUI(num, left); }
       }
     } catch(e) {}
   }
