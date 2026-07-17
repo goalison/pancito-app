@@ -175,6 +175,23 @@ This cannot be exercised in this browser-only environment at all — it is a
 build/manifest configuration that only a real Android OS backup pass can
 verify. Reviewed by code inspection only (see "Known limitations" below).
 
+**Partially confirmed on a real device (2026-07-16, v191)**: verified via
+Play Console CI logs that `android:allowBackup="true"`,
+`android:fullBackupContent`, and `android:dataExtractionRules` are all
+correctly present in the shipped manifest. Alison then uninstalled and
+reinstalled from Play Store (Closed testing → Alpha) — **Play Store
+offered a restore-app-data prompt on the first reinstall attempt**, which
+is itself strong evidence the backup exists, is correctly associated with
+this app/account, and is recognized as restorable by Android. She
+accidentally dismissed that prompt; a second immediate reinstall attempt
+did not re-offer it (expected — Android generally doesn't re-prompt for a
+restore the user already declined, on an immediate repeat reinstall of the
+same app on the same device). **Still open**: actually accepting the
+prompt and confirming the data lands correctly. Retry after waiting a few
+hours to overnight before reinstalling again, so the "already declined"
+state has a chance to clear, and watch closely for the prompt during the
+install screen.
+
 1. Install the app fresh on a device signed into a Google account with
    backup enabled (Settings → System → Backup). Log a few bakes with photos.
 2. Force a backup pass immediately instead of waiting for the OS's own
@@ -184,7 +201,8 @@ verify. Reviewed by code inspection only (see "Known limitations" below).
    success result for this package.
 4. Uninstall the app, then reinstall it from the same source (Play Store
    install is the real-world path; a fresh `adb install` of the same APK/AAB
-   signature also triggers restore). On first launch, confirm the bake logs,
+   signature also triggers restore). On first launch, **accept the restore
+   prompt if one appears** (easy to blow past), and confirm the bake logs,
    photos, and gamification state came back **without** using the in-app
    "Restore a backup" flow at all.
 5. Confirm `adb shell dumpsys backup` lists `com.pancitoymas.sourdough` as
