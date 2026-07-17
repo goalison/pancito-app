@@ -3,6 +3,13 @@ name: Build Pancito y Más Android APK
 on:
   push:
     branches: [main]
+    # Docs and Claude Code's own internal files have no effect on the shipped
+    # app — skip the build (and the automatic Play Store publish) entirely
+    # when a push touches only these. A push that mixes doc + code changes
+    # still runs normally; this only skips when every changed file matches.
+    paths-ignore:
+      - '**.md'
+      - '.claude/**'
   workflow_dispatch:
 
 jobs:

@@ -116,6 +116,11 @@ Console **Closed testing → Alpha** track (see
 never auto-publishes to Production — that promotion is a manual step in Play
 Console, on purpose.
 
+A push that touches **only** `*.md` files or `.claude/**` skips the build
+entirely (`paths-ignore` on the workflow trigger) — docs changes shouldn't
+burn a build or push a no-op version to testers. Mixing a doc change into a
+commit with real code changes still triggers a normal build.
+
 **Release notes**: edit `distribution/whatsnew/whatsnew-en-US` and
 `distribution/whatsnew/whatsnew-es-419` (plain text, ~500 char limit) before
 pushing — CI uploads whatever's currently committed there as that release's
