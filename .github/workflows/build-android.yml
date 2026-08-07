@@ -160,7 +160,7 @@ jobs:
           content = content.replace('</manifest>', perms + '</manifest>')
           vc = os.environ.get('GITHUB_RUN_NUMBER', '137')
           with open(path, 'w') as f:
-            f.write(content.replace('targetSdkVersion 34', 'targetSdkVersion 35').replace('targetSdk 34', 'targetSdk 35').replace('compileSdkVersion 34', 'compileSdkVersion 35').replace('versionCode 1', 'versionCode ' + vc))
+            f.write(content.replace('targetSdkVersion 34', 'targetSdkVersion 36').replace('targetSdk 34', 'targetSdk 36').replace('compileSdkVersion 34', 'compileSdkVersion 36').replace('versionCode 1', 'versionCode ' + vc))
           print('✓ Permissions injected')
           PYEOF
 
@@ -340,9 +340,9 @@ jobs:
           vc = os.environ.get('GITHUB_RUN_NUMBER', '137')
           with open(path, 'w') as f:
               f.write(content
-                  .replace('targetSdkVersion 34', 'targetSdkVersion 35')
-                  .replace('targetSdk 34', 'targetSdk 35')
-                  .replace('compileSdkVersion 34', 'compileSdkVersion 35')
+                  .replace('targetSdkVersion 34', 'targetSdkVersion 36')
+                  .replace('targetSdk 34', 'targetSdk 36')
+                  .replace('compileSdkVersion 34', 'compileSdkVersion 36')
                   .replace('versionCode 1', 'versionCode ' + vc)
                   .replace('versionName "1.0"', 'versionName "1.0.' + vc + '"'))
           print('✓ Signing config injected into build.gradle')
@@ -353,8 +353,8 @@ jobs:
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
-            "platforms;android-35" \
-            "build-tools;35.0.0" \
+            "platforms;android-36" \
+            "build-tools;36.0.0" \
             "platform-tools"
 
       # ── 10. Patch SDK versions in variables.gradle and create local.properties
@@ -367,11 +367,11 @@ jobs:
           for path in targets:
             with open(path, 'r') as f:
               content = f.read()
-            content = re.sub(r'((?:targetSdkVersion|compileSdkVersion|targetSdk|compileSdk)\s*=\s*)34', r'\g<1>35', content)
-            content = content.replace('targetSdkVersion 34', 'targetSdkVersion 35')
-            content = content.replace('compileSdkVersion 34', 'compileSdkVersion 35')
-            content = content.replace('targetSdk 34', 'targetSdk 35')
-            content = content.replace('compileSdk 34', 'compileSdk 35')
+            content = re.sub(r'((?:targetSdkVersion|compileSdkVersion|targetSdk|compileSdk)\s*=\s*)34', r'\g<1>36', content)
+            content = content.replace('targetSdkVersion 34', 'targetSdkVersion 36')
+            content = content.replace('compileSdkVersion 34', 'compileSdkVersion 36')
+            content = content.replace('targetSdk 34', 'targetSdk 36')
+            content = content.replace('compileSdk 34', 'compileSdk 36')
             with open(path, 'w') as f:
               f.write(content)
             print(f'✓ Patched {path}')
