@@ -10,6 +10,7 @@
 <script src="storage.js"></script>
 <script src="i18n.js"></script>
 <script src="gamification.js"></script>
+<script src="events.js"></script>
 <script src="celebration.js"></script>
 <script src="alarm-bridge.js"></script>
 <script id="tailwind-config">
@@ -296,6 +297,55 @@
 <span class="material-symbols-outlined">add_circle</span>
 </button>
 </div>
+</section>
+<!-- ── Where to go signposting (collapsible + dismissible) ──────────────── -->
+<section class="hidden rounded-2xl border border-outline-variant/30 bg-surface-container-low overflow-hidden" id="dashboard-signpost">
+  <button class="w-full flex items-center justify-between px-5 py-3.5" onclick="_pymToggleSignpost()">
+    <span class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary text-base">explore</span>
+      <span class="font-label text-xs font-bold uppercase tracking-widest text-on-surface" data-i18n="dashboard.signpost.title">Find your way around</span>
+    </span>
+    <span class="flex items-center gap-1">
+      <span class="material-symbols-outlined text-on-surface-variant/60 text-lg transition-transform" id="signpost-chevron">expand_less</span>
+      <span class="text-on-surface-variant/50 p-1" onclick="event.stopPropagation();_pymDismissSignpost()" title="Dismiss">
+        <span class="material-symbols-outlined text-base">close</span>
+      </span>
+    </span>
+  </button>
+  <div id="signpost-body" class="px-5 pb-5">
+    <div class="grid grid-cols-2 gap-3 mb-4">
+      <button onclick="showView('view-bake')" class="text-left bg-surface-container rounded-xl p-3 hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined text-primary text-lg block mb-1">bakery_dining</span>
+        <p class="text-xs font-bold text-on-surface" data-i18n="dashboard.signpost.bake.title">Bake</p>
+        <p class="text-[10px] text-on-surface-variant" data-i18n="dashboard.signpost.bake.sub">Time and track a live bake session</p>
+      </button>
+      <button onclick="showView('view-library')" class="text-left bg-surface-container rounded-xl p-3 hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined text-primary text-lg block mb-1">menu_book</span>
+        <p class="text-xs font-bold text-on-surface" data-i18n="dashboard.signpost.library.title">Library</p>
+        <p class="text-[10px] text-on-surface-variant" data-i18n="dashboard.signpost.library.sub">Guides, glossary &amp; troubleshooting</p>
+      </button>
+      <button onclick="showView('view-archive')" class="text-left bg-surface-container rounded-xl p-3 hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined text-primary text-lg block mb-1">history</span>
+        <p class="text-xs font-bold text-on-surface" data-i18n="dashboard.signpost.archive.title">Archive</p>
+        <p class="text-[10px] text-on-surface-variant" data-i18n="dashboard.signpost.archive.sub">Your past bakes &amp; backups</p>
+      </button>
+      <button onclick="showView('view-achievements')" class="text-left bg-surface-container rounded-xl p-3 hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined text-primary text-lg block mb-1">workspace_premium</span>
+        <p class="text-xs font-bold text-on-surface" data-i18n="dashboard.signpost.badges.title">Badges</p>
+        <p class="text-[10px] text-on-surface-variant" data-i18n="dashboard.signpost.badges.sub">Levels &amp; achievements you've earned</p>
+      </button>
+    </div>
+    <div class="space-y-2">
+      <a href="#" onclick="event.preventDefault();_pymGoLibrarySearch()" class="flex items-center gap-2 text-xs text-primary font-bold">
+        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        <span data-i18n="dashboard.signpost.linkNew">New to sourdough? Start with the Glossary in Library</span>
+      </a>
+      <a href="troubleshoot-rise.html" onclick="try{sessionStorage.setItem('pym_boot_view','view-library')}catch(e){}" class="flex items-center gap-2 text-xs text-primary font-bold">
+        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        <span data-i18n="dashboard.signpost.linkStuck">Stuck on a bake? Check Troubleshooting</span>
+      </a>
+    </div>
+  </div>
 </section>
 <!-- Stats Grid -->
 <section class="grid grid-cols-2 gap-4">
@@ -1026,6 +1076,17 @@
 </div>
 </div>
 </section>
+<!-- Library-wide Search -->
+<section class="mb-16">
+<div class="relative group max-w-2xl">
+<input class="w-full bg-surface-container-low border-none rounded-xl px-12 py-4 text-on-surface focus:ring-1 focus:ring-primary/40 transition-all placeholder:text-outline shadow-sm" id="librarySearchTop" placeholder="Search the Library (guides, terms, tools)" data-i18n-placeholder="library.search.topPlaceholder" type="text" autocomplete="off"/>
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary">search</span>
+<button type="button" class="hidden absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50" id="librarySearchTopClear" onclick="_pymClearLibraryTopSearch()" aria-label="Clear search">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+</div>
+<div id="librarySearchTopResults" class="hidden mt-3 max-w-2xl bg-surface rounded-xl shadow-lg border border-outline-variant/30 overflow-hidden divide-y divide-outline-variant/20"></div>
+</section>
 <!-- Free eBook -->
 <section class="mb-12">
   <div class="relative overflow-hidden rounded-3xl bg-on-surface">
@@ -1295,6 +1356,7 @@
     if (target) target.classList.remove('hidden');
     _currentView = viewId;
     _updateNav(viewId);
+    if (window.PymEvents) try { PymEvents.trackTab(viewId); } catch(_) {}
 
     // Apply static translations then re-render dynamic content
     if (window.PymI18n) window.PymI18n.applyTranslations();
@@ -1877,6 +1939,43 @@
     if (el) el.classList.add('hidden');
   }
 
+  // ════════════════════════════════════════════════════════
+  // Dashboard signposting — what's in each tab, collapsible/dismissible
+  // ════════════════════════════════════════════════════════
+  function _pymApplySignpostCollapsed(collapsed) {
+    var body    = document.getElementById('signpost-body');
+    var chevron = document.getElementById('signpost-chevron');
+    if (body) body.classList.toggle('hidden', collapsed);
+    if (chevron) chevron.textContent = collapsed ? 'expand_more' : 'expand_less';
+  }
+  function _pymUpdateSignpost() {
+    var el = document.getElementById('dashboard-signpost');
+    if (!el) return;
+    var dismissed = window.PymStorage ? window.PymStorage.get('pym_dashboard_signpost_dismissed', false) : false;
+    if (dismissed) { el.classList.add('hidden'); return; }
+    el.classList.remove('hidden');
+    var collapsed = window.PymStorage ? window.PymStorage.get('pym_dashboard_signpost_collapsed', false) : false;
+    _pymApplySignpostCollapsed(collapsed);
+  }
+  function _pymToggleSignpost() {
+    var collapsed = window.PymStorage ? window.PymStorage.get('pym_dashboard_signpost_collapsed', false) : false;
+    collapsed = !collapsed;
+    if (window.PymStorage) window.PymStorage.set('pym_dashboard_signpost_collapsed', collapsed);
+    _pymApplySignpostCollapsed(collapsed);
+  }
+  function _pymDismissSignpost() {
+    if (window.PymStorage) window.PymStorage.set('pym_dashboard_signpost_dismissed', true);
+    var el = document.getElementById('dashboard-signpost');
+    if (el) el.classList.add('hidden');
+  }
+  function _pymGoLibrarySearch() {
+    showView('view-library');
+    setTimeout(function() {
+      var el = document.getElementById('librarySearchTop');
+      if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.focus(); }
+    }, 200);
+  }
+
   function renderDashboard() {
     // Date label
     var now = new Date();
@@ -1932,6 +2031,7 @@
       renderStarterCompanion();
       _renderBootcampCard();
       _pymUpdateDashboardNudge();
+      _pymUpdateSignpost();
 
       // Recent badges strip
       var recentBadges = G.getUnlockedBadges().slice(-3).reverse();
@@ -2620,6 +2720,7 @@
   }
 
   async function completeStep1() {
+    if (window.PymEvents) try { PymEvents.trackBake('started'); } catch(_) {}
     try { getAudioCtx(); } catch(e) {}
     // Await — without this, the 60-min sendAlarm below could race ahead of
     // channel/permission setup and silently fail to schedule the notification.
@@ -2879,6 +2980,7 @@
       try { localStorage.setItem('pym_logs', JSON.stringify(logs)); }
       catch(quotaErr) { if (quotaErr.name === 'QuotaExceededError' || quotaErr.code === 22) { logs = logs.map(l => ({ ...l, photo: null })); localStorage.setItem('pym_logs', JSON.stringify(logs)); } else throw quotaErr; }
       if (window.PymStorage) window.PymStorage.set('pym_logs', logs);
+      if (window.PymEvents) try { PymEvents.trackBake('completed'); } catch(_) {}
       try {
         if (window.PymGamification) { const G = window.PymGamification; G.checkAchievements(logs, G.getStreak(), G.getStarterState()); }
       } catch(gamErr) {}
@@ -3351,9 +3453,112 @@
   // ════════════════════════════════════════════════════════
   var _libraryInited = false;
 
+  // ── Unified Library search index ──────────────────────────
+  // Covers glossary terms + every article/troubleshooting/equipment card in
+  // the Library. Designed so Phase 3 (recipes) can push more entries
+  // ({ type: 'recipe', ... }) onto this same array without rebuilding it —
+  // _pymLibrarySearchMatches() just filters whatever's here.
+  var LIBRARY_SEARCH_INDEX = [
+    { type: 'article', href: 'stretch-and-fold.html',   category: 'library.stretchFold.cat', titleKey: 'library.stretchFold.title', subKey: 'library.stretchFold.sub' },
+    { type: 'article', href: 'scoring-aesthetics.html',  category: 'library.scoring.cat',      titleKey: 'library.scoring.title',      subKey: 'library.scoring.sub' },
+    { type: 'article', href: 'starter-revival.html',     category: 'library.revival.cat',      titleKey: 'library.revival.title',      subKey: 'library.revival.sub' },
+    { type: 'article', href: 'science-of-steam.html',    category: 'library.featured.label',   titleKey: 'library.featured.title',     subKey: 'library.featured.sub' },
+    { type: 'article', href: 'troubleshoot-rise.html',   category: 'library.troubleshoot.title', titleKey: 'library.rise.title',       subKey: 'library.rise.sub' },
+    { type: 'article', href: 'troubleshoot-sticky.html', category: 'library.troubleshoot.title', titleKey: 'library.sticky.title',     subKey: 'library.sticky.sub' },
+    { type: 'article', href: 'troubleshoot-crust.html',  category: 'library.troubleshoot.title', titleKey: 'library.crust.title',      subKey: 'library.crust.sub' },
+    { type: 'article', href: 'troubleshoot-gummy.html',  category: 'library.troubleshoot.title', titleKey: 'library.gummy.title',      subKey: 'library.gummy.sub' },
+    { type: 'article', href: 'banneton.html',            category: 'equip.label', titleKey: 'equip.banneton.name', subKey: 'equip.banneton.sub' },
+    { type: 'article', href: 'lame.html',                category: 'equip.label', titleKey: 'equip.lame.name',     subKey: 'equip.lame.sub' },
+    { type: 'article', href: 'bench-scraper.html',       category: 'equip.label', titleKey: 'equip.scraper.name',  subKey: 'equip.scraper.sub' },
+    { type: 'article', href: 'bread-sling.html',         category: 'equip.label', titleKey: 'equip.sling.name',    subKey: 'equip.sling.sub' },
+    { type: 'glossary', term: 'autolyse',          category: 'glossary.cat.technique', titleKey: 'glossary.autolyse.name',         subKey: 'glossary.autolyse.desc' },
+    { type: 'glossary', term: 'hooch',             category: 'glossary.cat.science',   titleKey: 'glossary.hooch.name',            subKey: 'glossary.hooch.desc' },
+    { type: 'glossary', term: 'banneton',          category: 'glossary.cat.craft',     titleKey: 'glossary.banneton.name',         subKey: 'glossary.banneton.desc' },
+    { type: 'glossary', term: 'openCrumb',         category: 'glossary.cat.texture',   titleKey: 'glossary.openCrumb.name',        subKey: 'glossary.openCrumb.desc' },
+    { type: 'glossary', term: 'stretchFold',       category: 'glossary.cat.technique', titleKey: 'glossary.stretchFold.name',      subKey: 'glossary.stretchFold.desc' },
+    { type: 'glossary', term: 'bulkFermentation',  category: 'glossary.cat.process',   titleKey: 'glossary.bulkFermentation.name', subKey: 'glossary.bulkFermentation.desc' },
+    { type: 'glossary', term: 'lame',              category: 'glossary.cat.baking',    titleKey: 'glossary.lame.name',             subKey: 'glossary.lame.desc' },
+    { type: 'glossary', term: 'ovenSpring',        category: 'glossary.cat.science',   titleKey: 'glossary.ovenSpring.name',       subKey: 'glossary.ovenSpring.desc' },
+    { type: 'glossary', term: 'levain',            category: 'glossary.cat.starter',   titleKey: 'glossary.levain.name',           subKey: 'glossary.levain.desc' },
+    { type: 'glossary', term: 'boule',             category: 'glossary.cat.shaping',   titleKey: 'glossary.boule.name',            subKey: 'glossary.boule.desc' }
+  ];
+
+  function _pymLibrarySearchMatches(query) {
+    var lower = (query || '').trim().toLowerCase();
+    if (!lower) return [];
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
+    return LIBRARY_SEARCH_INDEX.filter(function(item) {
+      var title = _t(item.titleKey).toLowerCase();
+      var sub = item.subKey ? _t(item.subKey).toLowerCase() : '';
+      return title.indexOf(lower) !== -1 || sub.indexOf(lower) !== -1;
+    }).slice(0, 8);
+  }
+
+  function _pymRenderLibraryTopResults(matches, query) {
+    var box = document.getElementById('librarySearchTopResults');
+    if (!box) return;
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
+    if (!query) { box.classList.add('hidden'); box.innerHTML = ''; return; }
+    if (matches.length === 0) {
+      box.innerHTML = '<p class="text-xs text-on-surface-variant px-5 py-4">' + _t('library.noResults') + '</p>';
+      box.classList.remove('hidden');
+      return;
+    }
+    box.innerHTML = matches.map(function(item, i) {
+      var cat   = _t(item.category);
+      var title = _t(item.titleKey);
+      var sub   = item.subKey ? _t(item.subKey) : '';
+      return '<button type="button" class="w-full text-left px-5 py-3 hover:bg-surface-container-low transition-colors flex flex-col gap-0.5" data-idx="' + i + '">' +
+        '<span class="font-label text-[9px] uppercase tracking-widest text-primary font-bold">' + cat + '</span>' +
+        '<span class="font-headline text-base">' + title + '</span>' +
+        (sub ? '<span class="text-xs text-on-surface-variant line-clamp-1">' + sub + '</span>' : '') +
+        '</button>';
+    }).join('');
+    box.classList.remove('hidden');
+    box.querySelectorAll('[data-idx]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var item = matches[parseInt(btn.getAttribute('data-idx'), 10)];
+        _pymGoToLibraryResult(item);
+      });
+    });
+  }
+
+  function _pymGoToLibraryResult(item) {
+    if (window.PymEvents) try { PymEvents.track('search', item.type === 'glossary' ? ('glossary:' + item.term) : item.href); } catch(_) {}
+    if (item.type === 'glossary') {
+      var glossaryInput = document.getElementById('glossarySearch');
+      var _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
+      if (glossaryInput) { glossaryInput.value = _t(item.titleKey); glossaryInput.dispatchEvent(new Event('input')); }
+      var grid = document.getElementById('glossaryGrid');
+      if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      _pymClearLibraryTopSearch();
+    } else {
+      window.location.href = item.href;
+    }
+  }
+
+  function _pymClearLibraryTopSearch() {
+    var topInput = document.getElementById('librarySearchTop');
+    var box       = document.getElementById('librarySearchTopResults');
+    var clearBtn  = document.getElementById('librarySearchTopClear');
+    if (topInput) topInput.value = '';
+    if (box) { box.classList.add('hidden'); box.innerHTML = ''; }
+    if (clearBtn) clearBtn.classList.add('hidden');
+  }
+
   function renderLibrary() {
     if (_libraryInited) return;
     _libraryInited = true;
+
+    var topInput = document.getElementById('librarySearchTop');
+    var topClear = document.getElementById('librarySearchTopClear');
+    if (topInput) {
+      topInput.addEventListener('input', function() {
+        var q = this.value;
+        if (topClear) topClear.classList.toggle('hidden', !q);
+        _pymRenderLibraryTopResults(_pymLibrarySearchMatches(q), q.trim());
+      });
+    }
 
     var input   = document.getElementById('glossarySearch');
     var grid    = document.getElementById('glossaryGrid');
