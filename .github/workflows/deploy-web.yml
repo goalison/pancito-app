@@ -1,0 +1,47 @@
+name: Deploy Web App to pancitoymas.com/app
+
+# Keeps the web version at pancitoymas.com/app (linked from the printed book,
+# not from anywhere else on the site) in sync with the same source that
+# builds the Android app — so both are always the same version.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - '.claude/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Same staging step as the Android build, so both deploys ship from
+      # identical web assets.
+      - name: Prepare www directory with web assets
+        run: |
+          mkdir -p www
+          cp *.html www/ 2>/dev/null || true
+          cp *.js   www/ 2>/dev/null || true
+          cp *.css  www/ 2>/dev/null || true
+          cp *.jpg  www/ 2>/dev/null || true
+          cp *.png  www/ 2>/dev/null || true
+          cp -r Images www/ 2>/dev/null || true
+
+      # FTP_USERNAME/FTP_PASSWORD are a cPanel FTP account scoped to
+      # public_html/app, so server-dir is that account's own root ("./").
+      # dangerous-clean-slate stays false: old pre-refactor files already in
+      # that folder (archive.html, bake-log.html, library.html, backup/) are
+      # left alone rather than deleted by this deploy.
+      - name: Deploy to pancitoymas.com/app via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./www/
+          server-dir: ./
+          dangerous-clean-slate: false
