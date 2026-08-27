@@ -1,0 +1,47 @@
+name: One-time cleanup of old pancitoymas.com/app files
+
+# Manual-only (no push trigger). Removes the pre-refactor standalone pages
+# that app.html's views replaced (Dashboard/Archive/Library used to be
+# separate pages) plus the old backup/ folder. Deliberately leaves images/
+# alone — several current pages still reference pancitoymas.com/app/images/
+# directly.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete obsolete files and backup/ folder via FTP
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set -e
+          BASE="ftp://$FTP_SERVER/"
+          AUTH="$FTP_USERNAME:$FTP_PASSWORD"
+
+          echo "── Listing backup/ ──"
+          FILES=$(curl -s -u "$AUTH" "${BASE}backup/" || true)
+          echo "$FILES"
+
+          echo "── Deleting files inside backup/ ──"
+          echo "$FILES" | awk '{print $NF}' | while read -r f; do
+            [ -z "$f" ] && continue
+            echo "Deleting backup/$f"
+            curl -s -u "$AUTH" "$BASE" -Q "DELE backup/$f" || true
+          done
+
+          echo "── Removing backup/ directory ──"
+          curl -s -u "$AUTH" "$BASE" -Q "RMD backup" || true
+
+          echo "── Deleting obsolete standalone pages ──"
+          for f in archive.html bake-log.html library.html; do
+            echo "Deleting $f"
+            curl -s -u "$AUTH" "$BASE" -Q "DELE $f" || true
+          done
+
+          echo "── Done. Remaining root listing: ──"
+          curl -s -u "$AUTH" "$BASE"
