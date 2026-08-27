@@ -851,19 +851,14 @@
   <span class="material-symbols-outlined text-secondary text-3xl shrink-0">ac_unit</span>
   <div>
     <h3 class="font-headline text-xl text-secondary mb-1" data-i18n="stage4.welcome.title">You're in the home stretch! ❄️</h3>
-    <p class="text-sm text-on-surface-variant leading-relaxed" data-i18n="stage4.welcome.body">The cold fridge slows fermentation way down, letting the dough develop more complex flavor and firm up so it's easier to score. After the 10-minute ambient proof and stitching, cover your banneton in a plastic bag and put it in the fridge. You can bake it 12–16 hours later.</p>
+    <p class="text-sm text-on-surface-variant leading-relaxed" data-i18n="stage4.welcome.body">The cold fridge slows fermentation way down, letting the dough develop more complex flavor and firm up so it's easier to score. After stitching, cover your banneton in a plastic bag and put it in the fridge. You can bake it 12–16 hours later.</p>
   </div>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 <div class="bg-surface-container-low p-8 rounded-xl space-y-8" id="ambient-timer-container">
-<div>
-<span class="font-label text-[10px] uppercase tracking-widest font-bold text-secondary" data-i18n="stage4.stitchLabel">Final Stitching Window</span>
-<div class="font-headline text-5xl text-primary my-4 timer-display">10:00</div>
-<button class="px-6 py-2 bg-primary text-on-primary rounded-full text-xs font-label uppercase tracking-widest start-btn" onclick="toggleStaticTimer('ambient-timer-container', 10*60)" data-i18n="stage4.startAmbient">Start Ambient Proof</button>
-</div>
-<div class="space-y-4 pt-6 border-t border-outline-variant/30">
+<div class="space-y-4">
 <h4 class="font-headline text-2xl text-secondary" data-i18n="stage4.stitch.title">Stitching Instructions</h4>
-<p class="text-sm text-on-surface-variant leading-relaxed" data-i18n="stage4.stitch.body">Wait 10 minutes after basket entry. "Stitch" the dough by pulling sides over each other like a corset. This adds structural support for the oven spring.</p>
+<p class="text-sm text-on-surface-variant leading-relaxed" data-i18n="stage4.stitch.body">"Stitch" the dough by pulling sides over each other like a corset. This adds structural support for the oven spring. You can do this as soon as it's shaped and in the basket.</p>
 </div>
 </div>
 <div class="bg-secondary-container/20 p-8 rounded-xl flex flex-col justify-between">
@@ -3133,7 +3128,7 @@
     <button onclick="_pymShowEditTimesSheet('${id}')" class="w-full flex items-center justify-center gap-1.5 text-primary font-bold text-xs uppercase tracking-widest py-2 mb-8 -mt-4 hover:opacity-70 transition-opacity"><span class="material-symbols-outlined text-sm">edit</span>${_t('archive.editTimes.btn')}</button>
     <div class="mb-8"><h4 class="text-[10px] font-bold uppercase tracking-widest text-secondary mb-4 border-b border-outline-variant/10 pb-2">${_t('archive.modal.ingredients')}</h4>${ingrHtml}</div>
     <div class="grid grid-cols-3 gap-3 mb-8"><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">${_t('archive.modal.hydration')}</p><p class="font-bold text-primary">${hydrationVal}%</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">${_t('archive.modal.doughTemp')}</p><p class="font-bold text-primary">${tempVal}°F</p></div><div class="bg-surface-container-low p-3 rounded-xl text-center"><p class="text-[9px] font-bold uppercase tracking-widest text-outline mb-1">${_t('archive.modal.flourType')}</p><p class="font-bold text-primary text-xs">${log.flourType||'Bread Flour'}</p></div></div>
-    <div class="mb-8"><h4 class="text-[10px] font-bold uppercase tracking-widest text-secondary mb-4 border-b border-outline-variant/10 pb-2">${_t('archive.modal.notes')}</h4><div class="bg-surface-container-high/30 p-6 rounded-[1.5rem] border-l-4 border-primary italic text-on-surface-variant font-headline text-base leading-relaxed">"${log.comments||_t('archive.modal.noNotes')}"</div></div>
+    <div class="mb-8"><div class="flex items-center justify-between border-b border-outline-variant/10 pb-2 mb-4"><h4 class="text-[10px] font-bold uppercase tracking-widest text-secondary">${_t('archive.modal.notes')}</h4><button onclick="_pymShowEditNotesSheet('${id}')" class="flex items-center gap-1 text-primary font-bold text-[10px] uppercase tracking-widest hover:opacity-70 transition-opacity"><span class="material-symbols-outlined text-sm">edit</span>${_t('archive.editNotes.btn')}</button></div><div class="bg-surface-container-high/30 p-6 rounded-[1.5rem] border-l-4 border-primary italic text-on-surface-variant font-headline text-base leading-relaxed">"${log.comments||_t('archive.modal.noNotes')}"</div></div>
     <button class="w-full bg-primary text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-xl shadow-primary/20" onclick="closeModal()"><span class="material-symbols-outlined">check</span>${_t('archive.modal.close')}</button></div>`;
     modal.classList.remove('hidden'); document.body.style.overflow = 'hidden';
   };
@@ -3185,6 +3180,38 @@
       saveLogs(logs);
       sheet.remove();
       _pymToast(_t('archive.editTimes.saved'));
+      openDetails(id);
+    };
+  };
+
+  // Lets a baker keep editing their notes after saving — so the Archive can
+  // work like a real bake journal instead of a one-shot log entry.
+  window._pymShowEditNotesSheet = function(id) {
+    const logs = getLogs();
+    const idx = logs.findIndex((l, i) => (l.id === id || i.toString() === id));
+    if (idx === -1) return;
+    const log = logs[idx];
+    const _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
+    const sheet = document.createElement('div');
+    sheet.className = 'pym-sheet-overlay';
+    sheet.id = 'pym-edit-notes-sheet';
+    sheet.innerHTML = '<div class="pym-sheet" style="font-family:\'Plus Jakarta Sans\',sans-serif;">' +
+      '<div class="w-10 h-1 bg-outline-variant rounded-full mx-auto mb-4"></div>' +
+      '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#514538;margin-bottom:1.2rem;">' + _t('archive.editNotes.title') + '</p>' +
+      '<textarea id="pym-edit-notes" rows="6" style="width:100%;padding:12px;border:2px solid #e5ddd0;border-radius:12px;font-size:14px;margin-bottom:18px;font-family:inherit;box-sizing:border-box;resize:vertical;"></textarea>' +
+      '<button id="pym-notes-save" style="width:100%;padding:14px;background:#875305;color:#fff;border-radius:14px;font-weight:700;font-size:14px;border:none;cursor:pointer;margin-bottom:10px;font-family:inherit;">' + _t('common.save') + '</button>' +
+      '<button id="pym-notes-cancel" style="width:100%;padding:12px;background:none;border:none;color:#847466;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;">' + _t('common.cancel') + '</button>' +
+    '</div>';
+    sheet.addEventListener('click', function(e) { if (e.target === sheet) sheet.remove(); });
+    document.body.appendChild(sheet);
+    document.getElementById('pym-edit-notes').value = log.comments || '';
+    document.getElementById('pym-notes-cancel').onclick = function() { sheet.remove(); };
+    document.getElementById('pym-notes-save').onclick = function() {
+      const newNotes = document.getElementById('pym-edit-notes').value;
+      logs[idx] = Object.assign({}, log, { comments: newNotes });
+      saveLogs(logs);
+      sheet.remove();
+      _pymToast(_t('archive.editNotes.saved'));
       openDetails(id);
     };
   };
