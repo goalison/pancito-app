@@ -240,6 +240,10 @@
       // ── Dashboard — backup nudge ──────────────────────────────────────────
       'dashboard.backupNudge.text': 'Protect your bakes — export a backup',
       'dashboard.backupNudge.cta':  'Export',
+      'update.available.text': 'A new version of Pancito y Más is ready',
+      'update.available.cta':  'Update',
+      'update.ready.text':     'Update downloaded — restart to finish',
+      'update.ready.cta':      'Restart',
 
       // ── Dashboard — stats ────────────────────────────────────────────────
       'stat.totalBakes':    'Total Bakes',
@@ -1786,6 +1790,10 @@
       // ── Dashboard — backup nudge ──────────────────────────────────────────
       'dashboard.backupNudge.text': 'Protege tus panes — exporta una copia',
       'dashboard.backupNudge.cta':  'Exportar',
+      'update.available.text': 'Hay una nueva versión de Pancito y Más disponible',
+      'update.available.cta':  'Actualizar',
+      'update.ready.text':     'Actualización descargada — reinicia para terminar',
+      'update.ready.cta':      'Reiniciar',
 
       // ── Dashboard — stats ────────────────────────────────────────────────
       'stat.totalBakes':    'Horneadas',

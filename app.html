@@ -276,6 +276,15 @@
 <!-- App Views -->
 <div id="view-dashboard" class="app-view">
 <main class="max-w-7xl mx-auto px-6 pt-24 pb-36 space-y-8">
+<!-- ── App update banner (native only, Play Store flexible update) ─────── -->
+<section id="app-update-banner" class="hidden rounded-2xl p-4 bg-primary/10 border border-primary/30 flex items-center gap-3">
+  <span class="material-symbols-outlined text-primary shrink-0">system_update</span>
+  <p class="text-xs text-on-surface flex-1" id="app-update-banner-text" data-i18n="update.available.text">A new version of Pancito y Más is ready</p>
+  <button id="app-update-banner-btn" onclick="_pymHandleUpdateBannerTap()" class="text-[10px] font-bold uppercase tracking-wider text-primary shrink-0" data-i18n="update.available.cta">Update</button>
+  <button onclick="_pymDismissUpdateBanner()" class="text-on-surface-variant/50 shrink-0" title="Dismiss">
+    <span class="material-symbols-outlined text-base">close</span>
+  </button>
+</section>
 <!-- Hero Section -->
 <section class="flex flex-col items-start gap-6">
 <div>
@@ -1428,12 +1437,14 @@
       // → Step 2 transition), so jumping to other steps left the channel/perms
       // in an inconsistent state and alarms could fail to schedule.
       try { initNotifications(); } catch(e) {}
+      try { _pymCheckForAppUpdate(); } catch(e) {}
       // When app comes to foreground after a background timer fires, check immediately
       try {
         window.Capacitor.Plugins.App.addListener('resume', function() {
           // Resume AudioContext proactively — native WebView allows this without user gesture
           try { var ctx = getAudioCtx(); if (ctx.state === 'suspended') ctx.resume(); } catch(e) {}
           checkPendingAlarmOnStart();
+          try { _pymCheckForAppUpdate(); } catch(e) {}
         });
       } catch(e) {}
     }
@@ -1932,6 +1943,71 @@
     if (window.PymStorage) window.PymStorage.set('pym_backup_nudge_dismissed_at', Date.now());
     var el = document.getElementById('backup-nudge');
     if (el) el.classList.add('hidden');
+  }
+
+  // ════════════════════════════════════════════════════════
+  // In-app update banner — Play Store "flexible" in-app update. Shows a
+  // dismissible banner when a newer version is on the Play Store, downloads
+  // it quietly in the background once the user taps Update, then swaps the
+  // banner to a "Restart" prompt when the download finishes.
+  // ════════════════════════════════════════════════════════
+  var _pymUpdateState = 'none'; // 'available' | 'downloaded'
+  var _pymUpdateAvailableVersion = null;
+  var _pymUpdateListenerAttached = false;
+  function _pymCheckForAppUpdate() {
+    if (!IS_NATIVE || !window.Capacitor.Plugins.AppUpdate) return;
+    var AppUpdate = window.Capacitor.Plugins.AppUpdate;
+    if (!_pymUpdateListenerAttached) {
+      _pymUpdateListenerAttached = true;
+      try {
+        AppUpdate.addListener('onFlexibleUpdateStateChange', function(state) {
+          if (state && state.installStatus === 11) { // DOWNLOADED
+            _pymUpdateState = 'downloaded';
+            _pymShowUpdateBanner();
+          }
+        });
+      } catch(e) {}
+    }
+    if (_pymUpdateState === 'downloaded') { _pymShowUpdateBanner(); return; }
+    AppUpdate.getAppUpdateInfo().then(function(info) {
+      if (!info || info.updateAvailability !== 2 || !info.flexibleUpdateAllowed) return; // 2 = UPDATE_AVAILABLE
+      _pymUpdateAvailableVersion = info.availableVersionCode;
+      var dismissedVersion = window.PymStorage ? window.PymStorage.get('pym_update_dismissed_version', null) : null;
+      if (dismissedVersion === _pymUpdateAvailableVersion) return;
+      _pymUpdateState = 'available';
+      _pymShowUpdateBanner();
+    }).catch(function(e) {});
+  }
+  function _pymShowUpdateBanner() {
+    var el = document.getElementById('app-update-banner');
+    var text = document.getElementById('app-update-banner-text');
+    var btn = document.getElementById('app-update-banner-btn');
+    if (!el || !text || !btn) return;
+    var _t = (window.PymI18n && window.PymI18n.t) || function(k){return k;};
+    if (_pymUpdateState === 'downloaded') {
+      text.textContent = _t('update.ready.text');
+      btn.textContent = _t('update.ready.cta');
+    } else {
+      text.textContent = _t('update.available.text');
+      btn.textContent = _t('update.available.cta');
+    }
+    el.classList.remove('hidden');
+  }
+  function _pymHandleUpdateBannerTap() {
+    var AppUpdate = window.Capacitor.Plugins.AppUpdate;
+    if (!AppUpdate) return;
+    if (_pymUpdateState === 'downloaded') {
+      AppUpdate.completeFlexibleUpdate().catch(function(e) {});
+    } else {
+      AppUpdate.startFlexibleUpdate().catch(function(e) {});
+    }
+  }
+  function _pymDismissUpdateBanner() {
+    var el = document.getElementById('app-update-banner');
+    if (el) el.classList.add('hidden');
+    if (_pymUpdateState === 'available' && _pymUpdateAvailableVersion && window.PymStorage) {
+      window.PymStorage.set('pym_update_dismissed_version', _pymUpdateAvailableVersion);
+    }
   }
 
   // ════════════════════════════════════════════════════════
